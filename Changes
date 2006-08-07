@@ -1,0 +1,129 @@
+Revision history for ack
+
+NEXT
+        [ENHANCEMENTS]
+        * Added .css support.
+
+1.24    Sun Jul 16 01:10:44 CDT 2006
+        [ENHANCEMENTS]
+        * Now ignores files beginning with a dot, unless the -a/--all
+          flag is specified.
+        * Removed all the symbol exporting in App::Ack, so should
+          be microscopically faster.  Of course, if I really wanted
+          it faster, I'd have the entire app in one file.
+
+        [FIXES]
+        * Smarter about detecting shebang lines in extensionless
+          files.
+        * The -a/--all flag now is indeed EVERY file.  Until now,
+          it would still have ignored files ending with a tilde.
+
+
+1.22    Tue Jul  4 22:04:38 CDT 2006
+        [FIXES]
+        * t/filetypes.t would fail under 5.6.1
+
+        [ENHANCEMENTS]
+        * Added -c to show number of lines match
+
+
+1.20    Wed Jun  7 22:17:39 CDT 2006
+        [ENHANCEMENTS]
+        * Added --yaml
+        * Added --thpppt flag
+
+
+1.17_02 Tue Jun  6 14:32:38 CDT 2006
+        [FIXES]
+        * The -v flag would print out empty blank lines when it
+          shouldn't.  Now it works.
+
+        [ENHANCEMENTS]
+        * Added the -H flag to always print filenames
+
+        * Filenames no longer have "./" prepended unless you specify
+          "." as a directory to search.
+
+
+1.17_01 Mon Jun  5 12:04:38 CDT 2006
+        [FIXES]
+        * Starting points for files can be files, not just directories.
+          This broke in 1.16.
+
+        [ENHANCEMENTS]
+        * ack can now read from STDIN as a filter, like any good program.
+
+1.16    Fri Jun  2 23:50:10 CDT 2006
+        [FIXES]
+        * The -n flag was not working.  Using -n would find no files
+          at all.  And added some more unit tests to make sure I don't
+          screw it up again.
+
+1.14    Tue May 30 23:12:43 CDT 2006
+        [ENHANCEMENTS]
+        * Added -f flag to only show the files that would be searched,
+          instead of actually searching them.  This means that you can
+          get an easy way to get a list of all the Perl files in the
+          current directory, for example, by doing
+
+            ack -f --perl
+
+          Or in multiple directories
+
+            ack -f --perl thisdir thatdir
+
+        [FIXES]
+        * Added back -a as a synonym for --all.
+
+1.12    Wed May 10 11:13:42 CDT 2006
+        [FIXES]
+        * Was not skipping directories it should have been.  Now it does.
+
+1.10    Thu May  4 16:11:38 CDT 2006
+        [ENHANCEMENTS]
+        * Added --parrot support.  Thanks, Jerry Gay.
+
+        * No longer defaults to ANSI highlighting on Windows.  Thanks
+          again, Jerry.
+
+        * Added support for ACK_SWITCHES environment variable.
+
+1.08    May 01 2006
+        [ENHANCEMENTS]
+        * Now supports argument bundling.  "ack -i -l" can now be done as
+          "ack -il".  Thanks, Pete Krawczyk.
+
+        * Added --javascript support, plus a --js version to save your
+          weary fingers.  Thanks, Ask.
+
+1.06    Tue Mar 28 08:37:02 CST 2006
+        [FIXES]
+        * Now handles filenames that start with ">" or "<".
+        * Failing to open a file is now a warning, instead of fatal.
+
+1.04    Wed Jan 25 22:51:11 CST 2006
+        [ENHANCEMENTS]
+        * Now skips blib and RCS as well as CVS and .svn directories.
+        * Added support for Python and Ruby.
+
+1.02    Wed Dec 14 13:13:19 CST 2005
+        [FIXES]
+        * Fixed a mind-blowingly dumb bug.  The --all flag would search
+          no files at all.
+
+1.00    Wed Dec  7 09:30:25 CST 2005
+        [ENHANCEMENTS]
+        * Added support for finding C programs (--cc)
+
+        * Removed the --only option.  It's now smart enough to know
+          that if, for example, you say --perl, you only want Perl stuff,
+          and that if you say --noperl, you want everything BUT Perl.
+
+        * Removed the --exec option, which is irrelevant if you use
+          xargs like you should.  I added --exec before I understood what
+          xargs did.
+
+0.90    Fri Dec  2 11:12:44 CST 2005
+        First version, released on an unsuspecting world.  It's been
+        used at FLR for years, but I'm now releasing it in the wild.
+

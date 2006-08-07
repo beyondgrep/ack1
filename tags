@@ -1,0 +1,24 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.5.4	//
+Getopt	ack	/^Getopt::Long::Configure( "bundling" );$/;"	l
+PARROT_FILES_DESCEND	t/interesting.t	/^PARROT_FILES_DESCEND: {$/;"	l
+PARROT_FILES_NODESCEND	t/interesting.t	/^PARROT_FILES_NODESCEND: {$/;"	l
+PARROT_FILES_NODESCEND_EMPTY	t/interesting.t	/^PARROT_FILES_NODESCEND_EMPTY: {$/;"	l
+PERL_FILES	t/find.t	/^PERL_FILES: {$/;"	l
+PERL_FILES	t/interesting.t	/^PERL_FILES: {$/;"	l
+PERL_FILES_GLOBBED	t/interesting.t	/^PERL_FILES_GLOBBED: {$/;"	l
+_candidate_files	Ack.pm	/^sub _candidate_files {$/;"	s
+_init_types	Ack.pm	/^sub _init_types {$/;"	s
+_thpppt	Ack.pm	/^sub _thpppt {$/;"	s
+filetypes	Ack.pm	/^sub filetypes {$/;"	s
+filetypes_supported	Ack.pm	/^sub filetypes_supported {$/;"	s
+interesting_files	Ack.pm	/^sub interesting_files {$/;"	s
+is_filetype	Ack.pm	/^sub is_filetype {$/;"	s
+is_interesting	ack	/^sub is_interesting {$/;"	s
+is_parrot	t/interesting.t	/^sub is_parrot {$/;"	s
+is_perl	t/interesting.t	/^sub is_perl {$/;"	s
+search	ack	/^sub search {$/;"	s

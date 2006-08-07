@@ -1,0 +1,34 @@
+ack is a grep-like tool tailored to working with large trees of source
+code.
+
+INSTALLATION
+
+To install this module, run the following commands:
+
+    perl Makefile.PL
+    make
+    make test
+    make install
+
+SUPPORT AND DOCUMENTATION
+
+You can look for information at:
+
+    Search CPAN
+        http://search.cpan.org/dist/ack
+
+    CPAN Request Tracker:
+        http://rt.cpan.org/NoAuth/Bugs.html?Dist=ack
+
+    AnnoCPAN, annotated CPAN documentation:
+        http://annocpan.org/dist/ack
+
+    CPAN Ratings:
+        http://cpanratings.perl.org/d/ack
+
+COPYRIGHT AND LICENCE
+
+Copyright (C) 2005 Andy Lester
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.

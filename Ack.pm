@@ -84,18 +84,18 @@ sub filetypes {
     # No extension?  See if it has a shebang line
     if ( $filename !~ /\./ ) {
         my $fh;
-        if ( !open( $fh, "<", $filename ) ) {
+        if ( !open( $fh, '<', $filename ) ) {
             warn "ack: $filename: $!\n";
             return;
         }
         my $header = <$fh>;
         close $fh;
         return unless defined $header;
-        return "perl"   if $header =~ /^#!.+\bperl\b/;
-        return "php"    if $header =~ /^#!.+\bphp\b/;
-        return "python" if $header =~ /^#!.+\bpython\b/;
-        return "ruby"   if $header =~ /^#!.+\bruby\b/;
-        return "shell"  if $header =~ /^#!.+\b(ba|c|k|z)?sh\b/;
+        return 'perl'   if $header =~ /^#!.+\bperl\b/;
+        return 'php'    if $header =~ /^#!.+\bphp\b/;
+        return 'python' if $header =~ /^#!.+\bpython\b/;
+        return 'ruby'   if $header =~ /^#!.+\bruby\b/;
+        return 'shell'  if $header =~ /^#!.+\b(ba|c|k|z)?sh\b/;
         return;
     }
 
@@ -187,7 +187,8 @@ sub _candidate_files {
 sub _thpppt {
     my $y = q{_   /|,\\'!.x',=(www)=,   U   };
     $y =~ tr/,x!w/\nOo_/;
-    print "$y ack $_[0]!\n" and exit 0;
+    print "$y ack $_[0]!\n";
+    exit 0;
 }
 
 =head2 show_help()

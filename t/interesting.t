@@ -13,7 +13,7 @@ sub is_perl {
     my $file = shift;
 
     for my $type ( App::Ack::filetypes( $file ) ) {
-        return 1 if $type eq "perl";
+        return 1 if $type eq 'perl';
     }
     return;
 }
@@ -39,7 +39,7 @@ PERL_FILES: {
 PERL_FILES_GLOBBED: {
     # We have to be able to handle starting locations that are files.
     my @files;
-    my @starters = grep { !/blib/ } glob( "t/swamp/*" );
+    my @starters = grep { !/blib/ } glob( 't/swamp/*' );
     my $iter = App::Ack::interesting_files( \&is_perl, 0, @starters );
 
     while ( my $file = $iter->() ) {
@@ -60,7 +60,7 @@ sub is_parrot {
     my $file = shift;
 
     for my $type ( App::Ack::filetypes( $file ) ) {
-        return 1 if $type eq "parrot";
+        return 1 if $type eq 'parrot';
     }
     return;
 }

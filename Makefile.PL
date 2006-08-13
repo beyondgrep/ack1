@@ -30,5 +30,9 @@ tags:
 		--exclude=blib --exclude=t/lib \
 		--exclude=.svn --exclude='*~' \
 		--languages=Perl --langmap=Perl:+.t \
+
+critic:
+	perlcritic -1 .
+
 MAKE_FRAG
 }

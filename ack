@@ -35,30 +35,30 @@ my %options = (
     H           => \$opt{H},
     i           => \$opt{i},
     l           => \$opt{l},
-    "m=i"       => \$opt{m},
+    'm=i'       => \$opt{m},
     n           => \$opt{n},
     o           => \$opt{o},
     v           => \$opt{v},
     w           => \$opt{w},
 
-    "group!"    => \$opt{group},
-    "color!"    => \$opt{color},
-    "help"      => \$opt{help},
-    "version"   => sub { print "ack $App::Ack::VERSION\n" and exit 1; },
+    'group!'    => \$opt{group},
+    'color!'    => \$opt{color},
+    'help'      => \$opt{help},
+    'version'   => sub { print "ack $App::Ack::VERSION\n" and exit 1; },
 );
 
 my @filetypes_supported = App::Ack::filetypes_supported();
 for my $i ( @filetypes_supported ) {
     $options{ "$i!" } = \$lang{ $i };
 }
-$options{ "js!" } = \$lang{ javascript };
+$options{ 'js!' } = \$lang{ javascript };
 
 # Stick any default switches at the beginning, so they can be overridden
 # by the command line switches.
 unshift @ARGV, split( " ", $ENV{ACK_SWITCHES} ) if defined $ENV{ACK_SWITCHES};
 
 map { App::Ack::_thpppt($_) if /^--th[bp]+t$/ } @ARGV;
-Getopt::Long::Configure( "bundling" );
+Getopt::Long::Configure( 'bundling' );
 GetOptions( %options ) or die "ack --help for options.\n";
 
 my $filetypes_supported_set =   grep { defined $lang{$_} && ($lang{$_} == 1) } @filetypes_supported;
@@ -79,7 +79,7 @@ if ( $opt{help} || (!@ARGV && !$opt{f}) ) {
 my $re;
 
 if ( !$opt{f} ) {
-    $re = shift or die "No regex specified\n";
+    $re = shift or die 'No regex specified\n';
 
     if ( $opt{w} ) {
         $re = $opt{i} ? qr/\b$re\b/i : qr/\b$re\b/;

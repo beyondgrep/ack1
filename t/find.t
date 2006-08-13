@@ -14,7 +14,7 @@ PERL_FILES: {
     my $iter = App::Ack::interesting_files( sub { -f shift }, 1, 't/swamp' );
 
     while ( my $file = $iter->() ) {
-        push( @files, $file ) if App::Ack::is_filetype( $file, "perl" );
+        push( @files, $file ) if App::Ack::is_filetype( $file, 'perl' );
     }
 
     is_deeply( [sort @files], [sort qw(

@@ -18,7 +18,7 @@ my $is_parrot = sub { return App::Ack::is_filetype( $File::Next::name, 'parrot' 
 
 PERL_FILES: {
     my @files;
-    my $iter = interesting_files( $is_perl, 0, 't/swamp' );
+    my $iter = interesting_files( $is_perl, 1, 't/swamp' );
 
     while ( my $file = $iter->() ) {
         push( @files, $file );
@@ -38,7 +38,7 @@ PERL_FILES_GLOBBED: {
     # We have to be able to handle starting locations that are files.
     my @files;
     my @starters = grep { !/blib/ } glob( 't/swamp/*' );
-    my $iter = interesting_files( $is_perl, 0, @starters );
+    my $iter = interesting_files( $is_perl, 1, @starters );
 
     while ( my $file = $iter->() ) {
         push( @files, $file );
@@ -107,13 +107,13 @@ PERL_FILES_BY_NAME: {
 sub interesting_files {
     my $file_filter = shift;
     my $descend = shift;
-    my $start = shift;
+    my @start = @_;
 
     my $iter =
         File::Next::files( {
             file_filter => $file_filter,
             descend_filter => $descend ? \&App::Ack::skipdir_filter : sub {0},
-        }, $start );
+        }, @start );
 
     return $iter;
 }

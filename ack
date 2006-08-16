@@ -4,12 +4,13 @@ use warnings;
 use strict;
 
 our $is_windows;
+
 BEGIN {
     $is_windows = ($^O =~ /MSWin32/);
 }
 
 BEGIN {
-    eval { use Term::ANSIColor } unless $is_windows;
+    eval 'use Term::ANSIColor' unless $is_windows;
 }
 
 use App::Ack;
@@ -27,7 +28,7 @@ $opt{m} =       0;
 
 my %options = (
     a           => \$opt{all},
-    "all!"      => \$opt{all},
+    'all!'      => \$opt{all},
     c           => \$opt{count},
     count       => \$opt{count},
     f           => \$opt{f},
@@ -57,7 +58,7 @@ $options{ 'js!' } = \$lang{ javascript };
 # by the command line switches.
 unshift @ARGV, split( " ", $ENV{ACK_SWITCHES} ) if defined $ENV{ACK_SWITCHES};
 
-map { App::Ack::_thpppt($_) if /^--th[bp]+t$/ } @ARGV;
+map { App::Ack::_thpppt($_) if /^--th[bp]+t$/ } @ARGV; ## no critic
 Getopt::Long::Configure( 'bundling' );
 GetOptions( %options ) or die "ack --help for options.\n";
 
@@ -105,11 +106,11 @@ else {
             $opt{$_} and die "ack: Can't use -$_ when acting as a filter.\n";
         }
         $opt{show_filename} = 0;
-        search( "-", $re, %opt );
+        search( '-', $re, %opt );
         exit 0;
     }
     else {
-        @what = ""; # Assume current directory
+        @what = ''; # Assume current directory
         $opt{show_filename} = 1;
     }
 }
@@ -149,11 +150,11 @@ sub search {
     my $nmatches = 0;
 
     my $fh;
-    if ( $filename eq "-" ) {
+    if ( $filename eq '-' ) {
         $fh = *STDIN;
     }
     else {
-        if ( !open( $fh, "<", $filename ) ) {
+        if ( !open( $fh, '<', $filename ) ) {
             warn "ack: $filename: $!\n";
             return;
         }
@@ -180,7 +181,7 @@ sub search {
                 }
 
                 if ( $opt{show_filename} ) {
-                    my $colorname = $opt{color} ? colored( $filename, "bold green" ) : $filename;
+                    my $colorname = $opt{color} ? colored( $filename, 'bold green' ) : $filename;
                     if ( $opt{group} ) {
                         print "$colorname\n" if $nmatches == 1;
                         print "$.:$out";

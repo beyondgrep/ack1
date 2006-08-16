@@ -204,6 +204,8 @@ sub show_help {
         s/(\w+)(\s+)LIST/$1.$2._expand_list($1)/esmx;
     }
     print @lines;
+
+    return;
 }
 
 sub _expand_list {
@@ -212,7 +214,7 @@ sub _expand_list {
     my @files = map { ".$_" } @{$mappings{$lang}};
     my $and = pop @files;
 
-    return @files ? join( ", ", @files ) . " and $and" : $and;
+    return @files ? join( ', ', @files ) . " and $and" : $and;
 }
 
 =head1 AUTHOR

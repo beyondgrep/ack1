@@ -13,6 +13,7 @@ BEGIN {
     eval 'use Term::ANSIColor' unless $is_windows;
 }
 
+use File::Next 0.22;
 use App::Ack;
 use Getopt::Long;
 
@@ -117,8 +118,16 @@ else {
 $opt{show_filename} = 0 if $opt{h};
 $opt{show_filename} = 1 if $opt{H};
 
-my $filter = $opt{all} ? sub {1} : \&is_interesting;
-my $iter = App::Ack::interesting_files( $filter, !$opt{n}, @what );
+my $file_filter = $opt{all} ? sub {1} : \&is_interesting;
+my $descend_filter = $opt{n} ? sub {0} : sub {1};
+
+my $iter =
+    File::Next::files( {
+        file_filter     => $file_filter,
+        descend_filter  => $descend_filter,
+        error_handler   => sub { "ack: $_\n" },
+    }, @what );
+
 
 while ( my $file = $iter->() ) {
     if ( $opt{f} ) {
@@ -131,12 +140,11 @@ while ( my $file = $iter->() ) {
 exit 0;
 
 sub is_interesting {
-    my $file = shift;
+    return if /~$/;
+    return if /^\./;
 
-    return if $file =~ /~$/;
-    return if $file =~ /^\./;
-
-    for my $type ( App::Ack::filetypes( $file ) ) {
+    my $filename = $File::Find::name;
+    for my $type ( App::Ack::filetypes( $filename ) ) {
         return 1 if $lang{$type};
     }
     return;

@@ -38,6 +38,20 @@ sub is_filetype {
     return;
 }
 
+our %ignore_dirs = map { ($_,1) } qw( CVS RCS .svn _darcs blib );
+
+=head2 skipdir_filter
+
+Standard filter to pass as a L<File::Next> descend_filter.  It
+returns true if the directory is any of the ones we know we want
+to skip.
+
+=cut
+
+sub skipdir_filter {
+    return !exists $ignore_dirs{$_};
+}
+
 our %types;
 our %mappings = (
     cc          => [qw( c h )],
@@ -50,7 +64,7 @@ our %mappings = (
     ruby        => [qw( rb )],
     shell       => [qw( sh bash csh ksh zsh )],
     sql         => [qw( sql ctl )],
-    yaml        => [qw( yaml )],
+    yaml        => [qw( yaml yml )],
 );
 
 sub _init_types {
@@ -110,78 +124,6 @@ Returns a list of all the types that we can detect.
 
 sub filetypes_supported {
     return keys %mappings;
-}
-
-=head2 interesting_files( \&is_interesting, $should_descend, @starting points )
-
-Returns an iterator that walks directories starting with the items
-in I<@starting_points>.  If I<$should_descend> is false, don't descend
-into subdirectories. Each file to see if it's interesting is passed to
-I<is_interesting>, which must return true.
-
-All file-finding in this module is adapted from Mark Jason Dominus'
-marvelous I<Higher Order Perl>, page 126.
-
-=cut
-
-sub interesting_files {
-    my $is_interesting = shift;
-    my $should_descend = shift;
-    my @queue = map { _candidate_files($_) } @_;
-
-    return sub {
-        while (@queue) {
-            my $file = shift @queue;
-
-            if (-d $file) {
-                push( @queue, _candidate_files( $file ) ) if $should_descend;
-            }
-            elsif (-f $file) {
-                return $file if $is_interesting->($file);
-            }
-        } # while
-        return;
-    }; # iterator
-}
-
-=head2 _candidate_files( $dir )
-
-Pulls out the files/dirs that might be worth looking into in I<$dir>.
-If I<$dir> is the empty string, then search the current directory.
-This is different than explicitly passing in a ".", because that
-will get prepended to the path names.
-
-=cut
-
-our %ignore_dirs = map { ($_,1) } qw( . .. CVS RCS .svn _darcs blib );
-sub _candidate_files {
-    my $dir = shift;
-
-    my @newfiles;
-
-    # TODO Refactor out the redundancy
-    if ( $dir eq '' ) {
-        my $dh;
-        if ( !opendir $dh, "." ) {
-            warn "ack: in current directory: $!\n";
-            return;
-        }
-
-        @newfiles = grep { !$ignore_dirs{$_} } readdir $dh;
-    }
-    else {
-        return $dir unless -d $dir;
-
-        my $dh;
-        if ( !opendir $dh, $dir ) {
-            warn "ack: $dir: $!\n";
-            return;
-        }
-
-        @newfiles = grep { !$ignore_dirs{$_} } readdir $dh;
-        @newfiles = map { "$dir/$_" } @newfiles;
-    }
-    return @newfiles;
 }
 
 sub _thpppt {

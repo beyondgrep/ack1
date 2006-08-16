@@ -4,12 +4,13 @@ Changes
 MANIFEST
 Makefile.PL
 README
+
 t/00-load.t
 t/filetypes.t
-t/find.t
 t/interesting.t
 t/pod-coverage.t
 t/pod.t
+
 t/swamp/c-header.h
 t/swamp/c-source.c
 t/swamp/javascript.js

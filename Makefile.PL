@@ -16,6 +16,7 @@ WriteMakefile(
         'Term::ANSIColor' => 0,
         'Getopt::Long' => 0,
         'Test::More' => 0,
+        'File::Next' => 0.22,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'ack-*' },

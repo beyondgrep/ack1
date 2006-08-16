@@ -1,8 +1,14 @@
 Revision history for ack
 
-NEXT
+1.25_01 Wed Aug 16 18:16:19 CDT 2006
+
         [ENHANCEMENTS]
         * Added .css support.
+        * Added .yml as YAML
+
+        [INTERNALS]
+        * Now uses File::Next as the file finder.  Not surprisingly,
+          File::Next was based on ack's file finder.
 
 1.24    Sun Jul 16 01:10:44 CDT 2006
         [ENHANCEMENTS]

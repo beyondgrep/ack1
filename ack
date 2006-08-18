@@ -181,7 +181,7 @@ sub search {
             return;
         }
         if ( $opt{defaulted_to_dot} ) {
-            $filename =~ s{^./}{};
+            $filename =~ s{^\Q./}{};
         }
     }
 

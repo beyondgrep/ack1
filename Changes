@@ -1,5 +1,10 @@
 Revision history for ack
 
+NEXT
+
+        [ENHANCEMENTS]
+        * Now supports --asm, and ignores SCCS directories.
+
 1.25_01 Wed Aug 16 18:16:19 CDT 2006
 
         [ENHANCEMENTS]

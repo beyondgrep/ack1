@@ -38,7 +38,7 @@ sub is_filetype {
     return;
 }
 
-our %ignore_dirs = map { ($_,1) } qw( CVS RCS .svn _darcs blib );
+our %ignore_dirs = map { ($_,1) } qw( CVS RCS SCCS .svn _darcs blib );
 
 =head2 skipdir_filter
 
@@ -54,6 +54,7 @@ sub skipdir_filter {
 
 our %types;
 our %mappings = (
+    asm         => [qw( s S )],
     cc          => [qw( c h )],
     css         => [qw( css )],
     javascript  => [qw( js )],
@@ -249,6 +250,7 @@ File inclusion/exclusion:
     -n                No descending into subdirectories
     -a, --all         All files, regardless of extension
                       (but still skips RCS, CVS, .svn, _darcs and blib dirs)
+    --[no]asm         LIST
     --[no]cc          LIST
     --[no]javascript  LIST
     --[no]js          same as --[no]javascript

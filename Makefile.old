@@ -16,7 +16,7 @@
 #     MAN3PODS => { Ack.pm=>q[$(INST_MAN3DIR)/Ack.$(MAN3EXT)] }
 #     NAME => q[ack]
 #     PM => { Ack.pm=>q[$(INST_LIBDIR)/App/Ack.pm] }
-#     PREREQ_PM => { Test::More=>q[0], Getopt::Long=>q[0], Term::ANSIColor=>q[0] }
+#     PREREQ_PM => { Test::More=>q[0], Getopt::Long=>q[0], Term::ANSIColor=>q[0], File::Next=>q[0.22] }
 #     VERSION_FROM => q[Ack.pm]
 #     clean => { FILES=>q[ack-*] }
 #     dist => { COMPRESS=>q[gzip -9f], SUFFIX=>q[gz] }
@@ -59,11 +59,11 @@ DIRFILESEP = /
 DFSEP = $(DIRFILESEP)
 NAME = ack
 NAME_SYM = ack
-VERSION = 1.24
+VERSION = 1.25_01
 VERSION_MACRO = VERSION
-VERSION_SYM = 1_24
+VERSION_SYM = 1_25_01
 DEFINE_VERSION = -D$(VERSION_MACRO)=\"$(VERSION)\"
-XS_VERSION = 1.24
+XS_VERSION = 1.25_01
 XS_VERSION_MACRO = XS_VERSION
 XS_DEFINE_VERSION = -D$(XS_VERSION_MACRO)=\"$(XS_VERSION)\"
 INST_ARCHLIB = blib/arch
@@ -250,7 +250,7 @@ RCS_LABEL = rcs -Nv$(VERSION_SYM): -q
 DIST_CP = best
 DIST_DEFAULT = tardist
 DISTNAME = ack
-DISTVNAME = ack-1.24
+DISTVNAME = ack-1.25_01
 
 
 # --- MakeMaker macro section:
@@ -491,13 +491,14 @@ metafile : create_distdir
 	$(NOECHO) $(ECHO) Generating META.yml
 	$(NOECHO) $(ECHO) '--- #YAML:1.0' > META_new.yml
 	$(NOECHO) $(ECHO) 'name:                ack' >> META_new.yml
-	$(NOECHO) $(ECHO) 'version:             1.24' >> META_new.yml
+	$(NOECHO) $(ECHO) 'version:             1.25_01' >> META_new.yml
 	$(NOECHO) $(ECHO) 'abstract:            A grep-like program specifically for large source trees' >> META_new.yml
 	$(NOECHO) $(ECHO) 'license:             unknown' >> META_new.yml
 	$(NOECHO) $(ECHO) 'generated_by:        ExtUtils::MakeMaker version 6.30_01' >> META_new.yml
 	$(NOECHO) $(ECHO) 'author:              Andy Lester <andy@petdance.com>' >> META_new.yml
 	$(NOECHO) $(ECHO) 'distribution_type:   module' >> META_new.yml
 	$(NOECHO) $(ECHO) 'requires:     ' >> META_new.yml
+	$(NOECHO) $(ECHO) '    File::Next:                    0.22' >> META_new.yml
 	$(NOECHO) $(ECHO) '    Getopt::Long:                  0' >> META_new.yml
 	$(NOECHO) $(ECHO) '    Term::ANSIColor:               0' >> META_new.yml
 	$(NOECHO) $(ECHO) '    Test::More:                    0' >> META_new.yml
@@ -790,11 +791,12 @@ testdb_static :: testdb_dynamic
 # --- MakeMaker ppd section:
 # Creates a PPD (Perl Package Description) for a binary distribution.
 ppd:
-	$(NOECHO) $(ECHO) '<SOFTPKG NAME="$(DISTNAME)" VERSION="1,24,0,0">' > $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '<SOFTPKG NAME="$(DISTNAME)" VERSION="1,25_01,0,0">' > $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <TITLE>$(DISTNAME)</TITLE>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <ABSTRACT>A grep-like program specifically for large source trees</ABSTRACT>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <AUTHOR>Andy Lester &lt;andy@petdance.com&gt;</AUTHOR>' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '    <IMPLEMENTATION>' >> $(DISTNAME).ppd
+	$(NOECHO) $(ECHO) '        <DEPENDENCY NAME="File-Next" VERSION="0,22,0,0" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <DEPENDENCY NAME="Getopt-Long" VERSION="0,0,0,0" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <DEPENDENCY NAME="Term-ANSIColor" VERSION="0,0,0,0" />' >> $(DISTNAME).ppd
 	$(NOECHO) $(ECHO) '        <DEPENDENCY NAME="Test-More" VERSION="0,0,0,0" />' >> $(DISTNAME).ppd

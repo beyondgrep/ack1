@@ -1,6 +1,6 @@
 Revision history for ack
 
-NEXT
+1.25_02 Thu Aug 17 22:41:28 CDT 2006
 
         [THINGS THAT MIGHT BREAK YOUR CODE]
         * Stopped supporting the --javascript option.  I assume
@@ -16,6 +16,7 @@ NEXT
           output.  Thanks to Leland Johnson for the idea.
         * Now supports --asm, and ignores SCCS directories.
 
+
 1.25_01 Wed Aug 16 18:16:19 CDT 2006
 
         [ENHANCEMENTS]
@@ -25,6 +26,7 @@ NEXT
         [INTERNALS]
         * Now uses File::Next as the file finder.  Not surprisingly,
           File::Next was based on ack's file finder.
+
 
 1.24    Sun Jul 16 01:10:44 CDT 2006
         [ENHANCEMENTS]

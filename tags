@@ -7,7 +7,9 @@
 App::Ack	Ack.pm	/^package App::Ack;$/;"	p
 MY	Makefile.PL	/^sub MY::postamble {$/;"	s
 _expand_list	Ack.pm	/^sub _expand_list {$/;"	s
+_ignore_dirs_str	Ack.pm	/^sub _ignore_dirs_str { return _listify( @ignore_dirs ); }$/;"	s
 _init_types	Ack.pm	/^sub _init_types {$/;"	s
+_listify	Ack.pm	/^sub _listify {$/;"	s
 _thpppt	Ack.pm	/^sub _thpppt {$/;"	s
 filetypes	Ack.pm	/^sub filetypes {$/;"	s
 filetypes_supported	Ack.pm	/^sub filetypes_supported {$/;"	s

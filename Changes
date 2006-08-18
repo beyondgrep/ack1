@@ -2,6 +2,11 @@ Revision history for ack
 
 NEXT
 
+        [FIXES]
+        * Fixed bugs in 1.25_01 where it wouldn't skip
+          directories correctly, and wouldn't autodescend into the
+          current directory.
+
         [ENHANCEMENTS]
         * Now supports --asm, and ignores SCCS directories.
 

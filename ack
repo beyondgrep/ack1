@@ -70,7 +70,7 @@ for my $i ( @filetypes_supported ) {
 
 # Stick any default switches at the beginning, so they can be overridden
 # by the command line switches.
-unshift @ARGV, split( " ", $ENV{ACK_SWITCHES} ) if defined $ENV{ACK_SWITCHES};
+unshift @ARGV, split( ' ', $ENV{ACK_SWITCHES} ) if defined $ENV{ACK_SWITCHES};
 
 map { App::Ack::_thpppt($_) if /^--th[bp]+t$/ } @ARGV; ## no critic
 Getopt::Long::Configure( 'bundling' );

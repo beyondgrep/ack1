@@ -166,12 +166,12 @@ sub _expand_list {
 sub _listify {
     my @whats = @_;
 
-    return "" if !@whats;
+    return '' if !@whats;
 
     return $whats[0] if @whats == 1;
 
-    my $last = pop @whats;
-    return join( ', ', @whats ) . " and $last";
+    my $end = pop @whats;
+    return join( ', ', @whats ) . " and $end";
 }
 
 =head1 AUTHOR

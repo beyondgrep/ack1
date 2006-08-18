@@ -39,6 +39,7 @@ my %options = (
     l           => \$opt{l},
     'm=i'       => \$opt{m},
     n           => \$opt{n},
+    'o|output:s' => \$opt{o},
     v           => \$opt{v},
     w           => \$opt{w},
 
@@ -46,22 +47,8 @@ my %options = (
     'color!'    => \$opt{color},
     'help'      => \$opt{help},
     'version'   => sub { print "ack $App::Ack::VERSION\n" and exit 1; },
-
-    'o|output:s' => sub {
-                    my $opt = shift;
-                    my $val = shift;
-
-                    if ( $val eq '' ) {
-                        $val = '$&';
-                    }
-                    else {
-                        $val = qq{"$val"};
-                    }
-                    print qq[ sub { $val } ], "\n";
-                    $opt{o} = eval qq[ sub { $val } ];
-                    die "Unable to use your -o argument\n" if $@;
-                }, # opt o
 );
+
 
 my @filetypes_supported = App::Ack::filetypes_supported();
 for my $i ( @filetypes_supported ) {
@@ -75,6 +62,16 @@ unshift @ARGV, split( ' ', $ENV{ACK_SWITCHES} ) if defined $ENV{ACK_SWITCHES};
 map { App::Ack::_thpppt($_) if /^--th[bp]+t$/ } @ARGV; ## no critic
 Getopt::Long::Configure( 'bundling' );
 GetOptions( %options ) or die "ack --help for options.\n";
+
+if ( defined( my $val = $opt{o} ) ) {
+    if ( $val eq '' ) {
+        $val = '$&';
+    }
+    else {
+        $val = qq{"$val"};
+    }
+    $opt{o} = eval qq[ sub { $val } ];
+}
 
 my $filetypes_supported_set =   grep { defined $lang{$_} && ($lang{$_} == 1) } @filetypes_supported;
 my $filetypes_supported_unset = grep { defined $lang{$_} && ($lang{$_} == 0) } @filetypes_supported;

@@ -94,27 +94,29 @@ sub filetypes {
 
     _init_types() unless keys %types;
 
+    # If there's an extension, look it up
     if ( $filename =~ /\.([^.]+)$/ ) {
         my $ref = $types{lc $1};
-        return $ref ? @$ref : ();
+        return @$ref if $ref;
     }
 
-    # No extension?  See if it has a shebang line
-    if ( $filename !~ /\./ ) {
-        my $fh;
-        if ( !open( $fh, '<', $filename ) ) {
-            warn "ack: $filename: $!\n";
-            return;
-        }
-        my $header = <$fh>;
-        close $fh;
-        return unless defined $header;
-        return 'perl'   if $header =~ /^#!.+\bperl\b/;
-        return 'php'    if $header =~ /^#!.+\bphp\b/;
-        return 'python' if $header =~ /^#!.+\bpython\b/;
-        return 'ruby'   if $header =~ /^#!.+\bruby\b/;
-        return 'shell'  if $header =~ /^#!.+\b(ba|c|k|z)?sh\b/;
+    return unless -r $filename;
+
+    # If there's no extension, or we don't recognize it, check the shebang line
+    my $fh;
+    if ( !open( $fh, '<', $filename ) ) {
+        warn "ack: $filename: $!\n";
         return;
+    }
+    my $header = <$fh>;
+    close $fh;
+    return unless defined $header;
+    if ( $header =~ /^#!/ ) {
+        return 'perl'   if $header =~ /\bperl\b/;
+        return 'php'    if $header =~ /\bphp\b/;
+        return 'python' if $header =~ /\bpython\b/;
+        return 'ruby'   if $header =~ /\bruby\b/;
+        return 'shell'  if $header =~ /\b(ba|c|k|z)?sh\b/;
     }
 
     return;

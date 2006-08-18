@@ -23,6 +23,7 @@ PERL_FILES: {
 
     is_deeply( [sort @files], [sort qw(
         t/swamp/Makefile.PL
+        t/swamp/perl.cgi
         t/swamp/perl.pl
         t/swamp/perl.pm
         t/swamp/perl.pod
@@ -43,6 +44,7 @@ PERL_FILES_GLOBBED: {
 
     is_deeply( [sort @files], [sort qw(
         t/swamp/Makefile.PL
+        t/swamp/perl.cgi
         t/swamp/perl.pl
         t/swamp/perl.pm
         t/swamp/perl.pod

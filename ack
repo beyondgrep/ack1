@@ -39,7 +39,6 @@ my %options = (
     l           => \$opt{l},
     'm=i'       => \$opt{m},
     n           => \$opt{n},
-    o           => \$opt{o},
     v           => \$opt{v},
     w           => \$opt{w},
 
@@ -47,6 +46,21 @@ my %options = (
     'color!'    => \$opt{color},
     'help'      => \$opt{help},
     'version'   => sub { print "ack $App::Ack::VERSION\n" and exit 1; },
+
+    'o|output:s' => sub {
+                    my $opt = shift;
+                    my $val = shift;
+
+                    if ( $val eq '' ) {
+                        $val = '$&';
+                    }
+                    else {
+                        $val = qq{"$val"};
+                    }
+                    print qq[ sub { $val } ], "\n";
+                    $opt{o} = eval qq[ sub { $val } ];
+                    die "Unable to use your -o argument\n" if $@;
+                }, # opt o
 );
 
 my @filetypes_supported = App::Ack::filetypes_supported();
@@ -185,7 +199,8 @@ sub search {
 
                 my $out;
                 if ( $opt{o} ) {
-                    $out = "$&\n";
+                    $out = $opt{o}->() . "\n";
+                    $opt{show_filename} = 0;
                 }
                 else {
                     $out = $_;
@@ -257,16 +272,6 @@ Key improvements include:
 =item * Uses Perl regular expressions
 
 =item * Highlights matched text
-
-=back
-
-=head1 TODO
-
-=over 4
-
-=item * Search through standard input if no files specified
-
-=item * Add a --[no]comment option to grep inside or exclude comments.
 
 =back
 

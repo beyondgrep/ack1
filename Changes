@@ -8,6 +8,8 @@ NEXT
           current directory.
 
         [ENHANCEMENTS]
+        * -o option now hanldes any given Perl expression for the
+          output.  Thanks to Leland Johnson for the idea.
         * Now supports --asm, and ignores SCCS directories.
 
 1.25_01 Wed Aug 16 18:16:19 CDT 2006

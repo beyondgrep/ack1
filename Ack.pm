@@ -233,6 +233,7 @@ Searching:
 Search output:
     -l                only print filenames containing matches
     -o                show only the part of a line matching PATTERN
+    -o=expr           output the evaluation of expr for each line
     -m=NUM            stop after NUM matches
     -H                print the filename for each match
     -h                suppress the prefixing filename on output

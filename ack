@@ -111,7 +111,8 @@ else {
         exit 0;
     }
     else {
-        @what = ''; # Assume current directory
+        $opt{defaulted_to_dot} = 1;
+        @what = '.'; # Assume current directory
         $opt{show_filename} = 1;
     }
 }
@@ -119,7 +120,7 @@ $opt{show_filename} = 0 if $opt{h};
 $opt{show_filename} = 1 if $opt{H};
 
 my $file_filter = $opt{all} ? sub {1} : \&is_interesting;
-my $descend_filter = $opt{n} ? sub {0} : sub {1};
+my $descend_filter = $opt{n} ? sub {0} : \&App::Ack::skipdir_filter;
 
 my $iter =
     File::Next::files( {
@@ -143,7 +144,7 @@ sub is_interesting {
     return if /~$/;
     return if /^\./;
 
-    my $filename = $File::Find::name;
+    my $filename = $File::Next::name;
     for my $type ( App::Ack::filetypes( $filename ) ) {
         return 1 if $lang{$type};
     }
@@ -165,6 +166,9 @@ sub search {
         if ( !open( $fh, '<', $filename ) ) {
             warn "ack: $filename: $!\n";
             return;
+        }
+        if ( $opt{defaulted_to_dot} ) {
+            $filename =~ s{^./}{};
         }
     }
 

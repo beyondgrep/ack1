@@ -254,8 +254,12 @@ Search output:
     -H              print the filename for each match
     -h              suppress the prefixing filename on output
     -c, --count     show number of lines matching per file
-    --[no]group     print a blank line between each file's matches
-                    (default: on unless output is redirected)
+
+    --group         group matches by file name.
+                    (default: on when used interactively)
+    --nogroup       One result per line, including filename, like grep
+                    (default: on when the output is redirected)
+
     --[no]color     highlight the matching text (default: on unless
                     output is redirected, or on Windows)
 

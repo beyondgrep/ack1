@@ -1,5 +1,10 @@
 Revision history for ack
 
+NEXT
+
+        [ENHANCEMENTS]
+        * Fixed docs for --[no]color.  Thanks, Mark Stosberg.
+
 1.25_02 Thu Aug 17 22:41:28 CDT 2006
 
         [THINGS THAT MIGHT BREAK YOUR CODE]

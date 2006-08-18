@@ -2,6 +2,10 @@ Revision history for ack
 
 NEXT
 
+        [THINGS THAT MIGHT BREAK YOUR CODE]
+        * Stopped supporting the --javascript option.  I assume
+          that everyone just uses --js.  Tell me if I'm wrong.
+
         [FIXES]
         * Fixed bugs in 1.25_01 where it wouldn't skip
           directories correctly, and wouldn't autodescend into the

@@ -38,7 +38,19 @@ sub is_filetype {
     return;
 }
 
-our %ignore_dirs = map { ($_,1) } qw( CVS RCS SCCS .svn _darcs blib );
+our @ignore_dirs = qw( blib CVS RCS SCCS .svn _darcs );
+our %ignore_dirs = map { ($_,1) } @ignore_dirs;
+
+=head2 ignore_dirs_str
+
+Commafied version of the directories we ignore.
+
+=cut
+
+sub ignore_dirs_str {
+    return _listify( @ignore_dirs );
+}
+
 
 =head2 skipdir_filter
 
@@ -57,7 +69,7 @@ our %mappings = (
     asm         => [qw( s S )],
     cc          => [qw( c h )],
     css         => [qw( css )],
-    javascript  => [qw( js )],
+    js          => [qw( js )],
     parrot      => [qw( pir pasm pmc ops pod pg tg )],
     perl        => [qw( pl pm pod tt ttml t )],
     php         => [qw( php phpt htm html )],
@@ -155,9 +167,19 @@ sub _expand_list {
     my $lang = shift;
 
     my @files = map { ".$_" } @{$mappings{$lang}};
-    my $and = pop @files;
 
-    return @files ? join( ', ', @files ) . " and $and" : $and;
+    return _listify( @files );
+}
+
+sub _listify {
+    my @whats = @_;
+
+    return "" if !@whats;
+
+    return $whats[0] if @whats == 1;
+
+    my $last = pop @whats;
+    return join( ', ', @whats ) . " and $last" );
 }
 
 =head1 AUTHOR
@@ -253,8 +275,7 @@ File inclusion/exclusion:
                       (but still skips RCS, CVS, .svn, _darcs and blib dirs)
     --[no]asm         LIST
     --[no]cc          LIST
-    --[no]javascript  LIST
-    --[no]js          same as --[no]javascript
+    --[no]js          LIST
     --[no]parrot      LIST
     --[no]perl        LIST
     --[no]php         LIST

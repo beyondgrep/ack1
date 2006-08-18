@@ -67,7 +67,6 @@ my @filetypes_supported = App::Ack::filetypes_supported();
 for my $i ( @filetypes_supported ) {
     $options{ "$i!" } = \$lang{ $i };
 }
-$options{ 'js!' } = \$lang{ javascript };
 
 # Stick any default switches at the beginning, so they can be overridden
 # by the command line switches.

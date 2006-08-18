@@ -40,16 +40,7 @@ sub is_filetype {
 
 our @ignore_dirs = qw( blib CVS RCS SCCS .svn _darcs );
 our %ignore_dirs = map { ($_,1) } @ignore_dirs;
-
-=head2 ignore_dirs_str
-
-Commafied version of the directories we ignore.
-
-=cut
-
-sub ignore_dirs_str {
-    return _listify( @ignore_dirs );
-}
+sub _ignore_dirs_str { return _listify( @ignore_dirs ); }
 
 
 =head2 skipdir_filter
@@ -157,6 +148,7 @@ sub show_help {
 
     for ( @lines ) {
         s/(\w+)(\s+)LIST/$1.$2._expand_list($1)/esmx;
+        s/IGNORE_DIRS/_ignore_dirs_str()/esmx;
     }
     print @lines;
 
@@ -179,7 +171,7 @@ sub _listify {
     return $whats[0] if @whats == 1;
 
     my $last = pop @whats;
-    return join( ', ', @whats ) . " and $last" );
+    return join( ', ', @whats ) . " and $last";
 }
 
 =head1 AUTHOR
@@ -248,47 +240,49 @@ Default switches may be specified in ACK_SWITCHES environment variable.
 Example: ack -i select
 
 Searching:
-    -i                ignore case distinctions
-    -v                invert match: select non-matching lines
-    -w                force PATTERN to match only whole words
+    -i              ignore case distinctions
+    -v              invert match: select non-matching lines
+    -w              force PATTERN to match only whole words
 
 Search output:
-    -l                only print filenames containing matches
-    -o                show only the part of a line matching PATTERN
-    -o=expr           output the evaluation of expr for each line
-    -m=NUM            stop after NUM matches
-    -H                print the filename for each match
-    -h                suppress the prefixing filename on output
-    -c, --count       show number of lines matching per file
-    --[no]group       print a blank line between each file's matches
-                      (default: on unless output is redirected)
-    --[no]color       highlight the matching text (default: on unless
-                      output is redirected, or on Windows)
+    -l              only print filenames containing matches
+    -o              show only the part of a line matching PATTERN
+                    (turns off text highlighting)
+    -o=expr         output the evaluation of expr for each line
+                    (turns off text highlighting)
+    -m=NUM          stop after NUM matches
+    -H              print the filename for each match
+    -h              suppress the prefixing filename on output
+    -c, --count     show number of lines matching per file
+    --[no]group     print a blank line between each file's matches
+                    (default: on unless output is redirected)
+    --[no]color     highlight the matching text (default: on unless
+                    output is redirected, or on Windows)
 
 File finding:
-    -f                only print the files found, without searching.
-                      The PATTERN must not be specified.
+    -f              only print the files found, without searching.
+                    The PATTERN must not be specified.
 
 File inclusion/exclusion:
-    -n                No descending into subdirectories
-    -a, --all         All files, regardless of extension
-                      (but still skips RCS, CVS, .svn, _darcs and blib dirs)
-    --[no]asm         LIST
-    --[no]cc          LIST
-    --[no]js          LIST
-    --[no]parrot      LIST
-    --[no]perl        LIST
-    --[no]php         LIST
-    --[no]python      LIST
-    --[no]ruby        LIST
-    --[no]shell       LIST
-    --[no]sql         LIST
-    --[no]yaml        LIST
+    -n              No descending into subdirectories
+    -a, --all       All files, regardless of extension (but still skips
+                    IGNORE_DIRS dirs)
+    --[no]asm       LIST
+    --[no]cc        LIST
+    --[no]js        LIST
+    --[no]parrot    LIST
+    --[no]perl      LIST
+    --[no]php       LIST
+    --[no]python    LIST
+    --[no]ruby      LIST
+    --[no]shell     LIST
+    --[no]sql       LIST
+    --[no]yaml      LIST
 
 Miscellaneous:
-    --help            this help
-    --version         display version
-    --thpppt          Bill the Cat
+    --help          this help
+    --version       display version
+    --thpppt        Bill the Cat
 
 
 GOTCHAS:

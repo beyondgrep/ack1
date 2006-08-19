@@ -3,8 +3,8 @@
 use warnings;
 use strict;
 
-use Test::More tests => 7;
-use File::Next 0.20;
+use Test::More tests => 8;
+use File::Next 0.22;
 
 BEGIN {
     use_ok( 'App::Ack' );
@@ -12,6 +12,7 @@ BEGIN {
 
 my $is_perl = sub { return App::Ack::is_filetype( $File::Next::name, 'perl' ) }; ## no critic
 my $is_parrot = sub { return App::Ack::is_filetype( $File::Next::name, 'parrot' ) }; ## no critic
+my $is_binary = sub { return App::Ack::is_filetype( $File::Next::name, 'binary' ) }; ## no critic
 
 PERL_FILES: {
     my $iter =
@@ -126,3 +127,21 @@ PERL_FILES_BY_NAME: {
 
     is_deeply( [sort @files], [sort qw( t/swamp/perl.pod )], 'PERL_FILES_BY_NAME' );
 }
+
+BINARY_FILES: {
+    my $iter =
+        File::Next::files( {
+            file_filter => $is_binary,
+            descend_filter => \&App::Ack::skipdir_filter,
+        }, 't/swamp' );
+
+    my @files;
+    while ( my $file = $iter->() ) {
+        push( @files, $file );
+    }
+
+    is_deeply( [sort @files], [sort qw(
+        t/swamp/moose-andy.jpg
+    )], 'BINARY_FILES' );
+}
+

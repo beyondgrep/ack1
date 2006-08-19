@@ -9,11 +9,11 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.25_02
+Version 1.25_03
 
 =cut
 
-our $VERSION = '1.25_02';
+our $VERSION = '1.25_03';
 
 =head1 SYNOPSIS
 

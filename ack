@@ -78,8 +78,8 @@ my $filetypes_supported_unset = grep { defined $lang{$_} && ($lang{$_} == 0) } @
 
 # If anyone says --noperl, we assume all other languages must be on.
 if ( !$filetypes_supported_set ) {
-    for ( keys %lang ) {
-        $lang{$_} = 1 unless defined $lang{$_};
+    for my $i ( keys %lang ) {
+        $lang{$i} = 1 unless ( defined( $lang{$i} ) || $i eq 'binary' );
     }
 }
 
@@ -167,10 +167,12 @@ sub search {
     my %opt = @_;
 
     my $nmatches = 0;
+    my $is_binary;
 
     my $fh;
     if ( $filename eq '-' ) {
         $fh = *STDIN;
+        $is_binary = 0;
     }
     else {
         if ( !open( $fh, '<', $filename ) ) {
@@ -180,6 +182,7 @@ sub search {
         if ( $opt{defaulted_to_dot} ) {
             $filename =~ s{^\Q./}{};
         }
+        $is_binary = -B $filename;
     }
 
     local $_; ## no critic
@@ -187,11 +190,10 @@ sub search {
         if ( /$re/ ) { # If we have a matching line
             ++$nmatches;
             if ( !$opt{count} ) {
-                if ( $nmatches == 1 ) {
-                    # No point in searching more if we only want a list
-                    last if $opt{l};
-                }
                 next if $opt{v};
+
+                # No point in searching more if we only want a list
+                last if ( $nmatches == 1 && $opt{l} );
 
                 my $out;
                 if ( $opt{o} ) {
@@ -203,7 +205,11 @@ sub search {
                     $out =~ s/($re)/colored($1,"black on_yellow")/eg if $opt{color};
                 }
 
-                if ( $opt{show_filename} ) {
+                if ( $is_binary ) {
+                    print "Binary file $filename matches\n";
+                    last;
+                }
+                elsif ( $opt{show_filename} ) {
                     my $colorname = $opt{color} ? colored( $filename, 'bold green' ) : $filename;
                     if ( $opt{group} ) {
                         print "$colorname\n" if $nmatches == 1;

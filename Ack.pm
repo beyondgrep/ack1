@@ -58,6 +58,7 @@ sub skipdir_filter {
 our %types;
 our %mappings = (
     asm         => [qw( s S )],
+    binary      => q{Binary files as defined by Perl's -B operator},
     cc          => [qw( c h )],
     css         => [qw( css )],
     js          => [qw( js )],
@@ -73,8 +74,10 @@ our %mappings = (
 
 sub _init_types {
     while ( my ($type,$exts) = each %mappings ) {
-        for my $ext ( @$exts ) {
-            push( @{$types{$ext}}, $type );
+        if ( ref $exts ) {
+            for my $ext ( @$exts ) {
+                push( @{$types{$ext}}, $type );
+            }
         }
     }
 
@@ -101,6 +104,7 @@ sub filetypes {
     }
 
     return unless -r $filename;
+    return 'binary' if -B $filename;
 
     # If there's no extension, or we don't recognize it, check the shebang line
     my $fh;
@@ -160,6 +164,11 @@ sub show_help {
 sub _expand_list {
     my $lang = shift;
 
+    my $ext_list = $mappings{$lang};
+
+    if ( not ref $ext_list ) {
+        return $ext_list;
+    }
     my @files = map { ".$_" } @{$mappings{$lang}};
 
     return _listify( @files );
@@ -250,7 +259,7 @@ Search output:
     -l              only print filenames containing matches
     -o              show only the part of a line matching PATTERN
                     (turns off text highlighting)
-    -o=expr         output the evaluation of expr for each line
+    --output=expr   output the evaluation of expr for each line
                     (turns off text highlighting)
     -m=NUM          stop after NUM matches
     -H              print the filename for each match
@@ -284,6 +293,8 @@ File inclusion/exclusion:
     --[no]shell     LIST
     --[no]sql       LIST
     --[no]yaml      LIST
+    --[no]binary    LIST
+                    (default: no binary)
 
 Miscellaneous:
     --help          this help

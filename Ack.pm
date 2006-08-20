@@ -61,6 +61,7 @@ our %mappings = (
     binary      => q{Binary files as defined by Perl's -B operator},
     cc          => [qw( c h )],
     css         => [qw( css )],
+    haskell     => [qw( hs lhs )],
     js          => [qw( js )],
     parrot      => [qw( pir pasm pmc ops pod pg tg )],
     perl        => [qw( pl pm pod tt ttml t )],
@@ -284,6 +285,7 @@ File inclusion/exclusion:
                     IGNORE_DIRS dirs)
     --[no]asm       LIST
     --[no]cc        LIST
+    --[no]haskell   LIST
     --[no]js        LIST
     --[no]parrot    LIST
     --[no]perl      LIST

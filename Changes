@@ -3,8 +3,8 @@ Revision history for ack
 NEXT
 
         [ENHANCEMENTS]
-        * Added --[no]haskell
-        * Added --[no]html
+        * Added Haskell, HTML, elisp, lisp, OCaml, Ruby, Scheme,
+          Template Toolkit, Vim.
         * Made the extensions system EVEN MORE EXTENSIBLE
 
 1.25_03 Sat Aug 19 01:01:01 CDT 2006

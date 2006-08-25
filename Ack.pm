@@ -62,6 +62,7 @@ our %mappings = (
     cc          => [qw( c h )],
     css         => [qw( css )],
     haskell     => [qw( hs lhs )],
+    html        => [qw( htm html shtml )],
     js          => [qw( js )],
     parrot      => [qw( pir pasm pmc ops pod pg tg )],
     perl        => [qw( pl pm pod tt ttml t )],

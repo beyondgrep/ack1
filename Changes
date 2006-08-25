@@ -4,6 +4,7 @@ NEXT
 
         [ENHANCEMENTS]
         * Added --[no]haskell
+        * Added --[no]html
 
 1.25_03 Sat Aug 19 01:01:01 CDT 2006
 

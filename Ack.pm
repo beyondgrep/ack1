@@ -58,7 +58,7 @@ sub skipdir_filter {
 our %types;
 our %mappings = (
     asm         => [qw( s S )],
-    binary      => q{Binary files as defined by Perl's -B operator},
+    binary      => q{Binary files, as defined by Perl's -B op (default: off)},
     cc          => [qw( c h )],
     css         => [qw( css )],
     haskell     => [qw( hs lhs )],
@@ -152,28 +152,27 @@ Dumps the help page to the user.
 =cut
 
 sub show_help {
-    my @lines = <DATA>;
+    my $help = join "", <DATA>;
 
-    for ( @lines ) {
-        s/(\w+)(\s+)LIST/$1.$2._expand_list($1)/esmx;
-        s/IGNORE_DIRS/_ignore_dirs_str()/esmx;
+    my @langlines;
+    for my $lang ( sort keys %mappings ) {
+        my $ext_list = $mappings{$lang};
+
+        if ( ref $ext_list ) {
+            my @exts = map { ".$_" } @$ext_list;
+
+            $ext_list = _listify( @exts );
+        }
+        push( @langlines, sprintf( '    --[no]%-9.9s %s', $lang, $ext_list ) );
     }
-    print @lines;
+    my $langlines = join( "\n", @langlines );
+
+    $help =~ s/LIST/$langlines/smx;
+    $help =~ s/IGNORE_DIRS/_ignore_dirs_str()/esmx;
+
+    print $help;
 
     return;
-}
-
-sub _expand_list {
-    my $lang = shift;
-
-    my $ext_list = $mappings{$lang};
-
-    if ( not ref $ext_list ) {
-        return $ext_list;
-    }
-    my @files = map { ".$_" } @{$mappings{$lang}};
-
-    return _listify( @files );
 }
 
 sub _listify {
@@ -284,20 +283,7 @@ File inclusion/exclusion:
     -n              No descending into subdirectories
     -a, --all       All files, regardless of extension (but still skips
                     IGNORE_DIRS dirs)
-    --[no]asm       LIST
-    --[no]cc        LIST
-    --[no]haskell   LIST
-    --[no]js        LIST
-    --[no]parrot    LIST
-    --[no]perl      LIST
-    --[no]php       LIST
-    --[no]python    LIST
-    --[no]ruby      LIST
-    --[no]shell     LIST
-    --[no]sql       LIST
-    --[no]yaml      LIST
-    --[no]binary    LIST
-                    (default: no binary)
+LIST
 
 Miscellaneous:
     --help          this help

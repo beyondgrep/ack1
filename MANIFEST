@@ -13,6 +13,7 @@ t/pod.t
 
 t/swamp/c-header.h
 t/swamp/c-source.c
+t/swamp/#emacs-workfile.pl#
 t/swamp/javascript.js
 t/swamp/Makefile
 t/swamp/Makefile.PL

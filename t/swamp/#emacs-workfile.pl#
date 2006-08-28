@@ -1,0 +1,3 @@
+#!/usr/bin/perl
+
+This is a scratch emacs workfile that has a shebang line but should not get read.

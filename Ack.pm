@@ -103,6 +103,11 @@ F<foo.pod> could be "perl" or "parrot".
 sub filetypes {
     my $filename = shift;
 
+    return 'ignore' if $filename =~ /~$/;
+    return 'ignore' if $filename =~ /^#.+#$/;
+    return 'ignore' if $filename =~ /\.(o|a|so|swp|core)$/;
+    return 'ignore' if $filename =~ /^core\.\d+$/;
+
     _init_types() unless keys %types;
 
     # If there's an extension, look it up

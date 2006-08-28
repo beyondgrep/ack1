@@ -1,5 +1,12 @@
 Revision history for ack
 
+NEXT
+
+        [ENHANCEMENTS]
+        * Certain files won't get their contents checked, such as vi
+          and emacs swap files.  Sometimes those files would come up as
+          matching their shebang line, which isn't what we want.
+
 1.26    Thu Aug 24 20:28:05 CDT 2006
 
         [ENHANCEMENTS]

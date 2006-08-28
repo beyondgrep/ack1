@@ -1,11 +1,12 @@
 Revision history for ack
 
-NEXT
+1.27_01 Mon Aug 28 17:02:35 CDT 2006
 
         [ENHANCEMENTS]
         * Certain files won't get their contents checked, such as vi
           and emacs swap files.  Sometimes those files would come up as
           matching their shebang line, which isn't what we want.
+
 
 1.26    Thu Aug 24 20:28:05 CDT 2006
 

@@ -2,6 +2,7 @@ package App::Ack;
 
 use warnings;
 use strict;
+use File::Basename;
 
 =head1 NAME
 
@@ -78,16 +79,23 @@ our %mappings = (
     tt          => [qw( tt tt2 )],
     vim         => [qw( vim )],
     yaml        => [qw( yaml yml )],
+    -ignore     => [qw( a o so swp core )],
 );
 
+our @suffixes;
+
 sub _init_types {
+    my %suffixes;
     while ( my ($type,$exts) = each %mappings ) {
         if ( ref $exts ) {
             for my $ext ( @$exts ) {
                 push( @{$types{$ext}}, $type );
+                ++$suffixes{".$ext"};
             }
         }
     }
+
+    @suffixes = keys %suffixes;
 
     return;
 }
@@ -103,16 +111,16 @@ F<foo.pod> could be "perl" or "parrot".
 sub filetypes {
     my $filename = shift;
 
-    return 'ignore' if $filename =~ /~$/;
-    return 'ignore' if $filename =~ /^#.+#$/;
-    return 'ignore' if $filename =~ /\.(o|a|so|swp|core)$/;
-    return 'ignore' if $filename =~ /^core\.\d+$/;
-
     _init_types() unless keys %types;
 
+    my ($filebase,$dirs,$suffix) = fileparse( $filename, @suffixes );
+
+    return '-ignore' if $filebase =~ /^#.+#$/;
+    return '-ignore' if $filebase =~ /^core\.\d+$/;
+
     # If there's an extension, look it up
-    if ( $filename =~ /\.([^.]+)$/ ) {
-        my $ref = $types{lc $1};
+    if ( $suffix ) {
+        my $ref = $types{lc $suffix};
         return @$ref if $ref;
     }
 
@@ -167,6 +175,7 @@ sub show_help {
 
     my @langlines;
     for my $lang ( sort keys %mappings ) {
+        next if $lang =~ /^-/; # Stuff to not show
         my $ext_list = $mappings{$lang};
 
         if ( ref $ext_list ) {

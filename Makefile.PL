@@ -17,6 +17,7 @@ WriteMakefile(
         'Getopt::Long' => 0,
         'Test::More' => 0,
         'File::Next' => 0.22,
+        'File::Basename' => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'ack-*' },

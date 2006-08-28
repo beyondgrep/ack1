@@ -90,7 +90,7 @@ sub _init_types {
         if ( ref $exts ) {
             for my $ext ( @$exts ) {
                 push( @{$types{$ext}}, $type );
-                ++$suffixes{".$ext"};
+                ++$suffixes{"\\.$ext"};
             }
         }
     }
@@ -113,13 +113,17 @@ sub filetypes {
 
     _init_types() unless keys %types;
 
-    my ($filebase,$dirs,$suffix) = fileparse( $filename, @suffixes );
+    return '-ignore' if $filename =~ /~$/;
+
+    # Pass our $filename in lowercase so we match lowercase filenames
+    my ($filebase,$dirs,$suffix) = File::Basename::fileparse( lc $filename, @suffixes );
 
     return '-ignore' if $filebase =~ /^#.+#$/;
     return '-ignore' if $filebase =~ /^core\.\d+$/;
 
     # If there's an extension, look it up
     if ( $suffix ) {
+        $suffix =~ s/^\.//; # Drop the period that File::Basename needs
         my $ref = $types{lc $suffix};
         return @$ref if $ref;
     }

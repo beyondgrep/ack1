@@ -136,7 +136,7 @@ my $iter =
     File::Next::files( {
         file_filter     => $file_filter,
         descend_filter  => $descend_filter,
-        error_handler   => sub { "ack: $_\n" },
+        error_handler   => sub { my $msg = shift; warn "ack: $msg\n" },
     }, @what );
 
 

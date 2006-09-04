@@ -1,5 +1,10 @@
 Revision history for ack
 
+NEXT
+
+        [ENHANCEMENTS]
+        * Added --mason switch
+
 1.27_01 Mon Aug 28 17:02:35 CDT 2006
 
         [ENHANCEMENTS]

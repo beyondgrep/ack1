@@ -82,31 +82,6 @@ sub skipdir_filter {
 }
 
 our %types;
-our %mappings = (
-    asm         => [qw( s S )],
-    binary      => q{Binary files, as defined by Perl's -B op (default: off)},
-    cc          => [qw( c h )],
-    css         => [qw( css )],
-    elisp       => [qw( el )],
-    haskell     => [qw( hs lhs )],
-    html        => [qw( htm html shtml )],
-    lisp        => [qw( lisp )],
-    js          => [qw( js )],
-    ocaml       => [qw( ml mli )],
-    parrot      => [qw( pir pasm pmc ops pod pg tg )],
-    perl        => [qw( pl pm pod tt ttml t )],
-    php         => [qw( php phpt htm html )],
-    python      => [qw( py )],
-    ruby        => [qw( rb rhtml rjs )],
-    scheme      => [qw( scm )],
-    shell       => [qw( sh bash csh ksh zsh )],
-    sql         => [qw( sql ctl )],
-    tt          => [qw( tt tt2 )],
-    vim         => [qw( vim )],
-    yaml        => [qw( yaml yml )],
-    -ignore     => [qw( a o so swp core )],
-);
-
 our @suffixes;
 
 sub _init_types {

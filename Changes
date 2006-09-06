@@ -2,6 +2,10 @@ Revision history for ack
 
 NEXT
 
+        [FIXES]
+        * Now requires File::Next 0.28, because previous versions wouldn't
+          die correctly.
+
         [ENHANCEMENTS]
         * Added --mason switch
 

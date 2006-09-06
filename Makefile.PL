@@ -16,7 +16,7 @@ WriteMakefile(
         'Term::ANSIColor' => 0,
         'Getopt::Long' => 0,
         'Test::More' => 0,
-        'File::Next' => 0.22,
+        'File::Next' => 0.28,
         'File::Basename' => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },

@@ -26,7 +26,7 @@ PERL_FILES: {
         push( @files, $file );
     }
 
-    is_deeply( [sort @files], [sort qw(
+    _sets_match( \@files, [qw(
         t/swamp/Makefile.PL
         t/swamp/perl.cgi
         t/swamp/perl.pl
@@ -51,7 +51,7 @@ PERL_FILES_GLOBBED: {
         push( @files, $file );
     }
 
-    is_deeply( [sort @files], [sort qw(
+    _sets_match( \@files, [qw(
         t/swamp/Makefile.PL
         t/swamp/perl.cgi
         t/swamp/perl.pl
@@ -74,7 +74,7 @@ PARROT_FILES_DESCEND: {
         push( @files, $file );
     }
 
-    is_deeply( [sort @files], [sort qw(
+    _sets_match( \@files, [qw(
         t/swamp/parrot.pir
         t/swamp/perl.pod
     )], 'PARROT_FILES_DESCEND' );
@@ -92,7 +92,7 @@ PARROT_FILES_NODESCEND: {
         push( @files, $file );
     }
 
-    is_deeply( [sort @files], [sort qw(
+    _sets_match( \@files, [qw(
         t/swamp/parrot.pir
         t/swamp/perl.pod
     )], 'PARROT_FILES_NODESCEND' );
@@ -110,7 +110,7 @@ PARROT_FILES_NODESCEND_EMPTY: {
         push( @files, $file );
     }
 
-    is_deeply( [@files], [], 'PARROT_FILES_NODESCEND_EMPTY' );
+    _sets_match( \@files, [], 'PARROT_FILES_NODESCEND_EMPTY' );
 }
 
 PERL_FILES_BY_NAME: {
@@ -125,7 +125,7 @@ PERL_FILES_BY_NAME: {
         push( @files, $file );
     }
 
-    is_deeply( [sort @files], [sort qw( t/swamp/perl.pod )], 'PERL_FILES_BY_NAME' );
+    _sets_match( \@files, [qw( t/swamp/perl.pod )], 'PERL_FILES_BY_NAME' );
 }
 
 BINARY_FILES: {
@@ -140,8 +140,21 @@ BINARY_FILES: {
         push( @files, $file );
     }
 
-    is_deeply( [sort @files], [sort qw(
+    _sets_match( \@files, [qw(
         t/swamp/moose-andy.jpg
     )], 'BINARY_FILES' );
 }
 
+sub _sets_match {
+    my @expected = @{+shift};
+    my @actual = @{+shift};
+    my $msg = shift;
+
+    # Normalize all the paths
+    for my $path ( @expected, @actual ) {
+        $path = File::Next::_reslash( $path );
+    }
+
+    local $Test::Builder::Level = $Test::Builder::Level + 1; ## no critic
+    return is_deeply( [sort @expected], [sort @actual], $msg );
+}

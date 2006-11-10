@@ -2,6 +2,9 @@ Revision history for ack
 
 NEXT
 
+        [FIXES]
+        * Tests should pass on Win32.  Thanks, Jerry Gay.
+
         [ENHANCEMENTS]
         * A new make target, "crush", will create a "crushed" version
           of Ack with App::Ack and File::Next inlined, so that you

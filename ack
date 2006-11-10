@@ -46,7 +46,7 @@ my %options = (
     'group!'    => \$opt{group},
     'color!'    => \$opt{color},
     'help'      => \$opt{help},
-    'version'   => sub { print "ack $App::Ack::VERSION\n" and exit 1; },
+    'version'   => sub { version() and exit 1; },
 );
 
 
@@ -246,6 +246,19 @@ sub search {
             print "\n" if $nmatches && $opt{show_filename} && $opt{group} && !$opt{v};
         }
     }
+
+    return;
+}
+
+sub version() {
+    print <<"END_OF_VERSION";
+ack $App::Ack::VERSION
+
+Copyright 2005-2006 Andy Lester, all rights reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+END_OF_VERSION
 
     return;
 }

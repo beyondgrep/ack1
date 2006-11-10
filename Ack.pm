@@ -174,7 +174,8 @@ Dumps the help page to the user.
 
 =cut
 
-my $help = <<'END_OF_HELP';
+sub show_help {
+    my $help_template = <<'END_OF_HELP';
 Usage: ack [OPTION]... PATTERN [FILES]
 Search for PATTERN in each source file in the tree from cwd on down.
 If [FILES] is specified, then only those files/directories are checked.
@@ -233,7 +234,6 @@ Note that FILES must still match valid selection rules.  For example,
 will search nothing, because foo.rb is a Ruby file.
 END_OF_HELP
 
-sub show_help {
     my @langlines;
     for my $lang ( sort keys %mappings ) {
         next if $lang =~ /^-/; # Stuff to not show
@@ -248,6 +248,7 @@ sub show_help {
     }
     my $langlines = join( "\n", @langlines );
 
+    my $help = $help_template;
     $help =~ s/LIST/$langlines/smx;
     $help =~ s/IGNORE_DIRS/_ignore_dirs_str()/esmx;
 

@@ -7,6 +7,8 @@ NEXT
           of Ack with App::Ack and File::Next inlined, so that you
           can install it standalone in your own ~/bin directory.
 
+        * Added --cpp for .cpp, .h and .m files.
+
 1.28    Mon Sep 11 14:10:57 CDT 2006
 
         [FIXES]

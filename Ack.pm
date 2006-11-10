@@ -20,6 +20,7 @@ our %mappings = (
     asm         => [qw( s S )],
     binary      => q{Binary files, as defined by Perl's -B op (default: off)},
     cc          => [qw( c h )],
+    cpp         => [qw( cpp m h )],
     css         => [qw( css )],
     elisp       => [qw( el )],
     haskell     => [qw( hs lhs )],
@@ -217,8 +218,8 @@ File finding:
 File inclusion/exclusion:
     -n              No descending into subdirectories
     -a, --all       All files, regardless of extension (but still skips
-                    IGNORE_DIRS dirs)
-LIST
+                    @IGNORE_DIRS@ dirs)
+@LIST@
 
 Miscellaneous:
     --help          this help
@@ -249,8 +250,8 @@ END_OF_HELP
     my $langlines = join( "\n", @langlines );
 
     my $help = $help_template;
-    $help =~ s/LIST/$langlines/smx;
-    $help =~ s/IGNORE_DIRS/_ignore_dirs_str()/esmx;
+    $help =~ s/\@LIST\@/$langlines/smx;
+    $help =~ s/\@IGNORE_DIRS\@/_ignore_dirs_str()/esmx;
 
     print $help;
 

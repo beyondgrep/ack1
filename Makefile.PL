@@ -36,6 +36,15 @@ tags:
 critic:
 	perlcritic -1 -q .
 
+APP_ACK_PM      = Ack.pm
+FILE_NEXT_PM    = $(shell perldoc -l File::Next)
+CRUSH           = crush
+
+crush: $(APP_ACK_PM) $(FILE_NEXT_PM)
+	grep -v 'use App::Ack' ack | grep -v 'use File::Next' > $(CRUSH)
+	cat $(APP_ACK_PM) $(FILE_NEXT_PM) >> $(CRUSH)
+	chmod +x $(CRUSH)
+
 MAKE_FRAG
 }
 1;

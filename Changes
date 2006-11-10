@@ -1,5 +1,12 @@
 Revision history for ack
 
+NEXT
+
+        [ENHANCEMENTS]
+        * A new make target, "crush", will create a "crushed" version
+          of Ack with App::Ack and File::Next inlined, so that you
+          can install it standalone in your own ~/bin directory.
+
 1.28    Mon Sep 11 14:10:57 CDT 2006
 
         [FIXES]

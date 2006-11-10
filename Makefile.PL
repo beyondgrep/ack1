@@ -20,7 +20,7 @@ WriteMakefile(
         'File::Basename' => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean               => { FILES => 'ack-*' },
+    clean               => { FILES => 'ack-* crush' },
 );
 
 sub MY::postamble {

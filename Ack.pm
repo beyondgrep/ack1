@@ -10,11 +10,11 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.28
+Version 1.30
 
 =cut
 
-our $VERSION = '1.28';
+our $VERSION = '1.30';
 
 our %mappings = (
     asm         => [qw( s S )],

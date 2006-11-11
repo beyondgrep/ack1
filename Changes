@@ -1,6 +1,6 @@
 Revision history for ack
 
-NEXT
+1.30    Fri Nov 10 19:25:23 CST 2006
 
         [FIXES]
         * Tests should pass on Win32.  Thanks, Jerry Gay.

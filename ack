@@ -46,7 +46,7 @@ my %options = (
     'group!'    => \$opt{group},
     'color!'    => \$opt{color},
     'help'      => \$opt{help},
-    'version'   => sub { version() and exit 1; },
+    'version'   => sub { version(); exit 1; },
 );
 
 

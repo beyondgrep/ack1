@@ -3,7 +3,8 @@
 use warnings;
 use strict;
 
-use Test::More tests => 8;
+use Test::More tests => 18;
+use Data::Dumper;
 
 BEGIN {
     use_ok( 'App::Ack' );
@@ -19,3 +20,32 @@ ok(  App::Ack::is_filetype( 'foo.pod', 'perl' ), 'foo.pod can be perl' );
 ok(  App::Ack::is_filetype( 'foo.pod', 'parrot' ), 'foo.pod can be parrot' );
 ok( !App::Ack::is_filetype( 'foo.pod', 'ruby' ), 'foo.pod cannot be ruby' );
 
+is(App::Ack::filetypes(q{foo.pod~}), q{-ignore},
+    "correctly ignore backup file");
+
+is(App::Ack::filetypes(q{#some.pod#}), q{-ignore},
+    "correctly ignore files starting and ending with hash mark");
+
+is(App::Ack::filetypes(q{core.987654321}), q{-ignore},
+    "correctly ignore files named core.NNNN");
+
+is(App::Ack::filetypes(qq{etc/shebang.pl.xxx}), q{perl},
+    "file identified as Perl from shebang line");
+
+is(App::Ack::filetypes(qq{etc/shebang.php.xxx}), q{php},
+    "file identified as PHP from shebang line");
+
+is(App::Ack::filetypes(qq{etc/shebang.py.xxx}), q{python},
+    "file identified as Python from shebang line");
+
+is(App::Ack::filetypes(qq{etc/shebang.rb.xxx}), q{ruby},
+    "file identified as Ruby from shebang line");
+
+is(App::Ack::filetypes(qq{etc/shebang.sh.xxx}), q{shell},
+    "file identified as shell from shebang line");
+
+ok(! defined App::Ack::filetypes(qq{etc/shebang.foobar.xxx}), 
+    "file could not be identified from shebang line");
+
+is(App::Ack::filetypes(qq{etc/shebang.empty.xxx}), q{binary}, 
+    "empty file returns 'binary'");

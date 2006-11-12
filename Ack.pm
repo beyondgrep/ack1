@@ -229,7 +229,6 @@ Miscellaneous:
     --version       Display version & copyright
     --thpppt        Bill the Cat
 
-
 GOTCHAS:
 Note that FILES must still match valid selection rules.  For example,
 

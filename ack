@@ -61,7 +61,7 @@ for my $i ( @filetypes_supported ) {
 unshift @ARGV, split( ' ', $ENV{ACK_SWITCHES} ) if defined $ENV{ACK_SWITCHES};
 
 map { App::Ack::_thpppt($_) if /^--th[bp]+t$/ } @ARGV; ## no critic
-Getopt::Long::Configure( 'bundling' );
+Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
 GetOptions( %options ) or die "ack --help for options.\n";
 
 if ( defined( my $val = $opt{o} ) ) {

@@ -5,6 +5,9 @@ NEXT
         [ENHANCEMENTS]
         Added the -Q flag for treating the search string as a literal.
 
+        [FIXES]
+        Will no longer ignore case distinctions in options.
+
 
 1.30    Fri Nov 10 19:25:23 CST 2006
 

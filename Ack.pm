@@ -44,6 +44,8 @@ our %mappings = (
 
 =head1 SYNOPSIS
 
+If you want to know about the F<ack> program
+
 No user-serviceable parts inside.  F<ack> is all that should use this.
 
 =head1 FUNCTIONS
@@ -188,31 +190,32 @@ Default switches may be specified in ACK_SWITCHES environment variable.
 Example: ack -i select
 
 Searching:
-    -i              ignore case distinctions
-    -v              invert match: select non-matching lines
-    -w              force PATTERN to match only whole words
+    -i              Ignore case distinctions
+    -v              Invert match: select non-matching lines
+    -w              Force PATTERN to match only whole words
+    -Q              Quote all metacharacters; expr is literal
 
 Search output:
-    -l              only print filenames containing matches
-    -o              show only the part of a line matching PATTERN
+    -l              Only print filenames containing matches
+    -o              Show only the part of a line matching PATTERN
                     (turns off text highlighting)
-    --output=expr   output the evaluation of expr for each line
+    --output=expr   Output the evaluation of expr for each line
                     (turns off text highlighting)
-    -m=NUM          stop after NUM matches
-    -H              print the filename for each match
-    -h              suppress the prefixing filename on output
-    -c, --count     show number of lines matching per file
+    -m=NUM          Stop after NUM matches
+    -H              Print the filename for each match
+    -h              Suppress the prefixing filename on output
+    -c, --count     Show number of lines matching per file
 
-    --group         group matches by file name.
+    --group         Group matches by file name.
                     (default: on when used interactively)
     --nogroup       One result per line, including filename, like grep
                     (default: on when the output is redirected)
 
-    --[no]color     highlight the matching text (default: on unless
+    --[no]color     Highlight the matching text (default: on unless
                     output is redirected, or on Windows)
 
 File finding:
-    -f              only print the files found, without searching.
+    -f              Only print the files found, without searching.
                     The PATTERN must not be specified.
 
 File inclusion/exclusion:
@@ -222,8 +225,8 @@ File inclusion/exclusion:
 @LIST@
 
 Miscellaneous:
-    --help          this help
-    --version       display version
+    --help          This help
+    --version       Display version & copyright
     --thpppt        Bill the Cat
 
 

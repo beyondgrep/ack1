@@ -40,6 +40,7 @@ my %options = (
     'm=i'       => \$opt{m},
     n           => \$opt{n},
     'o|output:s' => \$opt{o},
+    'Q|literal' => \$opt{Q},
     v           => \$opt{v},
     w           => \$opt{w},
 
@@ -93,6 +94,9 @@ my $re;
 if ( !$opt{f} ) {
     $re = shift or die 'No regex specified\n';
 
+    if ( $opt{Q} ) {
+        $re = quotemeta( $re );
+    }
     if ( $opt{w} ) {
         $re = $opt{i} ? qr/\b$re\b/i : qr/\b$re\b/;
     }

@@ -2,7 +2,7 @@ package App::Ack;
 
 use warnings;
 use strict;
-use File::Basename;
+use File::Basename ();
 
 =head1 NAME
 
@@ -10,11 +10,11 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.30
+Version 1.32
 
 =cut
 
-our $VERSION = '1.30';
+our $VERSION = '1.32';
 
 our %mappings = (
     asm         => [qw( s S )],
@@ -314,8 +314,17 @@ L<http://ack.googlecode.com/svn/>
 
 =head1 ACKNOWLEDGEMENTS
 
-Thanks to everyone who has contributed to ack, including
-Rick Scott
+Thanks to everyone who has contributed to ack in any way, including
+Rick Scott,
+Ask Bjørn Hanse,
+Jerry Gay,
+Will Coleda,
+Mike O'Regan,
+Slaven Rezic,
+Mark Stosberg,
+David Alan Pisoni,
+Adriano Ferreira,
+Ricardo Signes
 and Pete Krawczyk.
 
 =head1 COPYRIGHT & LICENSE

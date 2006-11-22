@@ -94,7 +94,7 @@ if ( $opt{help} || (!@ARGV && !$opt{f}) ) {
 my $re;
 
 if ( !$opt{f} ) {
-    $re = shift or die 'No regex specified\n';
+    $re = shift or die "No regex specified\n";
 
     if ( $opt{Q} ) {
         $re = quotemeta( $re );
@@ -242,7 +242,8 @@ sub search {
     close $fh;
 
     if ( $opt{count} ) {
-        print "${filename}:${nmatches}\n";
+        print "${filename}:" if $opt{show_filename};
+        print "${nmatches}\n";
     }
     else {
         if ( $opt{l} ) {

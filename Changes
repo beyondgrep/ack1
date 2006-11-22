@@ -8,6 +8,9 @@ NEXT
         [FIXES]
         Will no longer ignore case distinctions in options.
 
+        The -h flag wouldn't work in conjunction with -c.  Now it does.
+        Thanks, Rick Scott.
+
 
 1.30    Fri Nov 10 19:25:23 CST 2006
 

@@ -314,6 +314,10 @@ L<http://ack.googlecode.com/svn/>
 
 =head1 ACKNOWLEDGEMENTS
 
+Thanks to everyone who has contributed to ack, including
+Rick Scott
+and Pete Krawczyk.
+
 =head1 COPYRIGHT & LICENSE
 
 Copyright 2005-2006 Andy Lester, all rights reserved.

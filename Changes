@@ -1,6 +1,6 @@
 Revision history for ack
 
-NEXT
+1.32    Tue Nov 21 23:27:07 CST 2006
 
         [ENHANCEMENTS]
         Added the -Q flag for treating the search string as a literal.

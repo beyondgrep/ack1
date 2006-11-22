@@ -20,7 +20,7 @@ WriteMakefile(
         'File::Basename' => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean               => { FILES => 'ack-* crush' },
+    clean               => { FILES => 'ack-* ack-standalone.txt' },
 );
 
 sub MY::postamble {
@@ -40,12 +40,12 @@ critic:
 ACK             = ack
 APP_ACK_PM      = Ack.pm
 FILE_NEXT_PM    = $file_next_filename
-CRUSH           = crush
+STANDALONE      = ack-standalone.txt
 
-crush: \$(ACK) \$(APP_ACK_PM) \$(FILE_NEXT_PM)
-	grep -v 'use App::Ack' \$(ACK) | grep -v 'use File::Next' > \$(CRUSH)
-	cat \$(APP_ACK_PM) \$(FILE_NEXT_PM) >> \$(CRUSH)
-	chmod +x \$(CRUSH)
+standalone: \$(ACK) \$(APP_ACK_PM) \$(FILE_NEXT_PM)
+	grep -v 'use App::Ack' \$(ACK) | grep -v 'use File::Next' > \$(STANDALONE)
+	cat \$(APP_ACK_PM) \$(FILE_NEXT_PM) >> \$(STANDALONE)
+	chmod +x \$(STANDALONE)
 
 MAKE_FRAG
 

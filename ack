@@ -91,19 +91,19 @@ if ( $opt{help} || (!@ARGV && !$opt{f}) ) {
     exit 1;
 }
 
-my $re;
+my $regex;
 
 if ( !$opt{f} ) {
-    $re = shift or die "No regex specified\n";
+    $regex = shift or die "No regex specified\n";
 
     if ( $opt{Q} ) {
-        $re = quotemeta( $re );
+        $regex = quotemeta( $regex );
     }
     if ( $opt{w} ) {
-        $re = $opt{i} ? qr/\b$re\b/i : qr/\b$re\b/;
+        $regex = $opt{i} ? qr/\b$regex\b/i : qr/\b$regex\b/;
     }
     else {
-        $re = $opt{i} ? qr/$re/i : qr/$re/;
+        $regex = $opt{i} ? qr/$regex/i : qr/$regex/;
     }
 }
 
@@ -123,7 +123,7 @@ else {
             $opt{$_} and die "ack: Can't use -$_ when acting as a filter.\n";
         }
         $opt{show_filename} = 0;
-        search( '-', $re, %opt );
+        search( '-', $regex, %opt );
         exit 0;
     }
     else {
@@ -151,7 +151,7 @@ while ( my $file = $iter->() ) {
         print "$file\n";
     }
     else {
-        search( $file, $re, %opt );
+        search( $file, $regex, %opt );
     }
 }
 exit 0;
@@ -193,7 +193,7 @@ sub search {
 
     local $_; ## no critic
     while (<$fh>) {
-        if ( /$re/ ) { # If we have a matching line
+        if ( /$regex/ ) { # If we have a matching line
             ++$nmatches;
             if ( !$opt{count} ) {
                 next if $opt{v};
@@ -208,7 +208,7 @@ sub search {
                 }
                 else {
                     $out = $_;
-                    $out =~ s/($re)/colored($1,"black on_yellow")/eg if $opt{color};
+                    $out =~ s/($regex)/colored($1,"black on_yellow")/eg if $opt{color};
                 }
 
                 if ( $is_binary ) {

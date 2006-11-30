@@ -5,7 +5,11 @@ use strict;
 
 our $COPYRIGHT = 'Copyright 2005-2006 Andy Lester, all rights reserved.';
 
+# These are all our globals.
 our $is_windows;
+our %opt;
+our %lang;
+our $is_tty =  -t STDOUT;
 
 BEGIN {
     $is_windows = ($^O =~ /MSWin32/);
@@ -19,142 +23,142 @@ use File::Next 0.22;
 use App::Ack;
 use Getopt::Long;
 
-our %opt;
-our %lang;
 
-our $is_tty =  -t STDOUT;
-$opt{group} =   $is_tty;
-$opt{color} =   $is_tty && !$is_windows;
-$opt{all} =     0;
-$opt{help} =    0;
-$opt{m} =       0;
+MAIN: {
+    # Priorities! Get the --thpppt checking out of the way.
+    /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
 
-my %options = (
-    a           => \$opt{all},
-    'all!'      => \$opt{all},
-    c           => \$opt{count},
-    count       => \$opt{count},
-    f           => \$opt{f},
-    h           => \$opt{h},
-    H           => \$opt{H},
-    i           => \$opt{i},
-    l           => \$opt{l},
-    'm=i'       => \$opt{m},
-    n           => \$opt{n},
-    'o|output:s' => \$opt{o},
-    'Q|literal' => \$opt{Q},
-    v           => \$opt{v},
-    w           => \$opt{w},
+    $opt{group} =   $is_tty;
+    $opt{color} =   $is_tty && !$is_windows;
+    $opt{all} =     0;
+    $opt{help} =    0;
+    $opt{m} =       0;
 
-    'group!'    => \$opt{group},
-    'color!'    => \$opt{color},
-    'help'      => \$opt{help},
-    'version'   => sub { version(); exit 1; },
-);
+    my %options = (
+        a           => \$opt{all},
+        'all!'      => \$opt{all},
+        c           => \$opt{count},
+        count       => \$opt{count},
+        f           => \$opt{f},
+        h           => \$opt{h},
+        H           => \$opt{H},
+        i           => \$opt{i},
+        l           => \$opt{l},
+        'm=i'       => \$opt{m},
+        n           => \$opt{n},
+        'o|output:s' => \$opt{o},
+        'Q|literal' => \$opt{Q},
+        v           => \$opt{v},
+        w           => \$opt{w},
+
+        'group!'    => \$opt{group},
+        'color!'    => \$opt{color},
+        'help'      => \$opt{help},
+        'version'   => sub { version(); exit 1; },
+    );
 
 
-my @filetypes_supported = App::Ack::filetypes_supported();
-for my $i ( @filetypes_supported ) {
-    $options{ "$i!" } = \$lang{ $i };
-}
-
-# Stick any default switches at the beginning, so they can be overridden
-# by the command line switches.
-unshift @ARGV, split( ' ', $ENV{ACK_SWITCHES} ) if defined $ENV{ACK_SWITCHES};
-
-map { App::Ack::_thpppt($_) if /^--th[bp]+t$/ } @ARGV; ## no critic
-Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
-GetOptions( %options ) or die "ack --help for options.\n";
-
-if ( defined( my $val = $opt{o} ) ) {
-    if ( $val eq '' ) {
-        $val = '$&';
+    my @filetypes_supported = App::Ack::filetypes_supported();
+    for my $i ( @filetypes_supported ) {
+        $options{ "$i!" } = \$lang{ $i };
     }
-    else {
-        $val = qq{"$val"};
-    }
-    $opt{o} = eval qq[ sub { $val } ];
-}
 
-my $filetypes_supported_set =   grep { defined $lang{$_} && ($lang{$_} == 1) } @filetypes_supported;
-my $filetypes_supported_unset = grep { defined $lang{$_} && ($lang{$_} == 0) } @filetypes_supported;
+    # Stick any default switches at the beginning, so they can be overridden
+    # by the command line switches.
+    unshift @ARGV, split( ' ', $ENV{ACK_SWITCHES} ) if defined $ENV{ACK_SWITCHES};
 
-# If anyone says --noperl, we assume all other languages must be on.
-if ( !$filetypes_supported_set ) {
-    for my $i ( keys %lang ) {
-        $lang{$i} = 1 unless ( defined( $lang{$i} ) || $i eq 'binary' );
-    }
-}
+    Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
+    GetOptions( %options ) or die "ack --help for options.\n";
 
-if ( $opt{help} || (!@ARGV && !$opt{f}) ) {
-    App::Ack::show_help();
-    exit 1;
-}
-
-my $regex;
-
-if ( !$opt{f} ) {
-    $regex = shift or die "No regex specified\n";
-
-    if ( $opt{Q} ) {
-        $regex = quotemeta( $regex );
-    }
-    if ( $opt{w} ) {
-        $regex = $opt{i} ? qr/\b$regex\b/i : qr/\b$regex\b/;
-    }
-    else {
-        $regex = $opt{i} ? qr/$regex/i : qr/$regex/;
-    }
-}
-
-
-my $is_filter = !-t STDIN;
-my @what;
-if ( @ARGV ) {
-    @what = @ARGV;
-
-    # Show filenames unless we've specified one single file
-    $opt{show_filename} = (@what > 1) || (!-f $what[0]);
-}
-else {
-    if ( $is_filter ) {
-        # We're going into filter mode
-        for ( qw( f l ) ) {
-            $opt{$_} and die "ack: Can't use -$_ when acting as a filter.\n";
+    if ( defined( my $val = $opt{o} ) ) {
+        if ( $val eq '' ) {
+            $val = '$&';
         }
-        $opt{show_filename} = 0;
-        search( '-', $regex, %opt );
-        exit 0;
+        else {
+            $val = qq{"$val"};
+        }
+        $opt{o} = eval qq[ sub { $val } ];
+    }
+
+    my $filetypes_supported_set =   grep { defined $lang{$_} && ($lang{$_} == 1) } @filetypes_supported;
+    my $filetypes_supported_unset = grep { defined $lang{$_} && ($lang{$_} == 0) } @filetypes_supported;
+
+    # If anyone says --no-whatever, we assume all other languages must be on.
+    if ( !$filetypes_supported_set ) {
+        for my $i ( keys %lang ) {
+            $lang{$i} = 1 unless ( defined( $lang{$i} ) || $i eq 'binary' );
+        }
+    }
+
+    if ( $opt{help} || (!@ARGV && !$opt{f}) ) {
+        App::Ack::show_help();
+        exit 1;
+    }
+
+    my $regex;
+
+    if ( !$opt{f} ) {
+        $regex = shift @ARGV or die "No regex specified\n";
+
+        if ( $opt{Q} ) {
+            $regex = quotemeta( $regex );
+        }
+        if ( $opt{w} ) {
+            $regex = $opt{i} ? qr/\b$regex\b/i : qr/\b$regex\b/;
+        }
+        else {
+            $regex = $opt{i} ? qr/$regex/i : qr/$regex/;
+        }
+    }
+
+    my $is_filter = !-t STDIN;
+    my @what;
+    if ( @ARGV ) {
+        @what = @ARGV;
+
+        # Show filenames unless we've specified one single file
+        $opt{show_filename} = (@what > 1) || (!-f $what[0]);
     }
     else {
-        $opt{defaulted_to_dot} = 1;
-        @what = '.'; # Assume current directory
-        $opt{show_filename} = 1;
+        if ( $is_filter ) {
+            # We're going into filter mode
+            for ( qw( f l ) ) {
+                $opt{$_} and die "ack: Can't use -$_ when acting as a filter.\n";
+            }
+            $opt{show_filename} = 0;
+            search( '-', $regex, %opt );
+            exit 0;
+        }
+        else {
+            $opt{defaulted_to_dot} = 1;
+            @what = '.'; # Assume current directory
+            $opt{show_filename} = 1;
+        }
     }
+    $opt{show_filename} = 0 if $opt{h};
+    $opt{show_filename} = 1 if $opt{H};
+
+    my $file_filter = $opt{all} ? sub {1} : \&is_interesting;
+    my $descend_filter = $opt{n} ? sub {0} : \&App::Ack::skipdir_filter;
+
+    my $iter =
+        File::Next::files( {
+            file_filter     => $file_filter,
+            descend_filter  => $descend_filter,
+            error_handler   => sub { my $msg = shift; warn "ack: $msg\n" },
+        }, @what );
+
+
+    while ( my $file = $iter->() ) {
+        if ( $opt{f} ) {
+            print "$file\n";
+        }
+        else {
+            search( $file, $regex, %opt );
+        }
+    }
+    exit 0;
 }
-$opt{show_filename} = 0 if $opt{h};
-$opt{show_filename} = 1 if $opt{H};
-
-my $file_filter = $opt{all} ? sub {1} : \&is_interesting;
-my $descend_filter = $opt{n} ? sub {0} : \&App::Ack::skipdir_filter;
-
-my $iter =
-    File::Next::files( {
-        file_filter     => $file_filter,
-        descend_filter  => $descend_filter,
-        error_handler   => sub { my $msg = shift; warn "ack: $msg\n" },
-    }, @what );
-
-
-while ( my $file = $iter->() ) {
-    if ( $opt{f} ) {
-        print "$file\n";
-    }
-    else {
-        search( $file, $regex, %opt );
-    }
-}
-exit 0;
 
 sub is_interesting {
     return if /~$/;

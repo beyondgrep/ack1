@@ -26,6 +26,7 @@ our %mappings = (
     haskell     => [qw( hs lhs )],
     html        => [qw( htm html shtml )],
     lisp        => [qw( lisp )],
+    java        => [qw( java )],
     js          => [qw( js )],
     mason       => [qw( mas )],
     ocaml       => [qw( ml mli )],

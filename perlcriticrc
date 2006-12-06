@@ -1,0 +1,22 @@
+[-CodeLayout::ProhibitParensWithBuiltins]
+[CodeLayout::ProhibitHardTabs]
+allow_leading_tabs = 0
+
+[-ControlStructures::ProhibitPostfixControls]
+
+[-Documentation::RequirePodAtEnd]
+[-Documentation::RequirePodSections]
+
+[-Editor::RequireEmacsFileVariables]
+[-ErrorHandling::RequireCarping]
+
+[-Miscellanea::RequireRcsKeywords]
+
+[-Modules::RequireVersionVar]
+
+[-RegularExpressions::RequireExtendedFormatting]
+[-RegularExpressions::RequireLineBoundaryMatching]
+
+[-ValuesAndExpressions::ProhibitEmptyQuotes]
+
+[-Variables::ProhibitPunctuationVars]

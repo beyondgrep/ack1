@@ -5,6 +5,8 @@ NEXT
         [ENHANCEMENTS]
         Added --java support.  What took me so long?
 
+        Made the error messages from opening the file more normal.
+
 
 1.32    Tue Nov 21 23:27:07 CST 2006
 

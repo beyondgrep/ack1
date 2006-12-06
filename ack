@@ -6,10 +6,10 @@ use strict;
 our $COPYRIGHT = 'Copyright 2005-2006 Andy Lester, all rights reserved.';
 
 # These are all our globals.
-our $is_windows;
-our %opt;
-our %lang;
-our $is_tty =  -t STDOUT;
+my $is_windows;
+my %opt;
+my %lang;
+my $is_tty =  -t STDOUT;
 
 BEGIN {
     $is_windows = ($^O =~ /MSWin32/);
@@ -261,7 +261,7 @@ sub search {
     return;
 }
 
-sub version() {
+sub version() { ## no critic (Subroutines::ProhibitSubroutinePrototypes)
     print <<"END_OF_VERSION";
 ack $App::Ack::VERSION
 

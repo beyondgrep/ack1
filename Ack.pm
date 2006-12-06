@@ -92,7 +92,7 @@ sub _init_types {
     my %suffixes;
     while ( my ($type,$exts) = each %mappings ) {
         if ( ref $exts ) {
-            for my $ext ( @$exts ) {
+            for my $ext ( @{$exts} ) {
                 push( @{$types{$ext}}, $type );
                 ++$suffixes{"\\.$ext"};
             }
@@ -109,6 +109,10 @@ sub _init_types {
 
 Returns a list of types that I<$filename> could be.  For example, a file
 F<foo.pod> could be "perl" or "parrot".
+
+The filetype will be C<undef> if we can't determine it.  It will
+be '-ignore' if it's something that ack should always ignore, even
+under -a.
 
 =cut
 
@@ -129,16 +133,20 @@ sub filetypes {
     if ( $suffix ) {
         $suffix =~ s/^\.//; # Drop the period that File::Basename needs
         my $ref = $types{lc $suffix};
-        return @$ref if $ref;
+        return @{$ref} if $ref;
     }
 
-    return unless -r $filename;
+    if ( !-r $filename ) {
+        warn _my_program(), ": $filename: Permission denied\n";
+        return;
+    }
+
     return 'binary' if -B $filename;
 
     # If there's no extension, or we don't recognize it, check the shebang line
     my $fh;
     if ( !open( $fh, '<', $filename ) ) {
-        warn "ack: $filename: $!\n";
+        warn _my_program(), ": $filename: $!\n";
         return;
     }
     my $header = <$fh>;
@@ -154,6 +162,11 @@ sub filetypes {
 
     return;
 }
+
+sub _my_program {
+    return File::Basename::basename( $0 );
+}
+
 
 =head2 filetypes_supported()
 
@@ -244,7 +257,7 @@ END_OF_HELP
         my $ext_list = $mappings{$lang};
 
         if ( ref $ext_list ) {
-            my @exts = map { ".$_" } @$ext_list;
+            my @exts = map { ".$_" } @{$ext_list};
 
             $ext_list = _listify( @exts );
         }

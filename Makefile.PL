@@ -13,11 +13,11 @@ WriteMakefile(
     MAN3PODS            => {}, # App::Ack's docs aren't useful
     EXE_FILES           => [ 'ack' ],
     PREREQ_PM => {
-        'Term::ANSIColor' => 0,
-        'Getopt::Long' => 0,
-        'Test::More' => 0,
-        'File::Next' => 0.28,
-        'File::Basename' => 0,
+        'Term::ANSIColor'   => 0,
+        'Getopt::Long'      => 0,
+        'Test::More'        => 0,
+        'File::Next'        => 0.32,   # For the better handling of package variables
+        'File::Basename'    => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'ack-* ack-standalone.txt' },

@@ -2,6 +2,11 @@ Revision history for ack
 
 NEXT
 
+        [FIXES]
+        The standalone version of ack was not getting built correctly.
+        Now we require File::Next 0.32 to handle it.
+
+
         [ENHANCEMENTS]
         Added --java support.  What took me so long?
 

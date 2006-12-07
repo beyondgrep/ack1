@@ -20,7 +20,7 @@ WriteMakefile(
         'File::Basename'    => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean               => { FILES => 'ack-* ack-standalone.txt' },
+    clean               => { FILES => 'ack-*' },
 );
 
 sub MY::postamble {
@@ -28,21 +28,21 @@ sub MY::postamble {
     my $postamble = <<"MAKE_FRAG";
 .PHONY: tags critic
 
-tags:
+tags :
 	ctags -f tags --recurse --totals \
 		--exclude=blib --exclude=t/lib \
 		--exclude=.svn --exclude='*~' \
 		--languages=Perl --langmap=Perl:+.t \
 
-critic:
+critic :
 	perlcritic -1 -q -profile perlcriticrc .
 
 ACK             = ack
 APP_ACK_PM      = Ack.pm
 FILE_NEXT_PM    = $file_next_filename
-STANDALONE      = ack-standalone.txt
+STANDALONE      = ack-standalone
 
-standalone: \$(ACK) \$(APP_ACK_PM) \$(FILE_NEXT_PM)
+standalone : \$(ACK) \$(APP_ACK_PM) \$(FILE_NEXT_PM)
 	grep -v 'use App::Ack' \$(ACK) | grep -v 'use File::Next' > \$(STANDALONE)
 	cat \$(FILE_NEXT_PM) \$(APP_ACK_PM) >> \$(STANDALONE)
 	chmod +x \$(STANDALONE)

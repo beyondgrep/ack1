@@ -15,6 +15,7 @@ t/00-load.t
 t/filetypes.t
 t/interesting.t
 t/pod.t
+t/standalone.t
 t/swamp/blib/ignore.pir
 t/swamp/blib/ignore.pm
 t/swamp/blib/ignore.pod

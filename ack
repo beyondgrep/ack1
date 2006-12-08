@@ -3,6 +3,7 @@
 use warnings;
 use strict;
 
+our $VERSION   = '1.34';
 our $COPYRIGHT = 'Copyright 2005-2006 Andy Lester, all rights reserved.';
 
 # These are all our globals.
@@ -25,6 +26,7 @@ use Getopt::Long;
 
 
 MAIN: {
+    die "Version mismatch" unless $App::Ack::VERSION eq $main::VERSION;
     # Priorities! Get the --thpppt checking out of the way.
     /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
 

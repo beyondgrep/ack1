@@ -14,7 +14,10 @@ Version 1.34
 
 =cut
 
-our $VERSION = '1.34';
+our $VERSION;
+BEGIN {
+    $VERSION = '1.34';
+}
 
 our %types;
 our %mappings;

@@ -23,6 +23,7 @@ WriteMakefile(
     clean               => { FILES => 'ack-*' },
 );
 
+package MY;
 sub MY::postamble {
     my $file_next_filename = qx(perldoc -l File::Next);
     my $postamble = <<"MAKE_FRAG";
@@ -51,5 +52,17 @@ MAKE_FRAG
 
     return $postamble;
 }
+
+
+sub MY::top_targets {
+    my $str = shift->SUPER::top_targets(@_);
+
+    my @lines = split( /\n/, $str );
+
+    s/^pure_all ::.+/$& standalone/gsm for @lines;
+
+    return join( "\n", @lines );
+}
+
 
 1;

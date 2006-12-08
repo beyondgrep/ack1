@@ -57,11 +57,9 @@ MAKE_FRAG
 sub MY::top_targets {
     my $str = shift->SUPER::top_targets(@_);
 
-    my @lines = split( /\n/, $str );
+    $str =~ s/^pure_all.+/$& standalone/m;
 
-    s/^pure_all ::.+/$& standalone/gsm for @lines;
-
-    return join( "\n", @lines );
+    return $str;
 }
 
 

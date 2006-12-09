@@ -14,9 +14,6 @@ my $is_tty =  -t STDOUT;
 
 BEGIN {
     $is_windows = ($^O =~ /MSWin32/);
-}
-
-BEGIN {
     eval 'use Term::ANSIColor' unless $is_windows;
 }
 

@@ -21,7 +21,6 @@ use File::Next 0.22;
 use App::Ack;
 use Getopt::Long;
 
-
 MAIN: {
     die "Version mismatch" unless $App::Ack::VERSION eq $main::VERSION;
     # Priorities! Get the --thpppt checking out of the way.

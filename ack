@@ -22,7 +22,7 @@ use App::Ack;
 use Getopt::Long;
 
 MAIN: {
-    die "Version mismatch" unless $App::Ack::VERSION eq $main::VERSION;
+    die 'Version mismatch' unless $App::Ack::VERSION eq $main::VERSION;
     # Priorities! Get the --thpppt checking out of the way.
     /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
 
@@ -210,7 +210,7 @@ sub search {
                 }
                 else {
                     $out = $_;
-                    $out =~ s/($regex)/colored($1,"black on_yellow")/eg if $opt{color};
+                    $out =~ s/($regex)/colored($1,'black on_yellow')/eg if $opt{color};
                 }
 
                 if ( $is_binary ) {

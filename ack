@@ -9,7 +9,7 @@ our $COPYRIGHT = 'Copyright 2005-2006 Andy Lester, all rights reserved.';
 # These are all our globals.
 my $is_windows;
 my %opt;
-my %lang;
+my %type_wanted;
 my $is_tty =  -t STDOUT;
 
 BEGIN {
@@ -58,7 +58,7 @@ MAIN: {
 
     my @filetypes_supported = App::Ack::filetypes_supported();
     for my $i ( @filetypes_supported ) {
-        $options{ "$i!" } = \$lang{ $i };
+        $options{ "$i!" } = \$type_wanted{ $i };
     }
 
     # Stick any default switches at the beginning, so they can be overridden
@@ -78,13 +78,13 @@ MAIN: {
         $opt{o} = eval qq[ sub { $val } ];
     }
 
-    my $filetypes_supported_set =   grep { defined $lang{$_} && ($lang{$_} == 1) } @filetypes_supported;
-    my $filetypes_supported_unset = grep { defined $lang{$_} && ($lang{$_} == 0) } @filetypes_supported;
+    my $filetypes_supported_set =   grep { defined $type_wanted{$_} && ($type_wanted{$_} == 1) } @filetypes_supported;
+    my $filetypes_supported_unset = grep { defined $type_wanted{$_} && ($type_wanted{$_} == 0) } @filetypes_supported;
 
-    # If anyone says --no-whatever, we assume all other languages must be on.
+    # If anyone says --no-whatever, we assume all other types must be on.
     if ( !$filetypes_supported_set ) {
-        for my $i ( keys %lang ) {
-            $lang{$i} = 1 unless ( defined( $lang{$i} ) || $i eq 'binary' );
+        for my $i ( keys %type_wanted ) {
+            $type_wanted{$i} = 1 unless ( defined( $type_wanted{$i} ) || $i eq 'binary' );
         }
     }
 
@@ -164,7 +164,7 @@ sub is_interesting {
 
     my $filename = $File::Next::name;
     for my $type ( App::Ack::filetypes( $filename ) ) {
-        return 1 if $lang{$type};
+        return 1 if $type_wanted{$type};
     }
     return;
 }

@@ -274,29 +274,25 @@ END_OF_VERSION
 
 =head1 NAME
 
-ack - grep-like text finder for large trees of text
+ack - grep-like text finder
+
+=head1 SYNOPSIS
+
+    ack [options] PATTERN [FILE...]
+    ack -f [options] [DIRECTORY...]
 
 =head1 DESCRIPTION
 
-F<ack> is a F<grep>-like program with optimizations for searching through
-large trees of source code.
+Ack is designed as a replacement for F<grep>.
 
-Key improvements include:
+Ack searches the named input FILEs (or standard input if no files
+are named, or the file name - is given) for lines containing a match
+to the given PATTERN.  By default, ack prints the matching lines.
 
-=over 4
+Ack can also list files that would be searched, without actually
+searching them, to let you take advantage of ack's file-type filtering
+capabilities.
 
-=item * Defaults to only searching program source code
-
-=item * Defaults to recursively searching directories
-
-=item * Ignores F<blib> directories.
-
-=item * Ignores source code control directories, like F<CVS>, F<.svn> and F<_darcs>.
-
-=item * Uses Perl regular expressions
-
-=item * Highlights matched text
-
-=back
+=head1 OPTIONS
 
 =cut

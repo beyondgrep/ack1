@@ -243,6 +243,7 @@ File inclusion/exclusion:
 
 Miscellaneous:
     --help          This help
+    --man           Man page
     --version       Display version & copyright
     --thpppt        Bill the Cat
 

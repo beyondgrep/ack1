@@ -22,14 +22,16 @@ use App::Ack;
 use Getopt::Long;
 
 MAIN: {
-    die 'Version mismatch' unless $App::Ack::VERSION eq $main::VERSION;
+    if ( $App::Ack::VERSION ne $main::VERSION ) {
+        die "Program/library version mismatch\n\t$0 is $main::VERSION\n\t$INC{'App/Ack.pm'} is $App::Ack::VERSION\n";
+    }
+
     # Priorities! Get the --thpppt checking out of the way.
     /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
 
     $opt{group} =   $is_tty;
     $opt{color} =   $is_tty && !$is_windows;
     $opt{all} =     0;
-    $opt{help} =    0;
     $opt{m} =       0;
 
     my %options = (
@@ -51,8 +53,10 @@ MAIN: {
 
         'group!'    => \$opt{group},
         'color!'    => \$opt{color},
-        'help'      => \$opt{help},
         'version'   => sub { version(); exit 1; },
+
+        'help|?'    => sub {App::Ack::show_help(); exit},
+        'man'       => sub {require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit},
     );
 
 
@@ -88,7 +92,7 @@ MAIN: {
         }
     }
 
-    if ( $opt{help} || (!@ARGV && !$opt{f}) ) {
+    if ( !@ARGV && !$opt{f} ) {
         App::Ack::show_help();
         exit 1;
     }
@@ -96,6 +100,8 @@ MAIN: {
     my $regex;
 
     if ( !$opt{f} ) {
+        # REVIEW: This shouldn't be able to happen because of the help
+        # check above.
         $regex = shift @ARGV or die "No regex specified\n";
 
         if ( $opt{Q} ) {

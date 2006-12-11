@@ -249,7 +249,7 @@ Miscellaneous:
 END_OF_HELP
 
     my @langlines;
-    for my $lang ( sort keys %mappings ) {
+    for my $lang ( sort( filetypes_supported() ) ) {
         next if $lang =~ /^-/; # Stuff to not show
         my $ext_list = $mappings{$lang};
 

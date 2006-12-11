@@ -39,7 +39,7 @@ critic :
 
 ACK             = ack
 APP_ACK_PM      = Ack.pm
-FILE_NEXT_PM    = $file_next_filename
+FILE_NEXT_PM    = \$(shell perldoc -l File::Next)
 STANDALONE      = ack-standalone
 
 \$(STANDALONE) : \$(ACK) \$(APP_ACK_PM) \$(FILE_NEXT_PM)

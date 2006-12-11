@@ -1,5 +1,11 @@
 Revision history for ack
 
+NEXT
+        [ENHANCEMENTS]
+        Adding long variants of options a la GNU grep.  Now you can
+        use --ignore-case as well as -i.  You shouldn't be surprised that
+        that's the same as in GNU grep.
+
 1.34    Thu Dec  7 23:06:39 CST 2006
 
         [FIXES]

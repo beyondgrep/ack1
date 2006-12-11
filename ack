@@ -42,14 +42,14 @@ MAIN: {
         f           => \$opt{f},
         h           => \$opt{h},
         H           => \$opt{H},
-        i           => \$opt{i},
-        l           => \$opt{l},
-        'm=i'       => \$opt{m},
+        'i|ignore-case'         => \$opt{i},
+        'l|files-with-match'    => \$opt{l},
+        'm|max-count=i'         => \$opt{m},
         n           => \$opt{n},
         'o|output:s' => \$opt{o},
-        'Q|literal' => \$opt{Q},
-        v           => \$opt{v},
-        w           => \$opt{w},
+        'Q|literal'             => \$opt{Q},
+        'v|invert-match'        => \$opt{v},
+        'w|word-regexp'         => \$opt{w},
 
         'group!'    => \$opt{group},
         'color!'    => \$opt{color},
@@ -300,5 +300,34 @@ searching them, to let you take advantage of ack's file-type filtering
 capabilities.
 
 =head1 OPTIONS
+
+=over 4
+
+=item -i, --ignore-case
+
+Ignore case in the search strings.
+
+=item -v, --invert-match
+
+Invert match: select non-matching lines
+
+=item -w, --word-regexp
+
+Force PATTERN to match only whole words.  The PATTERN is wrapped
+with C<\b> metacharacters.
+
+=item -Q
+
+Quote all metacharacters.  PATTERN is treated as a literal.
+
+=item -l, --files-with-matches
+
+Only print the filenames of matching files, instead of the matching text.
+
+=back
+
+=head1 ENVIRONMENT VARIABLES
+
+ACK_SWITCHES
 
 =cut

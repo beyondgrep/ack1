@@ -25,6 +25,9 @@ MAIN: {
     if ( $App::Ack::VERSION ne $main::VERSION ) {
         die "Program/library version mismatch\n\t$0 is $main::VERSION\n\t$INC{'App/Ack.pm'} is $App::Ack::VERSION\n";
     }
+    if ( exists $ENV{ACK_SWITCHES} ) {
+        warn "ACK_SWITCHES is no longer supported.  Use ACK_OPTIONS.\n";
+    }
 
     # Priorities! Get the --thpppt checking out of the way.
     /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
@@ -67,7 +70,7 @@ MAIN: {
 
     # Stick any default switches at the beginning, so they can be overridden
     # by the command line switches.
-    unshift @ARGV, split( ' ', $ENV{ACK_SWITCHES} ) if defined $ENV{ACK_SWITCHES};
+    unshift @ARGV, split( ' ', $ENV{ACK_OPTIONS} ) if defined $ENV{ACK_OPTIONS};
 
     Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
     GetOptions( %options ) or die "ack --help for options.\n";
@@ -402,6 +405,20 @@ C<\b> metacharacters.
 
 =head1 ENVIRONMENT VARIABLES
 
-ACK_SWITCHES
+=over 4
+
+=item ACK_OPTIONS
+
+This variable specifies default options to be placed in front of any explicit options.
+
+=back
+
+=head1 GOTCHAS
+
+Note that FILES must still match valid selection rules.  For example,
+
+    ack something --perl foo.rb
+
+will search nothing, because I<foo.rb> is a Ruby file.
 
 =cut

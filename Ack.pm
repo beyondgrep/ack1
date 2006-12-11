@@ -202,7 +202,7 @@ If [FILES] is specified, then only those files/directories are checked.
 ack may also search STDIN, but only if no FILES are specified, or if
 one of FILES is "-".
 
-Default switches may be specified in ACK_SWITCHES environment variable.
+Default switches may be specified in ACK_OPTIONS environment variable.
 
 Example: ack -i select
 
@@ -246,13 +246,6 @@ Miscellaneous:
     --man           Man page
     --version       Display version & copyright
     --thpppt        Bill the Cat
-
-GOTCHAS:
-Note that FILES must still match valid selection rules.  For example,
-
-    ack something --perl foo.rb
-
-will search nothing, because foo.rb is a Ruby file.
 END_OF_HELP
 
     my @langlines;

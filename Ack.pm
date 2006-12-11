@@ -10,13 +10,13 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.34
+Version 1.36
 
 =cut
 
 our $VERSION;
 BEGIN {
-    $VERSION = '1.34';
+    $VERSION = '1.36';
 }
 
 our %types;
@@ -202,7 +202,7 @@ If [FILES] is specified, then only those files/directories are checked.
 ack may also search STDIN, but only if no FILES are specified, or if
 one of FILES is "-".
 
-Default switches may be specified in ACK_SWITCHES environment variable.
+Default switches may be specified in ACK_OPTIONS environment variable.
 
 Example: ack -i select
 
@@ -243,19 +243,13 @@ File inclusion/exclusion:
 
 Miscellaneous:
     --help          This help
+    --man           Man page
     --version       Display version & copyright
     --thpppt        Bill the Cat
-
-GOTCHAS:
-Note that FILES must still match valid selection rules.  For example,
-
-    ack something --perl foo.rb
-
-will search nothing, because foo.rb is a Ruby file.
 END_OF_HELP
 
     my @langlines;
-    for my $lang ( sort keys %mappings ) {
+    for my $lang ( sort( filetypes_supported() ) ) {
         next if $lang =~ /^-/; # Stuff to not show
         my $ext_list = $mappings{$lang};
 

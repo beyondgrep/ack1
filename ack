@@ -3,20 +3,17 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.34';
+our $VERSION   = '1.36';
 our $COPYRIGHT = 'Copyright 2005-2006 Andy Lester, all rights reserved.';
 
 # These are all our globals.
 my $is_windows;
 my %opt;
-my %lang;
+my %type_wanted;
 my $is_tty =  -t STDOUT;
 
 BEGIN {
     $is_windows = ($^O =~ /MSWin32/);
-}
-
-BEGIN {
     eval 'use Term::ANSIColor' unless $is_windows;
 }
 
@@ -24,16 +21,20 @@ use File::Next 0.22;
 use App::Ack;
 use Getopt::Long;
 
-
 MAIN: {
-    die "Version mismatch" unless $App::Ack::VERSION eq $main::VERSION;
+    if ( $App::Ack::VERSION ne $main::VERSION ) {
+        die "Program/library version mismatch\n\t$0 is $main::VERSION\n\t$INC{'App/Ack.pm'} is $App::Ack::VERSION\n";
+    }
+    if ( exists $ENV{ACK_SWITCHES} ) {
+        warn "ACK_SWITCHES is no longer supported.  Use ACK_OPTIONS.\n";
+    }
+
     # Priorities! Get the --thpppt checking out of the way.
     /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
 
     $opt{group} =   $is_tty;
     $opt{color} =   $is_tty && !$is_windows;
     $opt{all} =     0;
-    $opt{help} =    0;
     $opt{m} =       0;
 
     my %options = (
@@ -44,30 +45,32 @@ MAIN: {
         f           => \$opt{f},
         h           => \$opt{h},
         H           => \$opt{H},
-        i           => \$opt{i},
-        l           => \$opt{l},
-        'm=i'       => \$opt{m},
+        'i|ignore-case'         => \$opt{i},
+        'l|files-with-match'    => \$opt{l},
+        'm|max-count=i'         => \$opt{m},
         n           => \$opt{n},
         'o|output:s' => \$opt{o},
-        'Q|literal' => \$opt{Q},
-        v           => \$opt{v},
-        w           => \$opt{w},
+        'Q|literal'             => \$opt{Q},
+        'v|invert-match'        => \$opt{v},
+        'w|word-regexp'         => \$opt{w},
 
         'group!'    => \$opt{group},
         'color!'    => \$opt{color},
-        'help'      => \$opt{help},
         'version'   => sub { version(); exit 1; },
+
+        'help|?'    => sub {App::Ack::show_help(); exit},
+        'man'       => sub {require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit},
     );
 
 
     my @filetypes_supported = App::Ack::filetypes_supported();
     for my $i ( @filetypes_supported ) {
-        $options{ "$i!" } = \$lang{ $i };
+        $options{ "$i!" } = \$type_wanted{ $i };
     }
 
     # Stick any default switches at the beginning, so they can be overridden
     # by the command line switches.
-    unshift @ARGV, split( ' ', $ENV{ACK_SWITCHES} ) if defined $ENV{ACK_SWITCHES};
+    unshift @ARGV, split( ' ', $ENV{ACK_OPTIONS} ) if defined $ENV{ACK_OPTIONS};
 
     Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
     GetOptions( %options ) or die "ack --help for options.\n";
@@ -82,17 +85,17 @@ MAIN: {
         $opt{o} = eval qq[ sub { $val } ];
     }
 
-    my $filetypes_supported_set =   grep { defined $lang{$_} && ($lang{$_} == 1) } @filetypes_supported;
-    my $filetypes_supported_unset = grep { defined $lang{$_} && ($lang{$_} == 0) } @filetypes_supported;
+    my $filetypes_supported_set =   grep { defined $type_wanted{$_} && ($type_wanted{$_} == 1) } @filetypes_supported;
+    my $filetypes_supported_unset = grep { defined $type_wanted{$_} && ($type_wanted{$_} == 0) } @filetypes_supported;
 
-    # If anyone says --no-whatever, we assume all other languages must be on.
+    # If anyone says --no-whatever, we assume all other types must be on.
     if ( !$filetypes_supported_set ) {
-        for my $i ( keys %lang ) {
-            $lang{$i} = 1 unless ( defined( $lang{$i} ) || $i eq 'binary' );
+        for my $i ( keys %type_wanted ) {
+            $type_wanted{$i} = 1 unless ( defined( $type_wanted{$i} ) || $i eq 'binary' );
         }
     }
 
-    if ( $opt{help} || (!@ARGV && !$opt{f}) ) {
+    if ( !@ARGV && !$opt{f} ) {
         App::Ack::show_help();
         exit 1;
     }
@@ -100,6 +103,8 @@ MAIN: {
     my $regex;
 
     if ( !$opt{f} ) {
+        # REVIEW: This shouldn't be able to happen because of the help
+        # check above.
         $regex = shift @ARGV or die "No regex specified\n";
 
         if ( $opt{Q} ) {
@@ -168,7 +173,7 @@ sub is_interesting {
 
     my $filename = $File::Next::name;
     for my $type ( App::Ack::filetypes( $filename ) ) {
-        return 1 if $lang{$type};
+        return 1 if $type_wanted{$type};
     }
     return;
 }
@@ -214,7 +219,7 @@ sub search {
                 }
                 else {
                     $out = $_;
-                    $out =~ s/($regex)/colored($1,"black on_yellow")/eg if $opt{color};
+                    $out =~ s/($regex)/colored($1,'black on_yellow')/eg if $opt{color};
                 }
 
                 if ( $is_binary ) {
@@ -278,29 +283,142 @@ END_OF_VERSION
 
 =head1 NAME
 
-ack - grep-like text finder for large trees of text
+ack - grep-like text finder
+
+=head1 SYNOPSIS
+
+    ack [options] PATTERN [FILE...]
+    ack -f [options] [DIRECTORY...]
 
 =head1 DESCRIPTION
 
-F<ack> is a F<grep>-like program with optimizations for searching through
-large trees of source code.
+Ack is designed as a replacement for F<grep>.
 
-Key improvements include:
+Ack searches the named input FILEs (or standard input if no files are
+named, or the file name - is given) for lines containing a match to the
+given PATTERN.  By default, ack prints the matching lines.
+
+Ack can also list files that would be searched, without actually searching
+them, to let you take advantage of ack's file-type filtering capabilities.
+
+=head1 OPTIONS
 
 =over 4
 
-=item * Defaults to only searching program source code
+=item B<-a>, B<--all>
 
-=item * Defaults to recursively searching directories
+Operate on all files, regardless of type (but still skip directories
+like F<blib>, F<CVS>, etc.
 
-=item * Ignores F<blib> directories.
+=item B<-c>, B<--count>
 
-=item * Ignores source code control directories, like F<CVS>, F<.svn> and F<_darcs>.
+Suppress normal output; instead print a count of matching lines for each
+input file.
 
-=item * Uses Perl regular expressions
+=item B<--color>, B<--nocolor>
 
-=item * Highlights matched text
+B<--color> highlights the matching text.  B<--nocolor> supresses
+the color.  This is on by default unless the output is redirected,
+or running under Windows.
+
+=item B<-f>
+
+Only print the files that would be searched, without actually doing
+any searching.  PATTERN must not be specified, or it will be taken as
+a path to search.
+
+=item B<--group>, B<--nogroup>
+
+B<--group> groups matches by file name with.  This is the default when
+used interactively.
+
+B<--nogroup> prints one result per line, like grep.  This is the default
+when output is redirected.
+
+=item B<-H>, B<--with-filename>
+
+Print the filename for each match.
+
+=item B<-h>, B<--no-filename>
+
+Suppress the prefixing of filenames on output when multiple files are
+searched.
+
+=item B<--help>
+
+Print a short help statement.
+
+=item B<-i>, B<--ignore-case>
+
+Ignore case in the search strings.
+
+=item B<-l>, B<--files-with-matches>
+
+Only print the filenames of matching files, instead of the matching text.
+
+=item B<-m=I<NUM>>, B<--max-count=I<NUM>>
+
+Stop reading a file after I<NUM> matches.
+
+=item B<--man>
+
+Print this manual page.
+
+=item B<-n>
+
+No descending into subdirectories.
+
+=item B<-o>
+
+Show only the part of each line matching PATTERN (turns off text
+highlighting)
+
+=item B<--output=I<expr>>
+
+Output the evaluation of I<expr> for each line (turns off text
+highlighting)
+
+=item B<-Q>
+
+Quote all metacharacters.  PATTERN is treated as a literal.
+
+=item B<--thpppt>
+
+Display the crucial Bill The Cat logo.  Note that the exact spelling
+of B<--thpppppt> is not important.  It's checked against a regular
+expression.
+
+=item B<-v>, B<--invert-match>
+
+Invert match: select non-matching lines
+
+=item B<--version>
+
+Display version and copyright information.
+
+=item B<-w>, B<--word-regexp>
+
+Force PATTERN to match only whole words.  The PATTERN is wrapped with
+C<\b> metacharacters.
 
 =back
+
+=head1 ENVIRONMENT VARIABLES
+
+=over 4
+
+=item ACK_OPTIONS
+
+This variable specifies default options to be placed in front of any explicit options.
+
+=back
+
+=head1 GOTCHAS
+
+Note that FILES must still match valid selection rules.  For example,
+
+    ack something --perl foo.rb
+
+will search nothing, because I<foo.rb> is a Ruby file.
 
 =cut

@@ -1,230 +1,273 @@
 Revision history for ack
 
+1.36    Sun Dec 10 23:59:57 CST 2006
+
+    [THINGS THAT MAY BREAK YOUR CODE]
+    The ACK_SWITCHES environment variable must now be ACK_OPTIONS.
+    You'll be warned if you have ACK_SWITCHES set.
+
+    [ENHANCEMENTS]
+    Adding long variants of options a la GNU grep.  Now you can
+    use --ignore-case as well as -i.  You shouldn't be surprised that
+    that's the same as in GNU grep.
+
+    [DOCUMENTATION]
+    Now there's a real man page.
+
+
 1.34    Thu Dec  7 23:06:39 CST 2006
 
-        [FIXES]
-        The standalone version of ack was not getting built correctly.
-        Now we require File::Next 0.32 to handle it.
+    [FIXES]
+    The standalone version of ack was not getting built correctly.
+    Now we require File::Next 0.32 to handle it.
 
 
-        [ENHANCEMENTS]
-        Added --java support.  What took me so long?
+    [ENHANCEMENTS]
+    Added --java support.  What took me so long?
 
-        Made the error messages from opening the file more normal.
+    Made the error messages from opening the file more normal.
 
 
 1.32    Tue Nov 21 23:27:07 CST 2006
 
-        [ENHANCEMENTS]
-        Added the -Q flag for treating the search string as a literal.
+    [ENHANCEMENTS]
+    Added the -Q flag for treating the search string as a literal.
 
-        [FIXES]
-        Will no longer ignore case distinctions in options.
+    [FIXES]
+    Will no longer ignore case distinctions in options.
 
-        The -h flag wouldn't work in conjunction with -c.  Now it does.
-        Thanks, Rick Scott.
+    The -h flag wouldn't work in conjunction with -c.  Now it does.
+    Thanks, Rick Scott.
 
 
 1.30    Fri Nov 10 19:25:23 CST 2006
 
-        [FIXES]
-        * Tests should pass on Win32.  Thanks, Jerry Gay.
+    [FIXES]
+    Tests should pass on Win32.  Thanks, Jerry Gay.
 
-        [ENHANCEMENTS]
-        * A new make target, "crush", will create a "crushed" version
-          of Ack with App::Ack and File::Next inlined, so that you
-          can install it standalone in your own ~/bin directory.
+    [ENHANCEMENTS]
+    A new make target, "crush", will create a "crushed" version of Ack
+    with App::Ack and File::Next inlined, so that you can install it
+    standalone in your own ~/bin directory.
 
-        * Added --cpp for .cpp, .h and .m files.
+    Added --cpp for .cpp, .h and .m files.
 
-        [INTERNALS]
-        * Improved test coverage.  Thanks, Jim Keenan.
+    [INTERNALS]
+    Improved test coverage.  Thanks, Jim Keenan.
 
 
 1.28    Mon Sep 11 14:10:57 CDT 2006
 
-        [FIXES]
-        * Now requires File::Next 0.28, because previous versions wouldn't
-          die correctly.
+    [FIXES]
+    Now requires File::Next 0.28, because previous versions wouldn't
+    die correctly.
 
-        [ENHANCEMENTS]
-        * Added --mason switch
+    [ENHANCEMENTS]
+    Added --mason switch
 
 
 1.27_01 Mon Aug 28 17:02:35 CDT 2006
 
-        [ENHANCEMENTS]
-        * Certain files won't get their contents checked, such as vi
-          and emacs swap files.  Sometimes those files would come up as
-          matching their shebang line, which isn't what we want.
+    [ENHANCEMENTS]
+    Certain files won't get their contents checked, such as vi and emacs
+    swap files.  Sometimes those files would come up as matching their
+    shebang line, which isn't what we want.
 
 
 1.26    Thu Aug 24 20:28:05 CDT 2006
 
-        [ENHANCEMENTS]
-        * Added Haskell, HTML, elisp, lisp, OCaml, Ruby, Scheme,
-          Template Toolkit, Vim.
-        * Made the extensions system EVEN MORE EXTENSIBLE
+    [ENHANCEMENTS]
+    Added Haskell, HTML, elisp, lisp, OCaml, Ruby, Scheme, Template
+    Toolkit, Vim.
+
+    Made the extensions system EVEN MORE EXTENSIBLE
 
 
 1.25_03 Sat Aug 19 01:01:01 CDT 2006
 
-        [ENHANCEMENTS]
-        * Added --binary support.
-        * Fixed docs for --[no]color.  Thanks, Mark Stosberg.
-        * Checks files with non-matching extensions for correct
-          filetype.  For example, a foo.cgi file will now be checked
-          for a shebang line.
+    [ENHANCEMENTS]
+    Added --binary support.
+
+    Fixed docs for --[no]color.  Thanks, Mark Stosberg.
+
+    Checks files with non-matching extensions for correct filetype.
+    For example, a foo.cgi file will now be checked for a shebang line.
 
 
 1.25_02 Thu Aug 17 22:41:28 CDT 2006
 
-        [THINGS THAT MIGHT BREAK YOUR CODE]
-        * Stopped supporting the --javascript option.  I assume
-          that everyone just uses --js.  Tell me if I'm wrong.
+    [THINGS THAT MIGHT BREAK YOUR CODE]
+    Stopped supporting the --javascript option.  I assume that everyone
+    just uses --js.  Tell me if I'm wrong.
 
-        [FIXES]
-        * Fixed bugs in 1.25_01 where it wouldn't skip
-          directories correctly, and wouldn't autodescend into the
-          current directory.
+    [FIXES]
+    Fixed bugs in 1.25_01 where it wouldn't skip directories correctly,
+    and wouldn't autodescend into the current directory.
 
-        [ENHANCEMENTS]
-        * -o option now hanldes any given Perl expression for the
-          output.  Thanks to Leland Johnson for the idea.
-        * Now supports --asm, and ignores SCCS directories.
+    [ENHANCEMENTS]
+    -o option now hanldes any given Perl expression for the
+    output.  Thanks to Leland Johnson for the idea.
+
+    Now supports --asm, and ignores SCCS directories.
 
 
 1.25_01 Wed Aug 16 18:16:19 CDT 2006
 
-        [ENHANCEMENTS]
-        * Added .css support.
-        * Added .yml as YAML
+    [ENHANCEMENTS]
+    Added .css support.
 
-        [INTERNALS]
-        * Now uses File::Next as the file finder.  Not surprisingly,
-          File::Next was based on ack's file finder.
+    Added .yml as YAML
+
+    [INTERNALS]
+    Now uses File::Next as the file finder.  Not surprisingly,
+    File::Next was based on ack's file finder.
 
 
 1.24    Sun Jul 16 01:10:44 CDT 2006
-        [ENHANCEMENTS]
-        * Now ignores files beginning with a dot, unless the -a/--all
-          flag is specified.
-        * Removed all the symbol exporting in App::Ack, so should
-          be microscopically faster.  Of course, if I really wanted
-          it faster, I'd have the entire app in one file.
+    [ENHANCEMENTS]
+    Now ignores files beginning with a dot, unless the -a/--all
+    flag is specified.
 
-        [FIXES]
-        * Smarter about detecting shebang lines in extensionless
-          files.
-        * The -a/--all flag now is indeed EVERY file.  Until now,
-          it would still have ignored files ending with a tilde.
+    Removed all the symbol exporting in App::Ack, so should
+    be microscopically faster.  Of course, if I really wanted
+    it faster, I'd have the entire app in one file.
+
+    [FIXES]
+    Smarter about detecting shebang lines in extensionless files.
+
+    The -a/--all flag now is indeed EVERY file.  Until now,
+    it would still have ignored files ending with a tilde.
 
 
 1.22    Tue Jul  4 22:04:38 CDT 2006
-        [FIXES]
-        * t/filetypes.t would fail under 5.6.1
+    [FIXES]
+    * t/filetypes.t would fail under 5.6.1
 
-        [ENHANCEMENTS]
-        * Added -c to show number of lines match
+    [ENHANCEMENTS]
+    Added -c to show number of lines match
 
 
 1.20    Wed Jun  7 22:17:39 CDT 2006
-        [ENHANCEMENTS]
-        * Added --yaml
-        * Added --thpppt flag
+
+    [ENHANCEMENTS]
+    Added --yaml
+
+    Added --thpppt flag
 
 
 1.17_02 Tue Jun  6 14:32:38 CDT 2006
-        [FIXES]
-        * The -v flag would print out empty blank lines when it
-          shouldn't.  Now it works.
 
-        [ENHANCEMENTS]
-        * Added the -H flag to always print filenames
+    [FIXES]
+    The -v flag would print out empty blank lines when it
+    shouldn't.  Now it works.
 
-        * Filenames no longer have "./" prepended unless you specify
-          "." as a directory to search.
+    [ENHANCEMENTS]
+    Added the -H flag to always print filenames
+
+    Filenames no longer have "./" prepended unless you specify
+    "." as a directory to search.
 
 
 1.17_01 Mon Jun  5 12:04:38 CDT 2006
-        [FIXES]
-        * Starting points for files can be files, not just directories.
-          This broke in 1.16.
 
-        [ENHANCEMENTS]
-        * ack can now read from STDIN as a filter, like any good program.
+    [FIXES]
+    Starting points for files can be files, not just directories.
+    This broke in 1.16.
+
+    [ENHANCEMENTS]
+    ack can now read from STDIN as a filter, like any good program.
+
 
 1.16    Fri Jun  2 23:50:10 CDT 2006
-        [FIXES]
-        * The -n flag was not working.  Using -n would find no files
-          at all.  And added some more unit tests to make sure I don't
-          screw it up again.
+
+    [FIXES]
+    The -n flag was not working.  Using -n would find no files
+    at all.  And added some more unit tests to make sure I don't
+    screw it up again.
+
 
 1.14    Tue May 30 23:12:43 CDT 2006
-        [ENHANCEMENTS]
-        * Added -f flag to only show the files that would be searched,
-          instead of actually searching them.  This means that you can
-          get an easy way to get a list of all the Perl files in the
-          current directory, for example, by doing
 
-            ack -f --perl
+    [ENHANCEMENTS]
+    Added -f flag to only show the files that would be searched,
+    instead of actually searching them.  This means that you can
+    get an easy way to get a list of all the Perl files in the
+    current directory, for example, by doing
 
-          Or in multiple directories
+        ack -f --perl
 
-            ack -f --perl thisdir thatdir
+    Or in multiple directories
 
-        [FIXES]
-        * Added back -a as a synonym for --all.
+        ack -f --perl thisdir thatdir
+
+    [FIXES]
+    Added back -a as a synonym for --all.
+
 
 1.12    Wed May 10 11:13:42 CDT 2006
-        [FIXES]
-        * Was not skipping directories it should have been.  Now it does.
+
+    [FIXES]
+    Was not skipping directories it should have been.  Now it does.
+
 
 1.10    Thu May  4 16:11:38 CDT 2006
-        [ENHANCEMENTS]
-        * Added --parrot support.  Thanks, Jerry Gay.
 
-        * No longer defaults to ANSI highlighting on Windows.  Thanks
-          again, Jerry.
+    [ENHANCEMENTS]
+    * Added --parrot support.  Thanks, Jerry Gay.
 
-        * Added support for ACK_SWITCHES environment variable.
+    No longer defaults to ANSI highlighting on Windows.  Thanks
+    again, Jerry.
+
+    Added support for ACK_SWITCHES environment variable.
+
 
 1.08    May 01 2006
-        [ENHANCEMENTS]
-        * Now supports argument bundling.  "ack -i -l" can now be done as
-          "ack -il".  Thanks, Pete Krawczyk.
 
-        * Added --javascript support, plus a --js version to save your
-          weary fingers.  Thanks, Ask.
+    [ENHANCEMENTS]
+    Now supports argument bundling.  "ack -i -l" can now be done as
+    "ack -il".  Thanks, Pete Krawczyk.
+
+    Added --javascript support, plus a --js version to save your
+    weary fingers.  Thanks, Ask.
+
 
 1.06    Tue Mar 28 08:37:02 CST 2006
-        [FIXES]
-        * Now handles filenames that start with ">" or "<".
-        * Failing to open a file is now a warning, instead of fatal.
+
+    [FIXES]
+    Now handles filenames that start with ">" or "<".
+
+    Failing to open a file is now a warning, instead of fatal.
+
 
 1.04    Wed Jan 25 22:51:11 CST 2006
-        [ENHANCEMENTS]
-        * Now skips blib and RCS as well as CVS and .svn directories.
-        * Added support for Python and Ruby.
+
+    [ENHANCEMENTS]
+    Now skips blib and RCS as well as CVS and .svn directories.
+
+    Added support for Python and Ruby.
+
 
 1.02    Wed Dec 14 13:13:19 CST 2005
-        [FIXES]
-        * Fixed a mind-blowingly dumb bug.  The --all flag would search
-          no files at all.
+
+    [FIXES]
+    Fixed a mind-blowingly dumb bug.  The --all flag would search
+    no files at all.
+
 
 1.00    Wed Dec  7 09:30:25 CST 2005
-        [ENHANCEMENTS]
-        * Added support for finding C programs (--cc)
 
-        * Removed the --only option.  It's now smart enough to know
-          that if, for example, you say --perl, you only want Perl stuff,
-          and that if you say --noperl, you want everything BUT Perl.
+    [ENHANCEMENTS]
+    Added support for finding C programs (--cc)
 
-        * Removed the --exec option, which is irrelevant if you use
-          xargs like you should.  I added --exec before I understood what
-          xargs did.
+    Removed the --only option.  It's now smart enough to know
+    that if, for example, you say --perl, you only want Perl stuff,
+    and that if you say --noperl, you want everything BUT Perl.
+
+    Removed the --exec option, which is irrelevant if you use
+    xargs like you should.  I added --exec before I understood what
+    xargs did.
 
 0.90    Fri Dec  2 11:12:44 CST 2005
-        First version, released on an unsuspecting world.  It's been
-        used at FLR for years, but I'm now releasing it in the wild.
+    First version, released on an unsuspecting world.  It's been
+    used at FLR for years, but I'm now releasing it in the wild.
 

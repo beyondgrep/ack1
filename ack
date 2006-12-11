@@ -291,38 +291,112 @@ ack - grep-like text finder
 
 Ack is designed as a replacement for F<grep>.
 
-Ack searches the named input FILEs (or standard input if no files
-are named, or the file name - is given) for lines containing a match
-to the given PATTERN.  By default, ack prints the matching lines.
+Ack searches the named input FILEs (or standard input if no files are
+named, or the file name - is given) for lines containing a match to the
+given PATTERN.  By default, ack prints the matching lines.
 
-Ack can also list files that would be searched, without actually
-searching them, to let you take advantage of ack's file-type filtering
-capabilities.
+Ack can also list files that would be searched, without actually searching
+them, to let you take advantage of ack's file-type filtering capabilities.
 
 =head1 OPTIONS
 
 =over 4
 
-=item -i, --ignore-case
+=item B<-a>, B<--all>
+
+Operate on all files, regardless of type (but still skip directories
+like F<blib>, F<CVS>, etc.
+
+=item B<-c>, B<--count>
+
+Suppress normal output; instead print a count of matching lines for each
+input file.
+
+=item B<--color>, B<--nocolor>
+
+B<--color> highlights the matching text.  B<--nocolor> supresses
+the color.  This is on by default unless the output is redirected,
+or running under Windows.
+
+=item B<-f>
+
+Only print the files that would be searched, without actually doing
+any searching.  PATTERN must not be specified, or it will be taken as
+a path to search.
+
+=item B<--group>, B<--nogroup>
+
+B<--group> groups matches by file name with.  This is the default when
+used interactively.
+
+B<--nogroup> prints one result per line, like grep.  This is the default
+when output is redirected.
+
+=item B<-H>, B<--with-filename>
+
+Print the filename for each match.
+
+=item B<-h>, B<--no-filename>
+
+Suppress the prefixing of filenames on output when multiple files are
+searched.
+
+=item B<--help>
+
+Print a short help statement.
+
+=item B<-i>, B<--ignore-case>
 
 Ignore case in the search strings.
 
-=item -v, --invert-match
+=item B<-l>, B<--files-with-matches>
 
-Invert match: select non-matching lines
+Only print the filenames of matching files, instead of the matching text.
 
-=item -w, --word-regexp
+=item B<-m=I<NUM>>, B<--max-count=I<NUM>>
 
-Force PATTERN to match only whole words.  The PATTERN is wrapped
-with C<\b> metacharacters.
+Stop reading a file after I<NUM> matches.
 
-=item -Q
+=item B<--man>
+
+Print this manual page.
+
+=item B<-n>
+
+No descending into subdirectories.
+
+=item B<-o>
+
+Show only the part of each line matching PATTERN (turns off text
+highlighting)
+
+=item B<--output=I<expr>>
+
+Output the evaluation of I<expr> for each line (turns off text
+highlighting)
+
+=item B<-Q>
 
 Quote all metacharacters.  PATTERN is treated as a literal.
 
-=item -l, --files-with-matches
+=item B<--thpppt>
 
-Only print the filenames of matching files, instead of the matching text.
+Display the crucial Bill The Cat logo.  Note that the exact spelling
+of B<--thpppppt> is not important.  It's checked against a regular
+expression.
+
+=item B<-v>, B<--invert-match>
+
+Invert match: select non-matching lines
+
+=item B<--version>
+
+Display version and copyright information.
+
+=item B<-w>, B<--word-regexp>
+
+Force PATTERN to match only whole words.  The PATTERN is wrapped with
+C<\b> metacharacters.
 
 =back
 

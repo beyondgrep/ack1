@@ -1,0 +1,73 @@
+Usage: ack [OPTION]... PATTERN [FILES]
+Search for PATTERN in each source file in the tree from cwd on down.
+If [FILES] is specified, then only those files/directories are checked.
+ack may also search STDIN, but only if no FILES are specified, or if
+one of FILES is "-".
+
+Default switches may be specified in ACK_OPTIONS environment variable.
+
+Example: ack -i select
+
+Searching:
+    -i              Ignore case distinctions
+    -v              Invert match: select non-matching lines
+    -w              Force PATTERN to match only whole words
+    -Q              Quote all metacharacters; expr is literal
+
+Search output:
+    -l              Only print filenames containing matches
+    -o              Show only the part of a line matching PATTERN
+                    (turns off text highlighting)
+    --output=expr   Output the evaluation of expr for each line
+                    (turns off text highlighting)
+    -m=NUM          Stop after NUM matches
+    -H              Print the filename for each match
+    -h              Suppress the prefixing filename on output
+    -c, --count     Show number of lines matching per file
+
+    --group         Group matches by file name.
+                    (default: on when used interactively)
+    --nogroup       One result per line, including filename, like grep
+                    (default: on when the output is redirected)
+
+    --[no]color     Highlight the matching text (default: on unless
+                    output is redirected, or on Windows)
+
+File finding:
+    -f              Only print the files found, without searching.
+                    The PATTERN must not be specified.
+
+File inclusion/exclusion:
+    -n              No descending into subdirectories
+    -a, --all       All files, regardless of extension (but still skips
+                    blib, CVS, RCS, SCCS, .svn and _darcs dirs)
+    --[no]asm       .s and .S
+    --[no]binary    Binary files, as defined by Perl's -B op (default: off)
+    --[no]cc        .c and .h
+    --[no]cpp       .cpp, .m and .h
+    --[no]css       .css
+    --[no]elisp     .el
+    --[no]haskell   .hs and .lhs
+    --[no]html      .htm, .html and .shtml
+    --[no]java      .java
+    --[no]js        .js
+    --[no]lisp      .lisp
+    --[no]mason     .mas
+    --[no]ocaml     .ml and .mli
+    --[no]parrot    .pir, .pasm, .pmc, .ops, .pod, .pg and .tg
+    --[no]perl      .pl, .pm, .pod, .tt, .ttml and .t
+    --[no]php       .php, .phpt, .htm and .html
+    --[no]python    .py
+    --[no]ruby      .rb, .rhtml and .rjs
+    --[no]scheme    .scm
+    --[no]shell     .sh, .bash, .csh, .ksh and .zsh
+    --[no]sql       .sql and .ctl
+    --[no]tt        .tt and .tt2
+    --[no]vim       .vim
+    --[no]yaml      .yaml and .yml
+
+Miscellaneous:
+    --help          This help
+    --man           Man page
+    --version       Display version & copyright
+    --thpppt        Bill the Cat

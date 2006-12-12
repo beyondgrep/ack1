@@ -23,6 +23,15 @@ WriteMakefile(
 );
 
 package MY;
+
+sub MY::top_targets {
+    my $str = shift->SUPER::top_targets(@_);
+
+    $str =~ s/^pure_all.+/$& ack-standalone ack-help.txt/m;
+
+    return $str;
+}
+
 sub MY::postamble {
     my $file_next_filename = qx(perldoc -l File::Next);
     my $postamble = <<"MAKE_FRAG";
@@ -40,24 +49,18 @@ critic :
 ACK             = ack
 APP_ACK_PM      = Ack.pm
 STANDALONE      = ack-standalone
+ACK_HELP        = ack-help.txt
 
 \$(STANDALONE) : \$(ACK) \$(APP_ACK_PM)
 	perl ./squash ack File::Next \$(APP_ACK_PM) > \$(STANDALONE)
 	chmod +x \$(STANDALONE)
 
+\$(ACK_HELP) : \$(STANDALONE)
+	perl \$(STANDALONE) > \$(ACK_HELP)
+
 MAKE_FRAG
 
     return $postamble;
 }
-
-
-sub MY::top_targets {
-    my $str = shift->SUPER::top_targets(@_);
-
-    $str =~ s/^pure_all.+/$& ack-standalone/m;
-
-    return $str;
-}
-
 
 1;

@@ -23,3 +23,5 @@ for my $arg ( @ARGV ) {
     }
     close $fh;
 }
+
+exit 0;

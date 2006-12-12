@@ -10,13 +10,13 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.36
+Version 1.38
 
 =cut
 
 our $VERSION;
 BEGIN {
-    $VERSION = '1.36';
+    $VERSION = '1.38';
 }
 
 our %types;

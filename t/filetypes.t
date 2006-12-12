@@ -20,32 +20,32 @@ ok(  App::Ack::is_filetype( 'foo.pod', 'perl' ), 'foo.pod can be perl' );
 ok(  App::Ack::is_filetype( 'foo.pod', 'parrot' ), 'foo.pod can be parrot' );
 ok( !App::Ack::is_filetype( 'foo.pod', 'ruby' ), 'foo.pod cannot be ruby' );
 
-is(App::Ack::filetypes(q{foo.pod~}), q{-ignore},
+is(App::Ack::filetypes('foo.pod~'), '-ignore',
     'correctly ignore backup file');
 
-is(App::Ack::filetypes(q{#some.pod#}), q{-ignore},
+is(App::Ack::filetypes('#some.pod#'), '-ignore',
     'correctly ignore files starting and ending with hash mark');
 
-is(App::Ack::filetypes(q{core.987654321}), q{-ignore},
+is(App::Ack::filetypes('core.987654321'), '-ignore',
     'correctly ignore files named core.NNNN');
 
-is(App::Ack::filetypes(q{etc/shebang.pl.xxx}), q{perl},
+is(App::Ack::filetypes('t/etc/shebang.pl.xxx'), 'perl',
     'file identified as Perl from shebang line');
 
-is(App::Ack::filetypes(q{etc/shebang.php.xxx}), q{php},
+is(App::Ack::filetypes('t/etc/shebang.php.xxx'), 'php',
     'file identified as PHP from shebang line');
 
-is(App::Ack::filetypes(q{etc/shebang.py.xxx}), q{python},
+is(App::Ack::filetypes('t/etc/shebang.py.xxx'), 'python',
     'file identified as Python from shebang line');
 
-is(App::Ack::filetypes(q{etc/shebang.rb.xxx}), q{ruby},
+is(App::Ack::filetypes('t/etc/shebang.rb.xxx'), 'ruby',
     'file identified as Ruby from shebang line');
 
-is(App::Ack::filetypes(q{etc/shebang.sh.xxx}), q{shell},
+is(App::Ack::filetypes('t/etc/shebang.sh.xxx'), 'shell',
     'file identified as shell from shebang line');
 
-ok(! defined App::Ack::filetypes(q{etc/shebang.foobar.xxx}),
+ok(! defined App::Ack::filetypes('etc/shebang.foobar.xxx'),
     'file could not be identified from shebang line');
 
-is(App::Ack::filetypes(q{etc/shebang.empty.xxx}), q{binary}, 
+is(App::Ack::filetypes('t/etc/shebang.empty.xxx'), 'binary', 
     'empty file returns "binary"');

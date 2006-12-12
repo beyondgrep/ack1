@@ -1,0 +1,1119 @@
+#!/usr/local/bin/perl
+
+use warnings;
+use strict;
+
+our $VERSION   = '1.38';
+our $COPYRIGHT = 'Copyright 2005-2006 Andy Lester, all rights reserved.';
+
+# These are all our globals.
+my $is_windows;
+my %opt;
+my %type_wanted;
+my $is_tty =  -t STDOUT;
+
+BEGIN {
+    $is_windows = ($^O =~ /MSWin32/);
+    eval 'use Term::ANSIColor' unless $is_windows;
+}
+
+use Getopt::Long;
+
+MAIN: {
+    if ( $App::Ack::VERSION ne $main::VERSION ) {
+        die "Program/library version mismatch\n\t$0 is $main::VERSION\n\t$INC{'App/Ack.pm'} is $App::Ack::VERSION\n";
+    }
+    if ( exists $ENV{ACK_SWITCHES} ) {
+        warn "ACK_SWITCHES is no longer supported.  Use ACK_OPTIONS.\n";
+    }
+
+    # Priorities! Get the --thpppt checking out of the way.
+    /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
+
+    $opt{group} =   $is_tty;
+    $opt{color} =   $is_tty && !$is_windows;
+    $opt{all} =     0;
+    $opt{m} =       0;
+
+    my %options = (
+        a           => \$opt{all},
+        'all!'      => \$opt{all},
+        c           => \$opt{count},
+        count       => \$opt{count},
+        f           => \$opt{f},
+        h           => \$opt{h},
+        H           => \$opt{H},
+        'i|ignore-case'         => \$opt{i},
+        'l|files-with-match'    => \$opt{l},
+        'm|max-count=i'         => \$opt{m},
+        n           => \$opt{n},
+        'o|output:s' => \$opt{o},
+        'Q|literal'             => \$opt{Q},
+        'v|invert-match'        => \$opt{v},
+        'w|word-regexp'         => \$opt{w},
+
+        'group!'    => \$opt{group},
+        'color!'    => \$opt{color},
+        'version'   => sub { version(); exit 1; },
+
+        'help|?'    => sub {App::Ack::show_help(); exit},
+        'man'       => sub {require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit},
+    );
+
+
+    my @filetypes_supported = App::Ack::filetypes_supported();
+    for my $i ( @filetypes_supported ) {
+        $options{ "$i!" } = \$type_wanted{ $i };
+    }
+
+    # Stick any default switches at the beginning, so they can be overridden
+    # by the command line switches.
+    unshift @ARGV, split( ' ', $ENV{ACK_OPTIONS} ) if defined $ENV{ACK_OPTIONS};
+
+    Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
+    GetOptions( %options ) or die "ack --help for options.\n";
+
+    if ( defined( my $val = $opt{o} ) ) {
+        if ( $val eq '' ) {
+            $val = '$&';
+        }
+        else {
+            $val = qq{"$val"};
+        }
+        $opt{o} = eval qq[ sub { $val } ];
+    }
+
+    my $filetypes_supported_set =   grep { defined $type_wanted{$_} && ($type_wanted{$_} == 1) } @filetypes_supported;
+    my $filetypes_supported_unset = grep { defined $type_wanted{$_} && ($type_wanted{$_} == 0) } @filetypes_supported;
+
+    # If anyone says --no-whatever, we assume all other types must be on.
+    if ( !$filetypes_supported_set ) {
+        for my $i ( keys %type_wanted ) {
+            $type_wanted{$i} = 1 unless ( defined( $type_wanted{$i} ) || $i eq 'binary' );
+        }
+    }
+
+    if ( !@ARGV && !$opt{f} ) {
+        App::Ack::show_help();
+        exit 1;
+    }
+
+    my $regex;
+
+    if ( !$opt{f} ) {
+        # REVIEW: This shouldn't be able to happen because of the help
+        # check above.
+        $regex = shift @ARGV or die "No regex specified\n";
+
+        if ( $opt{Q} ) {
+            $regex = quotemeta( $regex );
+        }
+        if ( $opt{w} ) {
+            $regex = $opt{i} ? qr/\b$regex\b/i : qr/\b$regex\b/;
+        }
+        else {
+            $regex = $opt{i} ? qr/$regex/i : qr/$regex/;
+        }
+    }
+
+    my $is_filter = !-t STDIN;
+    my @what;
+    if ( @ARGV ) {
+        @what = @ARGV;
+
+        # Show filenames unless we've specified one single file
+        $opt{show_filename} = (@what > 1) || (!-f $what[0]);
+    }
+    else {
+        if ( $is_filter ) {
+            # We're going into filter mode
+            for ( qw( f l ) ) {
+                $opt{$_} and die "ack: Can't use -$_ when acting as a filter.\n";
+            }
+            $opt{show_filename} = 0;
+            search( '-', $regex, %opt );
+            exit 0;
+        }
+        else {
+            $opt{defaulted_to_dot} = 1;
+            @what = '.'; # Assume current directory
+            $opt{show_filename} = 1;
+        }
+    }
+    $opt{show_filename} = 0 if $opt{h};
+    $opt{show_filename} = 1 if $opt{H};
+
+    my $file_filter = $opt{all} ? sub {1} : \&is_interesting;
+    my $descend_filter = $opt{n} ? sub {0} : \&App::Ack::skipdir_filter;
+
+    my $iter =
+        File::Next::files( {
+            file_filter     => $file_filter,
+            descend_filter  => $descend_filter,
+            error_handler   => sub { my $msg = shift; warn "ack: $msg\n" },
+        }, @what );
+
+
+    while ( my $file = $iter->() ) {
+        if ( $opt{f} ) {
+            print "$file\n";
+        }
+        else {
+            search( $file, $regex, %opt );
+        }
+    }
+    exit 0;
+}
+
+sub is_interesting {
+    return if /~$/;
+    return if /^\./;
+
+    my $filename = $File::Next::name;
+    for my $type ( App::Ack::filetypes( $filename ) ) {
+        return 1 if $type_wanted{$type};
+    }
+    return;
+}
+
+sub search {
+    my $filename = shift;
+    my $regex = shift;
+    my %opt = @_;
+
+    my $nmatches = 0;
+    my $is_binary;
+
+    my $fh;
+    if ( $filename eq '-' ) {
+        $fh = *STDIN;
+        $is_binary = 0;
+    }
+    else {
+        if ( !open( $fh, '<', $filename ) ) {
+            warn "ack: $filename: $!\n";
+            return;
+        }
+        if ( $opt{defaulted_to_dot} ) {
+            $filename =~ s{^\Q./}{};
+        }
+        $is_binary = -B $filename;
+    }
+
+    local $_; ## no critic
+    while (<$fh>) {
+        if ( /$regex/ ) { # If we have a matching line
+            ++$nmatches;
+            if ( !$opt{count} ) {
+                next if $opt{v};
+
+                # No point in searching more if we only want a list
+                last if ( $nmatches == 1 && $opt{l} );
+
+                my $out;
+                if ( $opt{o} ) {
+                    $out = $opt{o}->() . "\n";
+                    $opt{show_filename} = 0;
+                }
+                else {
+                    $out = $_;
+                    $out =~ s/($regex)/colored($1,'black on_yellow')/eg if $opt{color};
+                }
+
+                if ( $is_binary ) {
+                    print "Binary file $filename matches\n";
+                    last;
+                }
+                elsif ( $opt{show_filename} ) {
+                    my $colorname = $opt{color} ? colored( $filename, 'bold green' ) : $filename;
+                    if ( $opt{group} ) {
+                        print "$colorname\n" if $nmatches == 1;
+                        print "$.:$out";
+                    }
+                    else {
+                        print "${colorname}:$.:$out";
+                    }
+                }
+                else {
+                    print $out;
+                }
+            } # Not just --count
+
+            last if $opt{m} && ( $nmatches >= $opt{m} );
+        } # match
+        else { # no match
+            if ( $opt{v} ) {
+                print "${filename}:" if $opt{show_filename};
+                print $_;
+            }
+        }
+    } # while
+    close $fh;
+
+    if ( $opt{count} ) {
+        print "${filename}:" if $opt{show_filename};
+        print "${nmatches}\n";
+    }
+    else {
+        if ( $opt{l} ) {
+            print "$filename\n" if ($opt{v} && !$nmatches) || ($nmatches && !$opt{v});
+        }
+        else {
+            print "\n" if $nmatches && $opt{show_filename} && $opt{group} && !$opt{v};
+        }
+    }
+
+    return;
+}
+
+sub version() { ## no critic (Subroutines::ProhibitSubroutinePrototypes)
+    print <<"END_OF_VERSION";
+ack $App::Ack::VERSION
+
+$COPYRIGHT
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+END_OF_VERSION
+
+    return;
+}
+
+=head1 NAME
+
+ack - grep-like text finder
+
+=head1 SYNOPSIS
+
+    ack [options] PATTERN [FILE...]
+    ack -f [options] [DIRECTORY...]
+
+=head1 DESCRIPTION
+
+Ack is designed as a replacement for F<grep>.
+
+Ack searches the named input FILEs (or standard input if no files are
+named, or the file name - is given) for lines containing a match to the
+given PATTERN.  By default, ack prints the matching lines.
+
+Ack can also list files that would be searched, without actually searching
+them, to let you take advantage of ack's file-type filtering capabilities.
+
+=head1 OPTIONS
+
+=over 4
+
+=item B<-a>, B<--all>
+
+Operate on all files, regardless of type (but still skip directories
+like F<blib>, F<CVS>, etc.
+
+=item B<-c>, B<--count>
+
+Suppress normal output; instead print a count of matching lines for each
+input file.
+
+=item B<--color>, B<--nocolor>
+
+B<--color> highlights the matching text.  B<--nocolor> supresses
+the color.  This is on by default unless the output is redirected,
+or running under Windows.
+
+=item B<-f>
+
+Only print the files that would be searched, without actually doing
+any searching.  PATTERN must not be specified, or it will be taken as
+a path to search.
+
+=item B<--group>, B<--nogroup>
+
+B<--group> groups matches by file name with.  This is the default when
+used interactively.
+
+B<--nogroup> prints one result per line, like grep.  This is the default
+when output is redirected.
+
+=item B<-H>, B<--with-filename>
+
+Print the filename for each match.
+
+=item B<-h>, B<--no-filename>
+
+Suppress the prefixing of filenames on output when multiple files are
+searched.
+
+=item B<--help>
+
+Print a short help statement.
+
+=item B<-i>, B<--ignore-case>
+
+Ignore case in the search strings.
+
+=item B<-l>, B<--files-with-matches>
+
+Only print the filenames of matching files, instead of the matching text.
+
+=item B<-m=I<NUM>>, B<--max-count=I<NUM>>
+
+Stop reading a file after I<NUM> matches.
+
+=item B<--man>
+
+Print this manual page.
+
+=item B<-n>
+
+No descending into subdirectories.
+
+=item B<-o>
+
+Show only the part of each line matching PATTERN (turns off text
+highlighting)
+
+=item B<--output=I<expr>>
+
+Output the evaluation of I<expr> for each line (turns off text
+highlighting)
+
+=item B<-Q>
+
+Quote all metacharacters.  PATTERN is treated as a literal.
+
+=item B<--thpppt>
+
+Display the crucial Bill The Cat logo.  Note that the exact spelling
+of B<--thpppppt> is not important.  It's checked against a regular
+expression.
+
+=item B<-v>, B<--invert-match>
+
+Invert match: select non-matching lines
+
+=item B<--version>
+
+Display version and copyright information.
+
+=item B<-w>, B<--word-regexp>
+
+Force PATTERN to match only whole words.  The PATTERN is wrapped with
+C<\b> metacharacters.
+
+=back
+
+=head1 ENVIRONMENT VARIABLES
+
+=over 4
+
+=item ACK_OPTIONS
+
+This variable specifies default options to be placed in front of any explicit options.
+
+=back
+
+=head1 GOTCHAS
+
+Note that FILES must still match valid selection rules.  For example,
+
+    ack something --perl foo.rb
+
+will search nothing, because I<foo.rb> is a Ruby file.
+
+=cut
+package File::Next;
+
+use strict;
+use warnings;
+
+=head1 NAME
+
+File::Next - File-finding iterator
+
+=head1 VERSION
+
+Version 0.32
+
+=cut
+
+our $VERSION = '0.32';
+
+=head1 SYNOPSIS
+
+File::Next is a lightweight, taint-safe file-finding module.
+It's lightweight and has no non-core prerequisites.
+
+    use File::Next;
+
+    my $files = File::Next->files( '/tmp' );
+
+    while ( my $file = $files->() ) {
+        # do something...
+    }
+
+=head1 OPERATIONAL THEORY
+
+Each of the public functions in File::Next returns an iterator that
+will walk through a directory tree.  The simplest use case is:
+
+    use File::Next;
+
+    my $iter = File::Next->files( '/tmp' );
+
+    while ( my $file = $iter->() ) {
+        print $file, "\n";
+    }
+
+    # Prints...
+    /tmp/foo.txt
+    /tmp/bar.pl
+    /tmp/baz/1
+    /tmp/baz/2.txt
+    /tmp/baz/wango/tango/purple.txt
+
+Note that only files are returned by C<files()>'s iterator.
+
+The first parameter to any of the iterator factory functions may
+be a hashref of parameters.
+
+Note that the iterator will only return files, not directories.
+
+=head1 PARAMETERS
+
+=head2 file_filter -> \&file_filter
+
+The file_filter lets you check to see if it's really a file you
+want to get back.  If the file_filter returns a true value, the
+file will be returned; if false, it will be skipped.
+
+The file_filter function takes no arguments but rather does its work through
+a collection of variables.
+
+=over 4
+
+=item * C<$_> is the current filename within that directory
+
+=item * C<$File::Next::dir> is the current directory name
+
+=item * C<$File::Next::name> is the complete pathname to the file
+
+=back
+
+These are analogous to the same variables in L<File::Find>.
+
+    my $iter = File::Find::files( { file_filter => sub { /\.txt$/ } }, '/tmp' );
+
+By default, the I<file_filter> is C<sub {1}>, or "all files".
+
+=head2 descend_filter => \&descend_filter
+
+The descend_filter lets you check to see if the iterator should
+descend into a given directory.  Maybe you want to skip F<CVS> and
+F<.svn> directories.
+
+    my $descend_filter = sub { $_ ne "CVS" && $_ ne ".svn" }
+
+The descend_filter function takes no arguments but rather does its work through
+a collection of variables.
+
+=over 4
+
+=item * C<$_> is the current filename of the directory
+
+=item * C<$File::Next::dir> is the complete directory name
+
+=back
+
+The descend filter is NOT applied to any directory names specified
+in the constructor.  For example,
+
+    my $iter = File::Find::files( { descend_filter => sub{0} }, '/tmp' );
+
+always descends into I</tmp>, as you would expect.
+
+By default, the I<descend_filter> is C<sub {1}>, or "always descend".
+
+=head2 error_handler => \&error_handler
+
+If I<error_handler> is set, then any errors will be sent through
+it.  By default, this value is C<CORE::die>.
+
+=head2 sort_files => [ 0 | 1 | \&sort_sub]
+
+If you want files sorted, pass in some true value, as in
+C<< sort_files => 1 >>.
+
+If you want a special sort order, pass in a sort function like
+C<< sort_files => sub { $a->[1] cmp $b->[1] } >>.
+Note that the parms passed in to the sub are arrayrefs, where $a->[0]
+is the directory name and $a->[1] is the file name.  Typically
+you're going to be sorting on $a->[1].
+
+=head1 FUNCTIONS
+
+=head2 files( { \%parameters }, @starting points )
+
+Returns an iterator that walks directories starting with the items
+in I<@starting_points>.
+
+All file-finding in this module is adapted from Mark Jason Dominus'
+marvelous I<Higher Order Perl>, page 126.
+
+=head2 sort_standard( $a, $b )
+
+A sort function for passing as a C<sort_files> parameter:
+
+    my $iter = File::Next::files( {
+        sort_files => \&File::Next::sort_reverse
+    }, 't/swamp' );
+
+This function is the default, so the code above is identical to:
+
+    my $iter = File::Next::files( {
+        sort_files => \&File::Next::sort_reverse
+    }, 't/swamp' );
+
+=head2 sort_reverse( $a, $b )
+
+Same as C<sort_standard>, but in reverse.
+
+=cut
+
+use File::Spec ();
+
+## no critic (ProhibitPackageVars)
+our $name; # name of the current file
+our $dir;  # dir of the current file
+
+our %files_defaults;
+
+BEGIN {
+    %files_defaults = (
+        file_filter => sub{1},
+        descend_filter => sub {1},
+        error_handler => sub { CORE::die @_ },
+        sort_files => undef,
+    );
+}
+
+sub files {
+    my $passed_parms = ref $_[0] eq 'HASH' ? {%{+shift}} : {}; # copy parm hash
+    my %passed_parms = %{$passed_parms};
+
+    my $parms = {};
+    for my $key ( keys %files_defaults ) {
+        $parms->{$key} = delete( $passed_parms{$key} ) || $files_defaults{$key};
+    }
+
+    # Any leftover keys are bogus
+    for my $badkey ( keys %passed_parms ) {
+        $parms->{error_handler}->( "Invalid parameter passed to files(): $badkey" );
+    }
+
+    my @queue;
+    for ( @_ ) {
+        my $start = _reslash( $_ );
+        if (-d $start) {
+            push @queue, [$start,undef];
+        }
+        else {
+            push @queue, [undef,$start];
+        }
+    }
+
+    return sub {
+        while (@queue) {
+            my ($dir,$file) = @{shift @queue};
+
+            my $fullpath =
+                defined $dir
+                    ? defined $file
+                        ? File::Spec->catfile( $dir, $file )
+                        : $dir
+                    : $file;
+
+            if (-d $fullpath) {
+                unshift( @queue, _candidate_files( $parms, $fullpath ) );
+            }
+            elsif (-f $fullpath) {
+                local $_ = $file;
+                local $File::Next::dir = $dir;
+                local $File::Next::name = $fullpath;
+                if ( $parms->{file_filter}->() ) {
+                    if (wantarray) {
+                        return ($dir,$file);
+                    }
+                    else {
+                        return $fullpath;
+                    }
+                }
+            }
+        } # while
+
+        return;
+    }; # iterator
+}
+
+sub _reslash {
+    my $path = shift;
+
+    my @parts = split( /\//, $path );
+
+    return $path if @parts < 2;
+
+    return File::Spec->catfile( @parts );
+}
+
+=for private _candidate_files( $parms, $dir )
+
+Pulls out the files/dirs that might be worth looking into in I<$dir>.
+If I<$dir> is the empty string, then search the current directory.
+This is different than explicitly passing in a ".", because that
+will get prepended to the path names.
+
+I<$parms> is the hashref of parms passed into File::Next constructor.
+
+=cut
+
+our %ups;
+
+sub _candidate_files {
+    my $parms = shift;
+    my $dir = shift;
+
+    my $dh;
+    if ( !opendir $dh, $dir ) {
+        $parms->{error_handler}->( "$dir: $!" );
+        return;
+    }
+
+    %ups or %ups = map {($_,1)} (File::Spec->curdir, File::Spec->updir);
+    my @newfiles;
+    while ( my $file = readdir $dh ) {
+        next if $ups{$file};
+
+        local $File::Next::dir = File::Spec->catdir( $dir, $file );
+        if ( -d $File::Next::dir ) {
+            local $_ = $file;
+            next unless $parms->{descend_filter}->();
+        }
+        push( @newfiles, [$dir, $file] );
+    }
+    if ( my $sub = $parms->{sort_files} ) {
+        $sub = \&sort_standard unless ref($sub) eq 'CODE';
+        @newfiles = sort $sub @newfiles;
+    }
+
+    return @newfiles;
+}
+
+sub sort_standard($$)   { return $_[0]->[1] cmp $_[1]->[1] }; ## no critic (ProhibitSubroutinePrototypes)
+sub sort_reverse($$)    { return $_[1]->[1] cmp $_[0]->[1] }; ## no critic (ProhibitSubroutinePrototypes)
+
+=head1 AUTHOR
+
+Andy Lester, C<< <andy at petdance.com> >>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to
+C<bug-file-next at rt.cpan.org>, or through the web interface at
+L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=File-Next>.
+I will be notified, and then you'll automatically be notified of
+progress on your bug as I make changes.
+
+=head1 SUPPORT
+
+You can find documentation for this module with the perldoc command.
+
+    perldoc File::Next
+
+You can also look for information at:
+
+=over 4
+
+=item * AnnoCPAN: Annotated CPAN documentation
+
+L<http://annocpan.org/dist/File-Next>
+
+=item * CPAN Ratings
+
+L<http://cpanratings.perl.org/d/File-Next>
+
+=item * RT: CPAN's request tracker
+
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=File-Next>
+
+=item * Search CPAN
+
+L<http://search.cpan.org/dist/File-Next>
+
+=item * Subversion repository
+
+L<https://file-next.googlecode.com/svn/trunk>
+
+=back
+
+=head1 ACKNOWLEDGEMENTS
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2006 Andy Lester, all rights reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut
+
+1; # End of File::Next
+package App::Ack;
+
+use warnings;
+use strict;
+use File::Basename ();
+
+=head1 NAME
+
+App::Ack - A container for functions for the ack program
+
+=head1 VERSION
+
+Version 1.38
+
+=cut
+
+our $VERSION;
+BEGIN {
+    $VERSION = '1.38';
+}
+
+our %types;
+our %mappings;
+our @suffixes;
+our @ignore_dirs;
+our %ignore_dirs;
+
+BEGIN {
+    @ignore_dirs = qw( blib CVS RCS SCCS .svn _darcs );
+    %ignore_dirs = map { ($_,1) } @ignore_dirs;
+    %mappings = (
+        asm         => [qw( s S )],
+        binary      => q{Binary files, as defined by Perl's -B op (default: off)},
+        cc          => [qw( c h )],
+        cpp         => [qw( cpp m h )],
+        css         => [qw( css )],
+        elisp       => [qw( el )],
+        haskell     => [qw( hs lhs )],
+        html        => [qw( htm html shtml )],
+        lisp        => [qw( lisp )],
+        java        => [qw( java )],
+        js          => [qw( js )],
+        mason       => [qw( mas )],
+        ocaml       => [qw( ml mli )],
+        parrot      => [qw( pir pasm pmc ops pod pg tg )],
+        perl        => [qw( pl pm pod tt ttml t )],
+        php         => [qw( php phpt htm html )],
+        python      => [qw( py )],
+        ruby        => [qw( rb rhtml rjs )],
+        scheme      => [qw( scm )],
+        shell       => [qw( sh bash csh ksh zsh )],
+        sql         => [qw( sql ctl )],
+        tt          => [qw( tt tt2 )],
+        vim         => [qw( vim )],
+        yaml        => [qw( yaml yml )],
+    );
+
+    my %suffixes;
+    while ( my ($type,$exts) = each %mappings ) {
+        if ( ref $exts ) {
+            for my $ext ( @{$exts} ) {
+                push( @{$types{$ext}}, $type );
+                ++$suffixes{"\\.$ext"};
+            }
+        }
+    }
+    @suffixes = keys %suffixes;
+}
+
+=head1 SYNOPSIS
+
+If you want to know about the F<ack> program
+
+No user-serviceable parts inside.  F<ack> is all that should use this.
+
+=head1 FUNCTIONS
+
+=head2 is_filetype( $filename, $filetype )
+
+Asks whether I<$filename> is of type I<$filetype>.
+
+=cut
+
+sub is_filetype {
+    my $filename = shift;
+    my $wanted_type = shift;
+
+    for my $maybe_type ( filetypes( $filename ) ) {
+        return 1 if $maybe_type eq $wanted_type;
+    }
+
+    return;
+}
+
+sub _ignore_dirs_str { return _listify( @ignore_dirs ); }
+
+
+=head2 skipdir_filter
+
+Standard filter to pass as a L<File::Next> descend_filter.  It
+returns true if the directory is any of the ones we know we want
+to skip.
+
+=cut
+
+sub skipdir_filter {
+    return !exists $ignore_dirs{$_};
+}
+
+=head2 filetypes( $filename )
+
+Returns a list of types that I<$filename> could be.  For example, a file
+F<foo.pod> could be "perl" or "parrot".
+
+The filetype will be C<undef> if we can't determine it.  This could
+be if the file doesn't exist, or it can't be read.
+
+It will be '-ignore' if it's something that ack should always ignore,
+even under -a.
+
+=cut
+
+sub filetypes {
+    my $filename = shift;
+
+    return '-ignore' if $filename =~ /~$/;
+
+    # Pass our $filename in lowercase so we match lowercase filenames
+    my ($filebase,$dirs,$suffix) = File::Basename::fileparse( lc $filename, @suffixes );
+
+    return '-ignore' if $filebase =~ /^#.+#$/;
+    return '-ignore' if $filebase =~ /^core\.\d+$/;
+
+    # If there's an extension, look it up
+    if ( $suffix ) {
+        $suffix =~ s/^\.//; # Drop the period that File::Basename needs
+        my $ref = $types{lc $suffix};
+        return @{$ref} if $ref;
+    }
+
+    return unless -e $filename;
+    if ( !-r $filename ) {
+        warn _my_program(), ": $filename: Permission denied\n";
+        return;
+    }
+
+    return 'binary' if -B $filename;
+
+    # If there's no extension, or we don't recognize it, check the shebang line
+    my $fh;
+    if ( !open( $fh, '<', $filename ) ) {
+        warn _my_program(), ": $filename: $!\n";
+        return;
+    }
+    my $header = <$fh>;
+    close $fh;
+    return unless defined $header;
+    if ( $header =~ /^#!/ ) {
+        return 'perl'   if $header =~ /\bperl\b/;
+        return 'php'    if $header =~ /\bphp\b/;
+        return 'python' if $header =~ /\bpython\b/;
+        return 'ruby'   if $header =~ /\bruby\b/;
+        return 'shell'  if $header =~ /\b(ba|c|k|z)?sh\b/;
+    }
+
+    return;
+}
+
+sub _my_program {
+    return File::Basename::basename( $0 );
+}
+
+
+=head2 filetypes_supported()
+
+Returns a list of all the types that we can detect.
+
+=cut
+
+sub filetypes_supported {
+    return keys %mappings;
+}
+
+sub _thpppt {
+    my $y = q{_   /|,\\'!.x',=(www)=,   U   };
+    $y =~ tr/,x!w/\nOo_/;
+    print "$y ack $_[0]!\n";
+    exit 0;
+}
+
+=head2 show_help()
+
+Dumps the help page to the user.
+
+=cut
+
+sub show_help {
+    my $help_template = <<'END_OF_HELP';
+Usage: ack [OPTION]... PATTERN [FILES]
+Search for PATTERN in each source file in the tree from cwd on down.
+If [FILES] is specified, then only those files/directories are checked.
+ack may also search STDIN, but only if no FILES are specified, or if
+one of FILES is "-".
+
+Default switches may be specified in ACK_OPTIONS environment variable.
+
+Example: ack -i select
+
+Searching:
+    -i              Ignore case distinctions
+    -v              Invert match: select non-matching lines
+    -w              Force PATTERN to match only whole words
+    -Q              Quote all metacharacters; expr is literal
+
+Search output:
+    -l              Only print filenames containing matches
+    -o              Show only the part of a line matching PATTERN
+                    (turns off text highlighting)
+    --output=expr   Output the evaluation of expr for each line
+                    (turns off text highlighting)
+    -m=NUM          Stop after NUM matches
+    -H              Print the filename for each match
+    -h              Suppress the prefixing filename on output
+    -c, --count     Show number of lines matching per file
+
+    --group         Group matches by file name.
+                    (default: on when used interactively)
+    --nogroup       One result per line, including filename, like grep
+                    (default: on when the output is redirected)
+
+    --[no]color     Highlight the matching text (default: on unless
+                    output is redirected, or on Windows)
+
+File finding:
+    -f              Only print the files found, without searching.
+                    The PATTERN must not be specified.
+
+File inclusion/exclusion:
+    -n              No descending into subdirectories
+    -a, --all       All files, regardless of extension (but still skips
+                    @IGNORE_DIRS@ dirs)
+@LIST@
+
+Miscellaneous:
+    --help          This help
+    --man           Man page
+    --version       Display version & copyright
+    --thpppt        Bill the Cat
+END_OF_HELP
+
+    my @langlines;
+    for my $lang ( sort( filetypes_supported() ) ) {
+        next if $lang =~ /^-/; # Stuff to not show
+        my $ext_list = $mappings{$lang};
+
+        if ( ref $ext_list ) {
+            my @exts = map { ".$_" } @{$ext_list};
+
+            $ext_list = _listify( @exts );
+        }
+        push( @langlines, sprintf( '    --[no]%-9.9s %s', $lang, $ext_list ) );
+    }
+    my $langlines = join( "\n", @langlines );
+
+    my $help = $help_template;
+    $help =~ s/\@LIST\@/$langlines/smx;
+    $help =~ s/\@IGNORE_DIRS\@/_ignore_dirs_str()/esmx;
+
+    print $help;
+
+    return;
+}
+
+sub _listify {
+    my @whats = @_;
+
+    return '' if !@whats;
+
+    return $whats[0] if @whats == 1;
+
+    my $end = pop @whats;
+    return join( ', ', @whats ) . " and $end";
+}
+
+=head1 AUTHOR
+
+Andy Lester, C<< <andy at petdance.com> >>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to
+C<bug-ack at rt.cpan.org>, or through the web interface at
+L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=ack>.
+I will be notified, and then you'll automatically be notified of progress on
+your bug as I make changes.
+
+=head1 SUPPORT
+
+The App::Ack module isn't very interesting to users.  However, you may
+find useful information about this distribution at:
+
+=over 4
+
+=item * AnnoCPAN: Annotated CPAN documentation
+
+L<http://annocpan.org/dist/ack>
+
+=item * CPAN Ratings
+
+L<http://cpanratings.perl.org/d/ack>
+
+=item * RT: CPAN's request tracker
+
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=ack>
+
+=item * Search CPAN
+
+L<http://search.cpan.org/dist/ack>
+
+=item * Subversion repository
+
+L<http://ack.googlecode.com/svn/>
+
+=back
+
+=head1 ACKNOWLEDGEMENTS
+
+Thanks to everyone who has contributed to ack in any way, including
+Rick Scott,
+Ask Bjørn Hanse,
+Jerry Gay,
+Will Coleda,
+Mike O'Regan,
+Slaven Rezic,
+Mark Stosberg,
+David Alan Pisoni,
+Adriano Ferreira,
+James Keenan,
+Leland Johnson,
+Ricardo Signes
+and Pete Krawczyk.
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2005-2006 Andy Lester, all rights reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
+=cut
+
+1; # End of App::Ack

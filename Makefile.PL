@@ -19,10 +19,19 @@ WriteMakefile(
         'File::Basename'    => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean               => { FILES => 'ack-*' },
+    clean               => { FILES => 'ack-1*' },
 );
 
 package MY;
+
+sub MY::top_targets {
+    my $str = shift->SUPER::top_targets(@_);
+
+    $str =~ s/^pure_all.+/$& ack-standalone ack-help.txt/m;
+
+    return $str;
+}
+
 sub MY::postamble {
     my $file_next_filename = qx(perldoc -l File::Next);
     my $postamble = <<"MAKE_FRAG";
@@ -39,27 +48,19 @@ critic :
 
 ACK             = ack
 APP_ACK_PM      = Ack.pm
-FILE_NEXT_PM    = $file_next_filename
 STANDALONE      = ack-standalone
+ACK_HELP        = ack-help.txt
 
-\$(STANDALONE) : \$(ACK) \$(APP_ACK_PM) \$(FILE_NEXT_PM)
-	grep -v 'use App::Ack' \$(ACK) | grep -v 'use File::Next' > \$(STANDALONE)
-	cat \$(FILE_NEXT_PM) \$(APP_ACK_PM) >> \$(STANDALONE)
+\$(STANDALONE) : \$(ACK) \$(APP_ACK_PM)
+	perl ./squash ack File::Next \$(APP_ACK_PM) > \$(STANDALONE)
 	chmod +x \$(STANDALONE)
+
+\$(ACK_HELP) : \$(STANDALONE)
+	perl \$(STANDALONE) --help > \$(ACK_HELP) || perl -e0
 
 MAKE_FRAG
 
     return $postamble;
 }
-
-
-sub MY::top_targets {
-    my $str = shift->SUPER::top_targets(@_);
-
-    $str =~ s/^pure_all.+/$& ack-standalone/m;
-
-    return $str;
-}
-
 
 1;

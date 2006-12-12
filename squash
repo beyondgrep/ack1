@@ -1,0 +1,27 @@
+#!perl
+
+# Quickie utility for squashing together the parts for the standalone version
+
+use warnings;
+use strict;
+
+use File::Next;
+
+for my $arg ( @ARGV ) {
+    my $filename = $arg;
+    if ( $arg =~ /::/ ) {
+        my $key = "$arg.pm";
+        $key =~ s{::}{/}g;
+        $filename = $INC{$key} or die "Can't find the file for $arg";
+    }
+
+    warn "Reading $filename\n";
+    open( my $fh, '<', $filename ) or die "Can't open $filename: $!";
+    while ( <$fh> ) {
+        next if /^use (File::Next|App::Ack)/;
+        print;
+    }
+    close $fh;
+}
+
+exit 0;

@@ -1,5 +1,12 @@
 Revision history for ack
 
+1.38    Mon Dec 11 21:33:32 CST 2006
+
+    [FIXES]
+    The Makefile would be created incorrectly if File::Next did not
+    exist at the time Makefile.PL was run.
+
+
 1.36    Sun Dec 10 23:59:57 CST 2006
 
     [THINGS THAT MAY BREAK YOUR CODE]

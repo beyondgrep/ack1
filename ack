@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.36';
+our $VERSION   = '1.38';
 our $COPYRIGHT = 'Copyright 2005-2006 Andy Lester, all rights reserved.';
 
 # These are all our globals.

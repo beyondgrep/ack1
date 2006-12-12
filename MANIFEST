@@ -1,11 +1,12 @@
-ack
 Ack.pm
 Changes
-Makefile.PL
 MANIFEST
+Makefile.PL
 README
+ack
+ack-help.txt
+ack-standalone
 squash
-
 
 t/00-load.t
 t/filetypes.t

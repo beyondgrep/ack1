@@ -1,6 +1,6 @@
 Revision history for ack
 
-NEXT
+1.38    Mon Dec 11 21:33:32 CST 2006
 
     [FIXES]
     The Makefile would be created incorrectly if File::Next did not

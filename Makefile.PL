@@ -19,7 +19,7 @@ WriteMakefile(
         'File::Basename'    => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean               => { FILES => 'ack-*' },
+    clean               => { FILES => 'ack-1*' },
 );
 
 package MY;
@@ -56,7 +56,7 @@ ACK_HELP        = ack-help.txt
 	chmod +x \$(STANDALONE)
 
 \$(ACK_HELP) : \$(STANDALONE)
-	perl \$(STANDALONE) > \$(ACK_HELP)
+	perl \$(STANDALONE) --help > \$(ACK_HELP) || perl -e0
 
 MAKE_FRAG
 

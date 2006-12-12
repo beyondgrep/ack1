@@ -39,12 +39,10 @@ critic :
 
 ACK             = ack
 APP_ACK_PM      = Ack.pm
-FILE_NEXT_PM    = \$(shell perldoc -l File::Next)
 STANDALONE      = ack-standalone
 
-\$(STANDALONE) : \$(ACK) \$(APP_ACK_PM) \$(FILE_NEXT_PM)
-	grep -v 'use App::Ack' \$(ACK) | grep -v 'use File::Next' > \$(STANDALONE)
-	cat \$(FILE_NEXT_PM) \$(APP_ACK_PM) >> \$(STANDALONE)
+\$(STANDALONE) : \$(ACK) \$(APP_ACK_PM)
+	perl ./squash ack File::Next \$(APP_ACK_PM) > \$(STANDALONE)
 	chmod +x \$(STANDALONE)
 
 MAKE_FRAG

@@ -1,6 +1,11 @@
 ack
 Ack.pm
 Changes
+Makefile.PL
+MANIFEST
+README
+squash
+
 etc/shebang.empty.xxx
 etc/shebang.foobar.xxx
 etc/shebang.php.xxx
@@ -8,9 +13,7 @@ etc/shebang.pl.xxx
 etc/shebang.py.xxx
 etc/shebang.rb.xxx
 etc/shebang.sh.xxx
-Makefile.PL
-MANIFEST
-README
+
 t/00-load.t
 t/filetypes.t
 t/interesting.t

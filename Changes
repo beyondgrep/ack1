@@ -1,5 +1,11 @@
 Revision history for ack
 
+NEXT
+
+    [ENHANCEMENTS]
+    Added support for TeX files.
+
+
 1.38    Mon Dec 11 21:33:32 CST 2006
 
     [FIXES]

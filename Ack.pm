@@ -32,7 +32,8 @@ BEGIN {
         asm         => [qw( s S )],
         binary      => q{Binary files, as defined by Perl's -B op (default: off)},
         cc          => [qw( c h )],
-        cpp         => [qw( cpp m h )],
+        cpp         => [qw( cpp m h C H )],
+        csharp      => [qw( cs )],
         css         => [qw( css )],
         elisp       => [qw( el )],
         haskell     => [qw( hs lhs )],
@@ -54,6 +55,7 @@ BEGIN {
         tt          => [qw( tt tt2 )],
         vim         => [qw( vim )],
         yaml        => [qw( yaml yml )],
+        xml         => [qw( xml dtd xslt )],
     );
 
     my %suffixes;
@@ -157,12 +159,13 @@ sub filetypes {
     close $fh;
     return unless defined $header;
     if ( $header =~ /^#!/ ) {
-        return 'perl'   if $header =~ /\bperl\b/;
+        return 'perl'   if $header =~ /\bperl/;
         return 'php'    if $header =~ /\bphp\b/;
         return 'python' if $header =~ /\bpython\b/;
         return 'ruby'   if $header =~ /\bruby\b/;
         return 'shell'  if $header =~ /\b(ba|c|k|z)?sh\b/;
     }
+    return 'xml'    if $header =~ /<\?xml /;
 
     return;
 }
@@ -327,6 +330,7 @@ L<http://ack.googlecode.com/svn/>
 =head1 ACKNOWLEDGEMENTS
 
 Thanks to everyone who has contributed to ack in any way, including
+Merijn Broeren,
 Rick Scott,
 Ask Bjørn Hanse,
 Jerry Gay,

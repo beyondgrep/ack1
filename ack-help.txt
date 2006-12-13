@@ -44,7 +44,8 @@ File inclusion/exclusion:
     --[no]asm       .s and .S
     --[no]binary    Binary files, as defined by Perl's -B op (default: off)
     --[no]cc        .c and .h
-    --[no]cpp       .cpp, .m and .h
+    --[no]cpp       .cpp, .m, .h, .C and .H
+    --[no]csharp    .cs
     --[no]css       .css
     --[no]elisp     .el
     --[no]haskell   .hs and .lhs
@@ -62,8 +63,10 @@ File inclusion/exclusion:
     --[no]scheme    .scm
     --[no]shell     .sh, .bash, .csh, .ksh and .zsh
     --[no]sql       .sql and .ctl
+    --[no]tex       .tex
     --[no]tt        .tt and .tt2
     --[no]vim       .vim
+    --[no]xml       .xml, .dtd and .xslt
     --[no]yaml      .yaml and .yml
 
 Miscellaneous:

@@ -5,6 +5,7 @@ Makefile.PL
 README
 ack
 ack-help.txt
+ack-help-types.txt
 ack-standalone
 squash
 

@@ -58,7 +58,7 @@ MAIN: {
         'color!'    => \$opt{color},
         'version'   => sub { version(); exit 1; },
 
-        'help|?'    => sub {App::Ack::show_help(); exit},
+        'help|?:s'              => sub { shift; App::Ack::show_help(@_); exit; },
         'man'       => sub {require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit},
     );
 

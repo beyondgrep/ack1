@@ -56,7 +56,7 @@ MAIN: {
         'color!'    => \$opt{color},
         'version'   => sub { version(); exit 1; },
 
-        'help|?'    => sub {App::Ack::show_help(); exit},
+        'help|?:s'              => sub { shift; App::Ack::show_help(@_); exit; },
         'man'       => sub {require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit},
     );
 
@@ -966,7 +966,13 @@ Dumps the help page to the user.
 =cut
 
 sub show_help {
-    my $help_template = <<'END_OF_HELP';
+    my $help_arg = shift || 0;
+
+    return show_help_types() if $help_arg =~ /^types?/;
+
+    my $ignore_dirs = _ignore_dirs_str();
+
+    print <<"END_OF_HELP";
 Usage: ack [OPTION]... PATTERN [FILES]
 Search for PATTERN in each source file in the tree from cwd on down.
 If [FILES] is specified, then only those files/directories are checked.
@@ -1009,8 +1015,11 @@ File finding:
 File inclusion/exclusion:
     -n              No descending into subdirectories
     -a, --all       All files, regardless of extension (but still skips
-                    @IGNORE_DIRS@ dirs)
-@LIST@
+                    $ignore_dirs dirs)
+    --type=perl     Include only Perl files.
+    --perl          Include only Perl files.
+    --noperl        Exclude Perl files.
+                    See "ack --help type" for supported filetypes.
 
 Miscellaneous:
     --help          This help
@@ -1019,25 +1028,38 @@ Miscellaneous:
     --thpppt        Bill the Cat
 END_OF_HELP
 
-    my @langlines;
-    for my $lang ( sort( filetypes_supported() ) ) {
-        next if $lang =~ /^-/; # Stuff to not show
-        my $ext_list = $mappings{$lang};
+    return;
+}
+
+
+=head2 show_help_types()
+
+Display the filetypes help subpage.
+
+=cut
+
+sub show_help_types {
+    print <<'END_OF_HELP';
+Usage: ack [OPTION]... PATTERN [FILES]
+
+The following is the list of filetypes supported by ack.  You can
+specify a file type with the --type=TYPE format, or the --TYPE
+format.  For example, both --type=perl and --perl work.
+
+Note that some extensions may appear in multiple types.  For example,
+.pod files are both Perl and Parrot.
+
+END_OF_HELP
+
+    for my $type ( sort( filetypes_supported() ) ) {
+        next if $type =~ /^-/; # Stuff to not show
+        my $ext_list = $mappings{$type};
 
         if ( ref $ext_list ) {
-            my @exts = map { ".$_" } @{$ext_list};
-
-            $ext_list = _listify( @exts );
+            $ext_list = join( ' ', map { ".$_" } @{$ext_list} );
         }
-        push( @langlines, sprintf( '    --[no]%-9.9s %s', $lang, $ext_list ) );
+        printf( "    --[no]%-9.9s %s\n", $type, $ext_list );
     }
-    my $langlines = join( "\n", @langlines );
-
-    my $help = $help_template;
-    $help =~ s/\@LIST\@/$langlines/smx;
-    $help =~ s/\@IGNORE_DIRS\@/_ignore_dirs_str()/esmx;
-
-    print $help;
 
     return;
 }

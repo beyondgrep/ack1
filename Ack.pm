@@ -353,6 +353,7 @@ L<http://ack.googlecode.com/svn/>
 
 Thanks to everyone who has contributed to ack in any way, including
 Merijn Broeren,
+Uwe Voelker,
 Rick Scott,
 Ask Bjørn Hanse,
 Jerry Gay,

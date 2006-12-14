@@ -400,6 +400,17 @@ Display the crucial Bill The Cat logo.  Note that the exact spelling
 of B<--thpppppt> is not important.  It's checked against a regular
 expression.
 
+=item B<--type=TYPE>, B<--type=noTYPE>
+
+Specify the types of files to include or exclude from a search.
+TYPE is a filetype, like I<perl> or I<xml>.  B<--type=perl> can
+also be specified as B<--perl>, and B<--type=noperl> can be done
+as B<--noperl>.
+
+Type specifications can be repeated and are ORed together.
+
+See I<ack --help=types> for a list of valid types.
+
 =item B<-v>, B<--invert-match>
 
 Invert match: select non-matching lines

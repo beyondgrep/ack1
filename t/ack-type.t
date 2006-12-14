@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 4;
+use Test::More tests => 12;
 
 my $ruby = [qw(
     t/etc/shebang.rb.xxx
@@ -30,10 +30,18 @@ my $perl = [qw(
 my $perl_ruby = [ @{$perl}, @{$ruby} ];
 
 check_with( '--perl', $perl );
+check_with( '--perl --noruby', $perl );
 check_with( '--ruby', $ruby );
+check_with( '--ruby --noperl', $ruby );
 check_with( '--perl --ruby', $perl_ruby );
 check_with( '--ruby --perl', $perl_ruby );
 
+check_with( '--type=perl', $perl );
+check_with( '--type=perl --type=noruby', $perl );
+check_with( '--type=ruby', $ruby );
+check_with( '--type=ruby --type=noperl', $ruby );
+check_with( '--type=perl --type=ruby', $perl_ruby );
+check_with( '--type=ruby --type=perl', $perl_ruby );
 
 sub check_with {
     my $options = shift;

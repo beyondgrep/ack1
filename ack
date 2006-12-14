@@ -433,4 +433,74 @@ Note that FILES must still match valid selection rules.  For example,
 
 will search nothing, because I<foo.rb> is a Ruby file.
 
+=head1 AUTHOR
+
+Andy Lester, C<< <andy at petdance.com> >>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to
+C<bug-ack at rt.cpan.org>, or through the web interface at
+L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=ack>.
+I will be notified, and then you'll automatically be notified of progress on
+your bug as I make changes.
+
+=head1 SUPPORT
+
+Support for and information about F<ack> can be found at:
+
+=over 4
+
+=item * The ack homepage
+
+L<http://petdance.com/ack/>
+
+=item * AnnoCPAN: Annotated CPAN documentation
+
+L<http://annocpan.org/dist/ack>
+
+=item * CPAN Ratings
+
+L<http://cpanratings.perl.org/d/ack>
+
+=item * RT: CPAN's request tracker
+
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=ack>
+
+=item * Search CPAN
+
+L<http://search.cpan.org/dist/ack>
+
+=item * Subversion repository
+
+L<http://ack.googlecode.com/svn/>
+
+=back
+
+=head1 ACKNOWLEDGEMENTS
+
+Thanks to everyone who has contributed to ack in any way, including
+Merijn Broeren,
+Uwe Voelker,
+Rick Scott,
+Ask Bjørn Hansen,
+Jerry Gay,
+Will Coleda,
+Mike O'Regan,
+Slaven Rezic,
+Mark Stosberg,
+David Alan Pisoni,
+Adriano Ferreira,
+James Keenan,
+Leland Johnson,
+Ricardo Signes
+and Pete Krawczyk.
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2005-2006 Andy Lester, all rights reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+
 =cut

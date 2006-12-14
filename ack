@@ -130,7 +130,6 @@ MAIN: {
         }
     }
 
-    my $is_filter = !-t STDIN;
     my @what;
     if ( @ARGV ) {
         @what = @ARGV;
@@ -139,6 +138,7 @@ MAIN: {
         $opt{show_filename} = (@what > 1) || (!-f $what[0]);
     }
     else {
+        my $is_filter = !-t STDIN;
         if ( $is_filter ) {
             # We're going into filter mode
             for ( qw( f l ) ) {

@@ -44,7 +44,7 @@ tags :
 		--languages=Perl --langmap=Perl:+.t \
 
 critic :
-	perlcritic -1 -q -profile perlcriticrc .
+	perlcritic -1 -q -profile perlcriticrc ack t/*.t
 
 ACK             = ack
 APP_ACK_PM      = Ack.pm

@@ -52,8 +52,8 @@ STANDALONE      = ack-standalone
 ACK_HELP        = ack-help.txt
 ACK_HELP_TYPES  = ack-help-types.txt
 
-\$(STANDALONE) : \$(ACK) \$(APP_ACK_PM)
-	perl ./squash ack File::Next \$(APP_ACK_PM) > \$(STANDALONE)
+\$(STANDALONE) : \$(ACK) \$(APP_ACK_PM) squash
+	perl squash ack File::Next \$(APP_ACK_PM) > \$(STANDALONE)
 	chmod +x \$(STANDALONE)
 	perl -c \$(STANDALONE)
 

@@ -17,9 +17,14 @@ for my $arg ( @ARGV ) {
 
     warn "Reading $filename\n";
     open( my $fh, '<', $filename ) or die "Can't open $filename: $!";
+
     while ( <$fh> ) {
         next if /^use (File::Next|App::Ack)/;
-        print;
+
+        # See if we're in module POD blocks
+        my $skip = ($filename ne 'ack') && (/^=/ .. /^=cut/);
+
+        print unless $skip;
     }
     close $fh;
 }

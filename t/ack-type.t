@@ -3,15 +3,16 @@
 use warnings;
 use strict;
 
-use Test::More tests => 1;
+use Test::More tests => 4;
 
-my $ack = "$^X ./ack-standalone";
+my $ruby = [qw(
+    t/etc/shebang.rb.xxx
+)];
 
-my @expected = qw(
+my $perl = [qw(
     t/00-load.t
     t/ack-type.t
     t/etc/shebang.pl.xxx
-    t/etc/shebang.rb.xxx
     t/filetypes.t
     t/interesting.t
     t/pod-coverage.t
@@ -24,20 +25,25 @@ my @expected = qw(
     t/swamp/perl.pl
     t/swamp/perl.pm
     t/swamp/perl.pod
-);
+)];
 
-VIA_DASH_DASH_PERL: {
-    my @results = `$ack -f --perl --ruby t`;
+my $perl_ruby = [ @{$perl}, @{$ruby} ];
 
-    sets_match( \@results, \@expected, 'File lists match via --perl --ruby' );
-}
+check_with( '--perl', $perl );
+check_with( '--ruby', $ruby );
+check_with( '--perl --ruby', $perl_ruby );
+check_with( '--ruby --perl', $perl_ruby );
 
-sub sets_match {
-    my $actual = shift;
+
+sub check_with {
+    my $options = shift;
     my $expected = shift;
-    my $msg = shift;
 
-    chomp @$actual;
+    my @expected = sort @$expected;
 
-    return is_deeply( $actual, $expected, $msg );
+    my @results = sort `$^X ./ack-standalone -f $options t`;
+
+    chomp @results;
+
+    return is_deeply( \@results, \@expected, "File lists match via $options" );
 }

@@ -16,6 +16,7 @@ t/interesting.t
 t/pod.t
 t/standalone.t
 
+t/etc/core.2112
 t/etc/shebang.empty.xxx
 t/etc/shebang.foobar.xxx
 t/etc/shebang.php.xxx

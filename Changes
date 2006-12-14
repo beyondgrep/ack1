@@ -6,6 +6,9 @@ NEXT
     Added support for TeX, C# and XML files.
 
     [FIXES]
+    The -a flag was including files that should always be ignored,
+    including coredumps and backup files ending with "~".
+
     Cygwin has problems with file permissions, so we don't check
     for readability on files before they get opened.  Thanks, Elliot
     Shank.

@@ -155,7 +155,7 @@ MAIN: {
     $opt{show_filename} = 0 if $opt{h};
     $opt{show_filename} = 1 if $opt{H};
 
-    my $file_filter = $opt{all} ? sub {1} : \&is_interesting;
+    my $file_filter = $opt{all} ? \&dash_a : \&is_interesting;
     my $descend_filter = $opt{n} ? sub {0} : \&App::Ack::skipdir_filter;
 
     my $iter =
@@ -178,14 +178,18 @@ MAIN: {
 }
 
 sub is_interesting {
-    return if /~$/;
-    return if /^\./;
+    return if $File::Next::name =~ /^\./;
 
-    my $filename = $File::Next::name;
-    for my $type ( App::Ack::filetypes( $filename ) ) {
+    for my $type ( App::Ack::filetypes( $File::Next::name ) ) {
         return 1 if $type_wanted{$type};
     }
     return;
+}
+
+sub dash_a {
+    my @types = App::Ack::filetypes( $File::Next::name );
+    return 0 if (@types == 1) && ($types[0] eq '-ignore');
+    return 1;
 }
 
 sub search {
@@ -310,6 +314,63 @@ given PATTERN.  By default, ack prints the matching lines.
 
 Ack can also list files that would be searched, without actually searching
 them, to let you take advantage of ack's file-type filtering capabilities.
+
+=head1 FILE SELECTION
+
+I<ack> is intelligent about the files it searches.  It knows about
+certain file types, based on both the extension on the file and,
+in some cases, the contents of the file.  These selections can be
+made with the B<--type> option.
+
+The B<-a> option tells I<ack> to select all files, regardless of
+type.
+
+Some files will never be selected by I<ack>, even with B<-a>,
+including:
+
+=over 4
+
+=item * Backup files: Files ending with F<~>, or F<#*#>
+
+=item * Coredumps: Files matching F<core.\d+>
+
+=back
+
+=head1 DIRECTORY SELECTION
+
+I<ack> descends through the directory tree of the starting directories
+specified.  However, it will ignore the shadow directories used by
+many version control systems, and the build directories used by the
+Perl MakeMaker system.
+
+The following directories will never be descended into:
+
+=over 4
+
+=item * F<_darcs>
+
+=item * F<CVS>
+
+=item * F<RCS>
+
+=item * F<SCCS>
+
+=item * F<.svn>
+
+=item * F<blib>
+
+=back
+
+=head1 WHEN TO USE GREP
+
+I<ack> trumps I<grep> as an everyday tool 99% of the time, but don't
+throw I<grep> away, because there are times you'll still need it.
+
+If you truly want to search every file and every directory, I<ack>
+won't do it.  You'll need to rely on I<grep>.
+
+If you need context around your matches, use I<grep>, but check
+back in on I<ack> in the near future, because I'm adding it.
 
 =head1 OPTIONS
 

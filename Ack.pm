@@ -300,10 +300,8 @@ sub _listify {
 
     return '' if !@whats;
 
-    return $whats[0] if @whats == 1;
-
     my $end = pop @whats;
-    return join( ', ', @whats ) . " and $end";
+    return @whats ? join( ', ', @whats ) . " and $end" : $end;
 }
 
 =head1 AUTHOR

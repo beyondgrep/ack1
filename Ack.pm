@@ -24,6 +24,7 @@ our %mappings;
 our @suffixes;
 our @ignore_dirs;
 our %ignore_dirs;
+our $is_cygwin;
 
 BEGIN {
     @ignore_dirs = qw( blib CVS RCS SCCS .svn _darcs );
@@ -68,6 +69,8 @@ BEGIN {
         }
     }
     @suffixes = keys %suffixes;
+
+    $is_cygwin = ($^O eq 'cygwin');
 }
 
 =head1 SYNOPSIS
@@ -140,9 +143,18 @@ sub filetypes {
     }
 
     return unless -e $filename;
-    if ( !-r $filename ) {
-        warn _my_program(), ": $filename: Permission denied\n";
-        return;
+
+    # From Elliot Shank:
+    #     I can't see any reason that -r would fail on these-- the ACLs look
+    #     fine, and no program has any of them open, so the busted Windows
+    #     file locking model isn't getting in there.  If I comment the if
+    #     statement out, everything works fine
+    # So, for cygwin, don't bother trying to check for readability.
+    if ( !$is_cygwin ) {
+        if ( !-r $filename ) {
+            warn _my_program(), ": $filename: Permission denied\n";
+            return;
+        }
     }
 
     return 'binary' if -B $filename;
@@ -163,7 +175,7 @@ sub filetypes {
         return 'ruby'   if $header =~ /\bruby\b/;
         return 'shell'  if $header =~ /\b(ba|c|k|z)?sh\b/;
     }
-    return 'xml'    if $header =~ /<\?xml /;
+    return 'xml' if $header =~ /<\?xml /;
 
     return;
 }

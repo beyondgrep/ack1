@@ -491,6 +491,7 @@ L<http://ack.googlecode.com/svn/>
 =head1 ACKNOWLEDGEMENTS
 
 Thanks to everyone who has contributed to ack in any way, including
+Elliot Shank,
 Merijn Broeren,
 Uwe Voelker,
 Rick Scott,

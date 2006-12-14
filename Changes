@@ -5,6 +5,11 @@ NEXT
     [ENHANCEMENTS]
     Added support for TeX, C# and XML files.
 
+    [FIXES]
+    Cygwin has problems with file permissions, so we don't check
+    for readability on files before they get opened.  Thanks, Elliot
+    Shank.
+
 
 1.38    Mon Dec 11 21:33:32 CST 2006
 

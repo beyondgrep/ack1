@@ -41,27 +41,39 @@ MAIN: {
         a           => \$opt{all},
         'all!'      => \$opt{all},
         c           => \$opt{count},
+        'color!'    => \$opt{color},
         count       => \$opt{count},
         f           => \$opt{f},
+        'group!'    => \$opt{group},
         h           => \$opt{h},
         H           => \$opt{H},
         'i|ignore-case'         => \$opt{i},
         'l|files-with-match'    => \$opt{l},
         'm|max-count=i'         => \$opt{m},
-        n           => \$opt{n},
-        'o|output:s' => \$opt{o},
+        n                       => \$opt{n},
+        'o|output:s'            => \$opt{o},
         'Q|literal'             => \$opt{Q},
         'v|invert-match'        => \$opt{v},
         'w|word-regexp'         => \$opt{w},
 
-        'group!'    => \$opt{group},
-        'color!'    => \$opt{color},
+
         'version'   => sub { version(); exit 1; },
-
-        'help|?:s'              => sub { shift; App::Ack::show_help(@_); exit; },
+        'help|?:s'  => sub { shift; App::Ack::show_help(@_); exit; },
         'man'       => sub {require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit},
-    );
 
+        'type=s'    => sub {
+            my $dummy = shift;
+            my $type = shift;
+            my $wanted = ($type =~ s/^no//) ? 0 : 1; # must not be undef later
+
+            if ( exists $type_wanted{ $type } ) {
+                $type_wanted{ $type } = $wanted;
+            }
+            else {
+                die qq{Unknown type "$type"\n};
+            }
+        }, # type sub
+    );
 
     my @filetypes_supported = App::Ack::filetypes_supported();
     for my $i ( @filetypes_supported ) {

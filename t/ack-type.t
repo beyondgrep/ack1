@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 12;
+use Test::More tests => 16;
 
 my $ruby = [qw(
     t/etc/shebang.rb.xxx
@@ -43,6 +43,11 @@ check_with( '--type=ruby --type=noperl', $ruby );
 check_with( '--type=perl --type=ruby', $perl_ruby );
 check_with( '--type=ruby --type=perl', $perl_ruby );
 
+check_with( '--perl --type=noruby', $perl );
+check_with( '--ruby --type=noperl', $ruby );
+check_with( '--perl --type=ruby', $perl_ruby );
+check_with( '--ruby --type=perl', $perl_ruby );
+
 sub check_with {
     my $options = shift;
     my $expected = shift;
@@ -53,5 +58,6 @@ sub check_with {
 
     chomp @results;
 
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
     return is_deeply( \@results, \@expected, "File lists match via $options" );
 }

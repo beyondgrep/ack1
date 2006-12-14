@@ -247,9 +247,10 @@ File inclusion/exclusion:
     -n              No descending into subdirectories
     -a, --all       All files, regardless of extension (but still skips
                     $ignore_dirs dirs)
-    --type=perl     Include only Perl files.
     --perl          Include only Perl files.
+    --type=perl     Include only Perl files.
     --noperl        Exclude Perl files.
+    --type=noperl   Exclude Perl files.
                     See "ack --help type" for supported filetypes.
 
 Miscellaneous:

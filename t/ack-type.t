@@ -11,6 +11,7 @@ my @expected = qw(
     t/00-load.t
     t/ack-type.t
     t/etc/shebang.pl.xxx
+    t/etc/shebang.rb.xxx
     t/filetypes.t
     t/interesting.t
     t/pod-coverage.t
@@ -26,9 +27,9 @@ my @expected = qw(
 );
 
 VIA_DASH_DASH_PERL: {
-    my @results = `$ack -f --perl t`;
+    my @results = `$ack -f --perl --ruby t`;
 
-    sets_match( \@results, \@expected, 'File lists match via --perl' );
+    sets_match( \@results, \@expected, 'File lists match via --perl --ruby' );
 }
 
 sub sets_match {

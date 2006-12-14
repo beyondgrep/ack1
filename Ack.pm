@@ -95,8 +95,6 @@ sub is_filetype {
     return;
 }
 
-sub _ignore_dirs_str { return _listify( @ignore_dirs ); }
-
 
 =head2 skipdir_filter
 
@@ -203,7 +201,7 @@ sub show_help {
 
     return show_help_types() if $help_arg =~ /^types?/;
 
-    my $ignore_dirs = _ignore_dirs_str();
+    my $ignore_dirs = _listify( @ignore_dirs );
 
     print <<"END_OF_HELP";
 Usage: ack [OPTION]... PATTERN [FILES]

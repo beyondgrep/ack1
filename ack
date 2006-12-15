@@ -372,6 +372,10 @@ The following directories will never be descended into:
 I<ack> trumps I<grep> as an everyday tool 99% of the time, but don't
 throw I<grep> away, because there are times you'll still need it.
 
+I<ack> only searches through files of types that it recognizes.  If
+it can't tell what type a file is, then it won't look.  If that's
+annoying to you, use I<grep>.
+
 If you truly want to search every file and every directory, I<ack>
 won't do it.  You'll need to rely on I<grep>.
 

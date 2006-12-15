@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.38';
+our $VERSION   = '1.40';
 our $COPYRIGHT = 'Copyright 2005-2006 Andy Lester, all rights reserved.';
 
 # These are all our globals.
@@ -15,6 +15,9 @@ my $is_tty =  -t STDOUT;
 BEGIN {
     $is_windows = ($^O =~ /MSWin32/);
     eval 'use Term::ANSIColor' unless $is_windows;
+
+    $ENV{ACK_COLOR_MATCH}    ||= 'black on_yellow';
+    $ENV{ACK_COLOR_FILENAME} ||= 'bold green';
 }
 
 use File::Next 0.22;
@@ -41,27 +44,39 @@ MAIN: {
         a           => \$opt{all},
         'all!'      => \$opt{all},
         c           => \$opt{count},
+        'color!'    => \$opt{color},
         count       => \$opt{count},
         f           => \$opt{f},
+        'group!'    => \$opt{group},
         h           => \$opt{h},
         H           => \$opt{H},
         'i|ignore-case'         => \$opt{i},
         'l|files-with-match'    => \$opt{l},
         'm|max-count=i'         => \$opt{m},
-        n           => \$opt{n},
-        'o|output:s' => \$opt{o},
+        n                       => \$opt{n},
+        'o|output:s'            => \$opt{o},
         'Q|literal'             => \$opt{Q},
         'v|invert-match'        => \$opt{v},
         'w|word-regexp'         => \$opt{w},
 
-        'group!'    => \$opt{group},
-        'color!'    => \$opt{color},
+
         'version'   => sub { version(); exit 1; },
-
-        'help|?'    => sub {App::Ack::show_help(); exit},
+        'help|?:s'  => sub { shift; App::Ack::show_help(@_); exit; },
         'man'       => sub {require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit},
-    );
 
+        'type=s'    => sub {
+            my $dummy = shift;
+            my $type = shift;
+            my $wanted = ($type =~ s/^no//) ? 0 : 1; # must not be undef later
+
+            if ( exists $type_wanted{ $type } ) {
+                $type_wanted{ $type } = $wanted;
+            }
+            else {
+                die qq{Unknown type "$type"\n};
+            }
+        }, # type sub
+    );
 
     my @filetypes_supported = App::Ack::filetypes_supported();
     for my $i ( @filetypes_supported ) {
@@ -118,7 +133,6 @@ MAIN: {
         }
     }
 
-    my $is_filter = !-t STDIN;
     my @what;
     if ( @ARGV ) {
         @what = @ARGV;
@@ -127,6 +141,7 @@ MAIN: {
         $opt{show_filename} = (@what > 1) || (!-f $what[0]);
     }
     else {
+        my $is_filter = !-t STDIN;
         if ( $is_filter ) {
             # We're going into filter mode
             for ( qw( f l ) ) {
@@ -145,7 +160,7 @@ MAIN: {
     $opt{show_filename} = 0 if $opt{h};
     $opt{show_filename} = 1 if $opt{H};
 
-    my $file_filter = $opt{all} ? sub {1} : \&is_interesting;
+    my $file_filter = $opt{all} ? \&dash_a : \&is_interesting;
     my $descend_filter = $opt{n} ? sub {0} : \&App::Ack::skipdir_filter;
 
     my $iter =
@@ -168,14 +183,18 @@ MAIN: {
 }
 
 sub is_interesting {
-    return if /~$/;
-    return if /^\./;
+    return if $File::Next::name =~ /^\./;
 
-    my $filename = $File::Next::name;
-    for my $type ( App::Ack::filetypes( $filename ) ) {
+    for my $type ( App::Ack::filetypes( $File::Next::name ) ) {
         return 1 if $type_wanted{$type};
     }
     return;
+}
+
+sub dash_a {
+    my @types = App::Ack::filetypes( $File::Next::name );
+    return 0 if (@types == 1) && ($types[0] eq '-ignore');
+    return 1;
 }
 
 sub search {
@@ -202,7 +221,7 @@ sub search {
         $is_binary = -B $filename;
     }
 
-    local $_; ## no critic
+    local $_ = undef;
     while (<$fh>) {
         if ( /$regex/ ) { # If we have a matching line
             ++$nmatches;
@@ -219,7 +238,7 @@ sub search {
                 }
                 else {
                     $out = $_;
-                    $out =~ s/($regex)/colored($1,'black on_yellow')/eg if $opt{color};
+                    $out =~ s/($regex)/colored($1,$ENV{ACK_COLOR_MATCH})/eg if $opt{color};
                 }
 
                 if ( $is_binary ) {
@@ -227,7 +246,7 @@ sub search {
                     last;
                 }
                 elsif ( $opt{show_filename} ) {
-                    my $colorname = $opt{color} ? colored( $filename, 'bold green' ) : $filename;
+                    my $colorname = $opt{color} ? colored( $filename, $ENV{ACK_COLOR_FILENAME} ) : $filename;
                     if ( $opt{group} ) {
                         print "$colorname\n" if $nmatches == 1;
                         print "$.:$out";
@@ -300,6 +319,71 @@ given PATTERN.  By default, ack prints the matching lines.
 
 Ack can also list files that would be searched, without actually searching
 them, to let you take advantage of ack's file-type filtering capabilities.
+
+=head1 FILE SELECTION
+
+I<ack> is intelligent about the files it searches.  It knows about
+certain file types, based on both the extension on the file and,
+in some cases, the contents of the file.  These selections can be
+made with the B<--type> option.
+
+With no file selections, I<ack> only searches files of types that
+it recognizes.  If you have a file called F<foo.wango>, and I<ack>
+doesn't know what a .wango file is, I<ack> won't search it.
+
+The B<-a> option tells I<ack> to select all files, regardless of
+type.
+
+Some files will never be selected by I<ack>, even with B<-a>,
+including:
+
+=over 4
+
+=item * Backup files: Files ending with F<~>, or F<#*#>
+
+=item * Coredumps: Files matching F<core.\d+>
+
+=back
+
+=head1 DIRECTORY SELECTION
+
+I<ack> descends through the directory tree of the starting directories
+specified.  However, it will ignore the shadow directories used by
+many version control systems, and the build directories used by the
+Perl MakeMaker system.
+
+The following directories will never be descended into:
+
+=over 4
+
+=item * F<_darcs>
+
+=item * F<CVS>
+
+=item * F<RCS>
+
+=item * F<SCCS>
+
+=item * F<.svn>
+
+=item * F<blib>
+
+=back
+
+=head1 WHEN TO USE GREP
+
+I<ack> trumps I<grep> as an everyday tool 99% of the time, but don't
+throw I<grep> away, because there are times you'll still need it.
+
+I<ack> only searches through files of types that it recognizes.  If
+it can't tell what type a file is, then it won't look.  If that's
+annoying to you, use I<grep>.
+
+If you truly want to search every file and every directory, I<ack>
+won't do it.  You'll need to rely on I<grep>.
+
+If you need context around your matches, use I<grep>, but check
+back in on I<ack> in the near future, because I'm adding it.
 
 =head1 OPTIONS
 
@@ -388,6 +472,17 @@ Display the crucial Bill The Cat logo.  Note that the exact spelling
 of B<--thpppppt> is not important.  It's checked against a regular
 expression.
 
+=item B<--type=TYPE>, B<--type=noTYPE>
+
+Specify the types of files to include or exclude from a search.
+TYPE is a filetype, like I<perl> or I<xml>.  B<--type=perl> can
+also be specified as B<--perl>, and B<--type=noperl> can be done
+as B<--noperl>.
+
+Type specifications can be repeated and are ORed together.
+
+See I<ack --help=types> for a list of valid types.
+
 =item B<-v>, B<--invert-match>
 
 Invert match: select non-matching lines
@@ -409,7 +504,28 @@ C<\b> metacharacters.
 
 =item ACK_OPTIONS
 
-This variable specifies default options to be placed in front of any explicit options.
+This variable specifies default options to be placed in front of
+any explicit options on the command line.
+
+=item ACK_COLOR_FILENAME
+
+Specifies the color of the filename when it's printed in B<--group>
+mode.  By default, it's "bold green".
+
+The recognized attributes are clear, reset, dark, bold, underline,
+underscore, blink, reverse, concealed black, red, green, yellow,
+blue, magenta, on_black, on_red, on_green, on_yellow, on_blue,
+on_magenta, on_cyan, and on_white.  Case is not significant.
+Underline and underscore are equivalent, as are clear and reset.
+The color alone sets the foreground color, and on_color sets the
+background color.
+
+=item ACK_COLOR_MATCH
+
+Specifies the color of the matching text when printed in B<--color>
+mode.  By default, it's "black on_yellow".
+
+See B<ACK_COLOR_FILENAME> for the color specifications.
 
 =back
 
@@ -420,5 +536,77 @@ Note that FILES must still match valid selection rules.  For example,
     ack something --perl foo.rb
 
 will search nothing, because I<foo.rb> is a Ruby file.
+
+=head1 AUTHOR
+
+Andy Lester, C<< <andy at petdance.com> >>
+
+=head1 BUGS
+
+Please report any bugs or feature requests to
+C<bug-ack at rt.cpan.org>, or through the web interface at
+L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=ack>.
+I will be notified, and then you'll automatically be notified of progress on
+your bug as I make changes.
+
+=head1 SUPPORT
+
+Support for and information about F<ack> can be found at:
+
+=over 4
+
+=item * The ack homepage
+
+L<http://petdance.com/ack/>
+
+=item * AnnoCPAN: Annotated CPAN documentation
+
+L<http://annocpan.org/dist/ack>
+
+=item * CPAN Ratings
+
+L<http://cpanratings.perl.org/d/ack>
+
+=item * RT: CPAN's request tracker
+
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=ack>
+
+=item * Search CPAN
+
+L<http://search.cpan.org/dist/ack>
+
+=item * Subversion repository
+
+L<http://ack.googlecode.com/svn/>
+
+=back
+
+=head1 ACKNOWLEDGEMENTS
+
+Thanks to everyone who has contributed to ack in any way, including
+Nilson Santos F. Jr,
+Elliot Shank,
+Merijn Broeren,
+Uwe Voelker,
+Rick Scott,
+Ask Bjørn Hansen,
+Jerry Gay,
+Will Coleda,
+Mike O'Regan,
+Slaven Rezic,
+Mark Stosberg,
+David Alan Pisoni,
+Adriano Ferreira,
+James Keenan,
+Leland Johnson,
+Ricardo Signes
+and Pete Krawczyk.
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2005-2006 Andy Lester, all rights reserved.
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
 
 =cut

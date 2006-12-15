@@ -10,13 +10,13 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.38
+Version 1.40
 
 =cut
 
 our $VERSION;
 BEGIN {
-    $VERSION = '1.38';
+    $VERSION = '1.40';
 }
 
 our %types;
@@ -24,6 +24,7 @@ our %mappings;
 our @suffixes;
 our @ignore_dirs;
 our %ignore_dirs;
+our $is_cygwin;
 
 BEGIN {
     @ignore_dirs = qw( blib CVS RCS SCCS .svn _darcs );
@@ -32,7 +33,8 @@ BEGIN {
         asm         => [qw( s S )],
         binary      => q{Binary files, as defined by Perl's -B op (default: off)},
         cc          => [qw( c h )],
-        cpp         => [qw( cpp m h )],
+        cpp         => [qw( cpp m h C H )],
+        csharp      => [qw( cs )],
         css         => [qw( css )],
         elisp       => [qw( el )],
         haskell     => [qw( hs lhs )],
@@ -50,9 +52,11 @@ BEGIN {
         scheme      => [qw( scm )],
         shell       => [qw( sh bash csh ksh zsh )],
         sql         => [qw( sql ctl )],
+        tex         => [qw( tex )],
         tt          => [qw( tt tt2 )],
         vim         => [qw( vim )],
         yaml        => [qw( yaml yml )],
+        xml         => [qw( xml dtd xslt )],
     );
 
     my %suffixes;
@@ -65,6 +69,8 @@ BEGIN {
         }
     }
     @suffixes = keys %suffixes;
+
+    $is_cygwin = ($^O eq 'cygwin');
 }
 
 =head1 SYNOPSIS
@@ -91,8 +97,6 @@ sub is_filetype {
 
     return;
 }
-
-sub _ignore_dirs_str { return _listify( @ignore_dirs ); }
 
 
 =head2 skipdir_filter
@@ -139,9 +143,18 @@ sub filetypes {
     }
 
     return unless -e $filename;
-    if ( !-r $filename ) {
-        warn _my_program(), ": $filename: Permission denied\n";
-        return;
+
+    # From Elliot Shank:
+    #     I can't see any reason that -r would fail on these-- the ACLs look
+    #     fine, and no program has any of them open, so the busted Windows
+    #     file locking model isn't getting in there.  If I comment the if
+    #     statement out, everything works fine
+    # So, for cygwin, don't bother trying to check for readability.
+    if ( !$is_cygwin ) {
+        if ( !-r $filename ) {
+            warn _my_program(), ": $filename: Permission denied\n";
+            return;
+        }
     }
 
     return 'binary' if -B $filename;
@@ -156,12 +169,13 @@ sub filetypes {
     close $fh;
     return unless defined $header;
     if ( $header =~ /^#!/ ) {
-        return 'perl'   if $header =~ /\bperl\b/;
+        return 'perl'   if $header =~ /\bperl/;
         return 'php'    if $header =~ /\bphp\b/;
         return 'python' if $header =~ /\bpython\b/;
         return 'ruby'   if $header =~ /\bruby\b/;
         return 'shell'  if $header =~ /\b(ba|c|k|z)?sh\b/;
     }
+    return 'xml' if $header =~ /<\?xml /;
 
     return;
 }
@@ -195,7 +209,13 @@ Dumps the help page to the user.
 =cut
 
 sub show_help {
-    my $help_template = <<'END_OF_HELP';
+    my $help_arg = shift || 0;
+
+    return show_help_types() if $help_arg =~ /^types?/;
+
+    my $ignore_dirs = _listify( @ignore_dirs );
+
+    print <<"END_OF_HELP";
 Usage: ack [OPTION]... PATTERN [FILES]
 Search for PATTERN in each source file in the tree from cwd on down.
 If [FILES] is specified, then only those files/directories are checked.
@@ -238,8 +258,12 @@ File finding:
 File inclusion/exclusion:
     -n              No descending into subdirectories
     -a, --all       All files, regardless of extension (but still skips
-                    @IGNORE_DIRS@ dirs)
-@LIST@
+                    $ignore_dirs dirs)
+    --perl          Include only Perl files.
+    --type=perl     Include only Perl files.
+    --noperl        Exclude Perl files.
+    --type=noperl   Exclude Perl files.
+                    See "ack --help type" for supported filetypes.
 
 Miscellaneous:
     --help          This help
@@ -248,25 +272,38 @@ Miscellaneous:
     --thpppt        Bill the Cat
 END_OF_HELP
 
-    my @langlines;
-    for my $lang ( sort( filetypes_supported() ) ) {
-        next if $lang =~ /^-/; # Stuff to not show
-        my $ext_list = $mappings{$lang};
+    return;
+}
+
+
+=head2 show_help_types()
+
+Display the filetypes help subpage.
+
+=cut
+
+sub show_help_types {
+    print <<'END_OF_HELP';
+Usage: ack [OPTION]... PATTERN [FILES]
+
+The following is the list of filetypes supported by ack.  You can
+specify a file type with the --type=TYPE format, or the --TYPE
+format.  For example, both --type=perl and --perl work.
+
+Note that some extensions may appear in multiple types.  For example,
+.pod files are both Perl and Parrot.
+
+END_OF_HELP
+
+    for my $type ( sort( filetypes_supported() ) ) {
+        next if $type =~ /^-/; # Stuff to not show
+        my $ext_list = $mappings{$type};
 
         if ( ref $ext_list ) {
-            my @exts = map { ".$_" } @{$ext_list};
-
-            $ext_list = _listify( @exts );
+            $ext_list = join( ' ', map { ".$_" } @{$ext_list} );
         }
-        push( @langlines, sprintf( '    --[no]%-9.9s %s', $lang, $ext_list ) );
+        printf( "    --[no]%-9.9s %s\n", $type, $ext_list );
     }
-    my $langlines = join( "\n", @langlines );
-
-    my $help = $help_template;
-    $help =~ s/\@LIST\@/$langlines/smx;
-    $help =~ s/\@IGNORE_DIRS\@/_ignore_dirs_str()/esmx;
-
-    print $help;
 
     return;
 }
@@ -276,77 +313,8 @@ sub _listify {
 
     return '' if !@whats;
 
-    return $whats[0] if @whats == 1;
-
     my $end = pop @whats;
-    return join( ', ', @whats ) . " and $end";
+    return @whats ? join( ', ', @whats ) . " and $end" : $end;
 }
-
-=head1 AUTHOR
-
-Andy Lester, C<< <andy at petdance.com> >>
-
-=head1 BUGS
-
-Please report any bugs or feature requests to
-C<bug-ack at rt.cpan.org>, or through the web interface at
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=ack>.
-I will be notified, and then you'll automatically be notified of progress on
-your bug as I make changes.
-
-=head1 SUPPORT
-
-The App::Ack module isn't very interesting to users.  However, you may
-find useful information about this distribution at:
-
-=over 4
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/ack>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/ack>
-
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=ack>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/ack>
-
-=item * Subversion repository
-
-L<http://ack.googlecode.com/svn/>
-
-=back
-
-=head1 ACKNOWLEDGEMENTS
-
-Thanks to everyone who has contributed to ack in any way, including
-Rick Scott,
-Ask Bjørn Hanse,
-Jerry Gay,
-Will Coleda,
-Mike O'Regan,
-Slaven Rezic,
-Mark Stosberg,
-David Alan Pisoni,
-Adriano Ferreira,
-James Keenan,
-Leland Johnson,
-Ricardo Signes
-and Pete Krawczyk.
-
-=head1 COPYRIGHT & LICENSE
-
-Copyright 2005-2006 Andy Lester, all rights reserved.
-
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
-
-=cut
 
 1; # End of App::Ack

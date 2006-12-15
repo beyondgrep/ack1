@@ -1,5 +1,23 @@
 Revision history for ack
 
+1.40    Thu Dec 14 22:43:33 CST 2006
+
+    [ENHANCEMENTS]
+    Added support for TeX, C# and XML files.
+
+    The colors are now settable as ACK_COLOR_FILENAME and
+    ACK_COLOR_MATCH.
+
+    [FIXES]
+    The -a flag was including files that should always be ignored,
+    including coredumps and backup files ending with "~".
+
+    Cygwin has problems with file permissions, so we don't check
+    for readability on files before they get opened.  We also have
+    cross-platform problems in the standalone test.  Thanks, Elliot
+    Shank and Nilson Santos Figueiredo Junior.
+
+
 1.38    Mon Dec 11 21:33:32 CST 2006
 
     [FIXES]

@@ -10,6 +10,8 @@ allow_leading_tabs = 0
 [-Editor::RequireEmacsFileVariables]
 [-ErrorHandling::RequireCarping]
 
+[-InputOutput::ProhibitInteractiveTest]
+
 [-Miscellanea::RequireRcsKeywords]
 
 [-Modules::RequireVersionVar]

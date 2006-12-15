@@ -41,30 +41,11 @@ File inclusion/exclusion:
     -n              No descending into subdirectories
     -a, --all       All files, regardless of extension (but still skips
                     blib, CVS, RCS, SCCS, .svn and _darcs dirs)
-    --[no]asm       .s and .S
-    --[no]binary    Binary files, as defined by Perl's -B op (default: off)
-    --[no]cc        .c and .h
-    --[no]cpp       .cpp, .m and .h
-    --[no]css       .css
-    --[no]elisp     .el
-    --[no]haskell   .hs and .lhs
-    --[no]html      .htm, .html and .shtml
-    --[no]java      .java
-    --[no]js        .js
-    --[no]lisp      .lisp
-    --[no]mason     .mas
-    --[no]ocaml     .ml and .mli
-    --[no]parrot    .pir, .pasm, .pmc, .ops, .pod, .pg and .tg
-    --[no]perl      .pl, .pm, .pod, .tt, .ttml and .t
-    --[no]php       .php, .phpt, .htm and .html
-    --[no]python    .py
-    --[no]ruby      .rb, .rhtml and .rjs
-    --[no]scheme    .scm
-    --[no]shell     .sh, .bash, .csh, .ksh and .zsh
-    --[no]sql       .sql and .ctl
-    --[no]tt        .tt and .tt2
-    --[no]vim       .vim
-    --[no]yaml      .yaml and .yml
+    --perl          Include only Perl files.
+    --type=perl     Include only Perl files.
+    --noperl        Exclude Perl files.
+    --type=noperl   Exclude Perl files.
+                    See "ack --help type" for supported filetypes.
 
 Miscellaneous:
     --help          This help

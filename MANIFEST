@@ -5,15 +5,20 @@ Makefile.PL
 README
 ack
 ack-help.txt
+ack-help-types.txt
 ack-standalone
 squash
 
 t/00-load.t
+t/ack-a.t
+t/ack-type.t
 t/filetypes.t
 t/interesting.t
 t/pod.t
+t/pod-coverage.t
 t/standalone.t
 
+t/etc/core.2112
 t/etc/shebang.empty.xxx
 t/etc/shebang.foobar.xxx
 t/etc/shebang.php.xxx

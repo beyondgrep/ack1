@@ -27,7 +27,7 @@ package MY;
 sub MY::top_targets {
     my $str = shift->SUPER::top_targets(@_);
 
-    $str =~ s/^pure_all.+/$& ack-standalone ack-help.txt/m;
+    $str =~ s/^pure_all.+/$& ack-standalone ack-help.txt ack-help-types.txt/m;
 
     return $str;
 }
@@ -44,19 +44,24 @@ tags :
 		--languages=Perl --langmap=Perl:+.t \
 
 critic :
-	perlcritic -1 -q -profile perlcriticrc .
+	perlcritic -1 -q -profile perlcriticrc ack t/*.t
 
 ACK             = ack
 APP_ACK_PM      = Ack.pm
 STANDALONE      = ack-standalone
 ACK_HELP        = ack-help.txt
+ACK_HELP_TYPES  = ack-help-types.txt
 
-\$(STANDALONE) : \$(ACK) \$(APP_ACK_PM)
-	perl ./squash ack File::Next \$(APP_ACK_PM) > \$(STANDALONE)
+\$(STANDALONE) : \$(ACK) \$(APP_ACK_PM) squash
+	perl squash ack File::Next \$(APP_ACK_PM) > \$(STANDALONE)
 	chmod +x \$(STANDALONE)
+	perl -c \$(STANDALONE)
 
 \$(ACK_HELP) : \$(STANDALONE)
 	perl \$(STANDALONE) --help > \$(ACK_HELP) || perl -e0
+
+\$(ACK_HELP_TYPES) : \$(STANDALONE)
+	perl \$(STANDALONE) --help=types > \$(ACK_HELP_TYPES) || perl -e0
 
 MAKE_FRAG
 

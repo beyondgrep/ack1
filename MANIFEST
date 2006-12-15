@@ -15,6 +15,7 @@ t/ack-type.t
 t/filetypes.t
 t/interesting.t
 t/pod.t
+t/pod-coverage.t
 t/standalone.t
 
 t/etc/core.2112

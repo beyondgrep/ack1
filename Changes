@@ -10,8 +10,11 @@ NEXT
     including coredumps and backup files ending with "~".
 
     Cygwin has problems with file permissions, so we don't check
-    for readability on files before they get opened.  Thanks, Elliot
-    Shank.
+    for readability on files before they get opened.  We also have
+    cross-platform problems in the standalone test.  Thanks, Elliot
+    Shank and Nilson Santos Figueiredo Junior.
+
+    nilsonsfj@cpan.org
 
 
 1.38    Mon Dec 11 21:33:32 CST 2006

@@ -11,17 +11,22 @@ my $ack = 'ack-standalone';
 
 ok( -e $ack, 'exists' );
 ok( -r $ack, 'readable' );
-ok( -x $ack, 'executable' );
+if ( $^O eq 'MSWin32' ) {
+    pass( 'Skipping -x test for Windows' );
+}
+else {
+    ok( -x $ack, 'executable' );
+}
 
 my $pid = open3( my $wh, my $rh, undef,
                     $^X, $ack, 'package', $ack );
 
 my @actual = <$rh>;
-chomp @actual;
+s/\r?\n$// for @actual;
 s/^\d+:// for @actual;
 
 my @expected = (
     'package File::Next;',
     'package App::Ack;',
 );
-is_deeply( \@expected, \@actual, 'Got expected output' );
+is_deeply( \@actual, \@expected, 'Got expected output' );

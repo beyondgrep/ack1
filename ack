@@ -560,6 +560,7 @@ L<http://ack.googlecode.com/svn/>
 =head1 ACKNOWLEDGEMENTS
 
 Thanks to everyone who has contributed to ack in any way, including
+Nilson Santos F. Jr,
 Elliot Shank,
 Merijn Broeren,
 Uwe Voelker,

@@ -322,6 +322,10 @@ certain file types, based on both the extension on the file and,
 in some cases, the contents of the file.  These selections can be
 made with the B<--type> option.
 
+With no file selections, I<ack> only searches files of types that
+it recognizes.  If you have a file called F<foo.wango>, and I<ack>
+doesn't know what a .wango file is, I<ack> won't search it.
+
 The B<-a> option tells I<ack> to select all files, regardless of
 type.
 
@@ -365,6 +369,10 @@ The following directories will never be descended into:
 
 I<ack> trumps I<grep> as an everyday tool 99% of the time, but don't
 throw I<grep> away, because there are times you'll still need it.
+
+I<ack> only searches through files of types that it recognizes.  If
+it can't tell what type a file is, then it won't look.  If that's
+annoying to you, use I<grep>.
 
 If you truly want to search every file and every directory, I<ack>
 won't do it.  You'll need to rely on I<grep>.
@@ -550,6 +558,7 @@ L<http://ack.googlecode.com/svn/>
 =head1 ACKNOWLEDGEMENTS
 
 Thanks to everyone who has contributed to ack in any way, including
+Nilson Santos F. Jr,
 Elliot Shank,
 Merijn Broeren,
 Uwe Voelker,

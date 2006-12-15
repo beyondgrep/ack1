@@ -5,6 +5,9 @@ NEXT
     [ENHANCEMENTS]
     Added support for TeX, C# and XML files.
 
+    The colors are now settable as ACK_COLOR_FILENAME and
+    ACK_COLOR_MATCH.
+
     [FIXES]
     The -a flag was including files that should always be ignored,
     including coredumps and backup files ending with "~".

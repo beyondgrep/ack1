@@ -1,5 +1,10 @@
 Revision history for ack
 
+NEXT
+    [FIXES]
+    Tests now pass under Windows.
+
+
 1.50    Sat Dec 16 00:35:55 CST 2006
     Big version bump because 1.40 is horribly broken. :-(
 

@@ -4,6 +4,7 @@ use warnings;
 use strict;
 
 use Test::More tests => 1;
+use File::Next 0.34; # For the reslash() function
 
 my @expected = qw(
     t/etc/shebang.empty.xxx
@@ -16,7 +17,8 @@ my @expected = qw(
 );
 
 my @results = sort `$^X ./ack-standalone -f -a t/etc`;
-
 chomp @results;
+
+$_ = File::Next::reslash( $_ ) for ( @expected, @results );
 
 is_deeply( \@results, \@expected, 'File lists match' );

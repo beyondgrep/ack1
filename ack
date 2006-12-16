@@ -21,7 +21,7 @@ BEGIN {
     $ENV{ACK_COLOR_FILENAME} ||= 'bold green';
 }
 
-use File::Next 0.22;
+use File::Next 0.34;
 use App::Ack;
 use Getopt::Long;
 

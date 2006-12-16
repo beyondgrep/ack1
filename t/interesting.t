@@ -152,9 +152,7 @@ sub _sets_match {
 
     # Normalize all the paths
     for my $path ( @expected, @actual ) {
-        # If this were anyone else violating this encapsulation, I'd
-        # laugh at them.  However, it's me and it's my module, so there.
-        $path = File::Next::_reslash( $path ); ## no critic (Variables::ProhibitPackageVars)
+        $path = File::Next::reslash( $path ); ## no critic (Variables::ProhibitPackageVars)
     }
 
     local $Test::Builder::Level = $Test::Builder::Level + 1; ## no critic

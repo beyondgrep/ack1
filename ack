@@ -183,7 +183,7 @@ MAIN: {
 }
 
 sub is_interesting {
-    return if $File::Next::name =~ /^\./;
+    return if /^\./;
 
     for my $type ( App::Ack::filetypes( $File::Next::name ) ) {
         return 1 if $type_wanted{$type};

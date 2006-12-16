@@ -1,6 +1,13 @@
 Revision history for ack
 
+1.42
+    [FIXES]
+    No files would ever be found in the current directory unless
+    you were using the -a flag.
+
+
 1.40    Thu Dec 14 22:43:33 CST 2006
+    BROKEN: Don't use 1.40, but the history is here for posterity.
 
     [ENHANCEMENTS]
     Added support for TeX, C# and XML files.

@@ -15,7 +15,7 @@ my $is_tty =  -t STDOUT;
 
 BEGIN {
     $is_windows = ($^O =~ /MSWin32/);
-    eval 'use Term::ANSIColor' unless $is_windows;
+    eval 'use Term::ANSIColor ();' unless $is_windows;
 
     $ENV{ACK_COLOR_MATCH}    ||= 'black on_yellow';
     $ENV{ACK_COLOR_FILENAME} ||= 'bold green';
@@ -42,6 +42,9 @@ MAIN: {
     $opt{m} =       0;
 
     my %options = (
+        'A|after-context'       => \$opt{after},
+        'B|before-context'      => \$opt{before},
+        'C|context'             => sub { shift; $opt{after} = $opt{before} = shift; },
         a           => \$opt{all},
         'all!'      => \$opt{all},
         c           => \$opt{count},
@@ -63,6 +66,7 @@ MAIN: {
 
         'version'   => sub { version(); exit 1; },
         'help|?:s'  => sub { shift; App::Ack::show_help(@_); exit; },
+        'help-types'=> sub { App::Ack::show_help_types(); exit; },
         'man'       => sub {require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit},
 
         'type=s'    => sub {
@@ -90,6 +94,9 @@ MAIN: {
 
     Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
     GetOptions( %options ) or die "ack --help for options.\n";
+
+    ## REVIEW: Let's do some sanity checking on options here.  For
+    ## example, -l precludes a lot of other options.
 
     if ( defined( my $val = $opt{o} ) ) {
         if ( $val eq '' ) {
@@ -239,21 +246,21 @@ sub search {
                 }
                 else {
                     $out = $_;
-                    $out =~ s/($regex)/colored($1,$ENV{ACK_COLOR_MATCH})/eg if $opt{color};
+                    $out =~ s/($regex)/Term::ANSIColor::colored($1,$ENV{ACK_COLOR_MATCH})/eg if $opt{color};
                 }
 
                 if ( $is_binary ) {
                     print "Binary file $filename matches\n";
                     last;
                 }
-                elsif ( $opt{show_filename} ) {
-                    my $colorname = $opt{color} ? colored( $filename, $ENV{ACK_COLOR_FILENAME} ) : $filename;
+                if ( $opt{show_filename} ) {
+                    my $display_name = $opt{color} ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} ) : $filename;
                     if ( $opt{group} ) {
-                        print "$colorname\n" if $nmatches == 1;
+                        print "$display_name\n" if $nmatches == 1;
                         print "$.:$out";
                     }
                     else {
-                        print "${colorname}:$.:$out";
+                        print "${display_name}:$.:$out";
                     }
                 }
                 else {
@@ -394,6 +401,21 @@ back in on I<ack> in the near future, because I'm adding it.
 
 Operate on all files, regardless of type (but still skip directories
 like F<blib>, F<CVS>, etc.
+
+=item B<-A I<NUM>>, B<--after-context=I<NUM>>
+
+Print I<NUM> lines of trailing context after matching lines.  Places
+a line containing -- between contiguous groups of matches.
+
+=item B<-B I<NUM>>, B<--before-context=I<NUM>>
+
+Print I<NUM> lines of leading context before matching lines.  Places
+a line containing -- between contiguous groups of matches.
+
+=item B<-C I<NUM>>, B<--context=I<NUM>>
+
+Print I<NUM> lines of context before and after matching lines.
+Places a line containing -- between contiguous groups of matches.
 
 =item B<-c>, B<--count>
 

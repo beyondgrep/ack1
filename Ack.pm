@@ -251,6 +251,13 @@ Search output:
     --[no]color     Highlight the matching text (default: on unless
                     output is redirected, or on Windows)
 
+Context control:
+    -B, --before-context=NUM
+    -A, --after-context=NUM
+    -C, --context=NUM
+                    print NUM lines of context before and/or after
+                    matching lines
+
 File finding:
     -f              Only print the files found, without searching.
                     The PATTERN must not be specified.

@@ -20,6 +20,7 @@ for my $arg ( @ARGV ) {
 
     while ( <$fh> ) {
         next if /^use (File::Next|App::Ack)/;
+        s{^#!.+}{#!/usr/bin/env perl};
 
         # See if we're in module POD blocks
         my $skip = ($filename ne 'ack') && (/^=/ .. /^=cut/);

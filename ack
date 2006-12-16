@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.40';
+our $VERSION   = '1.50';
 our $COPYRIGHT = 'Copyright 2005-2006 Andy Lester, all rights reserved.';
 # Check http://petdance.com/ack/ for updates
 

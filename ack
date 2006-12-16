@@ -3,8 +3,9 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.40';
+our $VERSION   = '1.50';
 our $COPYRIGHT = 'Copyright 2005-2006 Andy Lester, all rights reserved.';
+# Check http://petdance.com/ack/ for updates
 
 # These are all our globals.
 my $is_windows;
@@ -183,7 +184,7 @@ MAIN: {
 }
 
 sub is_interesting {
-    return if $File::Next::name =~ /^\./;
+    return if /^\./;
 
     for my $type ( App::Ack::filetypes( $File::Next::name ) ) {
         return 1 if $type_wanted{$type};

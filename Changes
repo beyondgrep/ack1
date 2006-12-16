@@ -1,6 +1,15 @@
 Revision history for ack
 
+1.50    Sat Dec 16 00:35:55 CST 2006
+    Big version bump because 1.40 is horribly broken. :-(
+
+    [FIXES]
+    No files would ever be found in the current directory unless
+    you were using the -a flag.
+
+
 1.40    Thu Dec 14 22:43:33 CST 2006
+    BROKEN: Don't use 1.40, but the history is here for posterity.
 
     [ENHANCEMENTS]
     Added support for TeX, C# and XML files.

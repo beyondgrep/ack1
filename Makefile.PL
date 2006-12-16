@@ -15,7 +15,7 @@ WriteMakefile(
         'Term::ANSIColor'   => 0,
         'Getopt::Long'      => 0,
         'Test::More'        => 0,
-        'File::Next'        => 0.32,   # For the better handling of package variables
+        'File::Next'        => 0.34,   # For the better handling of package variables
         'File::Basename'    => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
@@ -52,7 +52,7 @@ STANDALONE      = ack-standalone
 ACK_HELP        = ack-help.txt
 ACK_HELP_TYPES  = ack-help-types.txt
 
-\$(STANDALONE) : \$(ACK) \$(APP_ACK_PM) squash
+\$(STANDALONE) : \$(ACK) \$(APP_ACK_PM) squash Makefile
 	perl squash ack File::Next \$(APP_ACK_PM) > \$(STANDALONE)
 	chmod +x \$(STANDALONE)
 	perl -c \$(STANDALONE)

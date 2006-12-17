@@ -55,15 +55,15 @@ ACK_HELP        = ack-help.txt
 ACK_HELP_TYPES  = ack-help-types.txt
 
 $(STANDALONE) : $(ACK) $(APP_ACK_PM) squash Makefile
-	perl squash ack File::Next $(APP_ACK_PM) > $(STANDALONE)
+	$(PERL) squash ack File::Next $(APP_ACK_PM) > $(STANDALONE)
 	chmod +x $(STANDALONE)
-	perl -c $(STANDALONE)
+	$(PERL) -c $(STANDALONE)
 
 $(ACK_HELP) : $(STANDALONE)
-	perl $(STANDALONE) --help > $(ACK_HELP) || perl -e0
+	$(PERL) $(STANDALONE) --help > $(ACK_HELP) || perl -e0
 
 $(ACK_HELP_TYPES) : $(STANDALONE)
-	perl $(STANDALONE) --help=types > $(ACK_HELP_TYPES) || perl -e0
+	$(PERL) $(STANDALONE) --help=types > $(ACK_HELP_TYPES) || perl -e0
 
 stash.tgz :
 	tar czvf stash.tgz $(shell ack -fa)

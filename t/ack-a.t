@@ -6,7 +6,13 @@ use strict;
 use Test::More tests => 1;
 use File::Next 0.34; # For the reslash() function
 
+# new files in t/etc must be listed here
 my @expected = qw(
+    t/etc/buttonhook.html.xxx
+    t/etc/buttonhook.noxml.xxx
+    t/etc/buttonhook.rfc.xxx
+    t/etc/buttonhook.rss.xxx
+    t/etc/buttonhook.xml.xxx
     t/etc/shebang.empty.xxx
     t/etc/shebang.foobar.xxx
     t/etc/shebang.php.xxx

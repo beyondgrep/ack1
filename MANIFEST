@@ -19,6 +19,11 @@ t/pod-coverage.t
 t/standalone.t
 
 t/etc/core.2112
+t/etc/buttonhook.html.xxx
+t/etc/buttonhook.noxml.xxx
+t/etc/buttonhook.rfc.xxx
+t/etc/buttonhook.rss.xxx
+t/etc/buttonhook.xml.xxx
 t/etc/shebang.empty.xxx
 t/etc/shebang.foobar.xxx
 t/etc/shebang.php.xxx
@@ -26,14 +31,14 @@ t/etc/shebang.pl.xxx
 t/etc/shebang.py.xxx
 t/etc/shebang.rb.xxx
 t/etc/shebang.sh.xxx
+t/swamp/Makefile
+t/swamp/Makefile.PL
 t/swamp/blib/ignore.pir
 t/swamp/blib/ignore.pm
 t/swamp/blib/ignore.pod
 t/swamp/c-header.h
 t/swamp/c-source.c
 t/swamp/javascript.js
-t/swamp/Makefile
-t/swamp/Makefile.PL
 t/swamp/moose-andy.jpg
 t/swamp/parrot.pir
 t/swamp/perl-test.t
@@ -42,3 +47,7 @@ t/swamp/perl.cgi
 t/swamp/perl.pl
 t/swamp/perl.pm
 t/swamp/perl.pod
+t/swamp/x.htm
+t/swamp/x.html
+
+

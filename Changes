@@ -9,6 +9,9 @@ NEXT
     perl", which is more compatible.  Of course, you're welcome to
     change it to whatever you like.
 
+    [INTERNALS]
+    More testing on XML and PHP detection courtesy Bill Ricker.
+
 
 1.50    Sat Dec 16 00:35:55 CST 2006
     Big version bump because 1.40 is horribly broken. :-(

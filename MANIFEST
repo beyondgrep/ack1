@@ -38,6 +38,8 @@ t/swamp/blib/ignore.pm
 t/swamp/blib/ignore.pod
 t/swamp/c-header.h
 t/swamp/c-source.c
+t/swamp/html.htm
+t/swamp/html.html
 t/swamp/javascript.js
 t/swamp/moose-andy.jpg
 t/swamp/parrot.pir
@@ -47,7 +49,5 @@ t/swamp/perl.cgi
 t/swamp/perl.pl
 t/swamp/perl.pm
 t/swamp/perl.pod
-t/swamp/x.htm
-t/swamp/x.html
 
 

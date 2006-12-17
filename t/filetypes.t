@@ -70,10 +70,10 @@ ok(! defined App::Ack::filetypes('t/etc/x.html.xxx'),
 ## .htm[l]? is identified as Iqw(php html)
 ## Aare there really servers with .html extension instead of .php ?
 ## <!DOCTYPE html ...>\n\n<?php...> would require more than one line lookahead.
-is_deeply([App::Ack::filetypes('t/swamp/x.html')], [qw/php html/],
+is_deeply([App::Ack::filetypes('t/swamp/html.html')], [qw/php html/],
     'file identified as html ');
 
-is_deeply([App::Ack::filetypes('t/swamp/x.htm')], [qw/php html/],
+is_deeply([App::Ack::filetypes('t/swamp/html.htm')], [qw/php html/],
     'file identified as htm[l]');
 
 

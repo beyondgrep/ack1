@@ -13,6 +13,10 @@ NEXT
     than reopening it from the filesystem.  This gave me about a
     1% speedup in my tests.
 
+    Started adding sanity checks to the options.  For instance, it
+    doesn't make sense to use -l and -C together, so ack will
+    complain about that.
+
     [INTERNALS]
     More testing on XML and PHP detection courtesy Bill Ricker.
 

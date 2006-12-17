@@ -34,15 +34,17 @@ MAIN: {
     # Priorities! Get the --thpppt checking out of the way.
     /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
 
-    $opt{group} =   $is_tty;
-    $opt{color} =   $is_tty && !$is_windows;
-    $opt{all} =     0;
-    $opt{m} =       0;
+    my %defaults = (
+        group => $is_tty,
+        color => $is_tty && !$is_windows,
+        all =>   0,
+        m =>     0,
+    );
 
     my %options = (
-        'A|after-context'       => \$opt{after},
-        'B|before-context'      => \$opt{before},
-        'C|context'             => sub { shift; $opt{after} = $opt{before} = shift; },
+        'A|after-context=i'     => \$opt{after},
+        'B|before-context=i'    => \$opt{before},
+        'C|context=i'           => sub { shift; $opt{after} = $opt{before} = shift; },
         a           => \$opt{all},
         'all!'      => \$opt{all},
         c           => \$opt{count},
@@ -91,10 +93,14 @@ MAIN: {
     unshift @ARGV, split( ' ', $ENV{ACK_OPTIONS} ) if defined $ENV{ACK_OPTIONS};
 
     Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
-    GetOptions( %options ) or die "ack --help for options.\n";
+    GetOptions( %options ) && App::Ack::options_sanity_check( %opt ) or die "See ack --help or ack --man for options.\n";
 
-    ## REVIEW: Let's do some sanity checking on options here.  For
-    ## example, -l precludes a lot of other options.
+    # Apply defaults
+    while ( my ($key,$value) = each %defaults ) {
+        if ( not defined $opt{$key} ) {
+            $opt{$key} = $value;
+        }
+    }
 
     if ( defined( my $val = $opt{o} ) ) {
         if ( $val eq '' ) {
@@ -893,6 +899,40 @@ sub filetypes {
     return 'xml' if $header =~ /<\?xml /;
 
     return;
+}
+
+
+sub options_sanity_check {
+    my %opts = @_;
+    my $ok = 1;
+
+    $ok = 0 if _option_conflict( \%opts, 'l', [qw( A B C o m group )] );
+    $ok = 0 if _option_conflict( \%opts, 'f', [qw( A B C o m group )] );
+
+    return $ok;
+}
+
+sub _option_conflict {
+    my $opts = shift;
+    my $used = shift;
+    my $exclusives = shift;
+
+    return if not defined $opts->{$used};
+
+    my $bad = 0;
+    for ( @$exclusives ) {
+        if ( defined $opts->{$_} ) {
+            print "The ", _opty($_), " option cannot be used with the ", _opty($used), " option.\n";
+            $bad = 1;
+        }
+    }
+
+    return $bad;
+}
+
+sub _opty {
+    my $opt = shift;
+    return length($opt)>1 ? "--$opt" : "-$opt";
 }
 
 sub _my_program {

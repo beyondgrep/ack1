@@ -180,6 +180,46 @@ sub filetypes {
     return;
 }
 
+=head2 options_sanity_check( %opts )
+
+Checks for sane command-line options.  For example, I<-l> doesn't
+make sense with I<-C>.
+
+=cut
+
+sub options_sanity_check {
+    my %opts = @_;
+    my $ok = 1;
+
+    $ok = 0 if _option_conflict( \%opts, 'l', [qw( A B C o m group )] );
+    $ok = 0 if _option_conflict( \%opts, 'f', [qw( A B C o m group )] );
+
+    return $ok;
+}
+
+sub _option_conflict {
+    my $opts = shift;
+    my $used = shift;
+    my $exclusives = shift;
+
+    return if not defined $opts->{$used};
+
+    my $bad = 0;
+    for ( @$exclusives ) {
+        if ( defined $opts->{$_} ) {
+            print "The ", _opty($_), " option cannot be used with the ", _opty($used), " option.\n";
+            $bad = 1;
+        }
+    }
+
+    return $bad;
+}
+
+sub _opty {
+    my $opt = shift;
+    return length($opt)>1 ? "--$opt" : "-$opt";
+}
+
 sub _my_program {
     return File::Basename::basename( $0 );
 }

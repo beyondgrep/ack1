@@ -36,15 +36,17 @@ MAIN: {
     # Priorities! Get the --thpppt checking out of the way.
     /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
 
-    $opt{group} =   $is_tty;
-    $opt{color} =   $is_tty && !$is_windows;
-    $opt{all} =     0;
-    $opt{m} =       0;
+    my %defaults = (
+        group => $is_tty,
+        color => $is_tty && !$is_windows,
+        all =>   0,
+        m =>     0,
+    );
 
     my %options = (
-        'A|after-context'       => \$opt{after},
-        'B|before-context'      => \$opt{before},
-        'C|context'             => sub { shift; $opt{after} = $opt{before} = shift; },
+        'A|after-context=i'     => \$opt{after},
+        'B|before-context=i'    => \$opt{before},
+        'C|context=i'           => sub { shift; $opt{after} = $opt{before} = shift; },
         a           => \$opt{all},
         'all!'      => \$opt{all},
         c           => \$opt{count},
@@ -93,10 +95,14 @@ MAIN: {
     unshift @ARGV, split( ' ', $ENV{ACK_OPTIONS} ) if defined $ENV{ACK_OPTIONS};
 
     Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
-    GetOptions( %options ) or die "ack --help for options.\n";
+    GetOptions( %options ) && App::Ack::options_sanity_check( %opt ) or die "See ack --help or ack --man for options.\n";
 
-    ## REVIEW: Let's do some sanity checking on options here.  For
-    ## example, -l precludes a lot of other options.
+    # Apply defaults
+    while ( my ($key,$value) = each %defaults ) {
+        if ( not defined $opt{$key} ) {
+            $opt{$key} = $value;
+        }
+    }
 
     if ( defined( my $val = $opt{o} ) ) {
         if ( $val eq '' ) {

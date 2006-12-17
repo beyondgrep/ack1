@@ -67,8 +67,8 @@ is_deeply([App::Ack::filetypes('t/swamp/buttonhook.xml')], ['xml'],
 ok(! defined App::Ack::filetypes('t/etc/x.html.xxx'),
    '<!DOCTYPE not yet supported so no filetype');
 
-## .htm[l]? is identified as Iqw(php html)
-## Aare there really servers with .html extension instead of .php ?
+## .htm[l]? is identified as qw(php html)
+## Are there really servers with .html extension instead of .php ?
 ## <!DOCTYPE html ...>\n\n<?php...> would require more than one line lookahead.
 is_deeply([App::Ack::filetypes('t/swamp/html.html')], [qw/php html/],
     'file identified as html ');

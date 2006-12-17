@@ -236,6 +236,11 @@ sub search {
             if ( !$opt{count} ) {
                 next if $opt{v};
 
+                if ( $is_binary ) {
+                    print "Binary file $filename matches\n";
+                    last;
+                }
+
                 # No point in searching more if we only want a list
                 last if ( $nmatches == 1 && $opt{l} );
 
@@ -249,10 +254,6 @@ sub search {
                     $out =~ s/($regex)/Term::ANSIColor::colored($1,$ENV{ACK_COLOR_MATCH})/eg if $opt{color};
                 }
 
-                if ( $is_binary ) {
-                    print "Binary file $filename matches\n";
-                    last;
-                }
                 if ( $opt{show_filename} ) {
                     my $display_name = $opt{color} ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} ) : $filename;
                     if ( $opt{group} ) {

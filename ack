@@ -64,7 +64,7 @@ MAIN: {
         'w|word-regexp'         => \$opt{w},
 
 
-        'version'   => sub { version(); exit 1; },
+        'version'   => sub { App::Ack::version_statement( $COPYRIGHT ); exit 1; },
         'help|?:s'  => sub { shift; App::Ack::show_help(@_); exit; },
         'help-types'=> sub { App::Ack::show_help_types(); exit; },
         'man'       => sub {require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit},
@@ -292,19 +292,6 @@ sub search {
             print "\n" if $nmatches && $opt{show_filename} && $opt{group} && !$opt{v};
         }
     }
-
-    return;
-}
-
-sub version() { ## no critic (Subroutines::ProhibitSubroutinePrototypes)
-    print <<"END_OF_VERSION";
-ack $App::Ack::VERSION
-
-$COPYRIGHT
-
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
-END_OF_VERSION
 
     return;
 }

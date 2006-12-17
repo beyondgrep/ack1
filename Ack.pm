@@ -324,4 +324,24 @@ sub _listify {
     return @whats ? join( ', ', @whats ) . " and $end" : $end;
 }
 
+=head2 version_statement( $copyright )
+
+Prints the version information for ack.
+
+=cut
+
+sub version_statement {
+    my $copyright = shift;
+    print <<"END_OF_VERSION";
+ack $App::Ack::VERSION
+
+$copyright
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+END_OF_VERSION
+
+    return;
+}
+
 1; # End of App::Ack

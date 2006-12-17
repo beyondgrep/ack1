@@ -9,6 +9,10 @@ NEXT
     perl", which is more compatible.  Of course, you're welcome to
     change it to whatever you like.
 
+    I now check for binaryness on the already-open file, rather
+    than reopening it from the filesystem.  This gave me about a
+    1% speedup in my tests.
+
     [INTERNALS]
     More testing on XML and PHP detection courtesy Bill Ricker.
 

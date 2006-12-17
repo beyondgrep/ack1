@@ -221,10 +221,10 @@ sub search {
             warn "ack: $filename: $!\n";
             return;
         }
+        $is_binary = -B $fh;
         if ( $opt{defaulted_to_dot} ) {
             $filename =~ s{^\Q./}{};
         }
-        $is_binary = -B $filename;
     }
 
     local $_ = undef;

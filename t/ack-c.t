@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 DASH_L: {
     my @expected = qw(
@@ -40,4 +40,21 @@ DASH_C: {
     @expected = sort @expected;
 
     is_deeply( \@results, \@expected, 'Religion counts' );
+}
+
+DASH_LC: {
+    my @expected = qw(
+        t/text/science-of-myth.txt:2
+    );
+
+    my @files = qw( t/text );
+    my @args = qw( religion -i -a -l -c );
+    my $cmd = "$^X ./ack-standalone @args @files";
+    my @results = `$cmd`;
+    chomp @results;
+
+    @results = sort @results;
+    @expected = sort @expected;
+
+    is_deeply( \@results, \@expected, 'Religion counts -l -c' );
 }

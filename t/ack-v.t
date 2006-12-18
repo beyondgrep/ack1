@@ -5,17 +5,15 @@ use strict;
 
 use Test::More tests => 1;
 
-my $file = 't/etc/buttonhook.noxml.xxx';
-
-# new files in t/etc must be listed here
 my @expected = split( /\n/, <<'END_OF_LINES' );
-      </children>
-    </children>
-  </children>
-</children>
+t/text/boy-named-sue.txt
+t/text/freedom-of-choice.txt
+t/text/shut-up-be-happy.txt
 END_OF_LINES
 
-my @results = `$^X ./ack-standalone -v -a size $file`;
+my $file = 't/text';
+my @args = qw( religion -i -a -v -l );
+my @results = `$^X ./ack-standalone  @args $file`;
 chomp @results;
 
-is_deeply( \@results, \@expected, "XML matches $file" );
+is_deeply( \@results, \@expected, 'No religion please' );

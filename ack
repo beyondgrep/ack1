@@ -310,13 +310,17 @@ sub search_v {
     local $_ = undef;
     while (<$fh>) {
         if ( /$regex/ ) {
-            return if $opt{l};
+            return if $opt{l}; # For list mode, any match means we can bail
             next;
         }
-        ++$nmatches;
-        print "${filename}:" if $opt{show_filename};
-        print $_;
-        last if $opt{m} && ( $nmatches >= $opt{m} );
+        else {
+            ++$nmatches;
+            if ( !$opt{l} ) {
+                print "${filename}:" if $opt{show_filename};
+                print $_;
+                last if $opt{m} && ( $nmatches >= $opt{m} );
+            }
+        }
     } # while
     close $fh;
 
@@ -325,7 +329,7 @@ sub search_v {
         print "${nmatches}\n";
     }
     else {
-        print "$filename\n" if $opt{l} && !$nmatches;
+        print "$filename\n" if $opt{l};
     }
 
     return;

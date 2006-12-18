@@ -11,9 +11,11 @@ t/text/freedom-of-choice.txt
 t/text/shut-up-be-happy.txt
 END_OF_LINES
 
-my $file = 't/text';
+my @files = qw( t/text );
 my @args = qw( religion -i -a -v -l );
-my @results = `$^X ./ack-standalone  @args $file`;
+my $cmd = "$^X ./ack-standalone @args @files";
+diag( $cmd );
+my @results = `$cmd`;
 chomp @results;
 
 is_deeply( \@results, \@expected, 'No religion please' );

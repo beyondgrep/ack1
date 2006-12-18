@@ -24,6 +24,7 @@ our %mappings;
 our @suffixes;
 our @ignore_dirs;
 our %ignore_dirs;
+our $path_sep;
 our $is_cygwin;
 
 BEGIN {
@@ -59,6 +60,11 @@ BEGIN {
         xml         => [qw( xml dtd xslt )],
     );
 
+    use File::Spec ();
+    $path_sep = File::Spec->catfile( '', '' );
+    $path_sep = quotemeta( $path_sep );
+
+    # REVIEW: This may be entirely unused
     my %suffixes;
     while ( my ($type,$exts) = each %mappings ) {
         if ( ref $exts ) {
@@ -128,16 +134,12 @@ sub filetypes {
     my $filename = shift;
 
     return '-ignore' if $filename =~ /~$/;
-
-    # Pass our $filename in lowercase so we match lowercase filenames
-    my ($filebase,$dirs,$suffix) = File::Basename::fileparse( lc $filename, @suffixes );
-
-    return '-ignore' if $filebase =~ /^#.+#$/;
-    return '-ignore' if $filebase =~ /^core\.\d+$/;
+    return '-ignore' if $filename =~ m{$path_sep?#.+#$};
+    return '-ignore' if $filename =~ m{$path_sep?core\.\d+$};
 
     # If there's an extension, look it up
-    if ( $suffix ) {
-        $suffix =~ s/^\.//; # Drop the period that File::Basename needs
+    if ( $filename =~ m{\.([^$path_sep]+)$} ) {
+        my $suffix = $1;
         my $ref = $types{lc $suffix};
         return @{$ref} if $ref;
     }

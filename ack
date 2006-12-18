@@ -238,58 +238,58 @@ sub search {
 
     local $_ = undef;
     while (<$fh>) {
-        if ( /$regex/ ) { # If we have a matching line
-            ++$nmatches;
-            if ( !$opt{count} ) {
-                # No point in searching more if we only want a list
-                last if $opt{l};
+        next unless /$regex/;
+        ++$nmatches;
+        if ( !$opt{count} ) {
+            # No point in searching more if we only want a list,
+            # and don't want a count.
+            last if $opt{l};
 
-                if ( $is_binary ) {
-                    print "Binary file $filename matches\n";
-                    last;
-                }
+            if ( $is_binary ) {
+                print "Binary file $filename matches\n";
+                last;
+            }
 
-                my $out;
-                if ( $opt{o} ) {
-                    $out = $opt{o}->() . "\n";
-                    $opt{show_filename} = 0;
+            my $out;
+            if ( $opt{o} ) {
+                $out = $opt{o}->() . "\n";
+                $opt{show_filename} = 0;
+            }
+            else {
+                $out = $_;
+                $out =~ s/($regex)/Term::ANSIColor::colored($1,$ENV{ACK_COLOR_MATCH})/eg if $opt{color};
+            }
+
+            if ( $opt{show_filename} ) {
+                my $display_name = $opt{color} ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} ) : $filename;
+                if ( $opt{group} ) {
+                    print "$display_name\n" if $nmatches == 1;
+                    print "$.:$out";
                 }
                 else {
-                    $out = $_;
-                    $out =~ s/($regex)/Term::ANSIColor::colored($1,$ENV{ACK_COLOR_MATCH})/eg if $opt{color};
+                    print "${display_name}:$.:$out";
                 }
+            }
+            else {
+                print $out;
+            }
+        } # Not just --count
 
-                if ( $opt{show_filename} ) {
-                    my $display_name = $opt{color} ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} ) : $filename;
-                    if ( $opt{group} ) {
-                        print "$display_name\n" if $nmatches == 1;
-                        print "$.:$out";
-                    }
-                    else {
-                        print "${display_name}:$.:$out";
-                    }
-                }
-                else {
-                    print $out;
-                }
-            } # Not just --count
-
-            last if $opt{m} && ( $nmatches >= $opt{m} );
-        } # match
+        last if $opt{m} && ( $nmatches >= $opt{m} );
     } # while
     close $fh;
 
     if ( $opt{count} ) {
-        print "${filename}:" if $opt{show_filename};
-        print "${nmatches}\n";
+        if ( $nmatches || !$opt{l} ) {
+            print "${filename}:" if $opt{show_filename};
+            print "${nmatches}\n";
+        }
+    }
+    elsif ( $opt{l} ) {
+        print "$filename\n" if $nmatches;
     }
     else {
-        if ( $opt{l} ) {
-            print "$filename\n" if $nmatches;
-        }
-        else {
-            print "\n" if $nmatches && $opt{show_filename} && $opt{group};
-        }
+        print "\n" if $nmatches && $opt{show_filename} && $opt{group};
     }
 
     return;
@@ -446,8 +446,10 @@ Places a line containing -- between contiguous groups of matches.
 
 =item B<-c>, B<--count>
 
-Suppress normal output; instead print a count of matching lines for each
-input file.
+Suppress normal output; instead print a count of matching lines for
+each input file.  If B<-l> is in effect, it will only show the
+number of lines for each file that has lines matching.  Without
+B<-l>, some line counts may be zeroes.
 
 =item B<--color>, B<--nocolor>
 

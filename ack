@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.50';
+our $VERSION   = '1.51_01';
 our $COPYRIGHT = 'Copyright 2005-2006 Andy Lester, all rights reserved.';
 # Check http://petdance.com/ack/ for updates
 
@@ -85,6 +85,8 @@ MAIN: {
             }
         }, # type sub
     );
+
+    die "Sorry, but the -A, -B and -C options haven't actually been implemented yet." if $opt{A} || $opt{B} || $opt{C};
 
     my @filetypes_supported = App::Ack::filetypes_supported();
     for my $i ( @filetypes_supported ) {

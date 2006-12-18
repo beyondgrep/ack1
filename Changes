@@ -1,6 +1,10 @@
 Revision history for ack
 
-NEXT
+1.51_01     Mon Dec 18 12:59:28 CST 2006
+
+    Development version.  I'm putting this out so hardcore ack users
+    can test out some new features.
+
     [FIXES]
     Tests now pass under Windows.
 
@@ -21,6 +25,9 @@ NEXT
 
     [INTERNALS]
     More testing on XML and PHP detection courtesy Bill Ricker.
+
+    Lots of refactoring of search() in preparation for showing
+    context around matches.
 
 
 1.50    Sat Dec 16 00:35:55 CST 2006

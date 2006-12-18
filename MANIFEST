@@ -12,6 +12,7 @@ squash
 t/00-load.t
 t/ack-a.t
 t/ack-type.t
+t/ack-v.t
 t/filetypes.t
 t/interesting.t
 t/pod.t

@@ -134,8 +134,7 @@ sub filetypes {
 
     # If there's an extension, look it up
     if ( $filename =~ m{\.([^$path_sep]+)$} ) {
-        my $suffix = $1;
-        my $ref = $types{lc $suffix};
+        my $ref = $types{lc $1};
         return @{$ref} if $ref;
     }
 

@@ -305,6 +305,7 @@ sub search_v {
 
     my $nmatches = 0; # Although in here, it's really $n_non_matches. :-)
 
+    my $show_lines = !($opt{l} || $opt{count});
     local $_ = undef;
     while (<$fh>) {
         if ( /$regex/ ) {
@@ -313,7 +314,7 @@ sub search_v {
         }
         else {
             ++$nmatches;
-            if ( !$opt{l} ) {
+            if ( $show_lines ) {
                 print "${filename}:" if $opt{show_filename};
                 print $_;
                 last if $opt{m} && ( $nmatches >= $opt{m} );

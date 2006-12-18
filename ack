@@ -230,6 +230,10 @@ sub search {
         }
     }
 
+    # Negated counting is a pain, so I'm putting it in its own
+    # optimizable subroutine.
+    return search_v( $fh, $is_binary, $filename, $regex, %opt ) if $opt{v};
+
     local $_ = undef;
     while (<$fh>) {
         if ( /$regex/ ) { # If we have a matching line
@@ -272,12 +276,6 @@ sub search {
 
             last if $opt{m} && ( $nmatches >= $opt{m} );
         } # match
-        else { # no match
-            if ( $opt{v} ) {
-                print "${filename}:" if $opt{show_filename};
-                print $_;
-            }
-        }
     } # while
     close $fh;
 
@@ -295,7 +293,44 @@ sub search {
     }
 
     return;
-}
+}   # search()
+
+
+sub search_v {
+    my $fh = shift;
+    my $is_binary = shift;
+    my $filename = shift;
+    my $regex = shift;
+    my %opt = @_;
+
+    my $nmatches = 0; # Although in here, it's really $n_non_matches. :-)
+
+    die "Invalid options" if $opt{l} && ($opt{count} || $opt{m});
+
+    local $_ = undef;
+    while (<$fh>) {
+        if ( /$regex/ ) {
+            return if $opt{l};
+            next;
+        }
+        ++$nmatches;
+        print "${filename}:" if $opt{show_filename};
+        print $_;
+        last if $opt{m} && ( $nmatches >= $opt{m} );
+    } # while
+    close $fh;
+
+    if ( $opt{count} ) {
+        print "${filename}:" if $opt{show_filename};
+        print "${nmatches}\n";
+    }
+    else {
+        print "$filename\n" if $opt{l} && !$nmatches;
+    }
+
+    return;
+} # search_v()
+
 
 =head1 NAME
 

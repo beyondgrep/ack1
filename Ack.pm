@@ -191,7 +191,8 @@ sub options_sanity_check {
     my %opts = @_;
     my $ok = 1;
 
-    $ok = 0 if _option_conflict( \%opts, 'l', [qw( A B C o m group )] );
+    $ok = 0 if _option_conflict( \%opts, 'l', [qw( A B C o group )] );
+    $ok = 0 if _option_conflict( \%opts, 'l', [qw( m count )] );
     $ok = 0 if _option_conflict( \%opts, 'f', [qw( A B C o m group )] );
 
     return $ok;

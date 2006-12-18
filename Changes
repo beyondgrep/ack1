@@ -8,6 +8,10 @@ Revision history for ack
     [FIXES]
     Tests now pass under Windows.
 
+    [FEATURES]
+    You can now set the colors for display with the ACK_COLOR_MATCH
+    and ACK_COLOR_FILENAME environment variables.
+
     [ENHANCEMENTS]
     ack-standalone now builds with a shebang line of "#!/usr/bin/env
     perl", which is more compatible.  Of course, you're welcome to

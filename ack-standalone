@@ -239,13 +239,13 @@ sub search {
         if ( /$regex/ ) { # If we have a matching line
             ++$nmatches;
             if ( !$opt{count} ) {
+                # No point in searching more if we only want a list
+                last if $opt{l};
+
                 if ( $is_binary ) {
                     print "Binary file $filename matches\n";
                     last;
                 }
-
-                # No point in searching more if we only want a list
-                last if ( $nmatches == 1 && $opt{l} );
 
                 my $out;
                 if ( $opt{o} ) {

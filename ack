@@ -168,6 +168,7 @@ MAIN: {
     }
     $opt{show_filename} = 0 if $opt{h};
     $opt{show_filename} = 1 if $opt{H};
+    $opt{show_filename} = 0 if $opt{o};
 
     my $file_filter = $opt{all} ? \&dash_a : \&is_interesting;
     my $descend_filter = $opt{n} ? sub {0} : \&App::Ack::skipdir_filter;
@@ -240,40 +241,39 @@ sub search {
     while (<$fh>) {
         next unless /$regex/;
         ++$nmatches;
-        if ( !$opt{count} ) {
-            # No point in searching more if we only want a list,
-            # and don't want a count.
-            last if $opt{l};
+        next if $opt{count}; # Counting means no lines
 
-            if ( $is_binary ) {
-                print "Binary file $filename matches\n";
-                last;
-            }
+        # No point in searching more if we only want a list,
+        # and don't want a count.
+        last if $opt{l};
 
-            my $out;
-            if ( $opt{o} ) {
-                $out = $opt{o}->() . "\n";
-                $opt{show_filename} = 0;
+        if ( $is_binary ) {
+            print "Binary file $filename matches\n";
+            last;
+        }
+
+        my $out;
+        if ( $opt{o} ) {
+            $out = $opt{o}->() . "\n";
+        }
+        else {
+            $out = $_;
+            $out =~ s/($regex)/Term::ANSIColor::colored($1,$ENV{ACK_COLOR_MATCH})/eg if $opt{color};
+        }
+
+        if ( $opt{show_filename} ) {
+            my $display_name = $opt{color} ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} ) : $filename;
+            if ( $opt{group} ) {
+                print "$display_name\n" if $nmatches == 1;
+                print "$.:$out";
             }
             else {
-                $out = $_;
-                $out =~ s/($regex)/Term::ANSIColor::colored($1,$ENV{ACK_COLOR_MATCH})/eg if $opt{color};
+                print "${display_name}:$.:$out";
             }
-
-            if ( $opt{show_filename} ) {
-                my $display_name = $opt{color} ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} ) : $filename;
-                if ( $opt{group} ) {
-                    print "$display_name\n" if $nmatches == 1;
-                    print "$.:$out";
-                }
-                else {
-                    print "${display_name}:$.:$out";
-                }
-            }
-            else {
-                print $out;
-            }
-        } # Not just --count
+        }
+        else {
+            print $out;
+        }
 
         last if $opt{m} && ( $nmatches >= $opt{m} );
     } # while

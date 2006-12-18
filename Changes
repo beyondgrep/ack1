@@ -7,6 +7,11 @@ NEXT
     By using my own, instead of File::Basename, I cut out over 50%
     of the run time on my test of acking through a large tree.
 
+    [INTERNALS]
+    We no longer need to build a list of all used suffixes.  This
+    makes startup quicker.
+
+
 1.51_01     Mon Dec 18 12:59:28 CST 2006
 
     Development version.  I'm putting this out so hardcore ack users

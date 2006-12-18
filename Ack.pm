@@ -20,7 +20,6 @@ BEGIN {
 
 our %types;
 our %mappings;
-our @suffixes;
 our @ignore_dirs;
 our %ignore_dirs;
 our $path_sep;
@@ -64,16 +63,13 @@ BEGIN {
     $path_sep = quotemeta( $path_sep );
 
     # REVIEW: This may be entirely unused
-    my %suffixes;
     while ( my ($type,$exts) = each %mappings ) {
         if ( ref $exts ) {
             for my $ext ( @{$exts} ) {
                 push( @{$types{$ext}}, $type );
-                ++$suffixes{"\\.$ext"};
             }
         }
     }
-    @suffixes = keys %suffixes;
 
     $is_cygwin = ($^O eq 'cygwin');
 }

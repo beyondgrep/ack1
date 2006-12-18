@@ -19,6 +19,7 @@ my $perl = [qw(
     t/00-load.t
     t/ack-a.t
     t/ack-type.t
+    t/ack-v.t
     t/etc/shebang.pl.xxx
     t/filetypes.t
     t/interesting.t

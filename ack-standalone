@@ -230,7 +230,9 @@ sub search {
 
     # Negated counting is a pain, so I'm putting it in its own
     # optimizable subroutine.
-    return search_v( $fh, $is_binary, $filename, $regex, %opt ) if $opt{v};
+    if ( $opt{v} ) {
+        return search_v( $fh, $is_binary, $filename, $regex, %opt );
+    }
 
     local $_ = undef;
     while (<$fh>) {

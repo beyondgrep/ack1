@@ -2,7 +2,6 @@ package App::Ack;
 
 use warnings;
 use strict;
-use File::Basename ();
 
 =head1 NAME
 
@@ -224,6 +223,7 @@ sub _opty {
 }
 
 sub _my_program {
+    require File::Basename;
     return File::Basename::basename( $0 );
 }
 

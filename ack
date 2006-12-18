@@ -62,6 +62,7 @@ MAIN: {
         n                       => \$opt{n},
         'o|output:s'            => \$opt{o},
         'Q|literal'             => \$opt{Q},
+        'sort-files'            => \$opt{sort_files},
         'v|invert-match'        => \$opt{v},
         'w|word-regexp'         => \$opt{w},
 
@@ -178,6 +179,7 @@ MAIN: {
             file_filter     => $file_filter,
             descend_filter  => $descend_filter,
             error_handler   => sub { my $msg = shift; warn "ack: $msg\n" },
+            sort_files      => $opt{sort_files},
         }, @what );
 
 
@@ -262,18 +264,16 @@ sub search {
         }
 
         if ( $opt{show_filename} ) {
-            my $display_name = $opt{color} ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} ) : $filename;
+            my $display_filename = $opt{color} ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} ) : $filename;
             if ( $opt{group} ) {
-                print "$display_name\n" if $nmatches == 1;
-                print "$.:$out";
+                print "$display_filename\n" if $nmatches == 1;
+                print "$.:";
             }
             else {
-                print "${display_name}:$.:$out";
+                print "${display_filename}:$.:";
             }
         }
-        else {
-            print $out;
-        }
+        print $out;
 
         last if $opt{m} && ( $nmatches >= $opt{m} );
     } # while
@@ -315,6 +315,10 @@ sub search_v {
         else {
             ++$nmatches;
             if ( $show_lines ) {
+                if ( $is_binary ) {
+                    print "Binary file $filename matches\n";
+                    last;
+                }
                 print "${filename}:" if $opt{show_filename};
                 print $_;
                 last if $opt{m} && ( $nmatches >= $opt{m} );
@@ -517,6 +521,11 @@ highlighting)
 =item B<-Q>
 
 Quote all metacharacters.  PATTERN is treated as a literal.
+
+=item B<--sort-files>
+
+Sorts the found files lexically.  Use this if you want your file
+listings to be deterministic between runs of I<ack>.
 
 =item B<--thpppt>
 

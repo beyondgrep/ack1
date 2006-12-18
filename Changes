@@ -17,6 +17,8 @@ NEXT
     doesn't make sense to use -l and -C together, so ack will
     complain about that.
 
+    Added a --sort-files option.
+
     [INTERNALS]
     More testing on XML and PHP detection courtesy Bill Ricker.
 

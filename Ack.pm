@@ -302,6 +302,7 @@ Context control:
 File finding:
     -f              Only print the files found, without searching.
                     The PATTERN must not be specified.
+    --sort-files    Sort the found files lexically.
 
 File inclusion/exclusion:
     -n              No descending into subdirectories

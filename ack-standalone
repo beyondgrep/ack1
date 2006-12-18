@@ -303,8 +303,6 @@ sub search_v {
 
     my $nmatches = 0; # Although in here, it's really $n_non_matches. :-)
 
-    die "Invalid options" if $opt{l} && ($opt{count} || $opt{m});
-
     local $_ = undef;
     while (<$fh>) {
         if ( /$regex/ ) {
@@ -941,7 +939,7 @@ sub options_sanity_check {
     my $ok = 1;
 
     $ok = 0 if _option_conflict( \%opts, 'l', [qw( A B C o group )] );
-    $ok = 0 if _option_conflict( \%opts, 'l', [qw( m count )] );
+    $ok = 0 if _option_conflict( \%opts, 'l', [qw( m )] );
     $ok = 0 if _option_conflict( \%opts, 'f', [qw( A B C o m group )] );
 
     return $ok;

@@ -305,8 +305,6 @@ sub search_v {
 
     my $nmatches = 0; # Although in here, it's really $n_non_matches. :-)
 
-    die "Invalid options" if $opt{l} && ($opt{count} || $opt{m});
-
     local $_ = undef;
     while (<$fh>) {
         if ( /$regex/ ) {

@@ -239,8 +239,6 @@ sub search {
         if ( /$regex/ ) { # If we have a matching line
             ++$nmatches;
             if ( !$opt{count} ) {
-                next if $opt{v};
-
                 if ( $is_binary ) {
                     print "Binary file $filename matches\n";
                     last;
@@ -285,10 +283,10 @@ sub search {
     }
     else {
         if ( $opt{l} ) {
-            print "$filename\n" if ($opt{v} && !$nmatches) || ($nmatches && !$opt{v});
+            print "$filename\n" if $nmatches;
         }
         else {
-            print "\n" if $nmatches && $opt{show_filename} && $opt{group} && !$opt{v};
+            print "\n" if $nmatches && $opt{show_filename} && $opt{group};
         }
     }
 

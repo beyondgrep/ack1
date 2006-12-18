@@ -136,15 +136,10 @@ MAIN: {
         # check above.
         $regex = shift @ARGV or die "No regex specified\n";
 
-        if ( $opt{Q} ) {
-            $regex = quotemeta( $regex );
-        }
-        if ( $opt{w} ) {
-            $regex = $opt{i} ? qr/\b$regex\b/i : qr/\b$regex\b/;
-        }
-        else {
-            $regex = $opt{i} ? qr/$regex/i : qr/$regex/;
-        }
+        $regex = quotemeta( $regex ) if $opt{Q};
+        $regex = "\\b$regex\\b"      if $opt{w};
+
+        $regex = $opt{i} ? qr/$regex/i : qr/$regex/;
     }
 
     my @what;

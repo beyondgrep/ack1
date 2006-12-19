@@ -65,9 +65,6 @@ $(ACK_HELP) : $(STANDALONE)
 $(ACK_HELP_TYPES) : $(STANDALONE)
 	$(PERL) $(STANDALONE) --help=types > $(ACK_HELP_TYPES) || perl -e0
 
-stash.tgz :
-	tar czvf stash.tgz $(shell ack -fa)
-
 MAKE_FRAG
 
     return $postamble;

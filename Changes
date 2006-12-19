@@ -2,6 +2,11 @@ Revision history for ack
 
 NEXT
 
+    [FIXES]
+    In 1.51_01, I changed how we check the -B of a file, but it's
+    not reliable.  Perl's -B operator acts differently if you call
+    -B $filename vs. -B $fh.
+
     [ENHANCEMENTS]
     I changed some internal code to figure out a file's extension.
     By using my own, instead of File::Basename, I cut out over 50%

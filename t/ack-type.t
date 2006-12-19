@@ -18,6 +18,7 @@ my $perl = [qw(
     ./squash
     t/00-load.t
     t/ack-a.t
+    t/ack-binary.t
     t/ack-c.t
     t/ack-type.t
     t/ack-v.t

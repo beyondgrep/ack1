@@ -874,19 +874,6 @@ BEGIN {
 }
 
 
-sub is_filetype {
-    my $filename = shift;
-    my $wanted_type = shift;
-
-    for my $maybe_type ( filetypes( $filename ) ) {
-        return 1 if $maybe_type eq $wanted_type;
-    }
-
-    return;
-}
-
-
-
 sub skipdir_filter {
     return !exists $ignore_dirs{$_};
 }

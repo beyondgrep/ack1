@@ -16,9 +16,9 @@ is_deeply( [App::Ack::filetypes( 'Bongo.pm' )], [qw( perl )], 'Bongo.pm' );
 is_deeply( [App::Ack::filetypes( 'Makefile.PL' )], [qw( perl )], 'Makefile.PL' );
 is_deeply( [App::Ack::filetypes( 'Unknown.wango' )], [], 'Unknown' );
 
-ok(  App::Ack::is_filetype( 'foo.pod', 'perl' ), 'foo.pod can be perl' );
-ok(  App::Ack::is_filetype( 'foo.pod', 'parrot' ), 'foo.pod can be parrot' );
-ok( !App::Ack::is_filetype( 'foo.pod', 'ruby' ), 'foo.pod cannot be ruby' );
+ok(  is_filetype( 'foo.pod', 'perl' ), 'foo.pod can be perl' );
+ok(  is_filetype( 'foo.pod', 'parrot' ), 'foo.pod can be parrot' );
+ok( !is_filetype( 'foo.pod', 'ruby' ), 'foo.pod cannot be ruby' );
 
 is(App::Ack::filetypes('foo.pod~'), '-ignore',
     'correctly ignore backup file');
@@ -77,3 +77,13 @@ is_deeply([App::Ack::filetypes('t/swamp/html.htm')], [qw/php html/],
     'file identified as htm[l]');
 
 
+sub is_filetype {
+    my $filename = shift;
+    my $wanted_type = shift;
+
+    for my $maybe_type ( App::Ack::filetypes( $filename ) ) {
+        return 1 if $maybe_type eq $wanted_type;
+    }
+
+    return;
+}

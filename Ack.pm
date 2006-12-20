@@ -82,24 +82,6 @@ No user-serviceable parts inside.  F<ack> is all that should use this.
 
 =head1 FUNCTIONS
 
-=head2 is_filetype( $filename, $filetype )
-
-Asks whether I<$filename> is of type I<$filetype>.
-
-=cut
-
-sub is_filetype {
-    my $filename = shift;
-    my $wanted_type = shift;
-
-    for my $maybe_type ( filetypes( $filename ) ) {
-        return 1 if $maybe_type eq $wanted_type;
-    }
-
-    return;
-}
-
-
 =head2 skipdir_filter
 
 Standard filter to pass as a L<File::Next> descend_filter.  It

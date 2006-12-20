@@ -10,9 +10,9 @@ BEGIN {
     use_ok( 'App::Ack' );
 }
 
-my $is_perl = sub { return App::Ack::is_filetype( $File::Next::name, 'perl' ) }; ## no critic
-my $is_parrot = sub { return App::Ack::is_filetype( $File::Next::name, 'parrot' ) }; ## no critic
-my $is_binary = sub { return App::Ack::is_filetype( $File::Next::name, 'binary' ) }; ## no critic
+my $is_perl =   sub { return is_filetype( $File::Next::name, 'perl' ) }; ## no critic
+my $is_parrot = sub { return is_filetype( $File::Next::name, 'parrot' ) }; ## no critic
+my $is_binary = sub { return is_filetype( $File::Next::name, 'binary' ) }; ## no critic
 
 PERL_FILES: {
     my $iter =
@@ -158,3 +158,18 @@ sub _sets_match {
     local $Test::Builder::Level = $Test::Builder::Level + 1; ## no critic
     return is_deeply( [sort @expected], [sort @actual], $msg );
 }
+
+
+sub is_filetype {
+    my $filename = shift;
+    my $wanted_type = shift;
+
+    for my $maybe_type ( App::Ack::filetypes( $filename ) ) {
+        return 1 if $maybe_type eq $wanted_type;
+    }
+
+    return;
+}
+
+
+

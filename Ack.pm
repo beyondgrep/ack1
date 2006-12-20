@@ -62,7 +62,6 @@ BEGIN {
     $path_sep = File::Spec->catfile( '', '' );
     $path_sep = quotemeta( $path_sep );
 
-    # REVIEW: This may be entirely unused
     while ( my ($type,$exts) = each %mappings ) {
         if ( ref $exts ) {
             for my $ext ( @{$exts} ) {

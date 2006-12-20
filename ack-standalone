@@ -1073,7 +1073,8 @@ Note that some extensions may appear in multiple types.  For example,
 
 END_OF_HELP
 
-    for my $type ( sort( filetypes_supported() ) ) {
+    my @types = filetypes_supported();
+    for my $type ( sort @types ) {
         next if $type =~ /^-/; # Stuff to not show
         my $ext_list = $mappings{$type};
 

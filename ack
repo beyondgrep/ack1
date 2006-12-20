@@ -216,7 +216,6 @@ sub search {
     my $regex = shift;
     my %opt = @_;
 
-    my $nmatches = 0;
     my $is_binary;
 
     my $fh;
@@ -238,9 +237,10 @@ sub search {
     # Negated counting is a pain, so I'm putting it in its own
     # optimizable subroutine.
     if ( $opt{v} ) {
-        return search_v( $fh, $is_binary, $filename, $regex, %opt );
+        return _search_v( $fh, $is_binary, $filename, $regex, %opt );
     }
 
+    my $nmatches = 0;
     local $_ = undef;
     while (<$fh>) {
         next unless /$regex/;
@@ -298,7 +298,7 @@ sub search {
 }   # search()
 
 
-sub search_v {
+sub _search_v {
     my $fh = shift;
     my $is_binary = shift;
     my $filename = shift;
@@ -338,7 +338,7 @@ sub search_v {
     }
 
     return;
-} # search_v()
+} # _search_v()
 
 
 =head1 NAME

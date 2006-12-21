@@ -73,6 +73,7 @@ MAIN: {
         'man'       => sub {require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit},
 
         'type=s'    => sub {
+            # Whatever --type=xxx they specify, set it manually in the hash
             my $dummy = shift;
             my $type = shift;
             my $wanted = ($type =~ s/^no//) ? 0 : 1; # must not be undef later

@@ -71,6 +71,7 @@ MAIN: {
         'man'       => sub {require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit},
 
         'type=s'    => sub {
+            # Whatever --type=xxx they specify, set it manually in the hash
             my $dummy = shift;
             my $type = shift;
             my $wanted = ($type =~ s/^no//) ? 0 : 1; # must not be undef later
@@ -681,7 +682,7 @@ use strict;
 use warnings;
 
 
-our $VERSION = '0.34';
+our $VERSION = '0.36';
 
 
 use File::Spec ();
@@ -703,6 +704,7 @@ BEGIN {
     %skip_dirs = map {($_,1)} (File::Spec->curdir, File::Spec->updir);
 }
 
+
 sub files {
     my $passed_parms = ref $_[0] eq 'HASH' ? {%{+shift}} : {}; # copy parm hash
     my %passed_parms = %{$passed_parms};
@@ -721,23 +723,16 @@ sub files {
     for ( @_ ) {
         my $start = reslash( $_ );
         if (-d $start) {
-            push @queue, [$start,undef];
+            push @queue, ($start,undef,$start);
         }
         else {
-            push @queue, [undef,$start];
+            push @queue, (undef,$start,$start);
         }
     }
 
     return sub {
         while (@queue) {
-            my ($dir,$file) = @{shift @queue};
-
-            my $fullpath =
-                defined $dir
-                    ? defined $file
-                        ? File::Spec->catfile( $dir, $file )
-                        : $dir
-                    : $file;
+            my ($dir,$file,$fullpath) = splice( @queue, 0, 3 );
 
             if (-f $fullpath) {
                 if ( $parms->{file_filter} ) {
@@ -746,7 +741,7 @@ sub files {
                     local $File::Next::name = $fullpath;
                     next if not $parms->{file_filter}->();
                 }
-                return wantarray ? ($dir,$file) : $fullpath;
+                return wantarray ? ($dir,$file,$fullpath) : $fullpath;
             }
             elsif (-d $fullpath) {
                 unshift( @queue, _candidate_files( $parms, $fullpath ) );
@@ -755,17 +750,6 @@ sub files {
 
         return;
     }; # iterator
-}
-
-
-sub reslash {
-    my $path = shift;
-
-    my @parts = split( /\//, $path );
-
-    return $path if @parts < 2;
-
-    return File::Spec->catfile( @parts );
 }
 
 
@@ -784,18 +768,22 @@ sub _candidate_files {
         next if $skip_dirs{$file};
 
         # Only do directory checking if we have a descend_filter
-        if ( $parms->{descend_filter} ) {
-            local $File::Next::dir = File::Spec->catdir( $dir, $file );
-            if ( -d $File::Next::dir ) {
-                local $_ = $file;
-                next if not $parms->{descend_filter}->();
-            }
+        my $fullpath = File::Spec->catdir( $dir, $file );
+        if ( $parms->{descend_filter} && -d $fullpath ) {
+            local $File::Next::dir = $fullpath;
+            local $_ = $file;
+            next if not $parms->{descend_filter}->();
         }
-        push( @newfiles, [$dir, $file] );
+        push( @newfiles, $dir, $file, $fullpath );
     }
     if ( my $sub = $parms->{sort_files} ) {
         $sub = \&sort_standard unless ref($sub) eq 'CODE';
-        @newfiles = sort $sub @newfiles;
+
+        my @triplets;
+        while ( @newfiles ) {
+            push @triplets, [splice( @newfiles, 0, 3 )];
+        }
+        @newfiles = map { @{$_} } sort $sub @triplets;
     }
 
     return @newfiles;
@@ -803,6 +791,18 @@ sub _candidate_files {
 
 sub sort_standard($$)   { return $_[0]->[1] cmp $_[1]->[1] };
 sub sort_reverse($$)    { return $_[1]->[1] cmp $_[0]->[1] };
+
+
+
+sub reslash {
+    my $path = shift;
+
+    my @parts = split( /\//, $path );
+
+    return $path if @parts < 2;
+
+    return File::Spec->catfile( @parts );
+}
 
 
 1; # End of File::Next

@@ -15,7 +15,7 @@ WriteMakefile(
         'Term::ANSIColor'   => 0,
         'Getopt::Long'      => 0,
         'Test::More'        => 0,
-        'File::Next'        => 0.34,   # For the better handling of package variables
+        'File::Next'        => 0.36,   # Faster, drops leading zeroes
         'File::Basename'    => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },

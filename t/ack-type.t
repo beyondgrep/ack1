@@ -11,11 +11,11 @@ my $ruby = [qw(
 )];
 
 my $perl = [qw(
-    ./ack
-    ./ack-standalone
-    ./Ack.pm
-    ./Makefile.PL
-    ./squash
+    ack
+    ack-standalone
+    Ack.pm
+    Makefile.PL
+    squash
     t/00-load.t
     t/ack-a.t
     t/ack-binary.t

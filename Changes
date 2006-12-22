@@ -3,7 +3,12 @@ NEXT
     The following need to happen to get us to 1.60:
 
     * All tests run OK under windows.
+
     * Context searching.
+        http://code.google.com/p/ack/issues/detail?id=6
+
+    * Handling --symlinks
+        http://code.google.com/p/ack/issues/detail?id=13
 
 
 1.52        Fri Dec 22 00:41:45 CST 2006

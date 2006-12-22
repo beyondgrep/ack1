@@ -44,8 +44,8 @@ MAIN: {
     );
 
     my %options = (
-        'A|after-context=i'     => \$opt{after},
-        'B|before-context=i'    => \$opt{before},
+        'A|after-context=i'     => \$opt{A},
+        'B|before-context=i'    => \$opt{B},
         'C|context=i'           => sub { shift; $opt{after} = $opt{before} = shift; },
         a           => \$opt{all},
         'all!'      => \$opt{all},
@@ -87,7 +87,7 @@ MAIN: {
         }, # type sub
     );
 
-    die "Sorry, but the -A, -B and -C options haven't actually been implemented yet." if $opt{A} || $opt{B} || $opt{C};
+    die "Sorry, but the -A, -B and -C options haven't actually been implemented yet." if $opt{A} || $opt{B};
 
     my @filetypes_supported = App::Ack::filetypes_supported();
     for my $i ( @filetypes_supported ) {

@@ -204,9 +204,7 @@ sub is_interesting {
 }
 
 sub dash_a {
-    my @types = App::Ack::filetypes( $File::Next::name );
-    return 0 if (@types == 1) && ($types[0] eq '-ignore');
-    return 1;
+    return !App::Ack::should_ignore( $File::Next::name );
 }
 
 sub search {
@@ -877,9 +875,7 @@ sub skipdir_filter {
 sub filetypes {
     my $filename = shift;
 
-    return '-ignore' if $filename =~ /~$/;
-    return '-ignore' if $filename =~ m{$path_sep?#.+#$};
-    return '-ignore' if $filename =~ m{$path_sep?core\.\d+$};
+    return '-ignore' if should_ignore( $filename );
 
     # If there's an extension, look it up
     if ( $filename =~ m{\.([^$path_sep]+)$} ) {
@@ -921,6 +917,17 @@ sub filetypes {
         return 'shell'  if $header =~ /\b(ba|c|k|z)?sh\b/;
     }
     return 'xml' if $header =~ /<\?xml /;
+
+    return;
+}
+
+
+sub should_ignore {
+    my $filename = shift;
+
+    return 1 if $filename =~ /~$/;
+    return 1 if $filename =~ m{$path_sep?#.+#$};
+    return 1 if $filename =~ m{$path_sep?core\.\d+$};
 
     return;
 }

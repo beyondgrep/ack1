@@ -206,9 +206,7 @@ sub is_interesting {
 }
 
 sub dash_a {
-    my @types = App::Ack::filetypes( $File::Next::name );
-    return 0 if (@types == 1) && ($types[0] eq '-ignore');
-    return 1;
+    return !App::Ack::should_ignore( $File::Next::name );
 }
 
 sub search {

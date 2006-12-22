@@ -12,6 +12,11 @@ NEXT
     By using my own, instead of File::Basename, I cut out over 50%
     of the run time on my test of acking through a large tree.
 
+    When using -a, it's not necessary to determine the filetype
+    before searching, only if we should ignore the file or not.
+    This cut out an additional 10% or so of execution time when
+    doing -a searces.
+
     [INTERNALS]
     We no longer need to build a list of all used suffixes.  This
     makes startup quicker.

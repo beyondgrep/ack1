@@ -109,9 +109,7 @@ even under -a.
 sub filetypes {
     my $filename = shift;
 
-    return '-ignore' if $filename =~ /~$/;
-    return '-ignore' if $filename =~ m{$path_sep?#.+#$};
-    return '-ignore' if $filename =~ m{$path_sep?core\.\d+$};
+    return '-ignore' if should_ignore( $filename );
 
     # If there's an extension, look it up
     if ( $filename =~ m{\.([^$path_sep]+)$} ) {
@@ -153,6 +151,23 @@ sub filetypes {
         return 'shell'  if $header =~ /\b(ba|c|k|z)?sh\b/;
     }
     return 'xml' if $header =~ /<\?xml /;
+
+    return;
+}
+
+=head2 should_ignore( $filename )
+
+Returns true if the filename is one that we should ignore regardless
+of filetype, like a coredump or a backup file.
+
+=cut
+
+sub should_ignore {
+    my $filename = shift;
+
+    return 1 if $filename =~ /~$/;
+    return 1 if $filename =~ m{$path_sep?#.+#$};
+    return 1 if $filename =~ m{$path_sep?core\.\d+$};
 
     return;
 }

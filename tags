@@ -4,19 +4,36 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.6	//
-App::Ack	Ack.pm	/^package App::Ack;$/;"	p
+App	ack	/^        App::Ack::show_help();$/;"	l
+BINARY_FILES	t/interesting.t	/^BINARY_FILES: {$/;"	l
+Example	Ack.pm	/^Example: ack -i select$/;"	l
+File	ack	/^        File::Next::files( {$/;"	l
+File	t/interesting.t	/^        File::Next::files( {$/;"	l
+Getopt	ack	/^    Getopt::Long::Configure( 'bundling', 'no_ignore_case' );$/;"	l
+MAIN	ack	/^MAIN: {$/;"	l
 MY	Makefile.PL	/^sub MY::postamble {$/;"	s
-_expand_list	Ack.pm	/^sub _expand_list {$/;"	s
-_ignore_dirs_str	Ack.pm	/^sub _ignore_dirs_str { return _listify( @ignore_dirs ); }$/;"	s
-_init_types	Ack.pm	/^sub _init_types {$/;"	s
+MY	Makefile.PL	/^sub MY::top_targets {$/;"	s
+Miscellaneous	Ack.pm	/^Miscellaneous:$/;"	l
+PARROT_FILES_DESCEND	t/interesting.t	/^PARROT_FILES_DESCEND: {$/;"	l
+PARROT_FILES_NODESCEND	t/interesting.t	/^PARROT_FILES_NODESCEND: {$/;"	l
+PARROT_FILES_NODESCEND_EMPTY	t/interesting.t	/^PARROT_FILES_NODESCEND_EMPTY: {$/;"	l
+PERL_FILES	t/interesting.t	/^PERL_FILES: {$/;"	l
+PERL_FILES_BY_NAME	t/interesting.t	/^PERL_FILES_BY_NAME: {$/;"	l
+PERL_FILES_GLOBBED	t/interesting.t	/^PERL_FILES_GLOBBED: {$/;"	l
+Searching	Ack.pm	/^Searching:$/;"	l
+Usage	Ack.pm	/^Usage: ack [OPTION]... PATTERN [FILES]$/;"	l
 _listify	Ack.pm	/^sub _listify {$/;"	s
+_my_program	Ack.pm	/^sub _my_program {$/;"	s
+_sets_match	t/interesting.t	/^sub _sets_match {$/;"	s
 _thpppt	Ack.pm	/^sub _thpppt {$/;"	s
+check_with	t/ack-type.t	/^sub check_with {$/;"	s
+dash_a	ack	/^sub dash_a {$/;"	s
 filetypes	Ack.pm	/^sub filetypes {$/;"	s
 filetypes_supported	Ack.pm	/^sub filetypes_supported {$/;"	s
-interesting_files	t/interesting.t	/^sub interesting_files {$/;"	s
 is_filetype	Ack.pm	/^sub is_filetype {$/;"	s
 is_interesting	ack	/^sub is_interesting {$/;"	s
-main	Makefile.PL	/^package main;$/;"	p
 search	ack	/^sub search {$/;"	s
 show_help	Ack.pm	/^sub show_help {$/;"	s
+show_help_types	Ack.pm	/^sub show_help_types {$/;"	s
 skipdir_filter	Ack.pm	/^sub skipdir_filter {$/;"	s
+version	ack	/^sub version() { ## no critic (Subroutines::ProhibitSubroutinePrototypes)$/;"	s

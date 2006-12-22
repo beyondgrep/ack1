@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.50';
+our $VERSION   = '1.52';
 our $COPYRIGHT = 'Copyright 2005-2006 Andy Lester, all rights reserved.';
 # Check http://petdance.com/ack/ for updates
 
@@ -15,13 +15,13 @@ my $is_tty =  -t STDOUT;
 
 BEGIN {
     $is_windows = ($^O =~ /MSWin32/);
-    eval 'use Term::ANSIColor' unless $is_windows;
+    eval 'use Term::ANSIColor ();' unless $is_windows;
 
     $ENV{ACK_COLOR_MATCH}    ||= 'black on_yellow';
     $ENV{ACK_COLOR_FILENAME} ||= 'bold green';
 }
 
-use File::Next 0.22;
+use File::Next 0.34;
 use App::Ack;
 use Getopt::Long;
 
@@ -36,12 +36,17 @@ MAIN: {
     # Priorities! Get the --thpppt checking out of the way.
     /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
 
-    $opt{group} =   $is_tty;
-    $opt{color} =   $is_tty && !$is_windows;
-    $opt{all} =     0;
-    $opt{m} =       0;
+    my %defaults = (
+        group => $is_tty,
+        color => $is_tty && !$is_windows,
+        all =>   0,
+        m =>     0,
+    );
 
     my %options = (
+        'A|after-context=i'     => \$opt{after},
+        'B|before-context=i'    => \$opt{before},
+        'C|context=i'           => sub { shift; $opt{after} = $opt{before} = shift; },
         a           => \$opt{all},
         'all!'      => \$opt{all},
         c           => \$opt{count},
@@ -57,15 +62,18 @@ MAIN: {
         n                       => \$opt{n},
         'o|output:s'            => \$opt{o},
         'Q|literal'             => \$opt{Q},
+        'sort-files'            => \$opt{sort_files},
         'v|invert-match'        => \$opt{v},
         'w|word-regexp'         => \$opt{w},
 
 
-        'version'   => sub { version(); exit 1; },
+        'version'   => sub { App::Ack::version_statement( $COPYRIGHT ); exit 1; },
         'help|?:s'  => sub { shift; App::Ack::show_help(@_); exit; },
+        'help-types'=> sub { App::Ack::show_help_types(); exit; },
         'man'       => sub {require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit},
 
         'type=s'    => sub {
+            # Whatever --type=xxx they specify, set it manually in the hash
             my $dummy = shift;
             my $type = shift;
             my $wanted = ($type =~ s/^no//) ? 0 : 1; # must not be undef later
@@ -79,6 +87,8 @@ MAIN: {
         }, # type sub
     );
 
+    die "Sorry, but the -A, -B and -C options haven't actually been implemented yet." if $opt{A} || $opt{B} || $opt{C};
+
     my @filetypes_supported = App::Ack::filetypes_supported();
     for my $i ( @filetypes_supported ) {
         $options{ "$i!" } = \$type_wanted{ $i };
@@ -89,7 +99,14 @@ MAIN: {
     unshift @ARGV, split( ' ', $ENV{ACK_OPTIONS} ) if defined $ENV{ACK_OPTIONS};
 
     Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
-    GetOptions( %options ) or die "ack --help for options.\n";
+    GetOptions( %options ) && App::Ack::options_sanity_check( %opt ) or die "See ack --help or ack --man for options.\n";
+
+    # Apply defaults
+    while ( my ($key,$value) = each %defaults ) {
+        if ( not defined $opt{$key} ) {
+            $opt{$key} = $value;
+        }
+    }
 
     if ( defined( my $val = $opt{o} ) ) {
         if ( $val eq '' ) {
@@ -123,15 +140,10 @@ MAIN: {
         # check above.
         $regex = shift @ARGV or die "No regex specified\n";
 
-        if ( $opt{Q} ) {
-            $regex = quotemeta( $regex );
-        }
-        if ( $opt{w} ) {
-            $regex = $opt{i} ? qr/\b$regex\b/i : qr/\b$regex\b/;
-        }
-        else {
-            $regex = $opt{i} ? qr/$regex/i : qr/$regex/;
-        }
+        $regex = quotemeta( $regex ) if $opt{Q};
+        $regex = "\\b$regex\\b"      if $opt{w};
+
+        $regex = $opt{i} ? qr/$regex/i : qr/$regex/;
     }
 
     my @what;
@@ -153,13 +165,13 @@ MAIN: {
             exit 0;
         }
         else {
-            $opt{defaulted_to_dot} = 1;
             @what = '.'; # Assume current directory
             $opt{show_filename} = 1;
         }
     }
     $opt{show_filename} = 0 if $opt{h};
     $opt{show_filename} = 1 if $opt{H};
+    $opt{show_filename} = 0 if $opt{o};
 
     my $file_filter = $opt{all} ? \&dash_a : \&is_interesting;
     my $descend_filter = $opt{n} ? sub {0} : \&App::Ack::skipdir_filter;
@@ -169,6 +181,7 @@ MAIN: {
             file_filter     => $file_filter,
             descend_filter  => $descend_filter,
             error_handler   => sub { my $msg = shift; warn "ack: $msg\n" },
+            sort_files      => $opt{sort_files},
         }, @what );
 
 
@@ -193,9 +206,7 @@ sub is_interesting {
 }
 
 sub dash_a {
-    my @types = App::Ack::filetypes( $File::Next::name );
-    return 0 if (@types == 1) && ($types[0] eq '-ignore');
-    return 1;
+    return !App::Ack::should_ignore( $File::Next::name );
 }
 
 sub search {
@@ -203,7 +214,6 @@ sub search {
     my $regex = shift;
     my %opt = @_;
 
-    my $nmatches = 0;
     my $is_binary;
 
     my $fh;
@@ -216,57 +226,99 @@ sub search {
             warn "ack: $filename: $!\n";
             return;
         }
-        if ( $opt{defaulted_to_dot} ) {
-            $filename =~ s{^\Q./}{};
-        }
         $is_binary = -B $filename;
     }
 
+    # Negated counting is a pain, so I'm putting it in its own
+    # optimizable subroutine.
+    if ( $opt{v} ) {
+        return _search_v( $fh, $is_binary, $filename, $regex, %opt );
+    }
+
+    my $nmatches = 0;
     local $_ = undef;
     while (<$fh>) {
-        if ( /$regex/ ) { # If we have a matching line
+        next unless /$regex/;
+        ++$nmatches;
+        next if $opt{count}; # Counting means no lines
+
+        # No point in searching more if we only want a list,
+        # and don't want a count.
+        last if $opt{l};
+
+        if ( $is_binary ) {
+            print "Binary file $filename matches\n";
+            last;
+        }
+
+        my $out;
+        if ( $opt{o} ) {
+            $out = $opt{o}->() . "\n";
+        }
+        else {
+            $out = $_;
+            $out =~ s/($regex)/Term::ANSIColor::colored($1,$ENV{ACK_COLOR_MATCH})/eg if $opt{color};
+        }
+
+        if ( $opt{show_filename} ) {
+            my $display_filename = $opt{color} ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} ) : $filename;
+            if ( $opt{group} ) {
+                print "$display_filename\n" if $nmatches == 1;
+                print "$.:";
+            }
+            else {
+                print "${display_filename}:$.:";
+            }
+        }
+        print $out;
+
+        last if $opt{m} && ( $nmatches >= $opt{m} );
+    } # while
+    close $fh;
+
+    if ( $opt{count} ) {
+        if ( $nmatches || !$opt{l} ) {
+            print "${filename}:" if $opt{show_filename};
+            print "${nmatches}\n";
+        }
+    }
+    elsif ( $opt{l} ) {
+        print "$filename\n" if $nmatches;
+    }
+    else {
+        print "\n" if $nmatches && $opt{show_filename} && $opt{group};
+    }
+
+    return;
+}   # search()
+
+
+sub _search_v {
+    my $fh = shift;
+    my $is_binary = shift;
+    my $filename = shift;
+    my $regex = shift;
+    my %opt = @_;
+
+    my $nmatches = 0; # Although in here, it's really $n_non_matches. :-)
+
+    my $show_lines = !($opt{l} || $opt{count});
+    local $_ = undef;
+    while (<$fh>) {
+        if ( /$regex/ ) {
+            return if $opt{l}; # For list mode, any match means we can bail
+            next;
+        }
+        else {
             ++$nmatches;
-            if ( !$opt{count} ) {
-                next if $opt{v};
-
-                # No point in searching more if we only want a list
-                last if ( $nmatches == 1 && $opt{l} );
-
-                my $out;
-                if ( $opt{o} ) {
-                    $out = $opt{o}->() . "\n";
-                    $opt{show_filename} = 0;
-                }
-                else {
-                    $out = $_;
-                    $out =~ s/($regex)/colored($1,$ENV{ACK_COLOR_MATCH})/eg if $opt{color};
-                }
-
+            if ( $show_lines ) {
                 if ( $is_binary ) {
                     print "Binary file $filename matches\n";
                     last;
                 }
-                elsif ( $opt{show_filename} ) {
-                    my $colorname = $opt{color} ? colored( $filename, $ENV{ACK_COLOR_FILENAME} ) : $filename;
-                    if ( $opt{group} ) {
-                        print "$colorname\n" if $nmatches == 1;
-                        print "$.:$out";
-                    }
-                    else {
-                        print "${colorname}:$.:$out";
-                    }
-                }
-                else {
-                    print $out;
-                }
-            } # Not just --count
-
-            last if $opt{m} && ( $nmatches >= $opt{m} );
-        } # match
-        else { # no match
-            if ( $opt{v} ) {
                 print "${filename}:" if $opt{show_filename};
                 print $_;
+                last if $opt{m} && ( $nmatches >= $opt{m} );
             }
         }
     } # while
@@ -277,29 +329,12 @@ sub search {
         print "${nmatches}\n";
     }
     else {
-        if ( $opt{l} ) {
-            print "$filename\n" if ($opt{v} && !$nmatches) || ($nmatches && !$opt{v});
-        }
-        else {
-            print "\n" if $nmatches && $opt{show_filename} && $opt{group} && !$opt{v};
-        }
+        print "$filename\n" if $opt{l};
     }
 
     return;
-}
+} # _search_v()
 
-sub version() { ## no critic (Subroutines::ProhibitSubroutinePrototypes)
-    print <<"END_OF_VERSION";
-ack $App::Ack::VERSION
-
-$COPYRIGHT
-
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
-END_OF_VERSION
-
-    return;
-}
 
 =head1 NAME
 
@@ -395,10 +430,27 @@ back in on I<ack> in the near future, because I'm adding it.
 Operate on all files, regardless of type (but still skip directories
 like F<blib>, F<CVS>, etc.
 
+=item B<-A I<NUM>>, B<--after-context=I<NUM>>
+
+Print I<NUM> lines of trailing context after matching lines.  Places
+a line containing -- between contiguous groups of matches.
+
+=item B<-B I<NUM>>, B<--before-context=I<NUM>>
+
+Print I<NUM> lines of leading context before matching lines.  Places
+a line containing -- between contiguous groups of matches.
+
+=item B<-C I<NUM>>, B<--context=I<NUM>>
+
+Print I<NUM> lines of context before and after matching lines.
+Places a line containing -- between contiguous groups of matches.
+
 =item B<-c>, B<--count>
 
-Suppress normal output; instead print a count of matching lines for each
-input file.
+Suppress normal output; instead print a count of matching lines for
+each input file.  If B<-l> is in effect, it will only show the
+number of lines for each file that has lines matching.  Without
+B<-l>, some line counts may be zeroes.
 
 =item B<--color>, B<--nocolor>
 
@@ -466,6 +518,11 @@ highlighting)
 =item B<-Q>
 
 Quote all metacharacters.  PATTERN is treated as a literal.
+
+=item B<--sort-files>
+
+Sorts the found files lexically.  Use this if you want your file
+listings to be deterministic between runs of I<ack>.
 
 =item B<--thpppt>
 
@@ -584,7 +641,11 @@ L<http://ack.googlecode.com/svn/>
 
 =head1 ACKNOWLEDGEMENTS
 
+How appropriate to have I<ack>nowledgements!
+
 Thanks to everyone who has contributed to ack in any way, including
+Bill Ricker,
+David Golden,
 Nilson Santos F. Jr,
 Elliot Shank,
 Merijn Broeren,

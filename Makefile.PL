@@ -15,7 +15,7 @@ WriteMakefile(
         'Term::ANSIColor'   => 0,
         'Getopt::Long'      => 0,
         'Test::More'        => 0,
-        'File::Next'        => 0.34,   # For the better handling of package variables
+        'File::Next'        => 0.36,   # Faster, drops leading zeroes
         'File::Basename'    => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
@@ -34,13 +34,15 @@ sub MY::top_targets {
 
 sub MY::postamble {
     my $file_next_filename = qx(perldoc -l File::Next);
-    my $postamble = <<"MAKE_FRAG";
+    my $postamble = <<'MAKE_FRAG';
 .PHONY: tags critic
 
 tags :
 	ctags -f tags --recurse --totals \
-		--exclude=blib --exclude=t/lib \
-		--exclude=.svn --exclude='*~' \
+		--exclude=blib \
+		--exclude=.svn \
+		--exclude='*~' \
+		--exclude=ack-standalone \
 		--languages=Perl --langmap=Perl:+.t \
 
 critic :
@@ -52,16 +54,16 @@ STANDALONE      = ack-standalone
 ACK_HELP        = ack-help.txt
 ACK_HELP_TYPES  = ack-help-types.txt
 
-\$(STANDALONE) : \$(ACK) \$(APP_ACK_PM) squash Makefile
-	perl squash ack File::Next \$(APP_ACK_PM) > \$(STANDALONE)
-	chmod +x \$(STANDALONE)
-	perl -c \$(STANDALONE)
+$(STANDALONE) : $(ACK) $(APP_ACK_PM) squash Makefile
+	$(PERL) squash ack File::Next $(APP_ACK_PM) > $(STANDALONE)
+	chmod +x $(STANDALONE)
+	$(PERL) -c $(STANDALONE)
 
-\$(ACK_HELP) : \$(STANDALONE)
-	perl \$(STANDALONE) --help > \$(ACK_HELP) || perl -e0
+$(ACK_HELP) : $(STANDALONE)
+	$(PERL) $(STANDALONE) --help > $(ACK_HELP) || perl -e0
 
-\$(ACK_HELP_TYPES) : \$(STANDALONE)
-	perl \$(STANDALONE) --help=types > \$(ACK_HELP_TYPES) || perl -e0
+$(ACK_HELP_TYPES) : $(STANDALONE)
+	$(PERL) $(STANDALONE) --help=types > $(ACK_HELP_TYPES) || perl -e0
 
 MAKE_FRAG
 

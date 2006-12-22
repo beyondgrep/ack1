@@ -2,7 +2,6 @@ package App::Ack;
 
 use warnings;
 use strict;
-use File::Basename ();
 
 =head1 NAME
 
@@ -10,20 +9,20 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.50
+Version 1.52
 
 =cut
 
 our $VERSION;
 BEGIN {
-    $VERSION = '1.50';
+    $VERSION = '1.52';
 }
 
 our %types;
 our %mappings;
-our @suffixes;
 our @ignore_dirs;
 our %ignore_dirs;
+our $path_sep;
 our $is_cygwin;
 
 BEGIN {
@@ -59,16 +58,17 @@ BEGIN {
         xml         => [qw( xml dtd xslt )],
     );
 
-    my %suffixes;
+    use File::Spec ();
+    $path_sep = File::Spec->catfile( '', '' );
+    $path_sep = quotemeta( $path_sep );
+
     while ( my ($type,$exts) = each %mappings ) {
         if ( ref $exts ) {
             for my $ext ( @{$exts} ) {
                 push( @{$types{$ext}}, $type );
-                ++$suffixes{"\\.$ext"};
             }
         }
     }
-    @suffixes = keys %suffixes;
 
     $is_cygwin = ($^O eq 'cygwin');
 }
@@ -80,24 +80,6 @@ If you want to know about the F<ack> program
 No user-serviceable parts inside.  F<ack> is all that should use this.
 
 =head1 FUNCTIONS
-
-=head2 is_filetype( $filename, $filetype )
-
-Asks whether I<$filename> is of type I<$filetype>.
-
-=cut
-
-sub is_filetype {
-    my $filename = shift;
-    my $wanted_type = shift;
-
-    for my $maybe_type ( filetypes( $filename ) ) {
-        return 1 if $maybe_type eq $wanted_type;
-    }
-
-    return;
-}
-
 
 =head2 skipdir_filter
 
@@ -127,18 +109,11 @@ even under -a.
 sub filetypes {
     my $filename = shift;
 
-    return '-ignore' if $filename =~ /~$/;
-
-    # Pass our $filename in lowercase so we match lowercase filenames
-    my ($filebase,$dirs,$suffix) = File::Basename::fileparse( lc $filename, @suffixes );
-
-    return '-ignore' if $filebase =~ /^#.+#$/;
-    return '-ignore' if $filebase =~ /^core\.\d+$/;
+    return '-ignore' if should_ignore( $filename );
 
     # If there's an extension, look it up
-    if ( $suffix ) {
-        $suffix =~ s/^\.//; # Drop the period that File::Basename needs
-        my $ref = $types{lc $suffix};
+    if ( $filename =~ m{\.([^$path_sep]+)$} ) {
+        my $ref = $types{lc $1};
         return @{$ref} if $ref;
     }
 
@@ -180,7 +155,66 @@ sub filetypes {
     return;
 }
 
+=head2 should_ignore( $filename )
+
+Returns true if the filename is one that we should ignore regardless
+of filetype, like a coredump or a backup file.
+
+=cut
+
+sub should_ignore {
+    my $filename = shift;
+
+    return 1 if $filename =~ /~$/;
+    return 1 if $filename =~ m{$path_sep?#.+#$};
+    return 1 if $filename =~ m{$path_sep?core\.\d+$};
+
+    return;
+}
+
+=head2 options_sanity_check( %opts )
+
+Checks for sane command-line options.  For example, I<-l> doesn't
+make sense with I<-C>.
+
+=cut
+
+sub options_sanity_check {
+    my %opts = @_;
+    my $ok = 1;
+
+    $ok = 0 if _option_conflict( \%opts, 'l', [qw( A B C o group )] );
+    $ok = 0 if _option_conflict( \%opts, 'l', [qw( m )] );
+    $ok = 0 if _option_conflict( \%opts, 'f', [qw( A B C o m group )] );
+
+    return $ok;
+}
+
+sub _option_conflict {
+    my $opts = shift;
+    my $used = shift;
+    my $exclusives = shift;
+
+    return if not defined $opts->{$used};
+
+    my $bad = 0;
+    for ( @$exclusives ) {
+        if ( defined $opts->{$_} ) {
+            print "The ", _opty($_), " option cannot be used with the ", _opty($used), " option.\n";
+            $bad = 1;
+        }
+    }
+
+    return $bad;
+}
+
+sub _opty {
+    my $opt = shift;
+    return length($opt)>1 ? "--$opt" : "-$opt";
+}
+
 sub _my_program {
+    require File::Basename;
     return File::Basename::basename( $0 );
 }
 
@@ -251,9 +285,17 @@ Search output:
     --[no]color     Highlight the matching text (default: on unless
                     output is redirected, or on Windows)
 
+Context control:
+    -B, --before-context=NUM
+    -A, --after-context=NUM
+    -C, --context=NUM
+                    print NUM lines of context before and/or after
+                    matching lines
+
 File finding:
     -f              Only print the files found, without searching.
                     The PATTERN must not be specified.
+    --sort-files    Sort the found files lexically.
 
 File inclusion/exclusion:
     -n              No descending into subdirectories
@@ -295,7 +337,8 @@ Note that some extensions may appear in multiple types.  For example,
 
 END_OF_HELP
 
-    for my $type ( sort( filetypes_supported() ) ) {
+    my @types = filetypes_supported();
+    for my $type ( sort @types ) {
         next if $type =~ /^-/; # Stuff to not show
         my $ext_list = $mappings{$type};
 
@@ -315,6 +358,26 @@ sub _listify {
 
     my $end = pop @whats;
     return @whats ? join( ', ', @whats ) . " and $end" : $end;
+}
+
+=head2 version_statement( $copyright )
+
+Prints the version information for ack.
+
+=cut
+
+sub version_statement {
+    my $copyright = shift;
+    print <<"END_OF_VERSION";
+ack $App::Ack::VERSION
+
+$copyright
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
+END_OF_VERSION
+
+    return;
 }
 
 1; # End of App::Ack

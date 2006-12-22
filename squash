@@ -23,8 +23,16 @@ for my $arg ( @ARGV ) {
 
         # See if we're in module POD blocks
         my $skip = ($filename ne 'ack') && (/^=/ .. /^=cut/);
+        if ( !$skip ) {
+            # Replace the shebang line
+            s{^#!.+}{#!/usr/bin/env perl};
 
-        print unless $skip;
+            # Remove Perl::Critic comments.
+            # I'd like to remove all comments, but this is a start
+            s{\s*##.+critic.*}{};
+
+            print;
+        }
     }
     close $fh;
 }

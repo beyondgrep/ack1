@@ -1,0 +1,7 @@
+<?rfc toc="no"?>
+
+<!--
+If this were fully conformant, 
+this would have <?xml?> and <!DOCTYPE> lines before the <?rfc>, 
+this is just a sample odd <?$Topline?> test.
+-->

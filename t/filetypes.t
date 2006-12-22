@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 18;
+use Test::More tests => 25;
 use Data::Dumper;
 
 BEGIN {
@@ -16,9 +16,9 @@ is_deeply( [App::Ack::filetypes( 'Bongo.pm' )], [qw( perl )], 'Bongo.pm' );
 is_deeply( [App::Ack::filetypes( 'Makefile.PL' )], [qw( perl )], 'Makefile.PL' );
 is_deeply( [App::Ack::filetypes( 'Unknown.wango' )], [], 'Unknown' );
 
-ok(  App::Ack::is_filetype( 'foo.pod', 'perl' ), 'foo.pod can be perl' );
-ok(  App::Ack::is_filetype( 'foo.pod', 'parrot' ), 'foo.pod can be parrot' );
-ok( !App::Ack::is_filetype( 'foo.pod', 'ruby' ), 'foo.pod cannot be ruby' );
+ok(  is_filetype( 'foo.pod', 'perl' ), 'foo.pod can be perl' );
+ok(  is_filetype( 'foo.pod', 'parrot' ), 'foo.pod can be parrot' );
+ok( !is_filetype( 'foo.pod', 'ruby' ), 'foo.pod cannot be ruby' );
 
 is(App::Ack::filetypes('foo.pod~'), '-ignore',
     'correctly ignore backup file');
@@ -44,8 +44,46 @@ is(App::Ack::filetypes('t/etc/shebang.rb.xxx'), 'ruby',
 is(App::Ack::filetypes('t/etc/shebang.sh.xxx'), 'shell',
     'file identified as shell from shebang line');
 
-ok(! defined App::Ack::filetypes('etc/shebang.foobar.xxx'),
+ok(! defined App::Ack::filetypes('t/etc/shebang.foobar.xxx'),
     'file could not be identified from shebang line');
 
 is(App::Ack::filetypes('t/etc/shebang.empty.xxx'), 'binary', 
     'empty file returns "binary"');
+
+## Tests documenting current behavior in 1.50
+is(App::Ack::filetypes('t/etc/buttonhook.xml.xxx'), 'xml',
+    'file identified as xml from <?xml line');
+
+ok(! defined App::Ack::filetypes('t/etc/buttonhook.noxml.xxx'),
+    'no <?xml> found, so no filetype');
+
+
+is(App::Ack::filetypes('t/etc/buttonhook.xml.xxx'),'xml',
+   'filetype by <?xml>');
+
+is_deeply([App::Ack::filetypes('t/swamp/buttonhook.xml')], ['xml'],
+    'file identified as xml ');
+
+ok(! defined App::Ack::filetypes('t/etc/x.html.xxx'),
+   '<!DOCTYPE not yet supported so no filetype');
+
+## .htm[l]? is identified as qw(php html)
+## Are there really servers with .html extension instead of .php ?
+## <!DOCTYPE html ...>\n\n<?php...> would require more than one line lookahead.
+is_deeply([App::Ack::filetypes('t/swamp/html.html')], [qw/php html/],
+    'file identified as html ');
+
+is_deeply([App::Ack::filetypes('t/swamp/html.htm')], [qw/php html/],
+    'file identified as htm[l]');
+
+
+sub is_filetype {
+    my $filename = shift;
+    my $wanted_type = shift;
+
+    for my $maybe_type ( App::Ack::filetypes( $filename ) ) {
+        return 1 if $maybe_type eq $wanted_type;
+    }
+
+    return;
+}

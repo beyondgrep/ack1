@@ -1,6 +1,6 @@
 Revision history for ack
 
-NEXT
+1.52        Fri Dec 22 00:41:45 CST 2006
 
     [FIXES]
     In 1.51_01, I changed how we check the -B of a file, but it's

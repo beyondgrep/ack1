@@ -10,6 +10,10 @@ NEXT
     * Handling --symlinks
         http://code.google.com/p/ack/issues/detail?id=13
 
+    * Handle --files-match flag
+        I want to be able to do "ack -f --fm=filename" and have it
+        return a list of filename, filename.txt, etc.
+
 
 1.52        Fri Dec 22 00:41:45 CST 2006
 

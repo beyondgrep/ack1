@@ -165,7 +165,6 @@ MAIN: {
             exit 0;
         }
         else {
-            $opt{defaulted_to_dot} = 1;
             @what = '.'; # Assume current directory
             $opt{show_filename} = 1;
         }
@@ -230,9 +229,6 @@ sub search {
             return;
         }
         $is_binary = -B $filename;
-        if ( $opt{defaulted_to_dot} ) {
-            $filename =~ s{^\Q./}{};
-        }
     }
 
     # Negated counting is a pain, so I'm putting it in its own

@@ -44,7 +44,7 @@ MAIN: {
     my %options = (
         'A|after-context=i'     => \$opt{A},
         'B|before-context=i'    => \$opt{B},
-        'C|context=i'           => sub { shift; $opt{after} = $opt{before} = shift; },
+        'C|context=i'           => sub { shift; $opt{A} = $opt{B} = shift; },
         a           => \$opt{all},
         'all!'      => \$opt{all},
         c           => \$opt{count},
@@ -85,8 +85,6 @@ MAIN: {
         }, # type sub
     );
 
-    die "Sorry, but the -A, -B and -C options haven't actually been implemented yet." if $opt{A} || $opt{B};
-
     my @filetypes_supported = App::Ack::filetypes_supported();
     for my $i ( @filetypes_supported ) {
         $options{ "$i!" } = \$type_wanted{ $i };
@@ -98,6 +96,8 @@ MAIN: {
 
     Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
     GetOptions( %options ) && App::Ack::options_sanity_check( %opt ) or die "See ack --help or ack --man for options.\n";
+
+    die "Sorry, but the -A, -B and -C options haven't actually been implemented yet.\n" if $opt{A} || $opt{B};
 
     # Apply defaults
     while ( my ($key,$value) = each %defaults ) {

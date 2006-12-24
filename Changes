@@ -14,6 +14,11 @@ NEXT
         I want to be able to do "ack -f --fm=filename" and have it
         return a list of filename, filename.txt, etc.
 
+NEXT
+
+    [ENHANCEMENTS]
+    Added .sty and .cls to the --tex files.  Thanks, Uwe Voelker.
+
 
 1.52        Fri Dec 22 00:41:45 CST 2006
 

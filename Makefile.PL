@@ -56,7 +56,7 @@ ACK_HELP_TYPES  = ack-help-types.txt
 
 $(STANDALONE) : $(ACK) $(APP_ACK_PM) squash Makefile
 	$(PERL) squash ack File::Next $(APP_ACK_PM) > $(STANDALONE)
-	chmod +x $(STANDALONE)
+	$(PERL) -MExtUtils::Command -e chmod +x $(STANDALONE)
 	$(PERL) -c $(STANDALONE)
 
 $(ACK_HELP) : $(STANDALONE)

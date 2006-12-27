@@ -4,6 +4,7 @@ use warnings;
 use strict;
 
 use Test::More tests => 2;
+use File::Next 0.34; # For the reslash() function
 
 DASH_L: {
     my @expected = qw(
@@ -20,6 +21,8 @@ DASH_L: {
 
     @results = sort @results;
     @expected = sort @expected;
+
+    $_ = File::Next::reslash( $_ ) for ( @expected, @results );
 
     is_deeply( \@results, \@expected, 'No religion please' );
 }
@@ -40,6 +43,8 @@ DASH_C: {
 
     @results = sort @results;
     @expected = sort @expected;
+
+    $_ = File::Next::reslash( $_ ) for ( @expected, @results );
 
     is_deeply( \@results, \@expected, 'Non-religion counts' );
 }

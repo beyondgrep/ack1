@@ -5,6 +5,7 @@ use strict;
 
 use Test::More tests => 3;
 use App::Ack ();
+use File::Next 0.34; # For the reslash() function
 
 
 TYPES: {
@@ -28,6 +29,8 @@ ACK_F: {
 
     @results = sort @results;
     @expected = sort @expected;
+
+    $_ = File::Next::reslash( $_ ) for ( @expected, @results );
 
     is_deeply( \@results, \@expected, 'Looking for binary' );
 }

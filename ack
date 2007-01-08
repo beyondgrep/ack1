@@ -3,8 +3,8 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.52';
-our $COPYRIGHT = 'Copyright 2005-2006 Andy Lester, all rights reserved.';
+our $VERSION   = '1.54';
+our $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.

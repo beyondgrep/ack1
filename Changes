@@ -1,18 +1,6 @@
-NEXT
+Changelog for ack
 
-    The following need to happen to get us to 1.60:
-
-    * All tests run OK under windows.
-
-    * Context searching.
-        http://code.google.com/p/ack/issues/detail?id=6
-
-    * Handle --files-match flag
-        I want to be able to do "ack -f --fm=filename" and have it
-        return a list of filename, filename.txt, etc.
-
-
-NEXT
+1.54    Sun Jan  7 22:34:57 CST 2007
 
     [THINGS THAT MAY BREAK YOUR CODE]
     ack no longer follows symlinks by default, except for starting

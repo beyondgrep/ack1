@@ -11,10 +11,10 @@ BEGIN {
 }
 
 my @foo_pod_types = App::Ack::filetypes( 'foo.pod' ); # 5.6.1 doesn't like to sort(filetypes())
-is_deeply( [sort @foo_pod_types], [qw( parrot perl )], 'foo.pod can be multiple things' );
-is_deeply( [App::Ack::filetypes( 'Bongo.pm' )], [qw( perl )], 'Bongo.pm' );
-is_deeply( [App::Ack::filetypes( 'Makefile.PL' )], [qw( perl )], 'Makefile.PL' );
-is_deeply( [App::Ack::filetypes( 'Unknown.wango' )], [], 'Unknown' );
+sets_match( [@foo_pod_types], [qw( parrot perl )], 'foo.pod can be multiple things' );
+sets_match( [App::Ack::filetypes( 'Bongo.pm' )], [qw( perl )], 'Bongo.pm' );
+sets_match( [App::Ack::filetypes( 'Makefile.PL' )], [qw( perl )], 'Makefile.PL' );
+sets_match( [App::Ack::filetypes( 'Unknown.wango' )], [], 'Unknown' );
 
 ok(  is_filetype( 'foo.pod', 'perl' ), 'foo.pod can be perl' );
 ok(  is_filetype( 'foo.pod', 'parrot' ), 'foo.pod can be parrot' );
@@ -61,7 +61,7 @@ ok(! defined App::Ack::filetypes('t/etc/buttonhook.noxml.xxx'),
 is(App::Ack::filetypes('t/etc/buttonhook.xml.xxx'),'xml',
    'filetype by <?xml>');
 
-is_deeply([App::Ack::filetypes('t/swamp/buttonhook.xml')], ['xml'],
+sets_match([App::Ack::filetypes('t/swamp/buttonhook.xml')], ['xml'],
     'file identified as xml ');
 
 ok(! defined App::Ack::filetypes('t/etc/x.html.xxx'),
@@ -70,11 +70,8 @@ ok(! defined App::Ack::filetypes('t/etc/x.html.xxx'),
 ## .htm[l]? is identified as qw(php html)
 ## Are there really servers with .html extension instead of .php ?
 ## <!DOCTYPE html ...>\n\n<?php...> would require more than one line lookahead.
-is_deeply([App::Ack::filetypes('t/swamp/html.html')], [qw/php html/],
-    'file identified as html ');
-
-is_deeply([App::Ack::filetypes('t/swamp/html.htm')], [qw/php html/],
-    'file identified as htm[l]');
+sets_match([App::Ack::filetypes('t/swamp/html.html')], [qw/php html/], 'file identified as html');
+sets_match([App::Ack::filetypes('t/swamp/html.htm')], [qw/php html/],  'file identified as htm[l]');
 
 
 sub is_filetype {
@@ -86,4 +83,14 @@ sub is_filetype {
     }
 
     return;
+}
+
+
+sub sets_match {
+    my @expected = @{+shift};
+    my @actual = @{+shift};
+    my $msg = shift;
+
+    local $Test::Builder::Level = $Test::Builder::Level + 1; ## no critic
+    return is_deeply( [sort @expected], [sort @actual], $msg );
 }

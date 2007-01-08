@@ -3,8 +3,8 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.52';
-our $COPYRIGHT = 'Copyright 2005-2006 Andy Lester, all rights reserved.';
+our $VERSION   = '1.54';
+our $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.
@@ -37,22 +37,24 @@ MAIN: {
     /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
 
     my %defaults = (
-        group => $is_tty,
-        color => $is_tty && !$is_windows,
-        all =>   0,
-        m =>     0,
+        all     => 0,
+        color   => $is_tty && !$is_windows,
+        follow  => 0,
+        group   => $is_tty,
+        m       => 0,
     );
 
     my %options = (
-        'A|after-context=i'     => \$opt{after},
-        'B|before-context=i'    => \$opt{before},
-        'C|context=i'           => sub { shift; $opt{after} = $opt{before} = shift; },
+        'A|after-context=i'     => \$opt{A},
+        'B|before-context=i'    => \$opt{B},
+        'C|context=i'           => sub { shift; $opt{A} = $opt{B} = shift; },
         a           => \$opt{all},
         'all!'      => \$opt{all},
         c           => \$opt{count},
         'color!'    => \$opt{color},
         count       => \$opt{count},
         f           => \$opt{f},
+        'follow!'   => \$opt{follow},
         'group!'    => \$opt{group},
         h           => \$opt{h},
         H           => \$opt{H},
@@ -87,8 +89,6 @@ MAIN: {
         }, # type sub
     );
 
-    die "Sorry, but the -A, -B and -C options haven't actually been implemented yet." if $opt{A} || $opt{B} || $opt{C};
-
     my @filetypes_supported = App::Ack::filetypes_supported();
     for my $i ( @filetypes_supported ) {
         $options{ "$i!" } = \$type_wanted{ $i };
@@ -100,6 +100,8 @@ MAIN: {
 
     Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
     GetOptions( %options ) && App::Ack::options_sanity_check( %opt ) or die "See ack --help or ack --man for options.\n";
+
+    die "Sorry, but the -A, -B and -C options haven't actually been implemented yet.\n" if $opt{A} || $opt{B};
 
     # Apply defaults
     while ( my ($key,$value) = each %defaults ) {
@@ -182,6 +184,7 @@ MAIN: {
             descend_filter  => $descend_filter,
             error_handler   => sub { my $msg = shift; warn "ack: $msg\n" },
             sort_files      => $opt{sort_files},
+            follow_symlinks => $opt{follow},
         }, @what );
 
 
@@ -261,7 +264,10 @@ sub search {
         }
 
         if ( $opt{show_filename} ) {
-            my $display_filename = $opt{color} ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} ) : $filename;
+            my $display_filename =
+                $opt{color}
+                    ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} )
+                    : $filename;
             if ( $opt{group} ) {
                 print "$display_filename\n" if $nmatches == 1;
                 print "$.:";
@@ -463,6 +469,13 @@ or running under Windows.
 Only print the files that would be searched, without actually doing
 any searching.  PATTERN must not be specified, or it will be taken as
 a path to search.
+
+=item B<--follow>, B<--nofollow>
+
+Follow or don't follow symlinks, other than whatever starting files
+or directories were specified on the command line.
+
+This is off by default.
 
 =item B<--group>, B<--nogroup>
 

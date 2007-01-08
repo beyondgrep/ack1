@@ -3,8 +3,8 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.52';
-our $COPYRIGHT = 'Copyright 2005-2006 Andy Lester, all rights reserved.';
+our $VERSION   = '1.54';
+our $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.
@@ -35,22 +35,24 @@ MAIN: {
     /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
 
     my %defaults = (
-        group => $is_tty,
-        color => $is_tty && !$is_windows,
-        all =>   0,
-        m =>     0,
+        all     => 0,
+        color   => $is_tty && !$is_windows,
+        follow  => 0,
+        group   => $is_tty,
+        m       => 0,
     );
 
     my %options = (
-        'A|after-context=i'     => \$opt{after},
-        'B|before-context=i'    => \$opt{before},
-        'C|context=i'           => sub { shift; $opt{after} = $opt{before} = shift; },
+        'A|after-context=i'     => \$opt{A},
+        'B|before-context=i'    => \$opt{B},
+        'C|context=i'           => sub { shift; $opt{A} = $opt{B} = shift; },
         a           => \$opt{all},
         'all!'      => \$opt{all},
         c           => \$opt{count},
         'color!'    => \$opt{color},
         count       => \$opt{count},
         f           => \$opt{f},
+        'follow!'   => \$opt{follow},
         'group!'    => \$opt{group},
         h           => \$opt{h},
         H           => \$opt{H},
@@ -85,8 +87,6 @@ MAIN: {
         }, # type sub
     );
 
-    die "Sorry, but the -A, -B and -C options haven't actually been implemented yet." if $opt{A} || $opt{B} || $opt{C};
-
     my @filetypes_supported = App::Ack::filetypes_supported();
     for my $i ( @filetypes_supported ) {
         $options{ "$i!" } = \$type_wanted{ $i };
@@ -98,6 +98,8 @@ MAIN: {
 
     Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
     GetOptions( %options ) && App::Ack::options_sanity_check( %opt ) or die "See ack --help or ack --man for options.\n";
+
+    die "Sorry, but the -A, -B and -C options haven't actually been implemented yet.\n" if $opt{A} || $opt{B};
 
     # Apply defaults
     while ( my ($key,$value) = each %defaults ) {
@@ -180,6 +182,7 @@ MAIN: {
             descend_filter  => $descend_filter,
             error_handler   => sub { my $msg = shift; warn "ack: $msg\n" },
             sort_files      => $opt{sort_files},
+            follow_symlinks => $opt{follow},
         }, @what );
 
 
@@ -259,7 +262,10 @@ sub search {
         }
 
         if ( $opt{show_filename} ) {
-            my $display_filename = $opt{color} ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} ) : $filename;
+            my $display_filename =
+                $opt{color}
+                    ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} )
+                    : $filename;
             if ( $opt{group} ) {
                 print "$display_filename\n" if $nmatches == 1;
                 print "$.:";
@@ -461,6 +467,13 @@ or running under Windows.
 Only print the files that would be searched, without actually doing
 any searching.  PATTERN must not be specified, or it will be taken as
 a path to search.
+
+=item B<--follow>, B<--nofollow>
+
+Follow or don't follow symlinks, other than whatever starting files
+or directories were specified on the command line.
+
+This is off by default.
 
 =item B<--group>, B<--nogroup>
 
@@ -676,7 +689,8 @@ use strict;
 use warnings;
 
 
-our $VERSION = '0.36';
+our $VERSION = '0.38';
+
 
 
 use File::Spec ();
@@ -690,44 +704,21 @@ our %skip_dirs;
 
 BEGIN {
     %files_defaults = (
-        file_filter => undef,
-        descend_filter => undef,
-        error_handler => sub { CORE::die @_ },
-        sort_files => undef,
+        file_filter     => undef,
+        descend_filter  => undef,
+        error_handler   => sub { CORE::die @_ },
+        sort_files      => undef,
+        follow_symlinks => 1,
     );
     %skip_dirs = map {($_,1)} (File::Spec->curdir, File::Spec->updir);
 }
 
-
 sub files {
-    my $passed_parms = ref $_[0] eq 'HASH' ? {%{+shift}} : {}; # copy parm hash
-    my %passed_parms = %{$passed_parms};
-
-    my $parms = {};
-    for my $key ( keys %files_defaults ) {
-        $parms->{$key} = delete( $passed_parms{$key} ) || $files_defaults{$key};
-    }
-
-    # Any leftover keys are bogus
-    for my $badkey ( keys %passed_parms ) {
-        $parms->{error_handler}->( "Invalid parameter passed to files(): $badkey" );
-    }
-
-    my @queue;
-    for ( @_ ) {
-        my $start = reslash( $_ );
-        if (-d $start) {
-            push @queue, ($start,undef,$start);
-        }
-        else {
-            push @queue, (undef,$start,$start);
-        }
-    }
+    my ($parms,@queue) = _setup( \%files_defaults, @_ );
 
     return sub {
         while (@queue) {
             my ($dir,$file,$fullpath) = splice( @queue, 0, 3 );
-
             if (-f $fullpath) {
                 if ( $parms->{file_filter} ) {
                     local $_ = $file;
@@ -744,6 +735,76 @@ sub files {
 
         return;
     }; # iterator
+}
+
+sub dirs {
+    my ($parms,@queue) = _setup( \%files_defaults, @_ );
+
+    return sub {
+        while (@queue) {
+            my ($dir,$file,$fullpath) = splice( @queue, 0, 3 );
+            if (-d $fullpath) {
+                unshift( @queue, _candidate_files( $parms, $fullpath ) );
+                return $fullpath;
+            }
+        } # while
+
+        return;
+    }; # iterator
+}
+
+sub sort_standard($$)   { return $_[0]->[1] cmp $_[1]->[1] };
+sub sort_reverse($$)    { return $_[1]->[1] cmp $_[0]->[1] };
+
+sub reslash {
+    my $path = shift;
+
+    my @parts = split( /\//, $path );
+
+    return $path if @parts < 2;
+
+    return File::Spec->catfile( @parts );
+}
+
+
+
+sub _setup {
+    my $defaults = shift;
+    my $passed_parms = ref $_[0] eq 'HASH' ? {%{+shift}} : {}; # copy parm hash
+
+    my %passed_parms = %{$passed_parms};
+
+    my $parms = {};
+    for my $key ( keys %$defaults ) {
+        $parms->{$key} =
+            exists $passed_parms{$key}
+                ? delete $passed_parms{$key}
+                : $defaults->{$key};
+    }
+
+    # Any leftover keys are bogus
+    for my $badkey ( keys %passed_parms ) {
+        my $sub = (caller(1))[3];
+        $parms->{error_handler}->( "Invalid parameter passed to $sub(): $badkey" );
+    }
+
+    # If it's not a code ref, assume standard sort
+    if ( $parms->{sort_files} && ( ref($parms->{sort_files}) ne 'CODE' ) ) {
+        $parms->{sort_files} = \&sort_standard;
+    }
+    my @queue;
+
+    for ( @_ ) {
+        my $start = reslash( $_ );
+        if (-d $start) {
+            push @queue, ($start,undef,$start);
+        }
+        else {
+            push @queue, (undef,$start,$start);
+        }
+    }
+
+    return ($parms,@queue);
 }
 
 
@@ -763,6 +824,10 @@ sub _candidate_files {
 
         # Only do directory checking if we have a descend_filter
         my $fullpath = File::Spec->catdir( $dir, $file );
+        if ( !$parms->{follow_symlinks} ) {
+            next if -l $fullpath;
+        }
+
         if ( $parms->{descend_filter} && -d $fullpath ) {
             local $File::Next::dir = $fullpath;
             local $_ = $file;
@@ -771,8 +836,6 @@ sub _candidate_files {
         push( @newfiles, $dir, $file, $fullpath );
     }
     if ( my $sub = $parms->{sort_files} ) {
-        $sub = \&sort_standard unless ref($sub) eq 'CODE';
-
         my @triplets;
         while ( @newfiles ) {
             push @triplets, [splice( @newfiles, 0, 3 )];
@@ -781,21 +844,6 @@ sub _candidate_files {
     }
 
     return @newfiles;
-}
-
-sub sort_standard($$)   { return $_[0]->[1] cmp $_[1]->[1] };
-sub sort_reverse($$)    { return $_[1]->[1] cmp $_[0]->[1] };
-
-
-
-sub reslash {
-    my $path = shift;
-
-    my @parts = split( /\//, $path );
-
-    return $path if @parts < 2;
-
-    return File::Spec->catfile( @parts );
 }
 
 
@@ -808,7 +856,7 @@ use strict;
 
 our $VERSION;
 BEGIN {
-    $VERSION = '1.52';
+    $VERSION = '1.54';
 }
 
 our %types;
@@ -844,7 +892,7 @@ BEGIN {
         scheme      => [qw( scm )],
         shell       => [qw( sh bash csh ksh zsh )],
         sql         => [qw( sql ctl )],
-        tex         => [qw( tex )],
+        tex         => [qw( tex cls sty )],
         tt          => [qw( tt tt2 )],
         vim         => [qw( vim )],
         yaml        => [qw( yaml yml )],
@@ -1050,6 +1098,7 @@ File inclusion/exclusion:
     --noperl        Exclude Perl files.
     --type=noperl   Exclude Perl files.
                     See "ack --help type" for supported filetypes.
+    --[no]follow    Follow symlinks.  Default is off.
 
 Miscellaneous:
     --help          This help

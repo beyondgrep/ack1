@@ -9,13 +9,13 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.52
+Version 1.54
 
 =cut
 
 our $VERSION;
 BEGIN {
-    $VERSION = '1.52';
+    $VERSION = '1.54';
 }
 
 our %types;
@@ -51,7 +51,7 @@ BEGIN {
         scheme      => [qw( scm )],
         shell       => [qw( sh bash csh ksh zsh )],
         sql         => [qw( sql ctl )],
-        tex         => [qw( tex )],
+        tex         => [qw( tex cls sty )],
         tt          => [qw( tt tt2 )],
         vim         => [qw( vim )],
         yaml        => [qw( yaml yml )],
@@ -306,6 +306,7 @@ File inclusion/exclusion:
     --noperl        Exclude Perl files.
     --type=noperl   Exclude Perl files.
                     See "ack --help type" for supported filetypes.
+    --[no]follow    Follow symlinks.  Default is off.
 
 Miscellaneous:
     --help          This help

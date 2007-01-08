@@ -15,7 +15,7 @@ WriteMakefile(
         'Term::ANSIColor'   => 0,
         'Getopt::Long'      => 0,
         'Test::More'        => 0,
-        'File::Next'        => 0.36,   # Faster, drops leading zeroes
+        'File::Next'        => 0.38,   # follow_symlinks
         'File::Basename'    => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
@@ -56,7 +56,7 @@ ACK_HELP_TYPES  = ack-help-types.txt
 
 $(STANDALONE) : $(ACK) $(APP_ACK_PM) squash Makefile
 	$(PERL) squash ack File::Next $(APP_ACK_PM) > $(STANDALONE)
-	chmod +x $(STANDALONE)
+	$(CHMOD) +x $(STANDALONE)
 	$(PERL) -c $(STANDALONE)
 
 $(ACK_HELP) : $(STANDALONE)

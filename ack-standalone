@@ -148,7 +148,7 @@ MAIN: {
 
     my @what;
     if ( @ARGV ) {
-        @what = @ARGV;
+        @what = $^O eq 'MSWin32' ? <@ARGV> : @ARGV;
 
         # Show filenames unless we've specified one single file
         $opt{show_filename} = (@what > 1) || (!-f $what[0]);

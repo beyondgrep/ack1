@@ -5,7 +5,7 @@ use strict;
 
 use Test::More tests => 3;
 use App::Ack ();
-use File::Next 0.34; # For the reslash() function
+use File::Next ();
 
 
 TYPES: {
@@ -27,10 +27,20 @@ ACK_F: {
     my @results = `$cmd`;
     chomp @results;
 
-    @results = sort @results;
-    @expected = sort @expected;
+    file_sets_match( \@results, \@expected, 'Looking for binary' );
+}
 
-    $_ = File::Next::reslash( $_ ) for ( @expected, @results );
 
-    is_deeply( \@results, \@expected, 'Looking for binary' );
+sub file_sets_match {
+    my @expected = @{+shift};
+    my @actual = @{+shift};
+    my $msg = shift;
+
+    # Normalize all the paths
+    for my $path ( @expected, @actual ) {
+        $path = File::Next::reslash( $path ); ## no critic (Variables::ProhibitPackageVars)
+    }
+
+    local $Test::Builder::Level = $Test::Builder::Level + 1; ## no critic
+    return is_deeply( [sort @expected], [sort @actual], $msg );
 }

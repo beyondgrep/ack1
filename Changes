@@ -12,6 +12,8 @@ NEXT
     points specified on the command line.
 
     [ENHANCEMENTS]
+    Added the --follow/--nofollow switches for following symlinks.
+
     Added .sty and .cls to the --tex files.  Thanks, Uwe Voelker.
 
     [FIXES]

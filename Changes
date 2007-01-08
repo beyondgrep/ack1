@@ -7,14 +7,15 @@ NEXT
     * Context searching.
         http://code.google.com/p/ack/issues/detail?id=6
 
-    * Handling --symlinks
-        http://code.google.com/p/ack/issues/detail?id=13
-
     * Handle --files-match flag
         I want to be able to do "ack -f --fm=filename" and have it
         return a list of filename, filename.txt, etc.
 
 NEXT
+
+    [THINGS THAT MAY BREAK YOUR CODE]
+    ack no longer follows symlinks by default, except for starting
+    points specified on the command line.
 
     [ENHANCEMENTS]
     Added .sty and .cls to the --tex files.  Thanks, Uwe Voelker.

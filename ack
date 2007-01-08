@@ -37,10 +37,11 @@ MAIN: {
     /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
 
     my %defaults = (
-        group => $is_tty,
-        color => $is_tty && !$is_windows,
-        all =>   0,
-        m =>     0,
+        all     => 0,
+        color   => $is_tty && !$is_windows,
+        follow  => 0,
+        group   => $is_tty,
+        m       => 0,
     );
 
     my %options = (
@@ -53,6 +54,7 @@ MAIN: {
         'color!'    => \$opt{color},
         count       => \$opt{count},
         f           => \$opt{f},
+        'follow!'   => \$opt{follow},
         'group!'    => \$opt{group},
         h           => \$opt{h},
         H           => \$opt{H},
@@ -182,6 +184,7 @@ MAIN: {
             descend_filter  => $descend_filter,
             error_handler   => sub { my $msg = shift; warn "ack: $msg\n" },
             sort_files      => $opt{sort_files},
+            follow_symlinks => $opt{follow},
         }, @what );
 
 
@@ -261,7 +264,10 @@ sub search {
         }
 
         if ( $opt{show_filename} ) {
-            my $display_filename = $opt{color} ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} ) : $filename;
+            my $display_filename =
+                $opt{color}
+                    ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} )
+                    : $filename;
             if ( $opt{group} ) {
                 print "$display_filename\n" if $nmatches == 1;
                 print "$.:";
@@ -463,6 +469,13 @@ or running under Windows.
 Only print the files that would be searched, without actually doing
 any searching.  PATTERN must not be specified, or it will be taken as
 a path to search.
+
+=item B<--follow>, B<--nofollow>
+
+Follow or don't follow symlinks, other than whatever starting files
+or directories were specified on the command line.
+
+This is off by default.
 
 =item B<--group>, B<--nogroup>
 

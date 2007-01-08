@@ -54,6 +54,7 @@ File inclusion/exclusion:
     --noperl        Exclude Perl files.
     --type=noperl   Exclude Perl files.
                     See "ack --help type" for supported filetypes.
+    --[no]follow    Follow symlinks.  Default is off.
 
 Miscellaneous:
     --help          This help

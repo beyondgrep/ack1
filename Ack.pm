@@ -31,7 +31,7 @@ BEGIN {
     %mappings = (
         asm         => [qw( s S )],
         binary      => q{Binary files, as defined by Perl's -B op (default: off)},
-        cc          => [qw( c h )],
+        cc          => [qw( c h xs )],
         cpp         => [qw( cpp m h C H )],
         csharp      => [qw( cs )],
         css         => [qw( css )],

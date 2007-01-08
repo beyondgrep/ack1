@@ -1,5 +1,10 @@
 Changelog for ack
 
+NEXT
+    [ENHANCEMENTS]
+    Added .xs to the list of --cc files.
+
+
 1.54    Sun Jan  7 22:34:57 CST 2007
 
     [THINGS THAT MAY BREAK YOUR CODE]

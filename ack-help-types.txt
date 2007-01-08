@@ -9,7 +9,7 @@ Note that some extensions may appear in multiple types.  For example,
 
     --[no]asm       .s .S
     --[no]binary    Binary files, as defined by Perl's -B op (default: off)
-    --[no]cc        .c .h
+    --[no]cc        .c .h .xs
     --[no]cpp       .cpp .m .h .C .H
     --[no]csharp    .cs
     --[no]css       .css

@@ -17,10 +17,8 @@ for my $arg ( @ARGV ) {
 
     warn "Reading $filename\n";
     open( my $fh, '<', $filename ) or die "Can't open $filename: $!";
-    binmode $fh;
 
     while ( <$fh> ) {
-        chomp;
         next if /^use (File::Next|App::Ack)/;
 
         # See if we're in module POD blocks

@@ -112,7 +112,7 @@ MAIN: {
 
     if ( defined( my $val = $opt{o} ) ) {
         if ( $val eq '' ) {
-            $val = '$&';
+            $val = q{$&};
         }
         else {
             $val = qq{"$val"};

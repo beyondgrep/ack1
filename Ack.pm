@@ -127,7 +127,7 @@ sub filetypes {
     # So, for cygwin, don't bother trying to check for readability.
     if ( !$is_cygwin ) {
         if ( !-r $filename ) {
-            warn _my_program(), ": $filename: Permission denied\n";
+            App::Ack::warn( "$filename: Permission denied" );
             return;
         }
     }
@@ -137,7 +137,7 @@ sub filetypes {
     # If there's no extension, or we don't recognize it, check the shebang line
     my $fh;
     if ( !open( $fh, '<', $filename ) ) {
-        warn _my_program(), ": $filename: $!\n";
+        App::Ack::warn( "$filename: $!" );
         return;
     }
     my $header = <$fh>;
@@ -211,6 +211,26 @@ sub _option_conflict {
 sub _opty {
     my $opt = shift;
     return length($opt)>1 ? "--$opt" : "-$opt";
+}
+
+=head2 warn( @_ )
+
+Put out an ack-specific warning.
+
+=cut
+
+sub warn {
+    CORE::warn( _my_program(), ": ", @_, "\n" );
+}
+
+=head2 die( @_ )
+
+Die in an ack-specific way.
+
+=cut
+
+sub die {
+    CORE::die( _my_program(), ": ", @_, "\n" );
 }
 
 sub _my_program {

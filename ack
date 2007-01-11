@@ -27,7 +27,7 @@ use Getopt::Long;
 
 MAIN: {
     if ( $App::Ack::VERSION ne $main::VERSION ) {
-        die "Program/library version mismatch\n\t$0 is $main::VERSION\n\t$INC{'App/Ack.pm'} is $App::Ack::VERSION\n";
+        die "ack: Program/library version mismatch\n\t$0 is $main::VERSION\n\t$INC{'App/Ack.pm'} is $App::Ack::VERSION\n";
     }
     if ( exists $ENV{ACK_SWITCHES} ) {
         warn "ACK_SWITCHES is no longer supported.  Use ACK_OPTIONS.\n";
@@ -84,7 +84,7 @@ MAIN: {
                 $type_wanted{ $type } = $wanted;
             }
             else {
-                die qq{Unknown type "$type"\n};
+                die qq{ack: Unknown --type "$type"\n};
             }
         }, # type sub
     );
@@ -99,9 +99,9 @@ MAIN: {
     unshift @ARGV, split( ' ', $ENV{ACK_OPTIONS} ) if defined $ENV{ACK_OPTIONS};
 
     Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
-    GetOptions( %options ) && App::Ack::options_sanity_check( %opt ) or die "See ack --help or ack --man for options.\n";
+    GetOptions( %options ) && App::Ack::options_sanity_check( %opt ) or die "ack: See ack --help or ack --man for options.\n";
 
-    die "Sorry, but the -A, -B and -C options haven't actually been implemented yet.\n" if $opt{A} || $opt{B};
+    die "ack: Sorry, but the -A, -B and -C options haven't actually been implemented yet.\n" if $opt{A} || $opt{B};
 
     # Apply defaults
     while ( my ($key,$value) = each %defaults ) {
@@ -140,7 +140,7 @@ MAIN: {
     if ( !$opt{f} ) {
         # REVIEW: This shouldn't be able to happen because of the help
         # check above.
-        $regex = shift @ARGV or die "No regex specified\n";
+        $regex = shift @ARGV or die "ack: No regex specified\n";
 
         $regex = quotemeta( $regex ) if $opt{Q};
         $regex = "\\b$regex\\b"      if $opt{w};
@@ -150,7 +150,7 @@ MAIN: {
 
     my @what;
     if ( @ARGV ) {
-        @what = $^O eq 'MSWin32' ? <@ARGV> : @ARGV;
+        @what = $is_windows ? glob( @ARGV ) : @ARGV;
 
         # Show filenames unless we've specified one single file
         $opt{show_filename} = (@what > 1) || (!-f $what[0]);

@@ -397,23 +397,8 @@ specified.  However, it will ignore the shadow directories used by
 many version control systems, and the build directories used by the
 Perl MakeMaker system.
 
-The following directories will never be descended into:
-
-=over 4
-
-=item * F<_darcs>
-
-=item * F<CVS>
-
-=item * F<RCS>
-
-=item * F<SCCS>
-
-=item * F<.svn>
-
-=item * F<blib>
-
-=back
+The following directories will never be descended into: F<_darcs>,
+F<CVS>, F<RCS>, F<SCCS>, F<.svn>, F<blib>, F<.git>
 
 =head1 WHEN TO USE GREP
 
@@ -660,6 +645,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Christian Jaeger,
 Bill Sully,
 Bill Ricker,
 David Golden,

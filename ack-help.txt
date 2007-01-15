@@ -48,7 +48,7 @@ File finding:
 File inclusion/exclusion:
     -n              No descending into subdirectories
     -a, --all       All files, regardless of extension (but still skips
-                    blib, CVS, RCS, SCCS, .svn and _darcs dirs)
+                    blib, CVS, RCS, SCCS, .svn, _darcs and .git dirs)
     --perl          Include only Perl files.
     --type=perl     Include only Perl files.
     --noperl        Exclude Perl files.

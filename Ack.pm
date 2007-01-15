@@ -26,7 +26,7 @@ our $path_sep;
 our $is_cygwin;
 
 BEGIN {
-    @ignore_dirs = qw( blib CVS RCS SCCS .svn _darcs );
+    @ignore_dirs = qw( blib CVS RCS SCCS .svn _darcs .git );
     %ignore_dirs = map { ($_,1) } @ignore_dirs;
     %mappings = (
         asm         => [qw( s S )],

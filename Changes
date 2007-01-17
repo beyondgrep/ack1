@@ -1,6 +1,7 @@
 Changelog for ack
 
-NEXT
+1.56    Wed Jan 17 12:55:38 CST 2007
+
     [FIXES]
     Now correctly handles filetypes of files with multiple periods.
 

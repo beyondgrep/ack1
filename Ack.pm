@@ -112,7 +112,7 @@ sub filetypes {
     return '-ignore' if should_ignore( $filename );
 
     # If there's an extension, look it up
-    if ( $filename =~ m{\.([^$path_sep]+)$} ) {
+    if ( $filename =~ m{\.([^\.$path_sep]+)$} ) {
         my $ref = $types{lc $1};
         return @{$ref} if $ref;
     }

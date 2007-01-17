@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 use Test::More tests => 2;
-use File::Next 0.34; # For the reslash() function
+use File::Next ();
 
 DASH_L: {
     my @expected = qw(
@@ -19,12 +19,7 @@ DASH_L: {
     my @results = `$cmd`;
     chomp @results;
 
-    @results = sort @results;
-    @expected = sort @expected;
-
-    $_ = File::Next::reslash( $_ ) for ( @expected, @results );
-
-    is_deeply( \@results, \@expected, 'No religion please' );
+    file_sets_match( \@results, \@expected, 'No religion please' );
 }
 
 DASH_C: {
@@ -41,10 +36,19 @@ DASH_C: {
     my @results = `$cmd`;
     chomp @results;
 
-    @results = sort @results;
-    @expected = sort @expected;
+    file_sets_match( \@results, \@expected, 'Non-religion counts' );
+}
 
-    $_ = File::Next::reslash( $_ ) for ( @expected, @results );
+sub file_sets_match {
+    my @expected = @{+shift};
+    my @actual = @{+shift};
+    my $msg = shift;
 
-    is_deeply( \@results, \@expected, 'Non-religion counts' );
+    # Normalize all the paths
+    for my $path ( @expected, @actual ) {
+        $path = File::Next::reslash( $path ); ## no critic (Variables::ProhibitPackageVars)
+    }
+
+    local $Test::Builder::Level = $Test::Builder::Level + 1; ## no critic
+    return is_deeply( [sort @expected], [sort @actual], $msg );
 }

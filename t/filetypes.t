@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 25;
+use Test::More tests => 28;
 use Data::Dumper;
 
 BEGIN {
@@ -19,6 +19,9 @@ sets_match( [App::Ack::filetypes( 'Unknown.wango' )], [], 'Unknown' );
 ok(  is_filetype( 'foo.pod', 'perl' ), 'foo.pod can be perl' );
 ok(  is_filetype( 'foo.pod', 'parrot' ), 'foo.pod can be parrot' );
 ok( !is_filetype( 'foo.pod', 'ruby' ), 'foo.pod cannot be ruby' );
+ok(  is_filetype( 'foo.handler.pod', 'perl' ), 'foo.handler.pod can be perl' );
+ok(  is_filetype( '/tmp/wango/foo.pod', 'perl' ), '/tmp/wango/foo.pod can be perl' );
+ok(  is_filetype( '/tmp/wango/foo.handler.pod', 'perl' ), '/tmp/wango/foo.handler.pod can be perl' );
 
 is(App::Ack::filetypes('foo.pod~'), '-ignore',
     'correctly ignore backup file');

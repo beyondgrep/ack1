@@ -4,7 +4,6 @@ use warnings;
 use strict;
 
 use Test::More tests => 3;
-use File::Next 0.34; # For the reslash() function
 
 DASH_L: {
     my @expected = qw(
@@ -17,12 +16,7 @@ DASH_L: {
     my @results = `$cmd`;
     chomp @results;
 
-    @results = sort @results;
-    @expected = sort @expected;
-
-    $_ = File::Next::reslash( $_ ) for ( @expected, @results );
-
-    is_deeply( \@results, \@expected, 'Looking for religion' );
+    file_sets_match( \@results, \@expected, 'Looking for religion' );
 }
 
 DASH_C: {
@@ -39,12 +33,7 @@ DASH_C: {
     my @results = `$cmd`;
     chomp @results;
 
-    @results = sort @results;
-    @expected = sort @expected;
-
-    $_ = File::Next::reslash( $_ ) for ( @expected, @results );
-
-    is_deeply( \@results, \@expected, 'Religion counts' );
+    file_sets_match( \@results, \@expected, 'Religion counts' );
 }
 
 DASH_LC: {
@@ -58,10 +47,14 @@ DASH_LC: {
     my @results = `$cmd`;
     chomp @results;
 
-    @results = sort @results;
-    @expected = sort @expected;
+    file_sets_match( \@results, \@expected, 'Religion counts -l -c' );
+}
 
-    $_ = File::Next::reslash( $_ ) for ( @expected, @results );
+sub file_sets_match {
+    my @expected = @{+shift};
+    my @actual = @{+shift};
+    my $msg = shift;
 
-    is_deeply( \@results, \@expected, 'Religion counts -l -c' );
+    local $Test::Builder::Level = $Test::Builder::Level + 1; ## no critic
+    return is_deeply( [sort @expected], [sort @actual], $msg );
 }

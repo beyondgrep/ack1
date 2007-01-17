@@ -9,13 +9,13 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.54
+Version 1.56
 
 =cut
 
 our $VERSION;
 BEGIN {
-    $VERSION = '1.54';
+    $VERSION = '1.56';
 }
 
 our %types;
@@ -26,12 +26,12 @@ our $path_sep;
 our $is_cygwin;
 
 BEGIN {
-    @ignore_dirs = qw( blib CVS RCS SCCS .svn _darcs );
+    @ignore_dirs = qw( blib CVS RCS SCCS .svn _darcs .git );
     %ignore_dirs = map { ($_,1) } @ignore_dirs;
     %mappings = (
         asm         => [qw( s S )],
         binary      => q{Binary files, as defined by Perl's -B op (default: off)},
-        cc          => [qw( c h )],
+        cc          => [qw( c h xs )],
         cpp         => [qw( cpp m h C H )],
         csharp      => [qw( cs )],
         css         => [qw( css )],
@@ -112,7 +112,7 @@ sub filetypes {
     return '-ignore' if should_ignore( $filename );
 
     # If there's an extension, look it up
-    if ( $filename =~ m{\.([^$path_sep]+)$} ) {
+    if ( $filename =~ m{\.([^\.$path_sep]+)$} ) {
         my $ref = $types{lc $1};
         return @{$ref} if $ref;
     }
@@ -127,7 +127,7 @@ sub filetypes {
     # So, for cygwin, don't bother trying to check for readability.
     if ( !$is_cygwin ) {
         if ( !-r $filename ) {
-            warn _my_program(), ": $filename: Permission denied\n";
+            App::Ack::warn( "$filename: Permission denied" );
             return;
         }
     }
@@ -137,7 +137,7 @@ sub filetypes {
     # If there's no extension, or we don't recognize it, check the shebang line
     my $fh;
     if ( !open( $fh, '<', $filename ) ) {
-        warn _my_program(), ": $filename: $!\n";
+        App::Ack::warn( "$filename: $!" );
         return;
     }
     my $header = <$fh>;
@@ -211,6 +211,26 @@ sub _option_conflict {
 sub _opty {
     my $opt = shift;
     return length($opt)>1 ? "--$opt" : "-$opt";
+}
+
+=head2 warn( @_ )
+
+Put out an ack-specific warning.
+
+=cut
+
+sub warn {
+    CORE::warn( _my_program(), ": ", @_, "\n" );
+}
+
+=head2 die( @_ )
+
+Die in an ack-specific way.
+
+=cut
+
+sub die {
+    CORE::die( _my_program(), ": ", @_, "\n" );
 }
 
 sub _my_program {

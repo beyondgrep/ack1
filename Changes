@@ -1,5 +1,19 @@
 Changelog for ack
 
+1.56    Wed Jan 17 12:55:38 CST 2007
+
+    [FIXES]
+    Now correctly handles filetypes of files with multiple periods.
+
+    [ENHANCEMENTS]
+    Added .xs to the list of --cc files.
+
+    Warning messages now include the name "ack" at the beginning
+    of them.
+
+    Now skips .git directories.
+
+
 1.54    Sun Jan  7 22:34:57 CST 2007
 
     [THINGS THAT MAY BREAK YOUR CODE]
@@ -7,6 +21,8 @@ Changelog for ack
     points specified on the command line.
 
     [ENHANCEMENTS]
+    Added the --follow/--nofollow switches for following symlinks.
+
     Added .sty and .cls to the --tex files.  Thanks, Uwe Voelker.
 
     [FIXES]

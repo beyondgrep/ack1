@@ -11,6 +11,7 @@ allow_leading_tabs = 0
 [-ErrorHandling::RequireCarping]
 
 [-InputOutput::ProhibitInteractiveTest]
+[-InputOutput::ProhibitBacktickOperators]
 
 [-Miscellanea::RequireRcsKeywords]
 

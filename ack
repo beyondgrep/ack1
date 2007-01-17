@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.54';
+our $VERSION   = '1.56';
 our $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 # Check http://petdance.com/ack/ for updates
 
@@ -27,10 +27,10 @@ use Getopt::Long;
 
 MAIN: {
     if ( $App::Ack::VERSION ne $main::VERSION ) {
-        die "Program/library version mismatch\n\t$0 is $main::VERSION\n\t$INC{'App/Ack.pm'} is $App::Ack::VERSION\n";
+        App::Ack::die( "Program/library version mismatch\n\t$0 is $main::VERSION\n\t$INC{'App/Ack.pm'} is $App::Ack::VERSION" );
     }
     if ( exists $ENV{ACK_SWITCHES} ) {
-        warn "ACK_SWITCHES is no longer supported.  Use ACK_OPTIONS.\n";
+        App::Ack::warn( 'ACK_SWITCHES is no longer supported.  Use ACK_OPTIONS.' );
     }
 
     # Priorities! Get the --thpppt checking out of the way.
@@ -84,7 +84,7 @@ MAIN: {
                 $type_wanted{ $type } = $wanted;
             }
             else {
-                die qq{Unknown type "$type"\n};
+                App::Ack::die( qq{Unknown --type "$type"} );
             }
         }, # type sub
     );
@@ -99,9 +99,12 @@ MAIN: {
     unshift @ARGV, split( ' ', $ENV{ACK_OPTIONS} ) if defined $ENV{ACK_OPTIONS};
 
     Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
-    GetOptions( %options ) && App::Ack::options_sanity_check( %opt ) or die "See ack --help or ack --man for options.\n";
+    GetOptions( %options ) && App::Ack::options_sanity_check( %opt ) or
+        App::Ack::die( 'See ack --help or ack --man for options.' );
 
-    die "Sorry, but the -A, -B and -C options haven't actually been implemented yet.\n" if $opt{A} || $opt{B};
+    if ( $opt{A} || $opt{B} ) {
+        App::Ack::die( q{Sorry, but the -A, -B and -C options haven't actually been implemented yet.} );
+    }
 
     # Apply defaults
     while ( my ($key,$value) = each %defaults ) {
@@ -112,7 +115,7 @@ MAIN: {
 
     if ( defined( my $val = $opt{o} ) ) {
         if ( $val eq '' ) {
-            $val = '$&';
+            $val = q{$&};
         }
         else {
             $val = qq{"$val"};
@@ -140,7 +143,7 @@ MAIN: {
     if ( !$opt{f} ) {
         # REVIEW: This shouldn't be able to happen because of the help
         # check above.
-        $regex = shift @ARGV or die "No regex specified\n";
+        $regex = shift @ARGV or App::Ack::die( 'No regex specified' );
 
         $regex = quotemeta( $regex ) if $opt{Q};
         $regex = "\\b$regex\\b"      if $opt{w};
@@ -150,7 +153,7 @@ MAIN: {
 
     my @what;
     if ( @ARGV ) {
-        @what = @ARGV;
+        @what = $is_windows ? glob( @ARGV ) : @ARGV;
 
         # Show filenames unless we've specified one single file
         $opt{show_filename} = (@what > 1) || (!-f $what[0]);
@@ -160,7 +163,7 @@ MAIN: {
         if ( $is_filter ) {
             # We're going into filter mode
             for ( qw( f l ) ) {
-                $opt{$_} and die "ack: Can't use -$_ when acting as a filter.\n";
+                $opt{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );
             }
             $opt{show_filename} = 0;
             search( '-', $regex, %opt );
@@ -182,7 +185,7 @@ MAIN: {
         File::Next::files( {
             file_filter     => $file_filter,
             descend_filter  => $descend_filter,
-            error_handler   => sub { my $msg = shift; warn "ack: $msg\n" },
+            error_handler   => sub { my $msg = shift; App::Ack::warn( $msg ) },
             sort_files      => $opt{sort_files},
             follow_symlinks => $opt{follow},
         }, @what );
@@ -226,7 +229,7 @@ sub search {
     }
     else {
         if ( !open( $fh, '<', $filename ) ) {
-            warn "ack: $filename: $!\n";
+            App::Ack::warn( "$filename: $!" );
             return;
         }
         $is_binary = -B $filename;
@@ -394,23 +397,8 @@ specified.  However, it will ignore the shadow directories used by
 many version control systems, and the build directories used by the
 Perl MakeMaker system.
 
-The following directories will never be descended into:
-
-=over 4
-
-=item * F<_darcs>
-
-=item * F<CVS>
-
-=item * F<RCS>
-
-=item * F<SCCS>
-
-=item * F<.svn>
-
-=item * F<blib>
-
-=back
+The following directories will never be descended into: F<_darcs>,
+F<CVS>, F<RCS>, F<SCCS>, F<.svn>, F<blib>, F<.git>
 
 =head1 WHEN TO USE GREP
 
@@ -657,6 +645,8 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Christian Jaeger,
+Bill Sully,
 Bill Ricker,
 David Golden,
 Nilson Santos F. Jr,

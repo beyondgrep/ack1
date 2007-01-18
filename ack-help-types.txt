@@ -29,6 +29,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]scheme    .scm
     --[no]shell     .sh .bash .csh .ksh .zsh
     --[no]sql       .sql .ctl
+    --[no]tcl       .tcl
     --[no]tex       .tex .cls .sty
     --[no]tt        .tt .tt2
     --[no]vim       .vim

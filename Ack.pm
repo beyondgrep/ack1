@@ -51,6 +51,7 @@ BEGIN {
         scheme      => [qw( scm )],
         shell       => [qw( sh bash csh ksh zsh )],
         sql         => [qw( sql ctl )],
+        tcl         => [qw( tcl )],
         tex         => [qw( tex cls sty )],
         tt          => [qw( tt tt2 )],
         vim         => [qw( vim )],

@@ -1,5 +1,10 @@
 Changelog for ack
 
+NEXT
+
+    [ENHANCEMENTS]
+    Added a --tcl flag.  Thanks, Matt Diephouse.
+
 1.56    Wed Jan 17 12:55:38 CST 2007
 
     [FIXES]

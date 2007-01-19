@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.56';
+our $VERSION   = '1.58';
 our $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 # Check http://petdance.com/ack/ for updates
 
@@ -847,7 +847,7 @@ use strict;
 
 our $VERSION;
 BEGIN {
-    $VERSION = '1.56';
+    $VERSION = '1.58';
 }
 
 our %types;
@@ -877,7 +877,7 @@ BEGIN {
         ocaml       => [qw( ml mli )],
         parrot      => [qw( pir pasm pmc ops pod pg tg )],
         perl        => [qw( pl pm pod tt ttml t )],
-        php         => [qw( php phpt htm html )],
+        php         => [qw( php phpt )],
         python      => [qw( py )],
         ruby        => [qw( rb rhtml rjs )],
         scheme      => [qw( scm )],

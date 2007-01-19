@@ -1,6 +1,6 @@
 Changelog for ack
 
-NEXT
+1.58    Thu Jan 18 22:46:36 CST 2007
 
     [THINGS THAT MAY BREAK YOUR CODE]
     The PHP list of extensions no longer includes .htm and .html.
@@ -10,6 +10,7 @@ NEXT
 
     [ENHANCEMENTS]
     Added a --tcl flag.  Thanks, Matt Diephouse.
+
 
 1.56    Wed Jan 17 12:55:38 CST 2007
 

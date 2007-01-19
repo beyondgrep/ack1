@@ -1,3 +1,4 @@
+use File::Next ();
 
 sub slurp {
     my $iter = shift;

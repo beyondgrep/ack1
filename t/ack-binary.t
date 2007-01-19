@@ -7,6 +7,9 @@ use Test::More tests => 3;
 use App::Ack ();
 use File::Next ();
 
+use lib 't';
+use Util;
+
 
 TYPES: {
     my $file = 't/etc/shebang.pl.xxx';
@@ -27,20 +30,5 @@ ACK_F: {
     my @results = `$cmd`;
     chomp @results;
 
-    file_sets_match( \@results, \@expected, 'Looking for binary' );
-}
-
-
-sub file_sets_match {
-    my @expected = @{+shift};
-    my @actual = @{+shift};
-    my $msg = shift;
-
-    # Normalize all the paths
-    for my $path ( @expected, @actual ) {
-        $path = File::Next::reslash( $path ); ## no critic (Variables::ProhibitPackageVars)
-    }
-
-    local $Test::Builder::Level = $Test::Builder::Level + 1; ## no critic
-    return is_deeply( [sort @expected], [sort @actual], $msg );
+    sets_match( \@results, \@expected, 'Looking for binary' );
 }

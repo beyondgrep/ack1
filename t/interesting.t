@@ -27,6 +27,7 @@ PERL_FILES: {
     }
 
     _sets_match( \@files, [qw(
+        t/swamp/0
         t/swamp/Makefile.PL
         t/swamp/perl.cgi
         t/swamp/perl.pl
@@ -52,6 +53,7 @@ PERL_FILES_GLOBBED: {
     }
 
     _sets_match( \@files, [qw(
+        t/swamp/0
         t/swamp/Makefile.PL
         t/swamp/perl.cgi
         t/swamp/perl.pl

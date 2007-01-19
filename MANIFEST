@@ -34,6 +34,7 @@ t/etc/shebang.pl.xxx
 t/etc/shebang.py.xxx
 t/etc/shebang.rb.xxx
 t/etc/shebang.sh.xxx
+t/swamp/0
 t/swamp/Makefile
 t/swamp/Makefile.PL
 t/swamp/blib/ignore.pir

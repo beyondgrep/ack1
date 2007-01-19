@@ -1,9 +1,9 @@
-#!perl -Tw
+#!perl -w
 
 use warnings;
 use strict;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use File::Next 0.22;
 
 use lib 't';
@@ -15,10 +15,20 @@ BEGIN {
 
 # NOTE!  This block does a chdir.  If you add more tests after it, you
 # may be sorry.
+chdir 't/swamp' or die "Can't chdir";
+
+my @actual_swamp_perl = qw(
+    0
+    Makefile.PL
+    perl.cgi
+    perl.pl
+    perl.pm
+    perl.pod
+    perl-test.t
+    perl-without-extension
+);
 
 HANDLE_ZEROES: {
-    chdir 't/swamp' or die "Can't chdir";
-
     my $iter =
         File::Next::files( {
             file_filter => sub { return is_filetype( $File::Next::name, 'perl' ) }, ## no critic
@@ -27,14 +37,15 @@ HANDLE_ZEROES: {
 
     my @files = slurp( $iter );
 
-    sets_match( \@files, [qw(
-        0
-        Makefile.PL
-        perl.cgi
-        perl.pl
-        perl.pm
-        perl.pod
-        perl-test.t
-        perl-without-extension
-    )], 'PERL_FILES' );
+    sets_match( \@files, \@actual_swamp_perl, 'HANDLE_ZEROES' );
+}
+
+
+DASH_F: {
+    my @args = qw( -f --perl );
+    my $cmd = "$^X ../../ack-standalone @args";
+    my @results = `$cmd`;
+    chomp @results;
+
+    sets_match( \@results, \@actual_swamp_perl, 'DASH_F' );
 }

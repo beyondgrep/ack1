@@ -2,6 +2,9 @@ Changelog for ack
 
 NEXT
 
+    [FIXES]
+    Directories with a file named "0" would stop ack's searching.
+
     [ENHANCEMENTS]
     Added a --tcl flag.  Thanks, Matt Diephouse.
 

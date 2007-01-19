@@ -191,7 +191,7 @@ MAIN: {
         }, @what );
 
 
-    while ( my $file = $iter->() ) {
+    while ( defined ( my $file = $iter->() ) ) {
         if ( $opt{f} ) {
             print "$file\n";
         }

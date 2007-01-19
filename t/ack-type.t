@@ -37,6 +37,7 @@ my $perl = [qw(
     t/swamp/perl.pm
     t/swamp/perl.pod
     t/zero.t
+    Util.pm
 )];
 
 my $perl_ruby = [ @{$perl}, @{$ruby} ];

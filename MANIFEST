@@ -20,6 +20,7 @@ t/interesting.t
 t/pod.t
 t/pod-coverage.t
 t/standalone.t
+t/Util.pm
 
 t/etc/core.2112
 t/etc/buttonhook.html.xxx

@@ -1,4 +1,5 @@
 use File::Next ();
+use App::Ack ();
 
 sub slurp {
     my $iter = shift;
@@ -32,5 +33,17 @@ sub sets_match {
         return is_deeply( [sort @actual], [sort @expected], $msg );
     }
 }
+
+sub is_filetype {
+    my $filename = shift;
+    my $wanted_type = shift;
+
+    for my $maybe_type ( App::Ack::filetypes( $filename ) ) {
+        return 1 if $maybe_type eq $wanted_type;
+    }
+
+    return;
+}
+
 
 1;

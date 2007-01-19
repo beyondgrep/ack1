@@ -122,14 +122,3 @@ BINARY_FILES: {
         t/swamp/moose-andy.jpg
     )], 'BINARY_FILES' );
 }
-
-sub is_filetype {
-    my $filename = shift;
-    my $wanted_type = shift;
-
-    for my $maybe_type ( App::Ack::filetypes( $filename ) ) {
-        return 1 if $maybe_type eq $wanted_type;
-    }
-
-    return;
-}

@@ -6,6 +6,9 @@ use strict;
 use Test::More tests => 28;
 use Data::Dumper;
 
+use lib 't';
+use Util;
+
 BEGIN {
     use_ok( 'App::Ack' );
 }
@@ -75,25 +78,3 @@ ok(! defined App::Ack::filetypes('t/etc/x.html.xxx'),
 ## <!DOCTYPE html ...>\n\n<?php...> would require more than one line lookahead.
 sets_match([App::Ack::filetypes('t/swamp/html.html')], [qw/php html/], 'file identified as html');
 sets_match([App::Ack::filetypes('t/swamp/html.htm')], [qw/php html/],  'file identified as htm[l]');
-
-
-sub is_filetype {
-    my $filename = shift;
-    my $wanted_type = shift;
-
-    for my $maybe_type ( App::Ack::filetypes( $filename ) ) {
-        return 1 if $maybe_type eq $wanted_type;
-    }
-
-    return;
-}
-
-
-sub sets_match {
-    my @expected = @{+shift};
-    my @actual = @{+shift};
-    my $msg = shift;
-
-    local $Test::Builder::Level = $Test::Builder::Level + 1; ## no critic
-    return is_deeply( [sort @expected], [sort @actual], $msg );
-}

@@ -23,7 +23,7 @@ HANDLE_ZEROES: {
         File::Next::files( {
             file_filter => sub { return is_filetype( $File::Next::name, 'perl' ) }, ## no critic
             descend_filter => \&App::Ack::skipdir_filter,
-        }, 't/swamp' );
+        }, '.' );
 
     my @files = slurp( $iter );
 

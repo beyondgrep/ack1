@@ -8,6 +8,7 @@ ack-help.txt
 ack-help-types.txt
 ack-standalone
 squash
+Util.pm
 
 t/00-load.t
 t/ack-a.t
@@ -20,6 +21,7 @@ t/interesting.t
 t/pod.t
 t/pod-coverage.t
 t/standalone.t
+t/zero.t
 
 t/etc/core.2112
 t/etc/buttonhook.html.xxx
@@ -34,6 +36,7 @@ t/etc/shebang.pl.xxx
 t/etc/shebang.py.xxx
 t/etc/shebang.rb.xxx
 t/etc/shebang.sh.xxx
+t/swamp/0
 t/swamp/Makefile
 t/swamp/Makefile.PL
 t/swamp/blib/ignore.pir

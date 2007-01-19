@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.56';
+our $VERSION   = '1.58';
 our $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 # Check http://petdance.com/ack/ for updates
 
@@ -191,7 +191,7 @@ MAIN: {
         }, @what );
 
 
-    while ( my $file = $iter->() ) {
+    while ( defined ( my $file = $iter->() ) ) {
         if ( $opt{f} ) {
             print "$file\n";
         }
@@ -645,6 +645,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Matt Diephouse,
 Christian Jaeger,
 Bill Sully,
 Bill Ricker,
@@ -669,7 +670,7 @@ and Pete Krawczyk.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2005-2006 Andy Lester, all rights reserved.
+Copyright 2005-2007 Andy Lester, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

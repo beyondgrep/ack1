@@ -23,12 +23,13 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]ocaml     .ml .mli
     --[no]parrot    .pir .pasm .pmc .ops .pod .pg .tg
     --[no]perl      .pl .pm .pod .tt .ttml .t
-    --[no]php       .php .phpt .htm .html
+    --[no]php       .php .phpt
     --[no]python    .py
     --[no]ruby      .rb .rhtml .rjs
     --[no]scheme    .scm
     --[no]shell     .sh .bash .csh .ksh .zsh
     --[no]sql       .sql .ctl
+    --[no]tcl       .tcl
     --[no]tex       .tex .cls .sty
     --[no]tt        .tt .tt2
     --[no]vim       .vim

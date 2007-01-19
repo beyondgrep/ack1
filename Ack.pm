@@ -9,13 +9,13 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.56
+Version 1.58
 
 =cut
 
 our $VERSION;
 BEGIN {
-    $VERSION = '1.56';
+    $VERSION = '1.58';
 }
 
 our %types;
@@ -45,12 +45,13 @@ BEGIN {
         ocaml       => [qw( ml mli )],
         parrot      => [qw( pir pasm pmc ops pod pg tg )],
         perl        => [qw( pl pm pod tt ttml t )],
-        php         => [qw( php phpt htm html )],
+        php         => [qw( php phpt )],
         python      => [qw( py )],
         ruby        => [qw( rb rhtml rjs )],
         scheme      => [qw( scm )],
         shell       => [qw( sh bash csh ksh zsh )],
         sql         => [qw( sql ctl )],
+        tcl         => [qw( tcl )],
         tex         => [qw( tex cls sty )],
         tt          => [qw( tt tt2 )],
         vim         => [qw( vim )],

@@ -5,6 +5,9 @@ use strict;
 
 use Test::More tests => 3;
 
+use lib 't';
+use Util;
+
 DASH_L: {
     my @expected = qw(
         t/text/science-of-myth.txt
@@ -16,7 +19,7 @@ DASH_L: {
     my @results = `$cmd`;
     chomp @results;
 
-    file_sets_match( \@results, \@expected, 'Looking for religion' );
+    sets_match( \@results, \@expected, 'Looking for religion' );
 }
 
 DASH_C: {
@@ -33,7 +36,7 @@ DASH_C: {
     my @results = `$cmd`;
     chomp @results;
 
-    file_sets_match( \@results, \@expected, 'Religion counts' );
+    sets_match( \@results, \@expected, 'Religion counts' );
 }
 
 DASH_LC: {
@@ -47,14 +50,5 @@ DASH_LC: {
     my @results = `$cmd`;
     chomp @results;
 
-    file_sets_match( \@results, \@expected, 'Religion counts -l -c' );
-}
-
-sub file_sets_match {
-    my @expected = @{+shift};
-    my @actual = @{+shift};
-    my $msg = shift;
-
-    local $Test::Builder::Level = $Test::Builder::Level + 1; ## no critic
-    return is_deeply( [sort @expected], [sort @actual], $msg );
+    sets_match( \@results, \@expected, 'Religion counts -l -c' );
 }

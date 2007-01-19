@@ -28,6 +28,7 @@ my $perl = [qw(
     t/pod-coverage.t
     t/pod.t
     t/standalone.t
+    t/swamp/0
     t/swamp/Makefile.PL
     t/swamp/perl-test.t
     t/swamp/perl-without-extension
@@ -35,6 +36,8 @@ my $perl = [qw(
     t/swamp/perl.pl
     t/swamp/perl.pm
     t/swamp/perl.pod
+    t/zero.t
+    Util.pm
 )];
 
 my $perl_ruby = [ @{$perl}, @{$ruby} ];

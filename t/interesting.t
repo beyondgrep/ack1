@@ -6,6 +6,9 @@ use strict;
 use Test::More tests => 8;
 use File::Next 0.22;
 
+use lib 't';
+use Util;
+
 BEGIN {
     use_ok( 'App::Ack' );
 }
@@ -21,12 +24,10 @@ PERL_FILES: {
             descend_filter => \&App::Ack::skipdir_filter,
         }, 't/swamp' );
 
-    my @files;
-    while ( my $file = $iter->() ) {
-        push( @files, $file );
-    }
+    my @files = slurp( $iter );
 
-    _sets_match( \@files, [qw(
+    sets_match( \@files, [qw(
+        t/swamp/0
         t/swamp/Makefile.PL
         t/swamp/perl.cgi
         t/swamp/perl.pl
@@ -46,12 +47,9 @@ PERL_FILES_GLOBBED: {
             descend_filter => \&App::Ack::skipdir_filter,
         }, @starters );
 
-    my @files;
-    while ( my $file = $iter->() ) {
-        push( @files, $file );
-    }
-
-    _sets_match( \@files, [qw(
+    my @files = slurp( $iter );
+    sets_match( \@files, [qw(
+        t/swamp/0
         t/swamp/Makefile.PL
         t/swamp/perl.cgi
         t/swamp/perl.pl
@@ -69,12 +67,8 @@ PARROT_FILES_DESCEND: {
             descend_filter => \&App::Ack::skipdir_filter,
         }, 't' );
 
-    my @files;
-    while ( my $file = $iter->() ) {
-        push( @files, $file );
-    }
-
-    _sets_match( \@files, [qw(
+    my @files = slurp( $iter );
+    sets_match( \@files, [qw(
         t/swamp/parrot.pir
         t/swamp/perl.pod
     )], 'PARROT_FILES_DESCEND' );
@@ -87,12 +81,8 @@ PARROT_FILES_NODESCEND: {
             descend_filter => sub{0},
         }, 't/swamp' );
 
-    my @files;
-    while ( my $file = $iter->() ) {
-        push( @files, $file );
-    }
-
-    _sets_match( \@files, [qw(
+    my @files = slurp( $iter );
+    sets_match( \@files, [qw(
         t/swamp/parrot.pir
         t/swamp/perl.pod
     )], 'PARROT_FILES_NODESCEND' );
@@ -105,12 +95,8 @@ PARROT_FILES_NODESCEND_EMPTY: {
             descend_filter => sub{0},
         }, 't/' );
 
-    my @files;
-    while ( my $file = $iter->() ) {
-        push( @files, $file );
-    }
-
-    _sets_match( \@files, [], 'PARROT_FILES_NODESCEND_EMPTY' );
+    my @files = slurp( $iter );
+    sets_match( \@files, [], 'PARROT_FILES_NODESCEND_EMPTY' );
 }
 
 PERL_FILES_BY_NAME: {
@@ -120,12 +106,8 @@ PERL_FILES_BY_NAME: {
             descend_filter => sub{0},
         }, 't/swamp/perl.pod' );
 
-    my @files;
-    while ( my $file = $iter->() ) {
-        push( @files, $file );
-    }
-
-    _sets_match( \@files, [qw( t/swamp/perl.pod )], 'PERL_FILES_BY_NAME' );
+    my @files = slurp( $iter );
+    sets_match( \@files, [qw( t/swamp/perl.pod )], 'PERL_FILES_BY_NAME' );
 }
 
 BINARY_FILES: {
@@ -135,41 +117,8 @@ BINARY_FILES: {
             descend_filter => \&App::Ack::skipdir_filter,
         }, 't/swamp' );
 
-    my @files;
-    while ( my $file = $iter->() ) {
-        push( @files, $file );
-    }
-
-    _sets_match( \@files, [qw(
+    my @files = slurp( $iter );
+    sets_match( \@files, [qw(
         t/swamp/moose-andy.jpg
     )], 'BINARY_FILES' );
 }
-
-sub _sets_match {
-    my @expected = @{+shift};
-    my @actual = @{+shift};
-    my $msg = shift;
-
-    # Normalize all the paths
-    for my $path ( @expected, @actual ) {
-        $path = File::Next::reslash( $path ); ## no critic (Variables::ProhibitPackageVars)
-    }
-
-    local $Test::Builder::Level = $Test::Builder::Level + 1; ## no critic
-    return is_deeply( [sort @expected], [sort @actual], $msg );
-}
-
-
-sub is_filetype {
-    my $filename = shift;
-    my $wanted_type = shift;
-
-    for my $maybe_type ( App::Ack::filetypes( $filename ) ) {
-        return 1 if $maybe_type eq $wanted_type;
-    }
-
-    return;
-}
-
-
-

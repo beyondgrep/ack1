@@ -45,7 +45,7 @@ BEGIN {
         ocaml       => [qw( ml mli )],
         parrot      => [qw( pir pasm pmc ops pod pg tg )],
         perl        => [qw( pl pm pod tt ttml t )],
-        php         => [qw( php phpt htm html )],
+        php         => [qw( php phpt )],
         python      => [qw( py )],
         ruby        => [qw( rb rhtml rjs )],
         scheme      => [qw( scm )],

@@ -1,5 +1,11 @@
 Changelog for ack
 
+NEXT
+
+    [ENHANCEMENTS]
+    Now ack recognizes makefiles.
+
+
 1.58    Thu Jan 18 22:46:36 CST 2007
 
     [THINGS THAT MAY BREAK YOUR CODE]

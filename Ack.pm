@@ -41,6 +41,7 @@ BEGIN {
         lisp        => [qw( lisp )],
         java        => [qw( java )],
         js          => [qw( js )],
+        make        => q{Makefiles},
         mason       => [qw( mas )],
         ocaml       => [qw( ml mli )],
         parrot      => [qw( pir pasm pmc ops pod pg tg )],
@@ -112,14 +113,18 @@ sub filetypes {
 
     return '-ignore' if should_ignore( $filename );
 
+    return 'make' if $filename =~ m{(\Q$path_sep\E)?Makefile$}i;
+
     # If there's an extension, look it up
     if ( $filename =~ m{\.([^\.$path_sep]+)$} ) {
         my $ref = $types{lc $1};
         return @{$ref} if $ref;
     }
 
-    return unless -e $filename;
+    # At this point, we can't tell from just the name.  Now we have to
+    # open it and look inside.
 
+    return unless -e $filename;
     # From Elliot Shank:
     #     I can't see any reason that -r would fail on these-- the ACLs look
     #     fine, and no program has any of them open, so the busted Windows
@@ -145,7 +150,7 @@ sub filetypes {
     close $fh;
     return unless defined $header;
     if ( $header =~ /^#!/ ) {
-        return 'perl'   if $header =~ /\bperl/;
+        return 'perl'   if $header =~ /\bperl\b/;
         return 'php'    if $header =~ /\bphp\b/;
         return 'python' if $header =~ /\bpython\b/;
         return 'ruby'   if $header =~ /\bruby\b/;

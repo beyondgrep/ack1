@@ -3,7 +3,7 @@ Changelog for ack
 NEXT
 
     [ENHANCEMENTS]
-    Now ack recognizes makefiles.
+    Now ack recognizes makefiles and Visual Basic files.
 
 
 1.58    Thu Jan 18 22:46:36 CST 2007

@@ -33,6 +33,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]tcl       .tcl
     --[no]tex       .tex .cls .sty
     --[no]tt        .tt .tt2
+    --[no]vb        .bas .cls .frm .ctl .vb .resx
     --[no]vim       .vim
     --[no]xml       .xml .dtd .xslt
     --[no]yaml      .yaml .yml

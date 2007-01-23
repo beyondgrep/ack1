@@ -55,6 +55,7 @@ BEGIN {
         tcl         => [qw( tcl )],
         tex         => [qw( tex cls sty )],
         tt          => [qw( tt tt2 )],
+        vb          => [qw( bas cls frm ctl vb resx )],
         vim         => [qw( vim )],
         yaml        => [qw( yaml yml )],
         xml         => [qw( xml dtd xslt )],

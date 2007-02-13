@@ -112,12 +112,12 @@ even under -a.
 sub filetypes {
     my $filename = shift;
 
-    return '-ignore' if should_ignore( $filename );
+    return '-ignore' unless is_searchable( $filename );
 
-    return 'make' if $filename =~ m{(\Q$path_sep\E)?Makefile$}i;
+    return 'make' if $filename =~ m{$path_sep?Makefile$}io;
 
     # If there's an extension, look it up
-    if ( $filename =~ m{\.([^\.$path_sep]+)$} ) {
+    if ( $filename =~ m{\.([^\.$path_sep]+)$}o ) {
         my $ref = $types{lc $1};
         return @{$ref} if $ref;
     }
@@ -148,35 +148,37 @@ sub filetypes {
         return;
     }
     my $header = <$fh>;
-    close $fh;
-    return unless defined $header;
+    if ( not close $fh ) {
+        App::Ack::warn( "$filename: $!" );
+        return;
+    }
+
     if ( $header =~ /^#!/ ) {
         return 'perl'   if $header =~ /\bperl\b/;
         return 'php'    if $header =~ /\bphp\b/;
         return 'python' if $header =~ /\bpython\b/;
         return 'ruby'   if $header =~ /\bruby\b/;
-        return 'shell'  if $header =~ /\b(ba|c|k|z)?sh\b/;
+        return 'shell'  if $header =~ /\b(?:ba|c|k|z)?sh\b/;
     }
     return 'xml' if $header =~ /<\?xml /;
 
     return;
 }
 
-=head2 should_ignore( $filename )
+=head2 is_searchable( $filename )
 
-Returns true if the filename is one that we should ignore regardless
-of filetype, like a coredump or a backup file.
+Returns true if the filename is one that we can search, and false
+if it's one that we should ignore like a coredump or a backup file.
 
 =cut
 
-sub should_ignore {
+sub is_searchable {
     my $filename = shift;
 
-    return 1 if $filename =~ /~$/;
-    return 1 if $filename =~ m{$path_sep?#.+#$};
-    return 1 if $filename =~ m{$path_sep?core\.\d+$};
+    return if $filename =~ /~$/;
+    return if $filename =~ m{$path_sep?(?:#.+#|core\.\d+)$}o;
 
-    return;
+    return 1;
 }
 
 =head2 options_sanity_check( %opts )
@@ -205,9 +207,9 @@ sub _option_conflict {
     return if not defined $opts->{$used};
 
     my $bad = 0;
-    for ( @$exclusives ) {
-        if ( defined $opts->{$_} ) {
-            print "The ", _opty($_), " option cannot be used with the ", _opty($used), " option.\n";
+    for my $opt ( @{$exclusives} ) {
+        if ( defined $opts->{$opt} ) {
+            print 'The ', _opty($opt), ' option cannot be used with the ', _opty($used), " option.\n";
             $bad = 1;
         }
     }
@@ -226,8 +228,8 @@ Put out an ack-specific warning.
 
 =cut
 
-sub warn {
-    CORE::warn( _my_program(), ": ", @_, "\n" );
+sub warn { ## no critic (ProhibitBuiltinHomonyms)
+    return CORE::warn( _my_program(), ': ', @_, "\n" );
 }
 
 =head2 die( @_ )
@@ -236,8 +238,8 @@ Die in an ack-specific way.
 
 =cut
 
-sub die {
-    CORE::die( _my_program(), ": ", @_, "\n" );
+sub die { ## no critic (ProhibitBuiltinHomonyms)
+    return CORE::die( _my_program(), ': ', @_, "\n" );
 }
 
 sub _my_program {

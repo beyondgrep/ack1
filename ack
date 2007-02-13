@@ -212,7 +212,7 @@ sub is_interesting {
 }
 
 sub dash_a {
-    return !App::Ack::should_ignore( $File::Next::name );
+    return App::Ack::is_searchable( $File::Next::name );
 }
 
 sub search {
@@ -283,7 +283,7 @@ sub search {
 
         last if $opt{m} && ( $nmatches >= $opt{m} );
     } # while
-    close $fh;
+    close $fh or App::Ack::warn( "$filename: $!" );
 
     if ( $opt{count} ) {
         if ( $nmatches || !$opt{l} ) {
@@ -331,7 +331,7 @@ sub _search_v {
             }
         }
     } # while
-    close $fh;
+    close $fh or App::Ack::warn( "$filename: $!" );
 
     if ( $opt{count} ) {
         print "${filename}:" if $opt{show_filename};

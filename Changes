@@ -5,6 +5,13 @@ NEXT
     [ENHANCEMENTS]
     Now ack recognizes makefiles and Visual Basic files.
 
+    Teeny speed optimizations on some regexes.
+
+    Changed App::Ack::should_ignore to ::is_searchable() (and
+    reversed the meaning).
+
+    Added error checking on file closes.
+
 
 1.58    Thu Jan 18 22:46:36 CST 2007
 

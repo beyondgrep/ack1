@@ -15,7 +15,8 @@ BEGIN {
 
 # NOTE!  This block does a chdir.  If you add more tests after it, you
 # may be sorry.
-chdir 't/swamp' or die "Can't chdir";
+my $swamp = 't/swamp';
+chdir $swamp or die "Unable to chdir to $swamp: $!\n";
 
 my @actual_swamp_perl = qw(
     0

@@ -42,7 +42,7 @@ BEGIN {
         java        => [qw( java )],
         js          => [qw( js )],
         make        => q{Makefiles},
-        mason       => [qw( mas )],
+        mason       => [qw( mas mhtml mpl mtxt )],
         ocaml       => [qw( ml mli )],
         parrot      => [qw( pir pasm pmc ops pod pg tg )],
         perl        => [qw( pl pm pod tt ttml t )],

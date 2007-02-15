@@ -20,7 +20,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]js        .js
     --[no]lisp      .lisp
     --[no]make      Makefiles
-    --[no]mason     .mas
+    --[no]mason     .mas .mhtml .mpl .mtxt
     --[no]ocaml     .ml .mli
     --[no]parrot    .pir .pasm .pmc .ops .pod .pg .tg
     --[no]perl      .pl .pm .pod .tt .ttml .t

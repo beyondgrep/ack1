@@ -12,6 +12,10 @@ NEXT
 
     Added error checking on file closes.
 
+    Added new extensions for Mason per
+    http://masonhq.com/?FAQ:ServerConfiguration#h-what_filename_extensions_should_i_use_for_mason_components_
+    Thanks, Elias Lutfallah.
+
 
 1.58    Thu Jan 18 22:46:36 CST 2007
 

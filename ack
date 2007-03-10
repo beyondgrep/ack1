@@ -11,7 +11,6 @@ our $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 my $is_windows;
 my %opt;
 my %type_wanted;
-my $is_tty =  -t STDOUT;
 
 BEGIN {
     $is_windows = ($^O =~ /MSWin32/);
@@ -22,7 +21,7 @@ BEGIN {
 }
 
 use File::Next 0.34;
-use App::Ack;
+use App::Ack ();
 use Getopt::Long;
 
 MAIN: {
@@ -36,11 +35,12 @@ MAIN: {
     # Priorities! Get the --thpppt checking out of the way.
     /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
 
+    my $is_interactive = App::Ack::is_interactive();
     my %defaults = (
         all     => 0,
-        color   => $is_tty && !$is_windows,
+        color   => $is_interactive && !$is_windows,
         follow  => 0,
-        group   => $is_tty,
+        group   => $is_interactive,
         m       => 0,
     );
 

@@ -27,7 +27,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]perl      .pl .pm .pod .tt .ttml .t
     --[no]php       .php .phpt
     --[no]python    .py
-    --[no]ruby      .rb .rhtml .rjs
+    --[no]ruby      .rb .rhtml .rjs .rxml
     --[no]scheme    .scm
     --[no]shell     .sh .bash .csh .ksh .zsh
     --[no]sql       .sql .ctl

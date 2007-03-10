@@ -14,6 +14,8 @@ NEXT
 
     Added --jsp extensions.  Thanks, Stephen Steneker.
 
+    Added .rxml to --ruby.  Thanks, Ian Langworth.
+
     Teeny speed optimizations on some regexes.
 
     Changed App::Ack::should_ignore to ::is_searchable() (and

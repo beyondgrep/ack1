@@ -50,7 +50,7 @@ BEGIN {
         perl        => [qw( pl pm pod tt ttml t )],
         php         => [qw( php phpt )],
         python      => [qw( py )],
-        ruby        => [qw( rb rhtml rjs )],
+        ruby        => [qw( rb rhtml rjs rxml )],
         scheme      => [qw( scm )],
         shell       => [qw( sh bash csh ksh zsh )],
         sql         => [qw( sql ctl )],

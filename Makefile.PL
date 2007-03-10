@@ -49,7 +49,7 @@ critic:
 	perlcritic -1 -q -profile perlcriticrc ack Ack.pm t/*.t
 
 prof: all
-	perl -d:DProf -Mblib ack -f ~/parrot >> /dev/null 2>&1
+	perl -d:DProf -Mblib ack -w foo ~/parrot >> /dev/null 2>&1
 	dprofpp
 
 ACK             = ack

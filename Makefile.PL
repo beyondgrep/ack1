@@ -15,7 +15,7 @@ WriteMakefile(
         'Term::ANSIColor'   => 0,
         'Getopt::Long'      => 0,
         'Test::More'        => 0,
-        'File::Next'        => 0.38,   # follow_symlinks
+        'File::Next'        => 0.40, # Handle files called "0"
         'File::Basename'    => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
@@ -37,7 +37,7 @@ sub MY::postamble {
     my $postamble = <<'MAKE_FRAG';
 .PHONY: tags critic
 
-tags :
+tags:
 	ctags -f tags --recurse --totals \
 		--exclude=blib \
 		--exclude=.svn \
@@ -45,8 +45,12 @@ tags :
 		--exclude=ack-standalone \
 		--languages=Perl --langmap=Perl:+.t \
 
-critic :
-	perlcritic -1 -q -profile perlcriticrc ack t/*.t
+critic:
+	perlcritic -1 -q -profile perlcriticrc ack Ack.pm t/*.t
+
+prof: all
+	perl -d:DProf -Mblib ack -w foo ~/parrot >> /dev/null 2>&1
+	dprofpp
 
 ACK             = ack
 APP_ACK_PM      = Ack.pm

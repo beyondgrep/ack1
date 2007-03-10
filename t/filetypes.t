@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 26;
+use Test::More tests => 28;
 use Data::Dumper;
 
 use lib 't';
@@ -25,6 +25,8 @@ ok( !is_filetype( 'foo.pod', 'ruby' ), 'foo.pod cannot be ruby' );
 ok(  is_filetype( 'foo.handler.pod', 'perl' ), 'foo.handler.pod can be perl' );
 ok(  is_filetype( '/tmp/wango/foo.pod', 'perl' ), '/tmp/wango/foo.pod can be perl' );
 ok(  is_filetype( '/tmp/wango/foo.handler.pod', 'perl' ), '/tmp/wango/foo.handler.pod can be perl' );
+ok(  is_filetype( '/tmp/blongo/makefile', 'make' ), '/tmp/blongo/makefile is a makefile' );
+ok(  is_filetype( 'Makefile', 'make' ), 'Makefile is a makefile' );
 
 is(App::Ack::filetypes('foo.pod~'), '-ignore',
     'correctly ignore backup file');

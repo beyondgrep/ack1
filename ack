@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.58';
+our $VERSION   = '1.60';
 our $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 # Check http://petdance.com/ack/ for updates
 
@@ -11,7 +11,6 @@ our $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 my $is_windows;
 my %opt;
 my %type_wanted;
-my $is_tty =  -t STDOUT;
 
 BEGIN {
     $is_windows = ($^O =~ /MSWin32/);
@@ -21,8 +20,8 @@ BEGIN {
     $ENV{ACK_COLOR_FILENAME} ||= 'bold green';
 }
 
-use File::Next 0.34;
-use App::Ack;
+use File::Next 0.40;
+use App::Ack ();
 use Getopt::Long;
 
 MAIN: {
@@ -36,11 +35,12 @@ MAIN: {
     # Priorities! Get the --thpppt checking out of the way.
     /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
 
+    my $is_interactive = App::Ack::is_interactive();
     my %defaults = (
         all     => 0,
-        color   => $is_tty && !$is_windows,
+        color   => $is_interactive && !$is_windows,
         follow  => 0,
-        group   => $is_tty,
+        group   => $is_interactive,
         m       => 0,
     );
 
@@ -212,7 +212,7 @@ sub is_interesting {
 }
 
 sub dash_a {
-    return !App::Ack::should_ignore( $File::Next::name );
+    return App::Ack::is_searchable( $File::Next::name );
 }
 
 sub search {
@@ -283,7 +283,7 @@ sub search {
 
         last if $opt{m} && ( $nmatches >= $opt{m} );
     } # while
-    close $fh;
+    close $fh or App::Ack::warn( "$filename: $!" );
 
     if ( $opt{count} ) {
         if ( $nmatches || !$opt{l} ) {
@@ -331,7 +331,7 @@ sub _search_v {
             }
         }
     } # while
-    close $fh;
+    close $fh or App::Ack::warn( "$filename: $!" );
 
     if ( $opt{count} ) {
         print "${filename}:" if $opt{show_filename};
@@ -588,6 +588,23 @@ See B<ACK_COLOR_FILENAME> for the color specifications.
 
 =back
 
+=head1 ACK & OTHER TOOLS
+
+=head2 Vim integration
+
+F<ack> integrates easily with the Vim text editor. Set this in your
+F<.vimrc> to use F<ack> instead of F<grep>:
+
+    set grepprg=ack\ -a
+
+That examples uses C<-a> to search through all files, but you may
+use other default flags. Now you can search with F<ack> and easily
+step through the results in Vim:
+
+  :grep Dumper perllib
+
+=cut
+
 =head1 GOTCHAS
 
 Note that FILES must still match valid selection rules.  For example,
@@ -645,6 +662,9 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Stephen Steneker,
+Elias Lutfallah,
+Mark Leighton Fisher,
 Matt Diephouse,
 Christian Jaeger,
 Bill Sully,

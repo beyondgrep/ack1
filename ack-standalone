@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.58';
+our $VERSION   = '1.60';
 our $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 # Check http://petdance.com/ack/ for updates
 
@@ -11,7 +11,6 @@ our $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 my $is_windows;
 my %opt;
 my %type_wanted;
-my $is_tty =  -t STDOUT;
 
 BEGIN {
     $is_windows = ($^O =~ /MSWin32/);
@@ -34,11 +33,12 @@ MAIN: {
     # Priorities! Get the --thpppt checking out of the way.
     /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
 
+    my $is_interactive = App::Ack::is_interactive();
     my %defaults = (
         all     => 0,
-        color   => $is_tty && !$is_windows,
+        color   => $is_interactive && !$is_windows,
         follow  => 0,
-        group   => $is_tty,
+        group   => $is_interactive,
         m       => 0,
     );
 
@@ -210,7 +210,7 @@ sub is_interesting {
 }
 
 sub dash_a {
-    return !App::Ack::should_ignore( $File::Next::name );
+    return App::Ack::is_searchable( $File::Next::name );
 }
 
 sub search {
@@ -281,7 +281,7 @@ sub search {
 
         last if $opt{m} && ( $nmatches >= $opt{m} );
     } # while
-    close $fh;
+    close $fh or App::Ack::warn( "$filename: $!" );
 
     if ( $opt{count} ) {
         if ( $nmatches || !$opt{l} ) {
@@ -329,7 +329,7 @@ sub _search_v {
             }
         }
     } # while
-    close $fh;
+    close $fh or App::Ack::warn( "$filename: $!" );
 
     if ( $opt{count} ) {
         print "${filename}:" if $opt{show_filename};
@@ -586,6 +586,23 @@ See B<ACK_COLOR_FILENAME> for the color specifications.
 
 =back
 
+=head1 ACK & OTHER TOOLS
+
+=head2 Vim integration
+
+F<ack> integrates easily with the Vim text editor. Set this in your
+F<.vimrc> to use F<ack> instead of F<grep>:
+
+    set grepprg=ack\ -a
+
+That examples uses C<-a> to search through all files, but you may
+use other default flags. Now you can search with F<ack> and easily
+step through the results in Vim:
+
+  :grep Dumper perllib
+
+=cut
+
 =head1 GOTCHAS
 
 Note that FILES must still match valid selection rules.  For example,
@@ -643,6 +660,9 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Stephen Steneker,
+Elias Lutfallah,
+Mark Leighton Fisher,
 Matt Diephouse,
 Christian Jaeger,
 Bill Sully,
@@ -680,7 +700,7 @@ use strict;
 use warnings;
 
 
-our $VERSION = '0.38';
+our $VERSION = '0.40';
 
 
 
@@ -704,22 +724,24 @@ BEGIN {
     %skip_dirs = map {($_,1)} (File::Spec->curdir, File::Spec->updir);
 }
 
+
 sub files {
     my ($parms,@queue) = _setup( \%files_defaults, @_ );
+    my $filter = $parms->{file_filter};
 
     return sub {
         while (@queue) {
             my ($dir,$file,$fullpath) = splice( @queue, 0, 3 );
             if (-f $fullpath) {
-                if ( $parms->{file_filter} ) {
+                if ( $filter ) {
                     local $_ = $file;
                     local $File::Next::dir = $dir;
                     local $File::Next::name = $fullpath;
-                    next if not $parms->{file_filter}->();
+                    next if not $filter->();
                 }
                 return wantarray ? ($dir,$file,$fullpath) : $fullpath;
             }
-            elsif (-d $fullpath) {
+            elsif (-d _) {
                 unshift( @queue, _candidate_files( $parms, $fullpath ) );
             }
         } # while
@@ -728,12 +750,13 @@ sub files {
     }; # iterator
 }
 
+
 sub dirs {
     my ($parms,@queue) = _setup( \%files_defaults, @_ );
 
     return sub {
         while (@queue) {
-            my ($dir,$file,$fullpath) = splice( @queue, 0, 3 );
+            my (undef,undef,$fullpath) = splice( @queue, 0, 3 );
             if (-d $fullpath) {
                 unshift( @queue, _candidate_files( $parms, $fullpath ) );
                 return $fullpath;
@@ -766,7 +789,7 @@ sub _setup {
     my %passed_parms = %{$passed_parms};
 
     my $parms = {};
-    for my $key ( keys %$defaults ) {
+    for my $key ( keys %{$defaults} ) {
         $parms->{$key} =
             exists $passed_parms{$key}
                 ? delete $passed_parms{$key}
@@ -810,7 +833,7 @@ sub _candidate_files {
     }
 
     my @newfiles;
-    while ( my $file = readdir $dh ) {
+    while ( defined ( my $file = readdir $dh ) ) {
         next if $skip_dirs{$file};
 
         # Only do directory checking if we have a descend_filter
@@ -826,6 +849,8 @@ sub _candidate_files {
         }
         push( @newfiles, $dir, $file, $fullpath );
     }
+    closedir $dh;
+
     if ( my $sub = $parms->{sort_files} ) {
         my @triplets;
         while ( @newfiles ) {
@@ -843,11 +868,12 @@ package App::Ack;
 
 use warnings;
 use strict;
+use Scalar::Util ();
 
 
 our $VERSION;
 BEGIN {
-    $VERSION = '1.58';
+    $VERSION = '1.60';
 }
 
 our %types;
@@ -873,19 +899,22 @@ BEGIN {
         lisp        => [qw( lisp )],
         java        => [qw( java )],
         js          => [qw( js )],
-        mason       => [qw( mas )],
+        jsp         => [qw( jsp jspx jhtm jhtml )],
+        make        => q{Makefiles},
+        mason       => [qw( mas mhtml mpl mtxt )],
         ocaml       => [qw( ml mli )],
         parrot      => [qw( pir pasm pmc ops pod pg tg )],
         perl        => [qw( pl pm pod tt ttml t )],
-        php         => [qw( php phpt )],
+        php         => [qw( php phpt php3 php4 php5 )],
         python      => [qw( py )],
-        ruby        => [qw( rb rhtml rjs )],
+        ruby        => [qw( rb rhtml rjs rxml )],
         scheme      => [qw( scm )],
         shell       => [qw( sh bash csh ksh zsh )],
         sql         => [qw( sql ctl )],
         tcl         => [qw( tcl )],
         tex         => [qw( tex cls sty )],
         tt          => [qw( tt tt2 )],
+        vb          => [qw( bas cls frm ctl vb resx )],
         vim         => [qw( vim )],
         yaml        => [qw( yaml yml )],
         xml         => [qw( xml dtd xslt )],
@@ -915,16 +944,20 @@ sub skipdir_filter {
 sub filetypes {
     my $filename = shift;
 
-    return '-ignore' if should_ignore( $filename );
+    return '-ignore' unless is_searchable( $filename );
+
+    return 'make' if $filename =~ m{$path_sep?Makefile$}io;
 
     # If there's an extension, look it up
-    if ( $filename =~ m{\.([^\.$path_sep]+)$} ) {
+    if ( $filename =~ m{\.([^\.$path_sep]+)$}o ) {
         my $ref = $types{lc $1};
         return @{$ref} if $ref;
     }
 
-    return unless -e $filename;
+    # At this point, we can't tell from just the name.  Now we have to
+    # open it and look inside.
 
+    return unless -e $filename;
     # From Elliot Shank:
     #     I can't see any reason that -r would fail on these-- the ACLs look
     #     fine, and no program has any of them open, so the busted Windows
@@ -947,14 +980,14 @@ sub filetypes {
         return;
     }
     my $header = <$fh>;
-    close $fh;
-    return unless defined $header;
+    if ( not close $fh ) {
+        App::Ack::warn( "$filename: $!" );
+        return;
+    }
+
     if ( $header =~ /^#!/ ) {
-        return 'perl'   if $header =~ /\bperl/;
-        return 'php'    if $header =~ /\bphp\b/;
-        return 'python' if $header =~ /\bpython\b/;
-        return 'ruby'   if $header =~ /\bruby\b/;
-        return 'shell'  if $header =~ /\b(ba|c|k|z)?sh\b/;
+        return $1       if $header =~ /\b(ruby|p(erl|hp|ython))\b/;
+        return 'shell'  if $header =~ /\b(?:ba|c|k|z)?sh\b/;
     }
     return 'xml' if $header =~ /<\?xml /;
 
@@ -962,14 +995,13 @@ sub filetypes {
 }
 
 
-sub should_ignore {
+sub is_searchable {
     my $filename = shift;
 
-    return 1 if $filename =~ /~$/;
-    return 1 if $filename =~ m{$path_sep?#.+#$};
-    return 1 if $filename =~ m{$path_sep?core\.\d+$};
+    return if $filename =~ /~$/;
+    return if $filename =~ m{$path_sep?(?:#.+#|core\.\d+)$}o;
 
-    return;
+    return 1;
 }
 
 
@@ -992,9 +1024,9 @@ sub _option_conflict {
     return if not defined $opts->{$used};
 
     my $bad = 0;
-    for ( @$exclusives ) {
-        if ( defined $opts->{$_} ) {
-            print "The ", _opty($_), " option cannot be used with the ", _opty($used), " option.\n";
+    for my $opt ( @{$exclusives} ) {
+        if ( defined $opts->{$opt} ) {
+            print 'The ', _opty($opt), ' option cannot be used with the ', _opty($used), " option.\n";
             $bad = 1;
         }
     }
@@ -1009,12 +1041,12 @@ sub _opty {
 
 
 sub warn {
-    CORE::warn( _my_program(), ": ", @_, "\n" );
+    return CORE::warn( _my_program(), ': ', @_, "\n" );
 }
 
 
 sub die {
-    CORE::die( _my_program(), ": ", @_, "\n" );
+    return CORE::die( _my_program(), ': ', @_, "\n" );
 }
 
 sub _my_program {
@@ -1164,5 +1196,34 @@ END_OF_VERSION
 
     return;
 }
+
+
+
+sub is_interactive {
+    my ($out_handle) = (@_, select);    # Default to default output handle
+
+    # Not interactive if output is not to terminal...
+    return 0 if not -t $out_handle;
+
+    # If *ARGV is opened, we're interactive if...
+    if ( Scalar::Util::openhandle( *ARGV ) ) {
+        # ...it's currently opened to the magic '-' file
+        return -t *STDIN if defined $ARGV && $ARGV eq '-';
+
+        # ...it's at end-of-file and the next file is the magic '-' file
+        return @ARGV>0 && $ARGV[0] eq '-' && -t *STDIN if eof *ARGV;
+
+        # ...it's directly attached to the terminal 
+        return -t *ARGV;
+    }
+
+    # If *ARGV isn't opened, it will be interactive if *STDIN is attached 
+    # to a terminal and either there are no files specified on the command line
+    # or if there are files and the first is the magic '-' file
+    else {
+        return -t *STDIN && (@ARGV==0 || $ARGV[0] eq '-');
+    }
+}
+
 
 1; # End of App::Ack

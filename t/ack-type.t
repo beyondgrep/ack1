@@ -65,7 +65,7 @@ sub check_with {
     my $options = shift;
     my $expected = shift;
 
-    my @expected = sort @$expected;
+    my @expected = sort @{$expected};
 
     my @results = sort `$^X ./ack-standalone -f $options`;
     chomp @results;

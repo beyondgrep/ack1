@@ -1,5 +1,36 @@
 Changelog for ack
 
+1.60    Fri Mar  9 22:34:15 CST 2007
+
+    [FIXES]
+    ack should behave better when running under a shell now.
+
+    [ENHANCEMENTS]
+    ack now recognizes makefiles and Visual Basic files.
+
+    Added new extensions for Mason per
+    http://masonhq.com/?FAQ:ServerConfiguration#h-what_filename_extensions_should_i_use_for_mason_components_
+    Thanks, Elias Lutfallah.
+
+    Added .rxml to --ruby.  Thanks, Ian Langworth.
+
+    Added .php3, .php4 and .php5 to --php5.  Added --jsp extensions.
+    Thanks, Stephen Steneker.
+
+    Teeny speed optimizations on some regexes.
+
+    Changed App::Ack::should_ignore to ::is_searchable() (and
+    reversed the meaning).
+
+    Added error checking on file closes.
+
+    Improved how it knows if it's running interactive by stealing
+    is_interactive() from IO::Interactive.
+
+    [DOCUMENTATION]
+    Added example of using with vim.  Thanks, Mark Stosberg.
+
+
 1.58    Thu Jan 18 22:46:36 CST 2007
 
     [THINGS THAT MAY BREAK YOUR CODE]

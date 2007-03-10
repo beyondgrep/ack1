@@ -7,7 +7,6 @@ allow_leading_tabs = 0
 [-Documentation::RequirePodAtEnd]
 [-Documentation::RequirePodSections]
 
-[-Editor::RequireEmacsFileVariables]
 [-ErrorHandling::RequireCarping]
 
 [-InputOutput::ProhibitInteractiveTest]

@@ -2,6 +2,7 @@ package App::Ack;
 
 use warnings;
 use strict;
+use Scalar::Util ();
 
 =head1 NAME
 
@@ -9,13 +10,13 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.58
+Version 1.60
 
 =cut
 
 our $VERSION;
 BEGIN {
-    $VERSION = '1.58';
+    $VERSION = '1.60';
 }
 
 our %types;
@@ -41,19 +42,22 @@ BEGIN {
         lisp        => [qw( lisp )],
         java        => [qw( java )],
         js          => [qw( js )],
-        mason       => [qw( mas )],
+        jsp         => [qw( jsp jspx jhtm jhtml )],
+        make        => q{Makefiles},
+        mason       => [qw( mas mhtml mpl mtxt )],
         ocaml       => [qw( ml mli )],
         parrot      => [qw( pir pasm pmc ops pod pg tg )],
         perl        => [qw( pl pm pod tt ttml t )],
-        php         => [qw( php phpt )],
+        php         => [qw( php phpt php3 php4 php5 )],
         python      => [qw( py )],
-        ruby        => [qw( rb rhtml rjs )],
+        ruby        => [qw( rb rhtml rjs rxml )],
         scheme      => [qw( scm )],
         shell       => [qw( sh bash csh ksh zsh )],
         sql         => [qw( sql ctl )],
         tcl         => [qw( tcl )],
         tex         => [qw( tex cls sty )],
         tt          => [qw( tt tt2 )],
+        vb          => [qw( bas cls frm ctl vb resx )],
         vim         => [qw( vim )],
         yaml        => [qw( yaml yml )],
         xml         => [qw( xml dtd xslt )],
@@ -110,16 +114,20 @@ even under -a.
 sub filetypes {
     my $filename = shift;
 
-    return '-ignore' if should_ignore( $filename );
+    return '-ignore' unless is_searchable( $filename );
+
+    return 'make' if $filename =~ m{$path_sep?Makefile$}io;
 
     # If there's an extension, look it up
-    if ( $filename =~ m{\.([^\.$path_sep]+)$} ) {
+    if ( $filename =~ m{\.([^\.$path_sep]+)$}o ) {
         my $ref = $types{lc $1};
         return @{$ref} if $ref;
     }
 
-    return unless -e $filename;
+    # At this point, we can't tell from just the name.  Now we have to
+    # open it and look inside.
 
+    return unless -e $filename;
     # From Elliot Shank:
     #     I can't see any reason that -r would fail on these-- the ACLs look
     #     fine, and no program has any of them open, so the busted Windows
@@ -142,35 +150,34 @@ sub filetypes {
         return;
     }
     my $header = <$fh>;
-    close $fh;
-    return unless defined $header;
+    if ( not close $fh ) {
+        App::Ack::warn( "$filename: $!" );
+        return;
+    }
+
     if ( $header =~ /^#!/ ) {
-        return 'perl'   if $header =~ /\bperl/;
-        return 'php'    if $header =~ /\bphp\b/;
-        return 'python' if $header =~ /\bpython\b/;
-        return 'ruby'   if $header =~ /\bruby\b/;
-        return 'shell'  if $header =~ /\b(ba|c|k|z)?sh\b/;
+        return $1       if $header =~ /\b(ruby|p(erl|hp|ython))\b/;
+        return 'shell'  if $header =~ /\b(?:ba|c|k|z)?sh\b/;
     }
     return 'xml' if $header =~ /<\?xml /;
 
     return;
 }
 
-=head2 should_ignore( $filename )
+=head2 is_searchable( $filename )
 
-Returns true if the filename is one that we should ignore regardless
-of filetype, like a coredump or a backup file.
+Returns true if the filename is one that we can search, and false
+if it's one that we should ignore like a coredump or a backup file.
 
 =cut
 
-sub should_ignore {
+sub is_searchable {
     my $filename = shift;
 
-    return 1 if $filename =~ /~$/;
-    return 1 if $filename =~ m{$path_sep?#.+#$};
-    return 1 if $filename =~ m{$path_sep?core\.\d+$};
+    return if $filename =~ /~$/;
+    return if $filename =~ m{$path_sep?(?:#.+#|core\.\d+)$}o;
 
-    return;
+    return 1;
 }
 
 =head2 options_sanity_check( %opts )
@@ -199,9 +206,9 @@ sub _option_conflict {
     return if not defined $opts->{$used};
 
     my $bad = 0;
-    for ( @$exclusives ) {
-        if ( defined $opts->{$_} ) {
-            print "The ", _opty($_), " option cannot be used with the ", _opty($used), " option.\n";
+    for my $opt ( @{$exclusives} ) {
+        if ( defined $opts->{$opt} ) {
+            print 'The ', _opty($opt), ' option cannot be used with the ', _opty($used), " option.\n";
             $bad = 1;
         }
     }
@@ -220,8 +227,8 @@ Put out an ack-specific warning.
 
 =cut
 
-sub warn {
-    CORE::warn( _my_program(), ": ", @_, "\n" );
+sub warn { ## no critic (ProhibitBuiltinHomonyms)
+    return CORE::warn( _my_program(), ': ', @_, "\n" );
 }
 
 =head2 die( @_ )
@@ -230,8 +237,8 @@ Die in an ack-specific way.
 
 =cut
 
-sub die {
-    CORE::die( _my_program(), ": ", @_, "\n" );
+sub die { ## no critic (ProhibitBuiltinHomonyms)
+    return CORE::die( _my_program(), ': ', @_, "\n" );
 }
 
 sub _my_program {
@@ -401,5 +408,55 @@ END_OF_VERSION
 
     return;
 }
+
+
+=head2 C<is_interactive()>
+
+This is taken directly from Damian Conway's IO::Interactive.  Thanks,
+Damian!
+
+This subroutine returns true if C<*ARGV> and C<*STDOUT> are connected
+to the terminal. The test is considerably more sophisticated than:
+
+    -t *ARGV && -t *STDOUT
+
+as it takes into account the magic behaviour of C<*ARGV>.
+
+You can also pass C<is_interactive> a writable filehandle, in which
+case it requires that filehandle be connected to a terminal (instead
+of C<*STDOUT>).  The usual suspect here is C<*STDERR>:
+
+    if ( is_interactive(*STDERR) ) {
+        carp $warning;
+    }
+
+=cut
+
+sub is_interactive {
+    my ($out_handle) = (@_, select);    # Default to default output handle
+
+    # Not interactive if output is not to terminal...
+    return 0 if not -t $out_handle;
+
+    # If *ARGV is opened, we're interactive if...
+    if ( Scalar::Util::openhandle( *ARGV ) ) {
+        # ...it's currently opened to the magic '-' file
+        return -t *STDIN if defined $ARGV && $ARGV eq '-';
+
+        # ...it's at end-of-file and the next file is the magic '-' file
+        return @ARGV>0 && $ARGV[0] eq '-' && -t *STDIN if eof *ARGV;
+
+        # ...it's directly attached to the terminal 
+        return -t *ARGV;
+    }
+
+    # If *ARGV isn't opened, it will be interactive if *STDIN is attached 
+    # to a terminal and either there are no files specified on the command line
+    # or if there are files and the first is the magic '-' file
+    else {
+        return -t *STDIN && (@ARGV==0 || $ARGV[0] eq '-');
+    }
+}
+
 
 1; # End of App::Ack

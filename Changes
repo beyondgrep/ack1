@@ -1,6 +1,6 @@
 Changelog for ack
 
-NEXT
+1.60    Fri Mar  9 22:34:15 CST 2007
 
     [FIXES]
     ack should behave better when running under a shell now.

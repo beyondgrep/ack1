@@ -588,6 +588,23 @@ See B<ACK_COLOR_FILENAME> for the color specifications.
 
 =back
 
+=head1 ACK & OTHER TOOLS
+
+=head2 Vim integration
+
+F<ack> integrates easily with the Vim text editor. Set this in your
+F<.vimrc> to use F<ack> instead of F<grep>:
+
+    set grepprg=ack\ -a
+
+That examples uses C<-a> to search through all files, but you may
+use other default flags. Now you can search with F<ack> and easily
+step through the results in Vim:
+
+  :grep Dumper perllib
+
+=cut
+
 =head1 GOTCHAS
 
 Note that FILES must still match valid selection rules.  For example,

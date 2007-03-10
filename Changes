@@ -27,6 +27,9 @@ NEXT
     Improved how it knows if it's running interactive by stealing
     is_interactive() from IO::Interactive.
 
+    [DOCUMENTATION]
+    Added example of using with vim.  Thanks, Mark Stosberg.
+
 
 1.58    Thu Jan 18 22:46:36 CST 2007
 

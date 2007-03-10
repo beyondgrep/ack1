@@ -18,6 +18,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]html      .htm .html .shtml
     --[no]java      .java
     --[no]js        .js
+    --[no]jsp       .jsp .jspx .jhtm .jhtml
     --[no]lisp      .lisp
     --[no]make      Makefiles
     --[no]mason     .mas .mhtml .mpl .mtxt

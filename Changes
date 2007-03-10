@@ -8,16 +8,18 @@ NEXT
     [ENHANCEMENTS]
     Now ack recognizes makefiles and Visual Basic files.
 
+    Added new extensions for Mason per
+    http://masonhq.com/?FAQ:ServerConfiguration#h-what_filename_extensions_should_i_use_for_mason_components_
+    Thanks, Elias Lutfallah.
+
+    Added --jsp extensions.  Thanks, Stephen Steneker.
+
     Teeny speed optimizations on some regexes.
 
     Changed App::Ack::should_ignore to ::is_searchable() (and
     reversed the meaning).
 
     Added error checking on file closes.
-
-    Added new extensions for Mason per
-    http://masonhq.com/?FAQ:ServerConfiguration#h-what_filename_extensions_should_i_use_for_mason_components_
-    Thanks, Elias Lutfallah.
 
     Improved how it knows if it's running interactive by stealing
     is_interactive() from IO::Interactive.

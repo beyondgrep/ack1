@@ -42,6 +42,7 @@ BEGIN {
         lisp        => [qw( lisp )],
         java        => [qw( java )],
         js          => [qw( js )],
+        jsp         => [qw( jsp jspx jhtm jhtml )],
         make        => q{Makefiles},
         mason       => [qw( mas mhtml mpl mtxt )],
         ocaml       => [qw( ml mli )],

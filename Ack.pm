@@ -40,7 +40,7 @@ BEGIN {
         haskell     => [qw( hs lhs )],
         html        => [qw( htm html shtml )],
         lisp        => [qw( lisp )],
-        java        => [qw( java )],
+        java        => [qw( java properties )],
         js          => [qw( js )],
         jsp         => [qw( jsp jspx jhtm jhtml )],
         make        => q{Makefiles},

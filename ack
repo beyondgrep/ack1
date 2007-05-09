@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.60';
+our $VERSION   = '1.61_01';
 our $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 # Check http://petdance.com/ack/ for updates
 
@@ -662,6 +662,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Piers Cawley,
 Stephen Steneker,
 Elias Lutfallah,
 Mark Leighton Fisher,

@@ -8,7 +8,6 @@ ack-help.txt
 ack-help-types.txt
 ack-standalone
 squash
-Util.pm
 
 t/00-load.t
 t/ack-a.t
@@ -22,6 +21,7 @@ t/pod.t
 t/pod-coverage.t
 t/standalone.t
 t/zero.t
+t/Util.pm
 
 t/etc/core.2112
 t/etc/buttonhook.html.xxx
@@ -59,3 +59,4 @@ t/text/boy-named-sue.txt
 t/text/freedom-of-choice.txt
 t/text/science-of-myth.txt
 t/text/shut-up-be-happy.txt
+META.yml                                 Module meta-data (added by MakeMaker)

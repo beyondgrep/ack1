@@ -2,6 +2,11 @@ Changelog for ack
 
 NEXT
 
+    [FIXES]
+    RT #26953: Util.pm was in the wrong directory, but only the
+    Perl from Darwinports complained, because apparently most other
+    Perl installs have "." in @INC.
+
     [ENHANCEMENTS]
     Added .properties extension for --java.
 

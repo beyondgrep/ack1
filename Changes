@@ -2,6 +2,10 @@ Changelog for ack
 
 NEXT
 
+    [THINGS THAT MAY BREAK FOR YOU]
+    The extensions .tt and .ttml are no longer part of the --perl
+    type.  They are now only in the --tt type.
+
     [FIXES]
     RT #26953: Util.pm was in the wrong directory, but only the
     Perl from Darwinports complained, because apparently most other
@@ -44,7 +48,7 @@ NEXT
 
 1.58    Thu Jan 18 22:46:36 CST 2007
 
-    [THINGS THAT MAY BREAK YOUR CODE]
+    [THINGS THAT MAY BREAK FOR YOU]
     The PHP list of extensions no longer includes .htm and .html.
 
     [FIXES]
@@ -70,7 +74,7 @@ NEXT
 
 1.54    Sun Jan  7 22:34:57 CST 2007
 
-    [THINGS THAT MAY BREAK YOUR CODE]
+    [THINGS THAT MAY BREAK FOR YOU]
     ack no longer follows symlinks by default, except for starting
     points specified on the command line.
 

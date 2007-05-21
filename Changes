@@ -18,6 +18,9 @@ NEXT
     [ENHANCEMENTS]
     Added .properties extension for --java.
 
+    Added more GNU-style long opts.  Thanks to Ævar Arnfjörð Bjarmason,
+    my second utf-8 string.
+
 
 1.60    Fri Mar  9 22:34:15 CST 2007
 

@@ -151,7 +151,7 @@ MAIN: {
 
     my @what;
     if ( @ARGV ) {
-        @what = $is_windows ? glob( @ARGV ) : @ARGV;
+        @what = $is_windows ? <@ARGV> : @ARGV;
 
         # Show filenames unless we've specified one single file
         $opt{show_filename} = (@what > 1) || (!-f $what[0]);
@@ -342,6 +342,7 @@ sub _search_v {
     return;
 } # _search_v()
 
+=encoding utf-8
 
 =head1 NAME
 
@@ -660,6 +661,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Ævar Arnfjörð Bjarmason,
 Piers Cawley,
 Stephen Steneker,
 Elias Lutfallah,
@@ -678,7 +680,7 @@ Ask Bjørn Hansen,
 Jerry Gay,
 Will Coleda,
 Mike O'Regan,
-Slaven Rezic,
+Slaven Rezić,
 Mark Stosberg,
 David Alan Pisoni,
 Adriano Ferreira,
@@ -1010,8 +1012,13 @@ sub options_sanity_check {
     my %opts = @_;
     my $ok = 1;
 
+    # List mode doesn't make sense with any of these
     $ok = 0 if _option_conflict( \%opts, 'l', [qw( A B C o group )] );
+
+    # XXX This should work, I would think.
     $ok = 0 if _option_conflict( \%opts, 'l', [qw( m )] );
+
+    # File-searching is definitely irrelevant on these
     $ok = 0 if _option_conflict( \%opts, 'f', [qw( A B C o m group )] );
 
     return $ok;
@@ -1078,6 +1085,7 @@ sub show_help {
 
     print <<"END_OF_HELP";
 Usage: ack [OPTION]... PATTERN [FILES]
+
 Search for PATTERN in each source file in the tree from cwd on down.
 If [FILES] is specified, then only those files/directories are checked.
 ack may also search STDIN, but only if no FILES are specified, or if

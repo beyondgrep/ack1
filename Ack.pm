@@ -284,6 +284,7 @@ sub show_help {
 
     print <<"END_OF_HELP";
 Usage: ack [OPTION]... PATTERN [FILES]
+
 Search for PATTERN in each source file in the tree from cwd on down.
 If [FILES] is specified, then only those files/directories are checked.
 ack may also search STDIN, but only if no FILES are specified, or if

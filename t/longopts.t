@@ -97,5 +97,5 @@ sub option_in_usage {
     $usage = qx{ $^X $ack --help } unless $usage;
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    like( $usage, qr/\Q$opt\E\b/, "Found $opt in usage" );
+    like( $usage, qr/\Q$opt\E\b/s, "Found $opt in usage" );
 }

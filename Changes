@@ -1,5 +1,29 @@
 Changelog for ack
 
+1.62    Mon May 21 15:22:19 CDT 2007
+
+    [THINGS THAT MAY BREAK FOR YOU]
+    The extensions .tt and .ttml are no longer part of the --perl
+    type.  They are now only in the --tt type.
+
+    [FIXES]
+    RT #26953: Util.pm was in the wrong directory, but only the
+    Perl from Darwinports complained, because apparently most other
+    Perl installs have "." in @INC.
+
+    RT #25391: Fixed test failures under Win32.
+
+    Spelled Slaven Rezić's name properly.  Look, my first utf-8 string!
+
+    [ENHANCEMENTS]
+    Added .properties extension for --java.
+
+    Added -L as a negation to -l.  This is equivalent to -l -v.
+
+    Added more GNU-style long opts.  Thanks to Ævar Arnfjörð Bjarmason,
+    my second utf-8 string.
+
+
 1.60    Fri Mar  9 22:34:15 CST 2007
 
     [FIXES]
@@ -33,7 +57,7 @@ Changelog for ack
 
 1.58    Thu Jan 18 22:46:36 CST 2007
 
-    [THINGS THAT MAY BREAK YOUR CODE]
+    [THINGS THAT MAY BREAK FOR YOU]
     The PHP list of extensions no longer includes .htm and .html.
 
     [FIXES]
@@ -59,7 +83,7 @@ Changelog for ack
 
 1.54    Sun Jan  7 22:34:57 CST 2007
 
-    [THINGS THAT MAY BREAK YOUR CODE]
+    [THINGS THAT MAY BREAK FOR YOU]
     ack no longer follows symlinks by default, except for starting
     points specified on the command line.
 

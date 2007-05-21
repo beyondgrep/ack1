@@ -21,6 +21,7 @@ chdir $swamp or die "Unable to chdir to $swamp: $!\n";
 my @actual_swamp_perl = qw(
     0
     Makefile.PL
+    options.pl
     perl.cgi
     perl.pl
     perl.pm

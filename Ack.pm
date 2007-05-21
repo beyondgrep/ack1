@@ -10,13 +10,13 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.60
+Version 1.61_01
 
 =cut
 
 our $VERSION;
 BEGIN {
-    $VERSION = '1.60';
+    $VERSION = '1.62';
 }
 
 our %types;
@@ -40,14 +40,14 @@ BEGIN {
         haskell     => [qw( hs lhs )],
         html        => [qw( htm html shtml )],
         lisp        => [qw( lisp )],
-        java        => [qw( java )],
+        java        => [qw( java properties )],
         js          => [qw( js )],
         jsp         => [qw( jsp jspx jhtm jhtml )],
         make        => q{Makefiles},
         mason       => [qw( mas mhtml mpl mtxt )],
         ocaml       => [qw( ml mli )],
         parrot      => [qw( pir pasm pmc ops pod pg tg )],
-        perl        => [qw( pl pm pod tt ttml t )],
+        perl        => [qw( pl pm pod t )],
         php         => [qw( php phpt php3 php4 php5 )],
         python      => [qw( py )],
         ruby        => [qw( rb rhtml rjs rxml )],
@@ -56,7 +56,7 @@ BEGIN {
         sql         => [qw( sql ctl )],
         tcl         => [qw( tcl )],
         tex         => [qw( tex cls sty )],
-        tt          => [qw( tt tt2 )],
+        tt          => [qw( tt tt2 ttml )],
         vb          => [qw( bas cls frm ctl vb resx )],
         vim         => [qw( vim )],
         yaml        => [qw( yaml yml )],
@@ -191,8 +191,13 @@ sub options_sanity_check {
     my %opts = @_;
     my $ok = 1;
 
+    # List mode doesn't make sense with any of these
     $ok = 0 if _option_conflict( \%opts, 'l', [qw( A B C o group )] );
+
+    # XXX This should work, I would think.
     $ok = 0 if _option_conflict( \%opts, 'l', [qw( m )] );
+
+    # File-searching is definitely irrelevant on these
     $ok = 0 if _option_conflict( \%opts, 'f', [qw( A B C o m group )] );
 
     return $ok;
@@ -279,6 +284,7 @@ sub show_help {
 
     print <<"END_OF_HELP";
 Usage: ack [OPTION]... PATTERN [FILES]
+
 Search for PATTERN in each source file in the tree from cwd on down.
 If [FILES] is specified, then only those files/directories are checked.
 ack may also search STDIN, but only if no FILES are specified, or if
@@ -289,58 +295,61 @@ Default switches may be specified in ACK_OPTIONS environment variable.
 Example: ack -i select
 
 Searching:
-    -i              Ignore case distinctions
-    -v              Invert match: select non-matching lines
-    -w              Force PATTERN to match only whole words
-    -Q              Quote all metacharacters; expr is literal
+  -i, --ignore-case     Ignore case distinctions
+  -v, --invert-match    Invert match: select non-matching lines
+  -w, --word-regexp     Force PATTERN to match only whole words
+  -Q, --literal         Quote all metacharacters; expr is literal
 
 Search output:
-    -l              Only print filenames containing matches
-    -o              Show only the part of a line matching PATTERN
-                    (turns off text highlighting)
-    --output=expr   Output the evaluation of expr for each line
-                    (turns off text highlighting)
-    -m=NUM          Stop after NUM matches
-    -H              Print the filename for each match
-    -h              Suppress the prefixing filename on output
-    -c, --count     Show number of lines matching per file
+  -l, --files-with-matches
+                        Only print filenames containing matches
+  -L, --files-without-match
+                        Only print filenames with no match
+  -o                    Show only the part of a line matching PATTERN
+                        (turns off text highlighting)
+  --output=expr         Output the evaluation of expr for each line
+                        (turns off text highlighting)
+  -m, --max-count=NUM   Stop after NUM matches
+  -H, --with-filename   Print the filename for each match
+  -h, --no-filename     Suppress the prefixing filename on output
+  -c, --count           Show number of lines matching per file
 
-    --group         Group matches by file name.
-                    (default: on when used interactively)
-    --nogroup       One result per line, including filename, like grep
-                    (default: on when the output is redirected)
+  --group               Group matches by file name.
+                        (default: on when used interactively)
+  --nogroup             One result per line, including filename, like grep
+                        (default: on when the output is redirected)
 
-    --[no]color     Highlight the matching text (default: on unless
-                    output is redirected, or on Windows)
+  --[no]color           Highlight the matching text (default: on unless
+                        output is redirected, or on Windows)
 
 Context control:
-    -B, --before-context=NUM
-    -A, --after-context=NUM
-    -C, --context=NUM
-                    print NUM lines of context before and/or after
-                    matching lines
+  -B, --before-context=NUM
+  -A, --after-context=NUM
+  -C, --context=NUM
+                        Print NUM lines of context before and/or after
+                        matching lines
 
 File finding:
-    -f              Only print the files found, without searching.
-                    The PATTERN must not be specified.
-    --sort-files    Sort the found files lexically.
+  -f                    Only print the files found, without searching.
+                        The PATTERN must not be specified.
+  --sort-files          Sort the found files lexically.
 
 File inclusion/exclusion:
-    -n              No descending into subdirectories
-    -a, --all       All files, regardless of extension (but still skips
-                    $ignore_dirs dirs)
-    --perl          Include only Perl files.
-    --type=perl     Include only Perl files.
-    --noperl        Exclude Perl files.
-    --type=noperl   Exclude Perl files.
-                    See "ack --help type" for supported filetypes.
-    --[no]follow    Follow symlinks.  Default is off.
+  -n                    No descending into subdirectories
+  -a, --all             All files, regardless of extension (but still skips
+                        $ignore_dirs dirs)
+  --perl                Include only Perl files.
+  --type=perl           Include only Perl files.
+  --noperl              Exclude Perl files.
+  --type=noperl         Exclude Perl files.
+                        See "ack --help type" for supported filetypes.
+  --[no]follow          Follow symlinks.  Default is off.
 
 Miscellaneous:
-    --help          This help
-    --man           Man page
-    --version       Display version & copyright
-    --thpppt        Bill the Cat
+  --help                This help
+  --man                 Man page
+  --version             Display version & copyright
+  --thpppt              Bill the Cat
 END_OF_HELP
 
     return;

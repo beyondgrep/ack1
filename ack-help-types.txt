@@ -16,7 +16,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]elisp     .el
     --[no]haskell   .hs .lhs
     --[no]html      .htm .html .shtml
-    --[no]java      .java
+    --[no]java      .java .properties
     --[no]js        .js
     --[no]jsp       .jsp .jspx .jhtm .jhtml
     --[no]lisp      .lisp
@@ -24,7 +24,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]mason     .mas .mhtml .mpl .mtxt
     --[no]ocaml     .ml .mli
     --[no]parrot    .pir .pasm .pmc .ops .pod .pg .tg
-    --[no]perl      .pl .pm .pod .tt .ttml .t
+    --[no]perl      .pl .pm .pod .t
     --[no]php       .php .phpt .php3 .php4 .php5
     --[no]python    .py
     --[no]ruby      .rb .rhtml .rjs .rxml
@@ -33,7 +33,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]sql       .sql .ctl
     --[no]tcl       .tcl
     --[no]tex       .tex .cls .sty
-    --[no]tt        .tt .tt2
+    --[no]tt        .tt .tt2 .ttml
     --[no]vb        .bas .cls .frm .ctl .vb .resx
     --[no]vim       .vim
     --[no]xml       .xml .dtd .xslt

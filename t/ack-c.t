@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 3;
+use Test::More tests => 5;
 
 use lib 't';
 use Util;
@@ -20,6 +20,25 @@ DASH_L: {
     chomp @results;
 
     sets_match( \@results, \@expected, 'Looking for religion' );
+}
+
+DASH_CAPITAL_L: {
+    my @expected = qw(
+        t/text/boy-named-sue.txt
+        t/text/freedom-of-choice.txt
+        t/text/shut-up-be-happy.txt
+    );
+
+    # -L and -l -v are identical
+    for my $switches ( ['-L'], ['-l','-v'] ) {
+        my @files = qw( t/text );
+        my @args = ( 'religion', '-a', @{$switches} );
+        my $cmd = "$^X ./ack-standalone @args @files";
+        my @results = `$cmd`;
+        chomp @results;
+
+        sets_match( \@results, \@expected, 'Looking for religion' );
+    }
 }
 
 DASH_C: {

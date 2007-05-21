@@ -8,7 +8,6 @@ ack-help.txt
 ack-help-types.txt
 ack-standalone
 squash
-Util.pm
 
 t/00-load.t
 t/ack-a.t
@@ -18,10 +17,12 @@ t/ack-type.t
 t/ack-v.t
 t/filetypes.t
 t/interesting.t
+t/longopts.t
 t/pod.t
 t/pod-coverage.t
 t/standalone.t
 t/zero.t
+t/Util.pm
 
 t/etc/core.2112
 t/etc/buttonhook.html.xxx
@@ -48,6 +49,7 @@ t/swamp/html.htm
 t/swamp/html.html
 t/swamp/javascript.js
 t/swamp/moose-andy.jpg
+t/swamp/options.pl
 t/swamp/parrot.pir
 t/swamp/perl-test.t
 t/swamp/perl-without-extension

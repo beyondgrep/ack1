@@ -25,11 +25,13 @@ my $perl = [qw(
     t/etc/shebang.pl.xxx
     t/filetypes.t
     t/interesting.t
+    t/longopts.t
     t/pod-coverage.t
     t/pod.t
     t/standalone.t
     t/swamp/0
     t/swamp/Makefile.PL
+    t/swamp/options.pl
     t/swamp/perl-test.t
     t/swamp/perl-without-extension
     t/swamp/perl.cgi
@@ -37,7 +39,7 @@ my $perl = [qw(
     t/swamp/perl.pm
     t/swamp/perl.pod
     t/zero.t
-    Util.pm
+    t/Util.pm
 )];
 
 my $perl_ruby = [ @{$perl}, @{$ruby} ];

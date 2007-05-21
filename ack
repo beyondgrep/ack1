@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.60';
+our $VERSION   = '1.62';
 our $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 # Check http://petdance.com/ack/ for updates
 
@@ -59,7 +59,8 @@ MAIN: {
         h           => \$opt{h},
         H           => \$opt{H},
         'i|ignore-case'         => \$opt{i},
-        'l|files-with-match'    => \$opt{l},
+        'l|files-with-matches'  => \$opt{l},
+        'L|files-without-match' => \$opt{L},
         'm|max-count=i'         => \$opt{m},
         n                       => \$opt{n},
         'o|output:s'            => \$opt{o},
@@ -104,6 +105,11 @@ MAIN: {
 
     if ( $opt{A} || $opt{B} ) {
         App::Ack::die( q{Sorry, but the -A, -B and -C options haven't actually been implemented yet.} );
+    }
+
+    # Handle new -L the old way: as -l and -v
+    if ( $opt{L} ) {
+        $opt{l} = $opt{v} = 1;
     }
 
     # Apply defaults
@@ -153,7 +159,7 @@ MAIN: {
 
     my @what;
     if ( @ARGV ) {
-        @what = $is_windows ? glob( @ARGV ) : @ARGV;
+        @what = $is_windows ? <@ARGV> : @ARGV;
 
         # Show filenames unless we've specified one single file
         $opt{show_filename} = (@what > 1) || (!-f $what[0]);
@@ -344,6 +350,7 @@ sub _search_v {
     return;
 } # _search_v()
 
+=encoding utf-8
 
 =head1 NAME
 
@@ -516,7 +523,7 @@ highlighting)
 Output the evaluation of I<expr> for each line (turns off text
 highlighting)
 
-=item B<-Q>
+=item B<-Q>, B<--literal>
 
 Quote all metacharacters.  PATTERN is treated as a literal.
 
@@ -662,6 +669,8 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Ævar Arnfjörð Bjarmason,
+Piers Cawley,
 Stephen Steneker,
 Elias Lutfallah,
 Mark Leighton Fisher,
@@ -679,7 +688,7 @@ Ask Bjørn Hansen,
 Jerry Gay,
 Will Coleda,
 Mike O'Regan,
-Slaven Rezic,
+Slaven Rezić,
 Mark Stosberg,
 David Alan Pisoni,
 Adriano Ferreira,

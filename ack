@@ -59,7 +59,8 @@ MAIN: {
         h           => \$opt{h},
         H           => \$opt{H},
         'i|ignore-case'         => \$opt{i},
-        'l|files-with-match'    => \$opt{l},
+        'l|files-with-matches'  => \$opt{l},
+        'L|files-without-match' => \$opt{L},
         'm|max-count=i'         => \$opt{m},
         n                       => \$opt{n},
         'o|output:s'            => \$opt{o},
@@ -104,6 +105,11 @@ MAIN: {
 
     if ( $opt{A} || $opt{B} ) {
         App::Ack::die( q{Sorry, but the -A, -B and -C options haven't actually been implemented yet.} );
+    }
+
+    # Handle new -L the old way: as -l and -v
+    if ( $opt{L} ) {
+        $opt{l} = $opt{v} = 1;
     }
 
     # Apply defaults
@@ -517,7 +523,7 @@ highlighting)
 Output the evaluation of I<expr> for each line (turns off text
 highlighting)
 
-=item B<-Q>
+=item B<-Q>, B<--literal>
 
 Quote all metacharacters.  PATTERN is treated as a literal.
 

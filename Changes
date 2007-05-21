@@ -18,6 +18,8 @@ NEXT
     [ENHANCEMENTS]
     Added .properties extension for --java.
 
+    Added -L as a negation to -l.  This is equivalent to -l -v.
+
     Added more GNU-style long opts.  Thanks to Ævar Arnfjörð Bjarmason,
     my second utf-8 string.
 

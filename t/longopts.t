@@ -12,7 +12,7 @@ This tests whether L<ack(1)>'s command line options work as expected.
 use Test::More qw( no_plan );
 
 my $swamp = 't/swamp';
-my $ack   = './ack';
+my $ack   = './ack-standalone';
 
 # Help
 for ( qw( -h --help ) ) {
@@ -83,8 +83,8 @@ for ( qw( -l --files-with-matches ) ) {
 
 # Files without match
 for ( qw( -L --files-without-match ) ) {
-    unlike
-        qx{ $^X $ack $_ 'use puppies' t/swamp/options.pl },
+    like
+        qx{ $^X $ack $_ 'use snorgledork' t/swamp/options.pl },
         qr{\Qt/swamp/options.pl},
         qq{$_ prints matching files};
     option_in_usage( $_ );

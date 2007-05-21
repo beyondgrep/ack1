@@ -191,8 +191,13 @@ sub options_sanity_check {
     my %opts = @_;
     my $ok = 1;
 
+    # List mode doesn't make sense with any of these
     $ok = 0 if _option_conflict( \%opts, 'l', [qw( A B C o group )] );
+
+    # XXX This should work, I would think.
     $ok = 0 if _option_conflict( \%opts, 'l', [qw( m )] );
+
+    # File-searching is definitely irrelevant on these
     $ok = 0 if _option_conflict( \%opts, 'f', [qw( A B C o m group )] );
 
     return $ok;

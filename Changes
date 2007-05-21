@@ -11,6 +11,8 @@ NEXT
     Perl from Darwinports complained, because apparently most other
     Perl installs have "." in @INC.
 
+    RT #25391: Fixed test failures under Win32.
+
     [ENHANCEMENTS]
     Added .properties extension for --java.
 

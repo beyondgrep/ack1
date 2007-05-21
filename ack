@@ -153,7 +153,7 @@ MAIN: {
 
     my @what;
     if ( @ARGV ) {
-        @what = $is_windows ? glob( @ARGV ) : @ARGV;
+        @what = $is_windows ? <@ARGV> : @ARGV;
 
         # Show filenames unless we've specified one single file
         $opt{show_filename} = (@what > 1) || (!-f $what[0]);

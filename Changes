@@ -13,6 +13,8 @@ NEXT
 
     RT #25391: Fixed test failures under Win32.
 
+    Spelled Slaven Rezić's name properly.  Look, my first utf-8 string!
+
     [ENHANCEMENTS]
     Added .properties extension for --java.
 

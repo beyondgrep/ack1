@@ -344,6 +344,7 @@ sub _search_v {
     return;
 } # _search_v()
 
+=encoding utf-8
 
 =head1 NAME
 
@@ -680,7 +681,7 @@ Ask Bjørn Hansen,
 Jerry Gay,
 Will Coleda,
 Mike O'Regan,
-Slaven Rezic,
+Slaven Rezić,
 Mark Stosberg,
 David Alan Pisoni,
 Adriano Ferreira,

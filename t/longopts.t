@@ -9,103 +9,96 @@ This tests whether L<ack(1)>'s command line options work as expected.
 
 =cut
 
-use Test::More tests => 17;
+use Test::More tests => 32;
+use File::Next 0.34; # For the reslash() function
 
 my $swamp = 't/swamp';
-my $ack   = './ack';
+my $ack   = './ack-standalone';
 
-=head1 TESTS
+# Help
+for ( qw( -h --help ) ) {
+    like
+        qx{ $^X $ack $_ },
+        qr{ ^Usage: .* Example: }xs,
+        qq{$_ output is correct};
+    option_in_usage( $_ );
+}
 
-=over
+# Version
+for ( qw( --version ) ) {
+    like
+        qx{ $^X $ack $_ },
+        qr{ ^ack .* Copyright .* Perl }xs,
+        qq{$_ output is correct};
+    option_in_usage( $_ );
+}
 
-=cut
+# Ignore case
+for ( qw( -i --ignore-case ) ) {
+    like
+        qx{ $^X $ack $_ "upper case" t/swamp/options.pl },
+        qr{UPPER CASE},
+        qq{$_ works correctly for ascii};
+    option_in_usage( $_ );
+}
 
-=item --help
+# Invert match
+for ( qw( -v --invert-match ) ) {
+    unlike
+        qx{ $^X $ack $_ "use warnings" t/swamp/options.pl },
+        qr{use warnings},
+        qq{$_ works correctly};
+    option_in_usage( $_ );
+}
 
-=cut
+# Word regexp
+for ( qw( -w --word-regexp ) ) {
+    like
+        qx{ $^X $ack $_ "word" t/swamp/options.pl },
+        qr{ word },
+        qq{$_ ignores non-words};
+    unlike
+        qx{ $^X $ack $_ "word" t/swamp/options.pl },
+        qr{notaword},
+        qq{$_ ignores non-words};
+    option_in_usage( $_ );
+}
 
-like
-    qx{ $^X $ack $_ },
-    qr{ ^Usage: .* Example: }xs,
-    qq{$_ output is correct}
-        for qw( -h --help );
+# Literal
+for ( qw( -Q --literal ) ) {
+    like
+        qx{ $^X $ack $_ "[abc]" t/swamp/options.pl },
+        qr{\Q[abc]\E},
+        qq{$_ matches a literal string};
+    option_in_usage( $_ );
+}
 
-=item --version
+my $expected = File::Next::reslash( 't/swamp/options.pl' );
 
-=cut
+# Files with matches
+for ( qw( -l --files-with-matches ) ) {
+    like
+        qx{ $^X $ack $_ "use strict" t/swamp/options.pl },
+        qr{\Q$expected},
+        qq{$_ prints matching files};
+    option_in_usage( $_ );
+}
 
-like
-    qx{ $^X $ack $_ },
-    qr{ ^ack .* Copyright .* Perl }xs,
-    qq{$_ output is correct}
-        for qw( --version );
+# Files without match
+for ( qw( -L --files-without-match ) ) {
+    like
+        qx{ $^X $ack $_ "use snorgledork" t/swamp/options.pl },
+        qr{\Q$expected},
+        qq{$_ prints matching files};
+    option_in_usage( $_ );
+}
 
-=item --ignore-case
+my $usage;
+sub option_in_usage {
+    my $opt = shift;
 
-=cut
+    $usage = qx{ $^X $ack --help } unless $usage;
 
-like
-    qx{ $^X $ack $_ "upper case" t/swamp/options.pl },
-    qr{UPPER CASE},
-    qq{$_ works correctly for ascii}
-        for qw( -i --ignore-case );
-
-=item --invert-match
-
-=cut
-
-unlike
-    qx{ $^X $ack $_ "use warnings" t/swamp/options.pl },
-    qr{use warnings},
-    qq{$_ works correctly}
-        for qw( -v --invert-match );
-
-=item --word-regexp
-
-=cut
-
-like
-    qx{ $^X $ack $_ "word" t/swamp/options.pl },
-    qr{ word },
-    qq{$_ ignores non-words}
-        for qw( -w --word-regexp );
-
-unlike
-    qx{ $^X $ack $_ "word" t/swamp/options.pl },
-    qr{notaword},
-    qq{$_ ignores non-words}
-        for qw( -w --word-regexp );
-
-=item --literal
-
-=cut
-
-like
-    qx{ $^X $ack $_ "[abc]" t/swamp/options.pl },
-    qr{\Q[abc]\E},
-    qq{$_ matches a literal string}
-        for qw( -Q --literal );
-
-=item --files-with-matches
-
-=cut
-
-like
-    qx{ $^X $ack $_ "use strict" t/swamp/options.pl },
-    qr{t/swamp/options\.pl},
-    qq{$_ prints matching files}
-        for qw( -l --files-with-matches );
-
-=item --files-without-match
-
-=cut
-
-unlike
-    qx{ $^X $ack $_ "use puppies" t/swamp/options.pl },
-    qr{t/swamp/options\.pl},
-    qq{$_ prints matching files}
-        for qw( -L --files-without-match );
-
-=back
-
-=cut
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    ok( $usage =~ qr/\Q$opt\E\b/s, "Found $opt in usage" );
+}

@@ -107,10 +107,11 @@ MAIN: {
     GetOptions( %options ) && App::Ack::options_sanity_check( %opt ) or
         App::Ack::die( 'See ack --help or ack --man for options.' );
 
-    if ( $opt{A} || $opt{B} ) {
-        push @buffer_before => (undef) x $opt{B};
-        push @buffer_after  => (undef) x $opt{A};
-    }
+    $buffer_before[$opt{B} - 1] = undef
+        if $opt{B};
+
+    $buffer_after[$opt{A} - 1] = undef
+        if $opt{A};
 
     # Handle new -L the old way: as -l and -v
     if ( $opt{L} ) {
@@ -256,7 +257,7 @@ sub get_line {
     my $fh = shift;
     return () if eof $fh;
     my $line = <$fh>;
-    $line ? $line : '';
+    return [ $., $line ? $line : '' ];
 }
 
 sub search {
@@ -292,7 +293,7 @@ sub search {
         until defined $current_line;
 
     while (! eof $fh) {
-        unless ($current_line =~ /$regex/) {
+        unless ($current_line->[1] =~ /$regex/) {
             advance_current_line($fh, %opt);
             next;
         }
@@ -314,17 +315,18 @@ sub search {
         }
 
         if (@buffer_before or @buffer_after) {
-            print $. - 1, ": $_"
+            print "$$_[0]: $$_[1]"
                 for @buffer_before, $current_line, @buffer_after;
             print $match_sep, $/
         }
+        else {
 
         my $out;
         if ( $opt{o} ) {
             $out = $opt{o}->() . "\n";
         }
         else {
-            $out = $current_line;
+            $out = $current_line->[1];
             $out =~ s/($regex)/Term::ANSIColor::colored($1,$ENV{ACK_COLOR_MATCH})/eg if $opt{color};
         }
 
@@ -342,6 +344,7 @@ sub search {
             }
         }
         print $out;
+        }
 
         last if $opt{m} && ( $nmatches >= $opt{m} );
 

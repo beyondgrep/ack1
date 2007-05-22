@@ -9,7 +9,7 @@ This tests whether L<ack(1)>'s command line options work as expected.
 
 =cut
 
-use Test::More tests => 32;
+use Test::More tests => 17;
 
 my $swamp = 't/swamp';
 my $ack   = './ack';

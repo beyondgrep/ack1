@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.61_01';
+our $VERSION   = '1.62';
 our $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 # Check http://petdance.com/ack/ for updates
 
@@ -11,6 +11,9 @@ our $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 my $is_windows;
 my %opt;
 my %type_wanted;
+my (@buffer_pre, @buffer_post, $current_line);
+my $match_sep = '--';
+
 
 BEGIN {
     $is_windows = ($^O =~ /MSWin32/);
@@ -21,6 +24,7 @@ BEGIN {
 }
 
 use Getopt::Long;
+
 
 MAIN: {
     if ( $App::Ack::VERSION ne $main::VERSION ) {
@@ -101,7 +105,8 @@ MAIN: {
         App::Ack::die( 'See ack --help or ack --man for options.' );
 
     if ( $opt{A} || $opt{B} ) {
-        App::Ack::die( q{Sorry, but the -A, -B and -C options haven't actually been implemented yet.} );
+        push @buffer_pre  => (undef) x $opt{B};
+        push @buffer_post => (undef) x $opt{A};
     }
 
     # Apply defaults
@@ -213,6 +218,40 @@ sub dash_a {
     return App::Ack::is_searchable( $File::Next::name );
 }
 
+sub advance_current_line {
+    my $fh = shift;
+    my %opt = @_;
+    if( $opt{B} ) {
+        shift @buffer_pre;
+        push @buffer_pre => $current_line;
+    }
+
+    if( $opt{A} ) {
+         $current_line = shift @buffer_post;
+        fill_post_buffer($fh, %opt);
+    }
+    else {
+        $current_line = get_line($fh);
+    }
+}
+
+
+sub fill_post_buffer {
+    my $fh = shift;
+    my %opt = @_;
+    push @buffer_post => get_line($fh)
+        until @buffer_post == $opt{A};
+}
+
+
+sub get_line {
+    my $fh = shift;
+    return () if eof $fh;
+    my $line = <$fh>;
+#    chomp $line;
+    $line ? $line : '';
+}
+
 sub search {
     my $filename = shift;
     my $regex = shift;
@@ -240,11 +279,23 @@ sub search {
     }
 
     my $nmatches = 0;
-    local $_ = undef;
-    while (<$fh>) {
-        next unless /$regex/;
+    $current_line = undef;
+
+    advance_current_line($fh, %opt)
+        until defined $current_line;
+
+    while (! eof $fh) {
+        unless ($current_line =~ /$regex/) {
+            advance_current_line($fh, %opt);
+            next;
+        }
+
+
         ++$nmatches;
-        next if $opt{count}; # Counting means no lines
+        if ($opt{count}) { # Counting means no lines
+            advance_current_line($fh, %opt);
+            next;
+        }
 
         # No point in searching more if we only want a list,
         # and don't want a count.
@@ -255,12 +306,18 @@ sub search {
             last;
         }
 
+        if (@buffer_pre or @buffer_post) {
+            print $. - 1, ": $_"
+                for @buffer_pre, $current_line, @buffer_post;
+            print $match_sep, $/
+        }
+
         my $out;
         if ( $opt{o} ) {
             $out = $opt{o}->() . "\n";
         }
         else {
-            $out = $_;
+            $out = $current_line;
             $out =~ s/($regex)/Term::ANSIColor::colored($1,$ENV{ACK_COLOR_MATCH})/eg if $opt{color};
         }
 
@@ -280,6 +337,8 @@ sub search {
         print $out;
 
         last if $opt{m} && ( $nmatches >= $opt{m} );
+
+        advance_current_line($fh, %opt);
     } # while
     close $fh or App::Ack::warn( "$filename: $!" );
 
@@ -295,7 +354,6 @@ sub search {
     else {
         print "\n" if $nmatches && $opt{show_filename} && $opt{group};
     }
-
     return;
 }   # search()
 
@@ -876,7 +934,7 @@ use Scalar::Util ();
 
 our $VERSION;
 BEGIN {
-    $VERSION = '1.61_01';
+    $VERSION = '1.62';
 }
 
 our %types;

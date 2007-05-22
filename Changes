@@ -1,6 +1,6 @@
 Changelog for ack
 
-NEXT
+1.62    Mon May 21 15:22:19 CDT 2007
 
     [THINGS THAT MAY BREAK FOR YOU]
     The extensions .tt and .ttml are no longer part of the --perl

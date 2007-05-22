@@ -16,7 +16,7 @@ Version 1.61_01
 
 our $VERSION;
 BEGIN {
-    $VERSION = '1.61_01';
+    $VERSION = '1.62';
 }
 
 our %types;

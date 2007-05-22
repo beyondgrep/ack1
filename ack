@@ -11,7 +11,7 @@ our $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 my $is_windows;
 my %opt;
 my %type_wanted;
-my (@buffer_pre, @buffer_post, $current_line);
+my (@buffer_before, @buffer_after, $current_line);
 my $match_sep = '--';
 
 
@@ -107,8 +107,8 @@ MAIN: {
         App::Ack::die( 'See ack --help or ack --man for options.' );
 
     if ( $opt{A} || $opt{B} ) {
-        push @buffer_pre  => (undef) x $opt{B};
-        push @buffer_post => (undef) x $opt{A};
+        push @buffer_after  => (undef) x $opt{B};
+        push @buffer_before => (undef) x $opt{A};
     }
 
     # Apply defaults
@@ -224,13 +224,13 @@ sub advance_current_line {
     my $fh = shift;
     my %opt = @_;
     if( $opt{B} ) {
-        shift @buffer_pre;
-        push @buffer_pre => $current_line;
+        shift @buffer_before;
+        push @buffer_before => $current_line;
     }
 
     if( $opt{A} ) {
-         $current_line = shift @buffer_post;
-        fill_post_buffer($fh, %opt);
+         $current_line = shift @buffer_after;
+        fill_after_buffer($fh, %opt);
     }
     else {
         $current_line = get_line($fh);
@@ -238,11 +238,11 @@ sub advance_current_line {
 }
 
 
-sub fill_post_buffer {
+sub fill_after_buffer {
     my $fh = shift;
     my %opt = @_;
-    push @buffer_post => get_line($fh)
-        until @buffer_post == $opt{A};
+    push @buffer_after => get_line($fh)
+        until @buffer_after == $opt{A};
 }
 
 
@@ -250,7 +250,6 @@ sub get_line {
     my $fh = shift;
     return () if eof $fh;
     my $line = <$fh>;
-#    chomp $line;
     $line ? $line : '';
 }
 
@@ -308,9 +307,9 @@ sub search {
             last;
         }
 
-        if (@buffer_pre or @buffer_post) {
+        if (@buffer_before or @buffer_after) {
             print $. - 1, ": $_"
-                for @buffer_pre, $current_line, @buffer_post;
+                for @buffer_before, $current_line, @buffer_after;
             print $match_sep, $/
         }
 

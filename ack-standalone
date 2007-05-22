@@ -105,8 +105,8 @@ MAIN: {
         App::Ack::die( 'See ack --help or ack --man for options.' );
 
     if ( $opt{A} || $opt{B} ) {
-        push @buffer_after  => (undef) x $opt{B};
-        push @buffer_before => (undef) x $opt{A};
+        push @buffer_before => (undef) x $opt{B};
+        push @buffer_after  => (undef) x $opt{A};
     }
 
     # Apply defaults

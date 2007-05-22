@@ -81,7 +81,7 @@ unlike
 =cut
 
 like
-    qx{ $^X $ack $_ '[abc]' t/swamp/options.pl },
+    qx{ $^X $ack $_ "[abc]" t/swamp/options.pl },
     qr{\Q[abc]\E},
     qq{$_ matches a literal string}
         for qw( -Q --literal );
@@ -91,7 +91,7 @@ like
 =cut
 
 like
-    qx{ $^X $ack $_ 'use strict' t/swamp/options.pl },
+    qx{ $^X $ack $_ "use strict" t/swamp/options.pl },
     qr{t/swamp/options\.pl},
     qq{$_ prints matching files}
         for qw( -l --files-with-matches );
@@ -101,7 +101,7 @@ like
 =cut
 
 unlike
-    qx{ $^X $ack $_ 'use puppies' t/swamp/options.pl },
+    qx{ $^X $ack $_ "use puppies" t/swamp/options.pl },
     qr{t/swamp/options\.pl},
     qq{$_ prints matching files}
         for qw( -L --files-without-match );

@@ -10,6 +10,7 @@ This tests whether L<ack(1)>'s command line options work as expected.
 =cut
 
 use Test::More tests => 32;
+use File::Next 0.34; # For the reslash() function
 
 my $swamp = 't/swamp';
 my $ack   = './ack-standalone';
@@ -66,17 +67,19 @@ for ( qw( -w --word-regexp ) ) {
 # Literal
 for ( qw( -Q --literal ) ) {
     like
-        qx{ $^X $ack $_ '[abc]' t/swamp/options.pl },
+        qx{ $^X $ack $_ "[abc]" t/swamp/options.pl },
         qr{\Q[abc]\E},
         qq{$_ matches a literal string};
     option_in_usage( $_ );
 }
 
+my $expected = File::Next::reslash( 't/swamp/options.pl' );
+
 # Files with matches
 for ( qw( -l --files-with-matches ) ) {
     like
-        qx{ $^X $ack $_ 'use strict' t/swamp/options.pl },
-        qr{\Qt/swamp/options.pl},
+        qx{ $^X $ack $_ "use strict" t/swamp/options.pl },
+        qr{\Q$expected},
         qq{$_ prints matching files};
     option_in_usage( $_ );
 }
@@ -84,8 +87,8 @@ for ( qw( -l --files-with-matches ) ) {
 # Files without match
 for ( qw( -L --files-without-match ) ) {
     like
-        qx{ $^X $ack $_ 'use snorgledork' t/swamp/options.pl },
-        qr{\Qt/swamp/options.pl},
+        qx{ $^X $ack $_ "use snorgledork" t/swamp/options.pl },
+        qr{\Q$expected},
         qq{$_ prints matching files};
     option_in_usage( $_ );
 }

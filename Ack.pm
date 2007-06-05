@@ -2,7 +2,6 @@ package App::Ack;
 
 use warnings;
 use strict;
-use Scalar::Util ();
 
 =head1 NAME
 
@@ -10,13 +9,13 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.61_01
+Version 1.63_01
 
 =cut
 
 our $VERSION;
 BEGIN {
-    $VERSION = '1.62';
+    $VERSION = '1.63_01';
 }
 
 our %types;
@@ -417,55 +416,5 @@ END_OF_VERSION
 
     return;
 }
-
-
-=head2 C<is_interactive()>
-
-This is taken directly from Damian Conway's IO::Interactive.  Thanks,
-Damian!
-
-This subroutine returns true if C<*ARGV> and C<*STDOUT> are connected
-to the terminal. The test is considerably more sophisticated than:
-
-    -t *ARGV && -t *STDOUT
-
-as it takes into account the magic behaviour of C<*ARGV>.
-
-You can also pass C<is_interactive> a writable filehandle, in which
-case it requires that filehandle be connected to a terminal (instead
-of C<*STDOUT>).  The usual suspect here is C<*STDERR>:
-
-    if ( is_interactive(*STDERR) ) {
-        carp $warning;
-    }
-
-=cut
-
-sub is_interactive {
-    my ($out_handle) = (@_, select);    # Default to default output handle
-
-    # Not interactive if output is not to terminal...
-    return 0 if not -t $out_handle;
-
-    # If *ARGV is opened, we're interactive if...
-    if ( Scalar::Util::openhandle( *ARGV ) ) {
-        # ...it's currently opened to the magic '-' file
-        return -t *STDIN if defined $ARGV && $ARGV eq '-';
-
-        # ...it's at end-of-file and the next file is the magic '-' file
-        return @ARGV>0 && $ARGV[0] eq '-' && -t *STDIN if eof *ARGV;
-
-        # ...it's directly attached to the terminal 
-        return -t *ARGV;
-    }
-
-    # If *ARGV isn't opened, it will be interactive if *STDIN is attached 
-    # to a terminal and either there are no files specified on the command line
-    # or if there are files and the first is the magic '-' file
-    else {
-        return -t *STDIN && (@ARGV==0 || $ARGV[0] eq '-');
-    }
-}
-
 
 1; # End of App::Ack

@@ -1,5 +1,18 @@
 Changelog for ack
 
+1.63_01
+    [THINGS THAT MAY BREAK FOR YOU]
+    The changes I made to detect if ack is outputting to the screen
+    may break some automated build tools.  If so, please contact
+    me.  That's why this is a dev release.
+
+    [FIXES]
+    Colorized output to the screen is now the default, correctly.
+    I got rid of the is_interactive() I took from IO::Interactive
+    and just checked for C<-t *STDOUT>, because that's what we're
+    really checking for: Is the output going to the screen?
+
+
 1.62    Mon May 21 15:22:19 CDT 2007
 
     [THINGS THAT MAY BREAK FOR YOU]

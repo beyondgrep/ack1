@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.62';
+our $VERSION   = '1.63_01';
 our $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 # Check http://petdance.com/ack/ for updates
 
@@ -35,12 +35,12 @@ MAIN: {
     # Priorities! Get the --thpppt checking out of the way.
     /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
 
-    my $is_interactive = App::Ack::is_interactive();
+    my $to_screen = -t *STDOUT;
     my %defaults = (
         all     => 0,
-        color   => $is_interactive && !$is_windows,
+        color   => $to_screen && !$is_windows,
         follow  => 0,
-        group   => $is_interactive,
+        group   => $to_screen,
         m       => 0,
     );
 

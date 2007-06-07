@@ -6,6 +6,7 @@ use strict;
 use Test::More tests => 3;
 use App::Ack ();
 use File::Next ();
+delete $ENV{ACK_OPTIONS};
 
 use lib 't';
 use Util;

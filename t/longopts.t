@@ -11,6 +11,7 @@ This tests whether L<ack(1)>'s command line options work as expected.
 
 use Test::More tests => 32;
 use File::Next 0.34; # For the reslash() function
+delete $ENV{ACK_OPTIONS};
 
 my $swamp = 't/swamp';
 my $ack   = './ack-standalone';

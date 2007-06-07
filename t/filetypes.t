@@ -5,6 +5,7 @@ use strict;
 
 use Test::More tests => 28;
 use Data::Dumper;
+delete $ENV{ACK_OPTIONS};
 
 use lib 't';
 use Util;

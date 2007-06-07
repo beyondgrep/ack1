@@ -1,5 +1,12 @@
 Changelog for ack
 
+NEXT
+
+    [FIXES]
+    The tests didn't clear ACK_OPTIONS before running, so if you
+    set this useful environment variable, your tests would fail.
+    Thanks, Michael Hendricks.
+
 1.63_01
     [THINGS THAT MAY BREAK FOR YOU]
     The changes I made to detect if ack is outputting to the screen

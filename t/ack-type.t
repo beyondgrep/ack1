@@ -5,6 +5,7 @@ use strict;
 
 use Test::More tests => 16;
 use File::Next 0.34; # For the reslash() function
+delete $ENV{ACK_OPTIONS};
 
 my $ruby = [qw(
     t/etc/shebang.rb.xxx

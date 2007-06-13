@@ -66,6 +66,7 @@ MAIN: {
         'o|output:s'            => \$opt{o},
         'Q|literal'             => \$opt{Q},
         'sort-files'            => \$opt{sort_files},
+        'text'                  => \$opt{text},
         'v|invert-match'        => \$opt{v},
         'w|word-regexp'         => \$opt{w},
 
@@ -135,7 +136,7 @@ MAIN: {
     # If anyone says --no-whatever, we assume all other types must be on.
     if ( !$filetypes_supported_set ) {
         for my $i ( keys %type_wanted ) {
-            $type_wanted{$i} = 1 unless ( defined( $type_wanted{$i} ) || $i eq 'binary' );
+            $type_wanted{$i} = 1 unless ( defined( $type_wanted{$i} ) || $i eq 'binary' || $i eq 'text' );
         }
     }
 

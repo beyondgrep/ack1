@@ -16,6 +16,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]elisp     .el
     --[no]haskell   .hs .lhs
     --[no]html      .htm .html .shtml
+    --[no]ignored   Files, but not directories, normally ignored by ack (default: off)
     --[no]java      .java .properties
     --[no]js        .js
     --[no]jsp       .jsp .jspx .jhtm .jhtml
@@ -33,6 +34,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]sql       .sql .ctl
     --[no]tcl       .tcl
     --[no]tex       .tex .cls .sty
+    --[no]text      Text files, as defined by Perl's -T op (default: off)
     --[no]tt        .tt .tt2 .ttml
     --[no]vb        .bas .cls .frm .ctl .vb .resx
     --[no]vim       .vim

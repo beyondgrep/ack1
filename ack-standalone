@@ -64,6 +64,7 @@ MAIN: {
         'o|output:s'            => \$opt{o},
         'Q|literal'             => \$opt{Q},
         'sort-files'            => \$opt{sort_files},
+        'text'                  => \$opt{text},
         'v|invert-match'        => \$opt{v},
         'w|word-regexp'         => \$opt{w},
 
@@ -133,7 +134,7 @@ MAIN: {
     # If anyone says --no-whatever, we assume all other types must be on.
     if ( !$filetypes_supported_set ) {
         for my $i ( keys %type_wanted ) {
-            $type_wanted{$i} = 1 unless ( defined( $type_wanted{$i} ) || $i eq 'binary' );
+            $type_wanted{$i} = 1 unless ( defined( $type_wanted{$i} ) || $i eq 'binary' || $i eq 'text' || $i eq 'ignored' );
         }
     }
 
@@ -905,6 +906,7 @@ BEGIN {
         elisp       => [qw( el )],
         haskell     => [qw( hs lhs )],
         html        => [qw( htm html shtml )],
+        ignored     => q{Files, but not directories, normally ignored by ack (default: off)},
         lisp        => [qw( lisp )],
         java        => [qw( java properties )],
         js          => [qw( js )],
@@ -922,6 +924,7 @@ BEGIN {
         sql         => [qw( sql ctl )],
         tcl         => [qw( tcl )],
         tex         => [qw( tex cls sty )],
+        text        => q{Text files, as defined by Perl's -T op (default: off)},
         tt          => [qw( tt tt2 ttml )],
         vb          => [qw( bas cls frm ctl vb resx )],
         vim         => [qw( vim )],
@@ -950,17 +953,19 @@ sub skipdir_filter {
 }
 
 
+use constant TEXT => 'text';
+
 sub filetypes {
     my $filename = shift;
 
-    return '-ignore' unless is_searchable( $filename );
+    return 'ignored' unless is_searchable( $filename );
 
-    return 'make' if $filename =~ m{$path_sep?Makefile$}io;
+    return ('make',TEXT) if $filename =~ m{$path_sep?Makefile$}io;
 
     # If there's an extension, look it up
     if ( $filename =~ m{\.([^\.$path_sep]+)$}o ) {
         my $ref = $types{lc $1};
-        return @{$ref} if $ref;
+        return (@{$ref},TEXT) if $ref;
     }
 
     # At this point, we can't tell from just the name.  Now we have to
@@ -995,12 +1000,12 @@ sub filetypes {
     }
 
     if ( $header =~ /^#!/ ) {
-        return $1       if $header =~ /\b(ruby|p(erl|hp|ython))\b/;
-        return 'shell'  if $header =~ /\b(?:ba|c|k|z)?sh\b/;
+        return ($1,TEXT)       if $header =~ /\b(ruby|p(erl|hp|ython))\b/;
+        return ('shell','text')  if $header =~ /\b(?:ba|c|k|z)?sh\b/;
     }
-    return 'xml' if $header =~ /<\?xml /;
+    return ('xml',TEXT) if $header =~ /<\?xml /;
 
-    return;
+    return (TEXT);
 }
 
 

@@ -38,6 +38,7 @@ BEGIN {
         elisp       => [qw( el )],
         haskell     => [qw( hs lhs )],
         html        => [qw( htm html shtml )],
+        ignored     => q{Files, but not directories, normally ignored by ack (default: off)},
         lisp        => [qw( lisp )],
         java        => [qw( java properties )],
         js          => [qw( js )],
@@ -55,6 +56,7 @@ BEGIN {
         sql         => [qw( sql ctl )],
         tcl         => [qw( tcl )],
         tex         => [qw( tex cls sty )],
+        text        => q{Text files, as defined by Perl's -T op (default: off)},
         tt          => [qw( tt tt2 ttml )],
         vb          => [qw( bas cls frm ctl vb resx )],
         vim         => [qw( vim )],
@@ -105,22 +107,24 @@ F<foo.pod> could be "perl" or "parrot".
 The filetype will be C<undef> if we can't determine it.  This could
 be if the file doesn't exist, or it can't be read.
 
-It will be '-ignore' if it's something that ack should always ignore,
+It will be 'ignored' if it's something that ack should always ignore,
 even under -a.
 
 =cut
 
+use constant TEXT => 'text';
+
 sub filetypes {
     my $filename = shift;
 
-    return '-ignore' unless is_searchable( $filename );
+    return 'ignored' unless is_searchable( $filename );
 
-    return 'make' if $filename =~ m{$path_sep?Makefile$}io;
+    return ('make',TEXT) if $filename =~ m{$path_sep?Makefile$}io;
 
     # If there's an extension, look it up
     if ( $filename =~ m{\.([^\.$path_sep]+)$}o ) {
         my $ref = $types{lc $1};
-        return @{$ref} if $ref;
+        return (@{$ref},TEXT) if $ref;
     }
 
     # At this point, we can't tell from just the name.  Now we have to
@@ -155,12 +159,12 @@ sub filetypes {
     }
 
     if ( $header =~ /^#!/ ) {
-        return $1       if $header =~ /\b(ruby|p(erl|hp|ython))\b/;
-        return 'shell'  if $header =~ /\b(?:ba|c|k|z)?sh\b/;
+        return ($1,TEXT)       if $header =~ /\b(ruby|p(erl|hp|ython))\b/;
+        return ('shell','text')  if $header =~ /\b(?:ba|c|k|z)?sh\b/;
     }
-    return 'xml' if $header =~ /<\?xml /;
+    return ('xml',TEXT) if $header =~ /<\?xml /;
 
-    return;
+    return (TEXT);
 }
 
 =head2 is_searchable( $filename )

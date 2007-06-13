@@ -7,6 +7,15 @@ NEXT
     set this useful environment variable, your tests would fail.
     Thanks, Michael Hendricks.
 
+    [ENHANCEMENTS]
+    Added a filetype of "--text", which matches any text file.  This
+    is off by default, just as --binary is.
+
+    Added a filetype of "--ignored", which matches any file that
+    ack ignores, like core dumps and backup files.  It will NOT
+    include files that are in ignored directories like blib/ and
+    .svn/
+
 1.63_01
     [THINGS THAT MAY BREAK FOR YOU]
     The changes I made to detect if ack is outputting to the screen

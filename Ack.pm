@@ -38,7 +38,7 @@ BEGIN {
         elisp       => [qw( el )],
         haskell     => [qw( hs lhs )],
         html        => [qw( htm html shtml )],
-        ignored     => q{Files, but not directories, normally ignored by ack (default: off)},
+        skipped     => q{Files, but not directories, normally skipped by ack (default: off)},
         lisp        => [qw( lisp )],
         java        => [qw( java properties )],
         js          => [qw( js )],
@@ -107,7 +107,7 @@ F<foo.pod> could be "perl" or "parrot".
 The filetype will be C<undef> if we can't determine it.  This could
 be if the file doesn't exist, or it can't be read.
 
-It will be 'ignored' if it's something that ack should always ignore,
+It will be 'skipped' if it's something that ack should always ignore,
 even under -a.
 
 =cut
@@ -117,7 +117,7 @@ use constant TEXT => 'text';
 sub filetypes {
     my $filename = shift;
 
-    return 'ignored' unless is_searchable( $filename );
+    return 'skipped' unless is_searchable( $filename );
 
     return ('make',TEXT) if $filename =~ m{$path_sep?Makefile$}io;
 

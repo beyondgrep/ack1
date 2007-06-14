@@ -11,8 +11,8 @@ NEXT
     Added a filetype of "--text", which matches any text file.  This
     is off by default, just as --binary is.
 
-    Added a filetype of "--ignored", which matches any file that
-    ack ignores, like core dumps and backup files.  It will NOT
+    Added a filetype of "--skipped", which matches any file that
+    ack skips, like core dumps and backup files.  It will NOT
     include files that are in ignored directories like blib/ and
     .svn/
 

@@ -28,14 +28,14 @@ ok(  is_filetype( '/tmp/wango/foo.handler.pod', 'perl' ), '/tmp/wango/foo.handle
 ok(  is_filetype( '/tmp/blongo/makefile', 'make' ), '/tmp/blongo/makefile is a makefile' );
 ok(  is_filetype( 'Makefile', 'make' ), 'Makefile is a makefile' );
 
-is(App::Ack::filetypes('foo.pod~'), 'ignored',
-    'correctly ignore backup file');
+is(App::Ack::filetypes('foo.pod~'), 'skipped',
+    'correctly skip backup file');
 
-is(App::Ack::filetypes('#some.pod#'), 'ignored',
-    'correctly ignore files starting and ending with hash mark');
+is(App::Ack::filetypes('#some.pod#'), 'skipped',
+    'correctly skip files starting and ending with hash mark');
 
-is(App::Ack::filetypes('core.987654321'), 'ignored',
-    'correctly ignore files named core.NNNN');
+is(App::Ack::filetypes('core.987654321'), 'skipped',
+    'correctly skip files named core.NNNN');
 
 MATCH_VIA_CONTENT: {
     my %lookups = (

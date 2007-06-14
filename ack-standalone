@@ -906,7 +906,7 @@ BEGIN {
         elisp       => [qw( el )],
         haskell     => [qw( hs lhs )],
         html        => [qw( htm html shtml )],
-        ignored     => q{Files, but not directories, normally ignored by ack (default: off)},
+        skipped     => q{Files, but not directories, normally skipped by ack (default: off)},
         lisp        => [qw( lisp )],
         java        => [qw( java properties )],
         js          => [qw( js )],
@@ -958,7 +958,7 @@ use constant TEXT => 'text';
 sub filetypes {
     my $filename = shift;
 
-    return 'ignored' unless is_searchable( $filename );
+    return 'skipped' unless is_searchable( $filename );
 
     return ('make',TEXT) if $filename =~ m{$path_sep?Makefile$}io;
 

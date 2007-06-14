@@ -1,6 +1,6 @@
 Changelog for ack
 
-1.63_02     Thu Jun 14 09:39:23 CDT 2007
+1.63_03     Thu Jun 14 09:47:39 CDT 2007
 
     [FIXES]
     The tests didn't clear ACK_OPTIONS before running, so if you
@@ -15,6 +15,11 @@ Changelog for ack
     ack skips, like core dumps and backup files.  It will NOT
     include files that are in ignored directories like blib/ and
     .svn/
+
+
+1.63_02     Thu Jun 14 09:39:23 CDT 2007
+    Buggy release.  Ignore.
+
 
 1.63_01     Tue Jun  5 2007
     [THINGS THAT MAY BREAK FOR YOU]

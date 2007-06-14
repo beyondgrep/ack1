@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.63_02';
+our $VERSION   = '1.63_03';
 our $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 # Check http://petdance.com/ack/ for updates
 
@@ -136,7 +136,7 @@ MAIN: {
     # If anyone says --no-whatever, we assume all other types must be on.
     if ( !$filetypes_supported_set ) {
         for my $i ( keys %type_wanted ) {
-            $type_wanted{$i} = 1 unless ( defined( $type_wanted{$i} ) || $i eq 'binary' || $i eq 'text' || $i eq 'ignored' );
+            $type_wanted{$i} = 1 unless ( defined( $type_wanted{$i} ) || $i eq 'binary' || $i eq 'text' || $i eq 'skipped' );
         }
     }
 

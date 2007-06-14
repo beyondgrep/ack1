@@ -66,7 +66,6 @@ MAIN: {
         'o|output:s'            => \$opt{o},
         'Q|literal'             => \$opt{Q},
         'sort-files'            => \$opt{sort_files},
-        'text'                  => \$opt{text},
         'v|invert-match'        => \$opt{v},
         'w|word-regexp'         => \$opt{w},
 

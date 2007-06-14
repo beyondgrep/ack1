@@ -1,6 +1,6 @@
 Changelog for ack
 
-NEXT
+1.63_02     Thu Jun 14 09:39:23 CDT 2007
 
     [FIXES]
     The tests didn't clear ACK_OPTIONS before running, so if you
@@ -16,7 +16,7 @@ NEXT
     include files that are in ignored directories like blib/ and
     .svn/
 
-1.63_01
+1.63_01     Tue Jun  5 2007
     [THINGS THAT MAY BREAK FOR YOU]
     The changes I made to detect if ack is outputting to the screen
     may break some automated build tools.  If so, please contact

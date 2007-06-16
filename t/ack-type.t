@@ -5,6 +5,10 @@ use strict;
 
 use Test::More tests => 19;
 use File::Next 0.34; # For the reslash() function
+
+use lib 't';
+use Util qw( sets_match );
+
 delete $ENV{ACK_OPTIONS};
 
 my $cc = [qw(
@@ -87,8 +91,6 @@ sub check_with {
     my @results = sort `$^X ./ack-standalone -f $options`;
     chomp @results;
 
-    $_ = File::Next::reslash( $_ ) for ( @expected, @results );
-
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    return is_deeply( \@results, \@expected, "File lists match via $options" );
+    return sets_match( \@results, \@expected, "File lists match via $options" );
 }

@@ -1,5 +1,11 @@
 Changelog for ack
 
+NEXT
+
+    [ENHANCEMENTS]
+    Added --hh for C header files.
+
+
 1.63_03     Thu Jun 14 09:47:39 CDT 2007
 
     [FIXES]

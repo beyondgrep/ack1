@@ -37,6 +37,7 @@ BEGIN {
         css         => [qw( css )],
         elisp       => [qw( el )],
         haskell     => [qw( hs lhs )],
+        hh          => [qw( h )],
         html        => [qw( htm html shtml )],
         skipped     => q{Files, but not directories, normally skipped by ack (default: off)},
         lisp        => [qw( lisp )],

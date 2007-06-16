@@ -15,6 +15,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]css       .css
     --[no]elisp     .el
     --[no]haskell   .hs .lhs
+    --[no]hh        .h
     --[no]html      .htm .html .shtml
     --[no]java      .java .properties
     --[no]js        .js

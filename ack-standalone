@@ -710,7 +710,7 @@ use strict;
 use warnings;
 
 
-our $VERSION = '0.40';
+our $VERSION = '1.00';
 
 
 
@@ -777,6 +777,30 @@ sub dirs {
     }; # iterator
 }
 
+
+sub everything {
+    my ($parms,@queue) = _setup( \%files_defaults, @_ );
+    my $filter = $parms->{file_filter};
+
+    return sub {
+        while (@queue) {
+            my ($dir,$file,$fullpath) = splice( @queue, 0, 3 );
+            if (-d $fullpath) {
+                unshift( @queue, _candidate_files( $parms, $fullpath ) );
+            }
+            if ( $filter ) {
+                local $_ = $file;
+                local $File::Next::dir = $dir;
+                local $File::Next::name = $fullpath;
+                next if not $filter->();
+            }
+            return wantarray ? ($dir,$file,$fullpath) : $fullpath;
+        } # while
+
+        return;
+    }; # iterator
+}
+
 sub sort_standard($$)   { return $_[0]->[1] cmp $_[1]->[1] };
 sub sort_reverse($$)    { return $_[1]->[1] cmp $_[0]->[1] };
 
@@ -809,7 +833,7 @@ sub _setup {
     # Any leftover keys are bogus
     for my $badkey ( keys %passed_parms ) {
         my $sub = (caller(1))[3];
-        $parms->{error_handler}->( "Invalid parameter passed to $sub(): $badkey" );
+        $parms->{error_handler}->( "Invalid option passed to $sub(): $badkey" );
     }
 
     # If it's not a code ref, assume standard sort

@@ -82,7 +82,7 @@ BEGIN {
 
 =head1 SYNOPSIS
 
-If you want to know about the F<ack> program
+If you want to know about the F<ack> program, see the F<ack> file itself.
 
 No user-serviceable parts inside.  F<ack> is all that should use this.
 

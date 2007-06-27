@@ -429,7 +429,7 @@ back in on I<ack> in the near future, because I'm adding it.
 =item B<-a>, B<--all>
 
 Operate on all files, regardless of type (but still skip directories
-like F<blib>, F<CVS>, etc.
+like F<blib>, F<CVS>, etc.)
 
 =item B<-A I<NUM>>, B<--after-context=I<NUM>>
 

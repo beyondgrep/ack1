@@ -11,12 +11,12 @@ use Util;
 
 DASH_W: {
     my @expected = (
-        '34:And I said: "My name is Sue! How do you do! Now you gonna die!"',
-        '70:Bill or George! Anything but Sue! I still hate that name!',
+        'And I said: "My name is Sue! How do you do! Now you gonna die!"',
+        'Bill or George! Anything but Sue! I still hate that name!',
     );
 
     my @files = qw( t/text );
-    my @args = qw( Sue! -w --text );
+    my @args = qw( Sue! -w -h --text );
     my $cmd = "$^X ./ack-standalone @args @files";
     my @results = `$cmd`;
     chomp @results;

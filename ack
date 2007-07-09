@@ -152,7 +152,10 @@ MAIN: {
         $regex = shift @ARGV or App::Ack::die( 'No regex specified' );
 
         $regex = quotemeta( $regex ) if $opt{Q};
-        $regex = "\\b$regex\\b"      if $opt{w};
+        if ( $opt{w} ) {
+            $regex = "\\b$regex" if $regex =~ /^\w/;
+            $regex = "$regex\\b" if $regex =~ /\w$/;
+        }
 
         $regex = $opt{i} ? qr/$regex/i : qr/$regex/;
     }

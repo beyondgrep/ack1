@@ -24,7 +24,7 @@ Search output:
                         (turns off text highlighting)
   --output=expr         Output the evaluation of expr for each line
                         (turns off text highlighting)
-  -m, --max-count=NUM   Stop after NUM matches
+  -m, --max-count=NUM   Stop searching in a file after NUM matches
   -H, --with-filename   Print the filename for each match
   -h, --no-filename     Suppress the prefixing filename on output
   -c, --count           Show number of lines matching per file

@@ -20,6 +20,7 @@ ACK_F_TEXT: {
         t/ack-c.t
         t/ack-text.t
         t/ack-type.t
+        t/ack-w.t
         t/ack-v.t
         t/etc/buttonhook.html.xxx
         t/etc/buttonhook.noxml.xxx

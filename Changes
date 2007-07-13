@@ -3,6 +3,8 @@ Changelog for ack
 NEXT
 
     [ENHANCEMENTS]
+    Sped up searching by using the /o flag.  Duh!
+
     Added --hh for C header files.
 
 

@@ -253,7 +253,7 @@ sub search {
     my $nmatches = 0;
     local $_ = undef;
     while (<$fh>) {
-        next unless /$regex/;
+        next unless /$regex/o;
         ++$nmatches;
         next if $opt{count}; # Counting means no lines
 
@@ -323,7 +323,7 @@ sub _search_v {
     my $show_lines = !($opt{l} || $opt{count});
     local $_ = undef;
     while (<$fh>) {
-        if ( /$regex/ ) {
+        if ( /$regex/o ) {
             return if $opt{l}; # For list mode, any match means we can bail
             next;
         }

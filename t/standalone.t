@@ -4,6 +4,7 @@ use warnings;
 use strict;
 
 use Test::More tests => 4;
+delete $ENV{ACK_OPTIONS};
 
 use IPC::Open3;
 

@@ -3,20 +3,14 @@
 use warnings;
 use strict;
 
-use Test::More tests => 3;
+use Test::More tests => 1;
 use App::Ack ();
 use File::Next ();
+delete $ENV{ACK_OPTIONS};
 
 use lib 't';
 use Util;
 
-
-TYPES: {
-    my $file = 't/etc/shebang.pl.xxx';
-    my @types = App::Ack::filetypes( $file );
-    is( scalar @types, 1, 'Only one type' );
-    is( $types[0], 'perl', 'Type matches' );
-}
 
 ACK_F: {
     my @expected = qw(

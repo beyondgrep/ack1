@@ -2,7 +2,6 @@ package App::Ack;
 
 use warnings;
 use strict;
-use Scalar::Util ();
 
 =head1 NAME
 
@@ -10,13 +9,13 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.61_01
+Version 1.64
 
 =cut
 
 our $VERSION;
 BEGIN {
-    $VERSION = '1.62';
+    $VERSION = '1.64';
 }
 
 our %types;
@@ -38,7 +37,9 @@ BEGIN {
         css         => [qw( css )],
         elisp       => [qw( el )],
         haskell     => [qw( hs lhs )],
+        hh          => [qw( h )],
         html        => [qw( htm html shtml )],
+        skipped     => q{Files, but not directories, normally skipped by ack (default: off)},
         lisp        => [qw( lisp )],
         java        => [qw( java properties )],
         js          => [qw( js )],
@@ -56,6 +57,7 @@ BEGIN {
         sql         => [qw( sql ctl )],
         tcl         => [qw( tcl )],
         tex         => [qw( tex cls sty )],
+        text        => q{Text files, as defined by Perl's -T op (default: off)},
         tt          => [qw( tt tt2 ttml )],
         vb          => [qw( bas cls frm ctl vb resx )],
         vim         => [qw( vim )],
@@ -80,7 +82,7 @@ BEGIN {
 
 =head1 SYNOPSIS
 
-If you want to know about the F<ack> program
+If you want to know about the F<ack> program, see the F<ack> file itself.
 
 No user-serviceable parts inside.  F<ack> is all that should use this.
 
@@ -106,22 +108,24 @@ F<foo.pod> could be "perl" or "parrot".
 The filetype will be C<undef> if we can't determine it.  This could
 be if the file doesn't exist, or it can't be read.
 
-It will be '-ignore' if it's something that ack should always ignore,
+It will be 'skipped' if it's something that ack should always ignore,
 even under -a.
 
 =cut
 
+use constant TEXT => 'text';
+
 sub filetypes {
     my $filename = shift;
 
-    return '-ignore' unless is_searchable( $filename );
+    return 'skipped' unless is_searchable( $filename );
 
-    return 'make' if $filename =~ m{$path_sep?Makefile$}io;
+    return ('make',TEXT) if $filename =~ m{$path_sep?Makefile$}io;
 
     # If there's an extension, look it up
     if ( $filename =~ m{\.([^\.$path_sep]+)$}o ) {
         my $ref = $types{lc $1};
-        return @{$ref} if $ref;
+        return (@{$ref},TEXT) if $ref;
     }
 
     # At this point, we can't tell from just the name.  Now we have to
@@ -156,12 +160,12 @@ sub filetypes {
     }
 
     if ( $header =~ /^#!/ ) {
-        return $1       if $header =~ /\b(ruby|p(erl|hp|ython))\b/;
-        return 'shell'  if $header =~ /\b(?:ba|c|k|z)?sh\b/;
+        return ($1,TEXT)       if $header =~ /\b(ruby|p(erl|hp|ython))\b/;
+        return ('shell','text')  if $header =~ /\b(?:ba|c|k|z)?sh\b/;
     }
-    return 'xml' if $header =~ /<\?xml /;
+    return ('xml',TEXT) if $header =~ /<\?xml /;
 
-    return;
+    return (TEXT);
 }
 
 =head2 is_searchable( $filename )
@@ -309,7 +313,7 @@ Search output:
                         (turns off text highlighting)
   --output=expr         Output the evaluation of expr for each line
                         (turns off text highlighting)
-  -m, --max-count=NUM   Stop after NUM matches
+  -m, --max-count=NUM   Stop searching in a file after NUM matches
   -H, --with-filename   Print the filename for each match
   -h, --no-filename     Suppress the prefixing filename on output
   -c, --count           Show number of lines matching per file
@@ -322,16 +326,10 @@ Search output:
   --[no]color           Highlight the matching text (default: on unless
                         output is redirected, or on Windows)
 
-Context control:
-  -B, --before-context=NUM
-  -A, --after-context=NUM
-  -C, --context=NUM
-                        Print NUM lines of context before and/or after
-                        matching lines
-
 File finding:
   -f                    Only print the files found, without searching.
                         The PATTERN must not be specified.
+  -g=REGEX              Same as -f, but only print files matching REGEX.
   --sort-files          Sort the found files lexically.
 
 File inclusion/exclusion:
@@ -417,55 +415,5 @@ END_OF_VERSION
 
     return;
 }
-
-
-=head2 C<is_interactive()>
-
-This is taken directly from Damian Conway's IO::Interactive.  Thanks,
-Damian!
-
-This subroutine returns true if C<*ARGV> and C<*STDOUT> are connected
-to the terminal. The test is considerably more sophisticated than:
-
-    -t *ARGV && -t *STDOUT
-
-as it takes into account the magic behaviour of C<*ARGV>.
-
-You can also pass C<is_interactive> a writable filehandle, in which
-case it requires that filehandle be connected to a terminal (instead
-of C<*STDOUT>).  The usual suspect here is C<*STDERR>:
-
-    if ( is_interactive(*STDERR) ) {
-        carp $warning;
-    }
-
-=cut
-
-sub is_interactive {
-    my ($out_handle) = (@_, select);    # Default to default output handle
-
-    # Not interactive if output is not to terminal...
-    return 0 if not -t $out_handle;
-
-    # If *ARGV is opened, we're interactive if...
-    if ( Scalar::Util::openhandle( *ARGV ) ) {
-        # ...it's currently opened to the magic '-' file
-        return -t *STDIN if defined $ARGV && $ARGV eq '-';
-
-        # ...it's at end-of-file and the next file is the magic '-' file
-        return @ARGV>0 && $ARGV[0] eq '-' && -t *STDIN if eof *ARGV;
-
-        # ...it's directly attached to the terminal 
-        return -t *ARGV;
-    }
-
-    # If *ARGV isn't opened, it will be interactive if *STDIN is attached 
-    # to a terminal and either there are no files specified on the command line
-    # or if there are files and the first is the magic '-' file
-    else {
-        return -t *STDIN && (@ARGV==0 || $ARGV[0] eq '-');
-    }
-}
-
 
 1; # End of App::Ack

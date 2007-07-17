@@ -4,6 +4,7 @@ use warnings;
 use strict;
 
 use Test::More tests => 5;
+delete $ENV{ACK_OPTIONS};
 
 use lib 't';
 use Util;

@@ -1,5 +1,61 @@
 Changelog for ack
 
+1.64    Tue Jul 17 10:51:47 CDT 2007
+
+    [ENHANCEMENTS]
+    Sped up searching by using the /o flag.  Duh!
+
+    Added --hh for C header files.
+
+    Specifically excluding a type with --no-whatever trumps its
+    inclusion in --something-else.  For example, if you want to
+    search .c files, but excluding .h files, you can use --cc
+    --no-hh.  (In fact, that's the very reason I wrote this feature.)
+
+    Added -g=regex to let you do -f listings, but filter out only
+    those files matching the regex.  This is exactly the same as
+    "ack -f | ack regex".
+
+    The standalone version of ack gets unused functions pruned out
+    from it.
+
+    Removed the discussion of -A, -B and -C which doesn't work yet.
+
+
+1.63_03     Thu Jun 14 09:47:39 CDT 2007
+
+    [FIXES]
+    The tests didn't clear ACK_OPTIONS before running, so if you
+    set this useful environment variable, your tests would fail.
+    Thanks, Michael Hendricks.
+
+    [ENHANCEMENTS]
+    Added a filetype of "--text", which matches any text file.  This
+    is off by default, just as --binary is.
+
+    Added a filetype of "--skipped", which matches any file that
+    ack skips, like core dumps and backup files.  It will NOT
+    include files that are in ignored directories like blib/ and
+    .svn/
+
+
+1.63_02     Thu Jun 14 09:39:23 CDT 2007
+    Buggy release.  Ignore.
+
+
+1.63_01     Tue Jun  5 2007
+    [THINGS THAT MAY BREAK FOR YOU]
+    The changes I made to detect if ack is outputting to the screen
+    may break some automated build tools.  If so, please contact
+    me.  That's why this is a dev release.
+
+    [FIXES]
+    Colorized output to the screen is now the default, correctly.
+    I got rid of the is_interactive() I took from IO::Interactive
+    and just checked for C<-t *STDOUT>, because that's what we're
+    really checking for: Is the output going to the screen?
+
+
 1.62    Mon May 21 15:22:19 CDT 2007
 
     [THINGS THAT MAY BREAK FOR YOU]

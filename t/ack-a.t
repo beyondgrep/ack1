@@ -5,6 +5,7 @@ use strict;
 
 use Test::More tests => 1;
 use File::Next 0.34; # For the reslash() function
+delete $ENV{ACK_OPTIONS};
 
 # new files in t/etc must be listed here
 my @expected = qw(

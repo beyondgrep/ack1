@@ -14,8 +14,8 @@ sub slurp {
 
 
 sub sets_match {
-    my @expected = @{+shift};
     my @actual = @{+shift};
+    my @expected = @{+shift};
     my $msg = shift;
 
     # Normalize all the paths

@@ -54,6 +54,7 @@ MAIN: {
         'color!'    => \$opt{color},
         count       => \$opt{count},
         f           => \$opt{f},
+        'g=s'       => \$opt{g},
         'follow!'   => \$opt{follow},
         'group!'    => \$opt{group},
         h           => \$opt{h},
@@ -139,14 +140,15 @@ MAIN: {
         }
     }
 
-    if ( !@ARGV && !$opt{f} ) {
+    my $file_matching = $opt{f} || $opt{g};
+    if ( !@ARGV && !$file_matching ) {
         App::Ack::show_help();
         exit 1;
     }
 
     my $regex;
 
-    if ( !$opt{f} ) {
+    if ( !$file_matching ) {
         # REVIEW: This shouldn't be able to happen because of the help
         # check above.
         $regex = shift @ARGV or App::Ack::die( 'No regex specified' );
@@ -203,6 +205,9 @@ MAIN: {
     while ( defined ( my $file = $iter->() ) ) {
         if ( $opt{f} ) {
             print "$file\n";
+        }
+        elsif ( $opt{g} ) {
+            print "$file\n" if $file =~ /$opt{g}$/;
         }
         else {
             search( $file, $regex, %opt );
@@ -481,6 +486,12 @@ Follow or don't follow symlinks, other than whatever starting files
 or directories were specified on the command line.
 
 This is off by default.
+
+=item B<-g=glob>
+
+Same as B<-f>, but only print files that match I<glob>.  Only the
+filenames are matched, and only basic glob characters (C<*> and
+C<?>) are supported.
 
 =item B<--group>, B<--nogroup>
 

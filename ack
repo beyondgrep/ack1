@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.63_03';
+our $VERSION   = '1.63_04';
 our $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 # Check http://petdance.com/ack/ for updates
 
@@ -202,12 +202,21 @@ MAIN: {
         }, @what );
 
 
+    if ( $opt{g} ) {
+        # Translate globby to Perl regexes
+        my %perl_re = (
+            '.' => '\\.',
+            '*' => '.*',
+            '?' => '.',
+        );
+        $opt{g} =~ s/([.*?])/$perl_re{$1}/ge;
+    }
     while ( defined ( my $file = $iter->() ) ) {
         if ( $opt{f} ) {
             print "$file\n";
         }
         elsif ( $opt{g} ) {
-            print "$file\n" if $file =~ /$opt{g}$/;
+            print "$file\n" if $file =~ m/(?:\/|^)$opt{g}$/o;
         }
         else {
             search( $file, $regex, %opt );

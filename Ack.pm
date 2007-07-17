@@ -326,17 +326,10 @@ Search output:
   --[no]color           Highlight the matching text (default: on unless
                         output is redirected, or on Windows)
 
-Context control:
-  -B, --before-context=NUM
-  -A, --after-context=NUM
-  -C, --context=NUM
-                        Print NUM lines of context before and/or after
-                        matching lines
-
 File finding:
   -f                    Only print the files found, without searching.
                         The PATTERN must not be specified.
-  -g=GLOB               Same as -f, but only print files matching GLOB.
+  -g=REGEX              Same as -f, but only print files matching REGEX.
   --sort-files          Sort the found files lexically.
 
 File inclusion/exclusion:

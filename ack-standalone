@@ -43,9 +43,6 @@ MAIN: {
     );
 
     my %options = (
-        'A|after-context=i'     => \$opt{A},
-        'B|before-context=i'    => \$opt{B},
-        'C|context=i'           => sub { shift; $opt{A} = $opt{B} = shift; },
         a           => \$opt{all},
         'all!'      => \$opt{all},
         c           => \$opt{count},
@@ -200,23 +197,18 @@ MAIN: {
         }, @what );
 
 
-    if ( $opt{g} ) {
-        # Translate globby to Perl regexes
-        my %perl_re = (
-            '.' => '\\.',
-            '*' => '.*',
-            '?' => '.',
-        );
-        $opt{g} =~ s/([.*?])/$perl_re{$1}/ge;
-    }
-    while ( defined ( my $file = $iter->() ) ) {
-        if ( $opt{f} ) {
+    if ( $opt{f} ) {
+        while ( defined ( my $file = $iter->() ) ) {
             print "$file\n";
         }
-        elsif ( $opt{g} ) {
-            print "$file\n" if $file =~ m/(?:\/|^)$opt{g}$/o;
+    }
+    elsif ( $opt{g} ) {
+        while ( defined ( my $file = $iter->() ) ) {
+            print "$file\n" if $file =~ m/$opt{g}/o;
         }
-        else {
+    }
+    else {
+        while ( defined ( my $file = $iter->() ) ) {
             search( $file, $regex, %opt );
         }
     }
@@ -453,21 +445,6 @@ back in on I<ack> in the near future, because I'm adding it.
 Operate on all files, regardless of type (but still skip directories
 like F<blib>, F<CVS>, etc.)
 
-=item B<-A I<NUM>>, B<--after-context=I<NUM>>
-
-Print I<NUM> lines of trailing context after matching lines.  Places
-a line containing -- between contiguous groups of matches.
-
-=item B<-B I<NUM>>, B<--before-context=I<NUM>>
-
-Print I<NUM> lines of leading context before matching lines.  Places
-a line containing -- between contiguous groups of matches.
-
-=item B<-C I<NUM>>, B<--context=I<NUM>>
-
-Print I<NUM> lines of context before and after matching lines.
-Places a line containing -- between contiguous groups of matches.
-
 =item B<-c>, B<--count>
 
 Suppress normal output; instead print a count of matching lines for
@@ -494,11 +471,11 @@ or directories were specified on the command line.
 
 This is off by default.
 
-=item B<-g=I<GLOB>>
+=item B<-g=I<REGEX>>
 
-Same as B<-f>, but only print files that match I<GLOB>.  Only the
-filenames are matched, and only basic glob characters (C<*> and
-C<?>) are supported.
+Same as B<-f>, but only print files that match I<REGEX>.  The entire
+path and filename are matched against I<REGEX>, and I<REGEX> is a
+Perl regular expression, not a shell glob.
 
 =item B<--group>, B<--nogroup>
 
@@ -795,45 +772,10 @@ sub files {
 }
 
 
-sub dirs {
-    my ($parms,@queue) = _setup( \%files_defaults, @_ );
-
-    return sub {
-        while (@queue) {
-            my (undef,undef,$fullpath) = splice( @queue, 0, 3 );
-            if (-d $fullpath) {
-                unshift( @queue, _candidate_files( $parms, $fullpath ) );
-                return $fullpath;
-            }
-        } # while
-
-        return;
-    }; # iterator
-}
 
 
-sub everything {
-    my ($parms,@queue) = _setup( \%files_defaults, @_ );
-    my $filter = $parms->{file_filter};
 
-    return sub {
-        while (@queue) {
-            my ($dir,$file,$fullpath) = splice( @queue, 0, 3 );
-            if (-d $fullpath) {
-                unshift( @queue, _candidate_files( $parms, $fullpath ) );
-            }
-            if ( $filter ) {
-                local $_ = $file;
-                local $File::Next::dir = $dir;
-                local $File::Next::name = $fullpath;
-                next if not $filter->();
-            }
-            return wantarray ? ($dir,$file,$fullpath) : $fullpath;
-        } # while
 
-        return;
-    }; # iterator
-}
 
 sub sort_standard($$)   { return $_[0]->[1] cmp $_[1]->[1] };
 sub sort_reverse($$)    { return $_[1]->[1] cmp $_[0]->[1] };
@@ -1192,17 +1134,10 @@ Search output:
   --[no]color           Highlight the matching text (default: on unless
                         output is redirected, or on Windows)
 
-Context control:
-  -B, --before-context=NUM
-  -A, --after-context=NUM
-  -C, --context=NUM
-                        Print NUM lines of context before and/or after
-                        matching lines
-
 File finding:
   -f                    Only print the files found, without searching.
                         The PATTERN must not be specified.
-  -g=GLOB               Same as -f, but only print files matching GLOB.
+  -g=REGEX              Same as -f, but only print files matching REGEX.
   --sort-files          Sort the found files lexically.
 
 File inclusion/exclusion:

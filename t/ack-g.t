@@ -12,73 +12,64 @@ use Util;
 NO_METACHARCTERS: {
     my @expected = qw(
         t/swamp/Makefile
+        t/swamp/Makefile.PL
     );
-    my $pattern = 'Makefile';
+    my $regex = 'Makefile';
 
     my @files = qw( t/ );
-    my @args = ( '-g', $pattern );
+    my @args = ( '-g', $regex );
     my $cmd = "$^X ./ack-standalone @args @files";
     my @results = `$cmd`;
     chomp @results;
 
-    sets_match( \@results, \@expected, "Looking for $pattern" );
+    sets_match( \@results, \@expected, "Looking for $regex" );
 }
 
 
-DOT_STAR: {
+METACHARACTERS: {
     my @expected = qw(
-        t/swamp/perl.cgi
-        t/swamp/perl.pl
-        t/swamp/perl.pm
-        t/swamp/perl.pod
+        t/swamp/html.htm
+        t/swamp/html.html
     );
-    my $pattern = 'perl.*';
+    my $regex = 'swam.......htm';
 
     my @files = qw( t/ );
-    my @args = ( '-g', $pattern );
+    my @args = ( '-g', $regex );
     my $cmd = "$^X ./ack-standalone @args @files";
     my @results = `$cmd`;
     chomp @results;
 
-    sets_match( \@results, \@expected, "Looking for $pattern" );
+    sets_match( \@results, \@expected, "Looking for $regex" );
 }
 
 
-QUESTION_MARK: {
+FRONT_ANCHOR: {
     my @expected = qw(
-        t/swamp/perl.pl
-        t/swamp/perl.pm
+        squash
     );
-    my $pattern = 'perl.p?';
+    my $regex = '^s';
 
-    my @files = qw( t/ );
-    my @args = ( '-g', $pattern );
+    my @files = qw( . );
+    my @args = ( '-g', $regex );
     my $cmd = "$^X ./ack-standalone @args @files";
     my @results = `$cmd`;
     chomp @results;
 
-    sets_match( \@results, \@expected, "Looking for $pattern" );
+    sets_match( \@results, \@expected, "Looking for $regex" );
 }
 
 
-STAR_DOT_STAR: {
+BACK_ANCHOR: {
     my @expected = qw(
-        t/pod.t
-        t/pod-coverage.t
-        t/swamp/parrot.pir
-        t/swamp/perl-test.t
-        t/swamp/perl.cgi
-        t/swamp/perl.pl
-        t/swamp/perl.pm
-        t/swamp/perl.pod
+        t/swamp/moose-andy.jpg
     );
-    my $pattern = 'p*.*';
+    my $regex = 'g$';
 
-    my @files = qw( t/ );
-    my @args = ( '-g', $pattern );
+    my @files = qw( . );
+    my @args = ( '-a', '-g', $regex );
     my $cmd = "$^X ./ack-standalone @args @files";
     my @results = `$cmd`;
     chomp @results;
 
-    sets_match( \@results, \@expected, "Looking for $pattern" );
+    sets_match( \@results, \@expected, "Looking for $regex" );
 }

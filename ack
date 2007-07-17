@@ -45,9 +45,6 @@ MAIN: {
     );
 
     my %options = (
-        'A|after-context=i'     => \$opt{A},
-        'B|before-context=i'    => \$opt{B},
-        'C|context=i'           => sub { shift; $opt{A} = $opt{B} = shift; },
         a           => \$opt{all},
         'all!'      => \$opt{all},
         c           => \$opt{count},
@@ -202,23 +199,18 @@ MAIN: {
         }, @what );
 
 
-    if ( $opt{g} ) {
-        # Translate globby to Perl regexes
-        my %perl_re = (
-            '.' => '\\.',
-            '*' => '.*',
-            '?' => '.',
-        );
-        $opt{g} =~ s/([.*?])/$perl_re{$1}/ge;
-    }
-    while ( defined ( my $file = $iter->() ) ) {
-        if ( $opt{f} ) {
+    if ( $opt{f} ) {
+        while ( defined ( my $file = $iter->() ) ) {
             print "$file\n";
         }
-        elsif ( $opt{g} ) {
-            print "$file\n" if $file =~ m/(?:\/|^)$opt{g}$/o;
+    }
+    elsif ( $opt{g} ) {
+        while ( defined ( my $file = $iter->() ) ) {
+            print "$file\n" if $file =~ m/$opt{g}/o;
         }
-        else {
+    }
+    else {
+        while ( defined ( my $file = $iter->() ) ) {
             search( $file, $regex, %opt );
         }
     }
@@ -455,21 +447,6 @@ back in on I<ack> in the near future, because I'm adding it.
 Operate on all files, regardless of type (but still skip directories
 like F<blib>, F<CVS>, etc.)
 
-=item B<-A I<NUM>>, B<--after-context=I<NUM>>
-
-Print I<NUM> lines of trailing context after matching lines.  Places
-a line containing -- between contiguous groups of matches.
-
-=item B<-B I<NUM>>, B<--before-context=I<NUM>>
-
-Print I<NUM> lines of leading context before matching lines.  Places
-a line containing -- between contiguous groups of matches.
-
-=item B<-C I<NUM>>, B<--context=I<NUM>>
-
-Print I<NUM> lines of context before and after matching lines.
-Places a line containing -- between contiguous groups of matches.
-
 =item B<-c>, B<--count>
 
 Suppress normal output; instead print a count of matching lines for
@@ -496,11 +473,11 @@ or directories were specified on the command line.
 
 This is off by default.
 
-=item B<-g=I<GLOB>>
+=item B<-g=I<REGEX>>
 
-Same as B<-f>, but only print files that match I<GLOB>.  Only the
-filenames are matched, and only basic glob characters (C<*> and
-C<?>) are supported.
+Same as B<-f>, but only print files that match I<REGEX>.  The entire
+path and filename are matched against I<REGEX>, and I<REGEX> is a
+Perl regular expression, not a shell glob.
 
 =item B<--group>, B<--nogroup>
 

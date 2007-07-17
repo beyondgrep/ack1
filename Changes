@@ -12,7 +12,14 @@ Changelog for ack
     search .c files, but excluding .h files, you can use --cc
     --no-hh.  (In fact, that's the very reason I wrote this feature.)
 
-    Added -g=glob to let you do -f listings, but match a glob.
+    Added -g=regex to let you do -f listings, but filter out only
+    those files matching the regex.  This is exactly the same as
+    "ack -f | ack regex".
+
+    The standalone version of ack gets unused functions pruned out
+    from it.
+
+    Removed the discussion of -A, -B and -C which doesn't work yet.
 
 
 1.63_03     Thu Jun 14 09:47:39 CDT 2007

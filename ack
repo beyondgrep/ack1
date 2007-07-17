@@ -496,9 +496,9 @@ or directories were specified on the command line.
 
 This is off by default.
 
-=item B<-g=glob>
+=item B<-g=I<GLOB>>
 
-Same as B<-f>, but only print files that match I<glob>.  Only the
+Same as B<-f>, but only print files that match I<GLOB>.  Only the
 filenames are matched, and only basic glob characters (C<*> and
 C<?>) are supported.
 

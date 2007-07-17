@@ -47,7 +47,7 @@ Context control:
 File finding:
   -f                    Only print the files found, without searching.
                         The PATTERN must not be specified.
-  -g=glob               Same as -f, but only print files matching glob.
+  -g=GLOB               Same as -f, but only print files matching GLOB.
   --sort-files          Sort the found files lexically.
 
 File inclusion/exclusion:

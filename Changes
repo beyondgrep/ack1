@@ -1,6 +1,6 @@
 Changelog for ack
 
-1.63_04     Tue Jul 17 00:36:46 CDT 2007
+1.64    Tue Jul 17 10:51:47 CDT 2007
 
     [ENHANCEMENTS]
     Sped up searching by using the /o flag.  Duh!

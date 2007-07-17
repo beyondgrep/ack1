@@ -18,6 +18,7 @@ ACK_F_TEXT: {
         t/ack-a.t
         t/ack-binary.t
         t/ack-c.t
+        t/ack-g.t
         t/ack-text.t
         t/ack-type.t
         t/ack-w.t

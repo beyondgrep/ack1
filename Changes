@@ -1,6 +1,6 @@
 Changelog for ack
 
-NEXT
+1.63_04     Tue Jul 17 00:36:46 CDT 2007
 
     [ENHANCEMENTS]
     Sped up searching by using the /o flag.  Duh!
@@ -11,6 +11,8 @@ NEXT
     inclusion in --something-else.  For example, if you want to
     search .c files, but excluding .h files, you can use --cc
     --no-hh.  (In fact, that's the very reason I wrote this feature.)
+
+    Added -g=glob to let you do -f listings, but match a glob.
 
 
 1.63_03     Thu Jun 14 09:47:39 CDT 2007

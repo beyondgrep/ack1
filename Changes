@@ -7,6 +7,11 @@ NEXT
 
     Added --hh for C header files.
 
+    Specifically excluding a type with --no-whatever trumps its
+    inclusion in --something-else.  For example, if you want to
+    search .c files, but excluding .h files, you can use --cc
+    --no-hh.  (In fact, that's the very reason I wrote this feature.)
+
 
 1.63_03     Thu Jun 14 09:47:39 CDT 2007
 

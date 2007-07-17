@@ -212,10 +212,17 @@ MAIN: {
 sub is_interesting {
     return if /^\./;
 
+    my $include;
+    my $exclude;
+
     for my $type ( App::Ack::filetypes( $File::Next::name ) ) {
-        return 1 if $type_wanted{$type};
+        if ( defined $type_wanted{$type} ) {
+            $include = 1 if $type_wanted{$type};
+            $exclude = 1 if not $type_wanted{$type};
+        }
     }
-    return;
+
+    return ( $include && not $exclude );
 }
 
 sub dash_a {
@@ -545,6 +552,10 @@ Specify the types of files to include or exclude from a search.
 TYPE is a filetype, like I<perl> or I<xml>.  B<--type=perl> can
 also be specified as B<--perl>, and B<--type=noperl> can be done
 as B<--noperl>.
+
+If a file is of both type "foo" and "bar", specifying --foo and
+--nobar will exclude the file, because an exclusion takes precedence
+over an inclusion.
 
 Type specifications can be repeated and are ORed together.
 

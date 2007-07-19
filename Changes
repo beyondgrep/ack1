@@ -1,5 +1,10 @@
 Changelog for ack
 
+NEXT
+
+    [ENHANCEMENTS]
+    Added FORTRAN support.  Thanks, Tod Hagan.
+
 1.64    Tue Jul 17 10:51:47 CDT 2007
 
     [ENHANCEMENTS]

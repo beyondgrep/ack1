@@ -29,14 +29,14 @@ BEGIN {
     @ignore_dirs = qw( blib CVS RCS SCCS .svn _darcs .git );
     %ignore_dirs = map { ($_,1) } @ignore_dirs;
     %mappings = (
-        asm         => [qw( s S )],
+        asm         => [qw( s )],
         binary      => q{Binary files, as defined by Perl's -B op (default: off)},
         cc          => [qw( c h xs )],
-        cpp         => [qw( cpp m h C H )],
+        cpp         => [qw( cpp m h )],
         csharp      => [qw( cs )],
         css         => [qw( css )],
         elisp       => [qw( el )],
-        fortran     => [qw( f77 f90 f95 f03 for ftn fpp )],
+        fortran     => [qw( f f77 f90 f95 f03 for ftn fpp )],
         haskell     => [qw( hs lhs )],
         hh          => [qw( h )],
         html        => [qw( htm html shtml )],

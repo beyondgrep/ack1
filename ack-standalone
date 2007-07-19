@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.64';
+our $VERSION   = '1.65_01';
 our $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 # Check http://petdance.com/ack/ for updates
 
@@ -883,7 +883,7 @@ use strict;
 
 our $VERSION;
 BEGIN {
-    $VERSION = '1.64';
+    $VERSION = '1.65_01';
 }
 
 our %types;
@@ -897,14 +897,14 @@ BEGIN {
     @ignore_dirs = qw( blib CVS RCS SCCS .svn _darcs .git );
     %ignore_dirs = map { ($_,1) } @ignore_dirs;
     %mappings = (
-        asm         => [qw( s S )],
+        asm         => [qw( s )],
         binary      => q{Binary files, as defined by Perl's -B op (default: off)},
         cc          => [qw( c h xs )],
-        cpp         => [qw( cpp m h C H )],
+        cpp         => [qw( cpp m h )],
         csharp      => [qw( cs )],
         css         => [qw( css )],
         elisp       => [qw( el )],
-        fortran     => [qw( f77 f90 f95 f03 for ftn fpp )],
+        fortran     => [qw( f f77 f90 f95 f03 for ftn fpp )],
         haskell     => [qw( hs lhs )],
         hh          => [qw( h )],
         html        => [qw( htm html shtml )],

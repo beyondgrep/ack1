@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 19;
+use Test::More tests => 20;
 use File::Next 0.34; # For the reslash() function
 
 use lib 't';
@@ -21,6 +21,11 @@ my $hh = [qw(
 
 my $ruby = [qw(
     t/etc/shebang.rb.xxx
+)];
+
+my $fortran = [qw(
+    t/swamp/pipe-stress-freaks.F
+    t/swamp/crystallography-weenies.f
 )];
 
 my $perl = [qw(
@@ -83,6 +88,8 @@ check_with( '--ruby --type=perl', $perl_ruby );
 check_with( '--cc', $cc_hh );
 check_with( '--hh', $hh );
 check_with( '--cc --nohh', $cc );
+
+check_with( '--fortran', $fortran );
 
 sub check_with {
     my $options = shift;

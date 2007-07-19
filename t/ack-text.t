@@ -41,6 +41,8 @@ ACK_F_TEXT: {
         t/pod.t
         t/standalone.t
         t/swamp/0
+        t/swamp/pipe-stress-freaks.F
+        t/swamp/crystallography-weenies.f
         t/swamp/c-header.h
         t/swamp/c-source.c
         t/swamp/html.htm

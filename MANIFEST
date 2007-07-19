@@ -46,6 +46,8 @@ t/swamp/Makefile.PL
 t/swamp/blib/ignore.pir
 t/swamp/blib/ignore.pm
 t/swamp/blib/ignore.pod
+t/swamp/crystallography-weenies.f
+t/swamp/pipe-stress-freaks.F
 t/swamp/c-header.h
 t/swamp/c-source.c
 t/swamp/html.htm

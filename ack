@@ -366,7 +366,7 @@ sub _search_v {
     return;
 } # _search_v()
 
-=encoding utf-8
+=encoding utf8
 
 =head1 NAME
 

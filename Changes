@@ -5,6 +5,10 @@ NEXT
     [ENHANCEMENTS]
     Added FORTRAN support.  Thanks, Tod Hagan.
 
+    Now ignores .pc directories for the Quilt patch management
+    system.  Thanks, Dirk Jagdmann.
+
+
 1.64    Tue Jul 17 10:51:47 CDT 2007
 
     [ENHANCEMENTS]

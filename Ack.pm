@@ -20,14 +20,22 @@ BEGIN {
 
 our %types;
 our %mappings;
-our @ignore_dirs;
 our %ignore_dirs;
 our $path_sep;
 our $is_cygwin;
 
 BEGIN {
-    @ignore_dirs = qw( blib CVS RCS SCCS .svn _darcs .git );
-    %ignore_dirs = map { ($_,1) } @ignore_dirs;
+    %ignore_dirs = (
+        '.git'  => 'Git',
+        '.pc'   => 'quilt',
+        '.svn'  => 'Subversion',
+        CVS     => 'CVS',
+        RCS     => 'RCS',
+        SCCS    => 'SCCS',
+        _darcs  => 'darcs',
+        blib    => 'Perl module building',
+    );
+
     %mappings = (
         asm         => [qw( s )],
         binary      => q{Binary files, as defined by Perl's -B op (default: off)},
@@ -274,6 +282,13 @@ sub _thpppt {
     exit 0;
 }
 
+sub _key {
+    my $str = lc shift;
+    $str =~ s/[^a-z]//g;
+
+    return $str;
+}
+
 =head2 show_help()
 
 Dumps the help page to the user.
@@ -285,7 +300,7 @@ sub show_help {
 
     return show_help_types() if $help_arg =~ /^types?/;
 
-    my $ignore_dirs = _listify( @ignore_dirs );
+    my $ignore_dirs = _listify( sort { _key($a) cmp _key($b) } keys %ignore_dirs );
 
     print <<"END_OF_HELP";
 Usage: ack [OPTION]... PATTERN [FILES]

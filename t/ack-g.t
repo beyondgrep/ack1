@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 delete $ENV{ACK_OPTIONS};
 
 use lib 't';
@@ -72,4 +72,20 @@ BACK_ANCHOR: {
     chomp @results;
 
     sets_match( \@results, \@expected, "Looking for $regex" );
+}
+
+
+CASE_INSENSITIVE: {
+    my @expected = qw(
+        t/swamp/pipe-stress-freaks.F
+    );
+    my $regex = 'PIPE';
+
+    my @files = qw( . );
+    my @args = ( '-i', '-g', $regex );
+    my $cmd = "$^X ./ack-standalone @args @files";
+    my @results = `$cmd`;
+    chomp @results;
+
+    sets_match( \@results, \@expected, "Looking for $regex, case-insensitive" );
 }

@@ -203,8 +203,9 @@ MAIN: {
         }
     }
     elsif ( $opt{g} ) {
+        my $regex = $opt{i} ? qr/$opt{g}/i : qr/$opt{g}/;
         while ( defined ( my $file = $iter->() ) ) {
-            print "$file\n" if $file =~ m/$opt{g}/o;
+            print "$file\n" if $file =~ m/$regex/o;
         }
     }
     else {

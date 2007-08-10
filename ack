@@ -62,6 +62,7 @@ MAIN: {
         'm|max-count=i'         => \$opt{m},
         n                       => \$opt{n},
         'o|output:s'            => \$opt{o},
+        'passthru'              => \$opt{passthru},
         'Q|literal'             => \$opt{Q},
         'sort-files'            => \$opt{sort_files},
         'v|invert-match'        => \$opt{v},
@@ -263,7 +264,10 @@ sub search {
     my $nmatches = 0;
     local $_ = undef;
     while (<$fh>) {
-        next unless /$regex/o;
+        if ( !/$regex/o ) {
+            print if $opt{passthru};
+            next;
+        }
         ++$nmatches;
         next if $opt{count}; # Counting means no lines
 
@@ -526,6 +530,15 @@ highlighting)
 
 Output the evaluation of I<expr> for each line (turns off text
 highlighting)
+
+=item B<--passthru>
+
+Prints all lines, whether or not they match the expression.  Highlighting
+will still work, though, so it can be used to highlight matches while
+still seeing the entire file, as in:
+
+    # Watch a log file, and highlight a certain IP address
+    $ tail -f ~/access.log | ack --passthru 123.45.67.89
 
 =item B<-Q>, B<--literal>
 

@@ -329,6 +329,7 @@ Search output:
                         Only print filenames with no match
   -o                    Show only the part of a line matching PATTERN
                         (turns off text highlighting)
+  --passthru            Print all lines, whether matching or not
   --output=expr         Output the evaluation of expr for each line
                         (turns off text highlighting)
   -m, --max-count=NUM   Stop searching in a file after NUM matches

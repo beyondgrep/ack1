@@ -549,9 +549,9 @@ listings to be deterministic between runs of I<ack>.
 
 =item B<--thpppt>
 
-Display the crucial Bill The Cat logo.  Note that the exact spelling
-of B<--thpppppt> is not important.  It's checked against a regular
-expression.
+Display the all-important Bill The Cat logo.  Note that the exact
+spelling of B<--thpppppt> is not important.  It's checked against
+a regular expression.
 
 =item B<--type=TYPE>, B<--type=noTYPE>
 

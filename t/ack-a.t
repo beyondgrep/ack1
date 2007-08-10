@@ -4,7 +4,9 @@ use warnings;
 use strict;
 
 use Test::More tests => 1;
-use File::Next 0.34; # For the reslash() function
+use lib 't';
+use Util;
+
 delete $ENV{ACK_OPTIONS};
 
 # new files in t/etc must be listed here
@@ -26,6 +28,4 @@ my @expected = qw(
 my @results = sort `$^X ./ack-standalone -f -a t/etc`;
 chomp @results;
 
-$_ = File::Next::reslash( $_ ) for ( @expected, @results );
-
-is_deeply( \@results, \@expected, 'File lists match' );
+sets_match( \@results, \@expected, 'File lists match' );

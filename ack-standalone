@@ -43,6 +43,7 @@ MAIN: {
     );
 
     my %options = (
+        1           => \$opt{1},
         a           => \$opt{all},
         'all!'      => \$opt{all},
         c           => \$opt{count},

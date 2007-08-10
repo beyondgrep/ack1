@@ -15,6 +15,7 @@ use Util;
 ACK_F_TEXT: {
     my @expected = qw(
         t/00-load.t
+        t/ack-1.t
         t/ack-a.t
         t/ack-binary.t
         t/ack-c.t

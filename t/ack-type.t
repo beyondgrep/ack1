@@ -35,6 +35,7 @@ my $perl = [qw(
     Makefile.PL
     squash
     t/00-load.t
+    t/ack-1.t
     t/ack-a.t
     t/ack-binary.t
     t/ack-c.t

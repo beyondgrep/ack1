@@ -12,6 +12,16 @@ sub slurp {
     return @files;
 }
 
+sub run_ack {
+    my @args = @_;
+
+    my $cmd = "$^X ./ack-standalone @_";
+    my @results = `$cmd`;
+    chomp @results;
+
+    return @results;
+}
+
 # Use this one if order is important
 sub lists_match {
     my @actual = @{+shift};

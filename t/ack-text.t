@@ -71,9 +71,7 @@ ACK_F_TEXT: {
 
     my @files = qw( t );
     my @args = qw( -f --text );
-    my $cmd = "$^X ./ack-standalone @args @files";
-    my @results = `$cmd`;
-    chomp @results;
+    my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Looking for text files' );
 }

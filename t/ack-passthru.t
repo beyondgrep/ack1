@@ -29,9 +29,7 @@ EOF
 
     my @files = qw( t/text/4th-of-july.txt );
     my @args = qw( you --text );
-    my $cmd = "$^X ./ack-standalone @args @files";
-    my @results = `$cmd`;
-    chomp @results;
+    my @results = run_ack( @args, @files );
 
     lists_match( \@results, \@expected, q{I'm lookin' for you} );
 }
@@ -41,9 +39,7 @@ DASH_C: {
 
     my @files = qw( t/text/4th-of-july.txt );
     my @args = qw( you --text --passthru );
-    my $cmd = "$^X ./ack-standalone @args @files";
-    my @results = `$cmd`;
-    chomp @results;
+    my @results = run_ack( @args, @files );
 
     lists_match( \@results, \@expected, q{Still lookin' for you, in passthru mode} );
 }

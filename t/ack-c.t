@@ -16,9 +16,7 @@ DASH_L: {
 
     my @files = qw( t/text );
     my @args = qw( religion -i -a -l );
-    my $cmd = "$^X ./ack-standalone @args @files";
-    my @results = `$cmd`;
-    chomp @results;
+    my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Looking for religion' );
 }
@@ -35,9 +33,7 @@ DASH_CAPITAL_L: {
     for my $switches ( ['-L'], ['-l','-v'] ) {
         my @files = qw( t/text );
         my @args = ( 'religion', '-a', @{$switches} );
-        my $cmd = "$^X ./ack-standalone @args @files";
-        my @results = `$cmd`;
-        chomp @results;
+        my @results = run_ack( @args, @files );
 
         sets_match( \@results, \@expected, 'Looking for religion' );
     }
@@ -54,9 +50,7 @@ DASH_C: {
 
     my @files = qw( t/text );
     my @args = qw( boy -i -a -c );
-    my $cmd = "$^X ./ack-standalone @args @files";
-    my @results = `$cmd`;
-    chomp @results;
+    my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Boy counts' );
 }
@@ -68,9 +62,7 @@ DASH_LC: {
 
     my @files = qw( t/text );
     my @args = qw( religion -i -a -l -c );
-    my $cmd = "$^X ./ack-standalone @args @files";
-    my @results = `$cmd`;
-    chomp @results;
+    my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Religion counts -l -c' );
 }

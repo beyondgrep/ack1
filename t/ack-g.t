@@ -18,9 +18,7 @@ NO_METACHARCTERS: {
 
     my @files = qw( t/ );
     my @args = ( '-g', $regex );
-    my $cmd = "$^X ./ack-standalone @args @files";
-    my @results = `$cmd`;
-    chomp @results;
+    my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, "Looking for $regex" );
 }
@@ -35,9 +33,7 @@ METACHARACTERS: {
 
     my @files = qw( t/ );
     my @args = ( '-g', $regex );
-    my $cmd = "$^X ./ack-standalone @args @files";
-    my @results = `$cmd`;
-    chomp @results;
+    my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, "Looking for $regex" );
 }
@@ -51,9 +47,7 @@ FRONT_ANCHOR: {
 
     my @files = qw( . );
     my @args = ( '-g', $regex );
-    my $cmd = "$^X ./ack-standalone @args @files";
-    my @results = `$cmd`;
-    chomp @results;
+    my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, "Looking for $regex" );
 }
@@ -67,9 +61,7 @@ BACK_ANCHOR: {
 
     my @files = qw( . );
     my @args = ( '-a', '-g', $regex );
-    my $cmd = "$^X ./ack-standalone @args @files";
-    my @results = `$cmd`;
-    chomp @results;
+    my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, "Looking for $regex" );
 }
@@ -83,9 +75,7 @@ CASE_INSENSITIVE: {
 
     my @files = qw( . );
     my @args = ( '-i', '-g', $regex );
-    my $cmd = "$^X ./ack-standalone @args @files";
-    my @results = `$cmd`;
-    chomp @results;
+    my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, "Looking for $regex, case-insensitive" );
 }

@@ -20,9 +20,7 @@ DASH_L: {
 
     my @files = qw( t/text );
     my @args = qw( religion -i -a -v -l );
-    my $cmd = "$^X ./ack-standalone @args @files";
-    my @results = `$cmd`;
-    chomp @results;
+    my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'No religion please' );
 }
@@ -38,9 +36,7 @@ DASH_C: {
 
     my @files = qw( t/text );
     my @args = qw( religion -i -a -v -c );
-    my $cmd = "$^X ./ack-standalone @args @files";
-    my @results = `$cmd`;
-    chomp @results;
+    my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Non-religion counts' );
 }

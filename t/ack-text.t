@@ -58,6 +58,7 @@ ACK_F_TEXT: {
         t/swamp/perl.pl
         t/swamp/perl.pm
         t/swamp/perl.pod
+        t/text/4th-of-july.txt
         t/text/boy-named-sue.txt
         t/text/freedom-of-choice.txt
         t/text/science-of-myth.txt

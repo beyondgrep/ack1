@@ -211,7 +211,9 @@ sub options_sanity_check {
     $ok = 0 if _option_conflict( \%opts, 'l', [qw( m )] );
 
     # File-searching is definitely irrelevant on these
-    $ok = 0 if _option_conflict( \%opts, 'f', [qw( A B C o m group )] );
+    for my $switch ( qw( f g ) ) {
+        $ok = 0 if _option_conflict( \%opts, $switch, [qw( A B C o m group l )] );
+    }
 
     return $ok;
 }

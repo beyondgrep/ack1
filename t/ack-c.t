@@ -25,6 +25,7 @@ DASH_L: {
 
 DASH_CAPITAL_L: {
     my @expected = qw(
+        t/text/4th-of-july.txt
         t/text/boy-named-sue.txt
         t/text/freedom-of-choice.txt
         t/text/shut-up-be-happy.txt
@@ -44,19 +45,20 @@ DASH_CAPITAL_L: {
 
 DASH_C: {
     my @expected = qw(
-        t/text/boy-named-sue.txt:0
+        t/text/4th-of-july.txt:1
+        t/text/boy-named-sue.txt:2
         t/text/freedom-of-choice.txt:0
-        t/text/science-of-myth.txt:2
+        t/text/science-of-myth.txt:0
         t/text/shut-up-be-happy.txt:0
     );
 
     my @files = qw( t/text );
-    my @args = qw( religion -i -a -c );
+    my @args = qw( boy -i -a -c );
     my $cmd = "$^X ./ack-standalone @args @files";
     my @results = `$cmd`;
     chomp @results;
 
-    sets_match( \@results, \@expected, 'Religion counts' );
+    sets_match( \@results, \@expected, 'Boy counts' );
 }
 
 DASH_LC: {

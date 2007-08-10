@@ -12,6 +12,7 @@ use Util;
 
 DASH_L: {
     my @expected = qw(
+        t/text/4th-of-july.txt
         t/text/boy-named-sue.txt
         t/text/freedom-of-choice.txt
         t/text/shut-up-be-happy.txt
@@ -28,6 +29,7 @@ DASH_L: {
 
 DASH_C: {
     my @expected = qw(
+        t/text/4th-of-july.txt:37
         t/text/boy-named-sue.txt:72
         t/text/freedom-of-choice.txt:50
         t/text/science-of-myth.txt:24

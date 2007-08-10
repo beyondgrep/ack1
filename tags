@@ -12,10 +12,11 @@ App	ack	/^                App::Ack::die( qq{Unknown --type "$type"} );$/;"	l
 App	ack	/^            App::Ack::warn( "$filename: $!" );$/;"	l
 App	ack	/^        App::Ack::die( "Program\/library version mismatch\\n\\t$0 is $main::VERSION\\n\\t$INC{'App\/Ack.pm'} is $App::Ack::VERSION" );$/;"	l
 App	ack	/^        App::Ack::die( 'See ack --help or ack --man for options.' );$/;"	l
-App	ack	/^        App::Ack::die( q{Sorry, but the -A, -B and -C options haven't actually been implemented yet.} );$/;"	l
 App	ack	/^        App::Ack::show_help();$/;"	l
 App	ack	/^        App::Ack::warn( 'ACK_SWITCHES is no longer supported.  Use ACK_OPTIONS.' );$/;"	l
+BACK_ANCHOR	t/ack-g.t	/^BACK_ANCHOR: {$/;"	l
 BINARY_FILES	t/interesting.t	/^BINARY_FILES: {$/;"	l
+CASE_INSENSITIVE	t/ack-g.t	/^CASE_INSENSITIVE: {$/;"	l
 DASH_C	t/ack-c.t	/^DASH_C: {$/;"	l
 DASH_C	t/ack-v.t	/^DASH_C: {$/;"	l
 DASH_CAPITAL_L	t/ack-c.t	/^DASH_CAPITAL_L: {$/;"	l
@@ -25,6 +26,7 @@ DASH_L	t/ack-v.t	/^DASH_L: {$/;"	l
 DASH_LC	t/ack-c.t	/^DASH_LC: {$/;"	l
 Example	Ack.pm	/^Example: ack -i select$/;"	l
 FAIL_MATCHING_VIA_CONTENT	t/filetypes.t	/^FAIL_MATCHING_VIA_CONTENT: {$/;"	l
+FRONT_ANCHOR	t/ack-g.t	/^FRONT_ANCHOR: {$/;"	l
 File	ack	/^        File::Next::files( {$/;"	l
 File	t/interesting.t	/^        File::Next::files( {$/;"	l
 File	t/zero.t	/^        File::Next::files( {$/;"	l
@@ -32,7 +34,9 @@ Getopt	ack	/^    Getopt::Long::Configure( 'bundling', 'no_ignore_case' );$/;"	l
 HANDLE_ZEROES	t/zero.t	/^HANDLE_ZEROES: {$/;"	l
 MAIN	ack	/^MAIN: {$/;"	l
 MATCH_VIA_CONTENT	t/filetypes.t	/^MATCH_VIA_CONTENT: {$/;"	l
+METACHARACTERS	t/ack-g.t	/^METACHARACTERS: {$/;"	l
 Miscellaneous	Ack.pm	/^Miscellaneous:$/;"	l
+NO_METACHARCTERS	t/ack-g.t	/^NO_METACHARCTERS: {$/;"	l
 PARROT_FILES_DESCEND	t/interesting.t	/^PARROT_FILES_DESCEND: {$/;"	l
 PARROT_FILES_NODESCEND	t/interesting.t	/^PARROT_FILES_NODESCEND: {$/;"	l
 PARROT_FILES_NODESCEND_EMPTY	t/interesting.t	/^PARROT_FILES_NODESCEND_EMPTY: {$/;"	l
@@ -41,7 +45,11 @@ PERL_FILES_BY_NAME	t/interesting.t	/^PERL_FILES_BY_NAME: {$/;"	l
 PERL_FILES_GLOBBED	t/interesting.t	/^PERL_FILES_GLOBBED: {$/;"	l
 Searching	Ack.pm	/^Searching:$/;"	l
 TEXT	Ack.pm	/^use constant TEXT => 'text';$/;"	c
+TRAILING_METACHAR_BACKSLASH_W	t/ack-w.t	/^TRAILING_METACHAR_BACKSLASH_W: {$/;"	l
+TRAILING_METACHAR_DOT	t/ack-w.t	/^TRAILING_METACHAR_DOT: {$/;"	l
+TRAILING_PUNC	t/ack-w.t	/^TRAILING_PUNC: {$/;"	l
 Usage	Ack.pm	/^Usage: ack [OPTION]... PATTERN [FILES]$/;"	l
+_key	Ack.pm	/^sub _key {$/;"	s
 _listify	Ack.pm	/^sub _listify {$/;"	s
 _my_program	Ack.pm	/^sub _my_program {$/;"	s
 _option_conflict	Ack.pm	/^sub _option_conflict {$/;"	s

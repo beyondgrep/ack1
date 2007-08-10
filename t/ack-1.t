@@ -27,7 +27,7 @@ SINGLE_TEXT_MATCH: {
 SINGLE_FILE_MATCH: {
     my $regex = 'Makefile';
     my @files = qw( t/ );
-    my @args = ( '-g', -1, $regex );
+    my @args = ( '-1', '-g', $regex );
     my $cmd = "$^X ./ack-standalone @args @files";
     print "Running $cmd\n";
     my @results = `$cmd`;

@@ -1,8 +1,13 @@
 Changelog for ack
 
-NEXT
+1.65_01 Fri Aug 10 00:28:55 CDT 2007
 
     [ENHANCEMENTS]
+    Added --passthru switch, to print all lines, whether or not they
+    match.  This is something that could potentially get used a lot,
+    so I'm not sure that --passthru is the best name.  I'm open to
+    suggestions.
+
     Added FORTRAN support.  Thanks, Tod Hagan.
 
     Now ignores .pc directories for the Quilt patch management

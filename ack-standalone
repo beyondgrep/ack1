@@ -262,10 +262,7 @@ sub search {
     my $nmatches = 0;
     local $_ = undef;
     while (<$fh>) {
-        if ( !/$regex/o ) {
-            print if $opt{passthru};
-            next;
-        }
+        next unless $opt{passthru} || /$regex/o;
         ++$nmatches;
         next if $opt{count}; # Counting means no lines
 

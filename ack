@@ -101,10 +101,6 @@ MAIN: {
     GetOptions( %options ) && App::Ack::options_sanity_check( %opt ) or
         App::Ack::die( 'See ack --help or ack --man for options.' );
 
-    if ( $opt{A} || $opt{B} ) {
-        App::Ack::die( q{Sorry, but the -A, -B and -C options haven't actually been implemented yet.} );
-    }
-
     # Handle new -L the old way: as -l and -v
     if ( $opt{L} ) {
         $opt{l} = $opt{v} = 1;

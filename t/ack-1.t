@@ -23,6 +23,8 @@ SINGLE_TEXT_MATCH: {
     sets_match( \@results, \@expected, 'Looking for first instance of Sue!' );
 }
 
+# XXX Also check for -v -1 and hits in multiple files
+
 
 SINGLE_FILE_MATCH: {
     my $regex = 'Makefile';

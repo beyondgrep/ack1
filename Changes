@@ -1,5 +1,11 @@
 Changelog for ack
 
+NEXT
+    [FIXES]
+    New Macs are shipping with Test::Harness 1.85, and ack's test
+    confuse it.  I added a requirement of Test::Harness 2.50.  The
+    specific version is somewhat arbitrary.
+
 1.65_01 Fri Aug 10 00:28:55 CDT 2007
 
     [ENHANCEMENTS]

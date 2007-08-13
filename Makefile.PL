@@ -12,6 +12,7 @@ WriteMakefile(
     PM                  => { 'Ack.pm' => '$(INST_LIBDIR)/App/Ack.pm' },
     EXE_FILES           => [ 'ack' ],
     PREREQ_PM => {
+        'Test::Harness'     => 2.50, # Something reasonably newish
         'Term::ANSIColor'   => 0,
         'Getopt::Long'      => 0,
         'Test::More'        => 0,

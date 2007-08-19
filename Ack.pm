@@ -282,9 +282,14 @@ sub filetypes_supported {
     return keys %mappings;
 }
 
-sub _thpppt {
+sub _get_thpppt {
     my $y = q{_   /|,\\'!.x',=(www)=,   U   };
     $y =~ tr/,x!w/\nOo_/;
+    return $y;
+}
+
+sub _thpppt {
+    my $y = _get_thpppt();
     print "$y ack $_[0]!\n";
     exit 0;
 }

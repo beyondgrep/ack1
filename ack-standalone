@@ -38,15 +38,14 @@ sub main {
         }
     }
 
-    my $file_matching = $opt{f} || $opt{g};
-    if ( !@ARGV && !$file_matching ) {
-        App::Ack::show_help();
-        exit 1;
-    }
-
     my $regex;
+    my $file_matching = $opt{f} || $opt{g};
 
     if ( !$file_matching ) {
+        if ( !@ARGV ) {
+            App::Ack::show_help();
+            exit 1;
+        }
         # REVIEW: This shouldn't be able to happen because of the help
         # check above.
         $regex = shift @ARGV or App::Ack::die( 'No regex specified' );

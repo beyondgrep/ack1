@@ -108,6 +108,11 @@ MAIN: {
         $opt{l} = $opt{v} = 1;
     }
 
+    # Make the -m do work for us if we have -1
+    if ( $opt{1} ) {
+        $opt{m} = 1;
+    }
+
     # Apply defaults
     while ( my ($key,$value) = each %defaults ) {
         if ( not defined $opt{$key} ) {
@@ -213,8 +218,10 @@ MAIN: {
         }
     }
     else {
+        my $nmatches = 0;
         while ( defined ( my $file = $iter->() ) ) {
-            search( $file, $regex, %opt );
+            $nmatches += search( $file, $regex, %opt );
+            last if $nmatches && $opt{1};
         }
     }
     exit 0;
@@ -323,7 +330,7 @@ sub search {
         print "\n" if $nmatches && $opt{show_filename} && $opt{group};
     }
 
-    return;
+    return $nmatches;
 }   # search()
 
 
@@ -340,7 +347,7 @@ sub _search_v {
     local $_ = undef;
     while (<$fh>) {
         if ( /$regex/o ) {
-            return if $opt{l}; # For list mode, any match means we can bail
+            return 0 if $opt{l}; # For list mode, any match means we can bail
             next;
         }
         else {
@@ -366,7 +373,7 @@ sub _search_v {
         print "$filename\n" if $opt{l};
     }
 
-    return;
+    return $nmatches;
 } # _search_v()
 
 =encoding utf8

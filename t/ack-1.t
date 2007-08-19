@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 delete $ENV{ACK_OPTIONS};
 
 use lib 't';
@@ -21,6 +21,21 @@ SINGLE_TEXT_MATCH: {
     chomp @results;
 
     sets_match( \@results, \@expected, 'Looking for first instance of Sue!' );
+}
+
+
+DASH_V: {
+    my @expected = (
+        'Well, my daddy left home when I was three',
+    );
+
+    my @files = qw( t/text/boy-named-sue.txt );
+    my @args = qw( Sue! -1 -h -v --text );
+    my $cmd = "$^X ./ack-standalone @args @files";
+    my @results = `$cmd`;
+    chomp @results;
+
+    sets_match( \@results, \@expected, 'Looking for first non-match' );
 }
 
 # XXX Also check for -v -1 and hits in multiple files

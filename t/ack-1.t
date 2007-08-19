@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 3;
+use Test::More tests => 5;
 delete $ENV{ACK_OPTIONS};
 
 use lib 't';
@@ -26,7 +26,20 @@ SINGLE_TEXT_MATCH: {
 # XXX Also check for -v -1 and hits in multiple files
 
 
-SINGLE_FILE_MATCH: {
+DASH_F: {
+    my @files = qw( t/swamp );
+    my @args = qw( -1 -f );
+    my $cmd = "$^X ./ack-standalone @args @files";
+    print "Running $cmd\n";
+    my @results = `$cmd`;
+    chomp @results;
+
+    is( scalar @results, 1, 'Should only get one file back' );
+    like( $results[0], qr{^t/swamp/}, 'One of the files from the swamp' );
+}
+
+
+DASH_G: {
     my $regex = 'Makefile';
     my @files = qw( t/ );
     my @args = ( '-1', '-g', $regex );
@@ -36,5 +49,5 @@ SINGLE_FILE_MATCH: {
     chomp @results;
 
     is( scalar @results, 1, "Should only get one file back from $regex" );
-    like( $results[0], qr{t/swamp/Makefile(\.PL)?$}, 'The one file matches one of the two Makefile files' );
+    like( $results[0], qr{^t/swamp/Makefile(\.PL)?$}, 'The one file matches one of the two Makefile files' );
 }

@@ -73,7 +73,7 @@ MAIN: {
         'version'   => sub { App::Ack::version_statement( $COPYRIGHT ); exit 1; },
         'help|?:s'  => sub { shift; App::Ack::show_help(@_); exit; },
         'help-types'=> sub { App::Ack::show_help_types(); exit; },
-        'man'       => sub {require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit},
+        'man'       => sub {require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit; },
 
         'type=s'    => sub {
             # Whatever --type=xxx they specify, set it manually in the hash
@@ -200,12 +200,16 @@ MAIN: {
     if ( $opt{f} ) {
         while ( defined ( my $file = $iter->() ) ) {
             print "$file\n";
+            last if $opt{1};
         }
     }
     elsif ( $opt{g} ) {
         my $regex = $opt{i} ? qr/$opt{g}/i : qr/$opt{g}/;
         while ( defined ( my $file = $iter->() ) ) {
-            print "$file\n" if $file =~ m/$regex/o;
+            if ( $file =~ m/$regex/o ) {
+                print "$file\n";
+                last if $opt{1};
+            }
         }
     }
     else {

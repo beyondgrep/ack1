@@ -61,7 +61,28 @@ sub main {
         $regex = $opt{i} ? qr/$regex/i : qr/$regex/;
     }
 
-    my @what = App::Ack::_process_remaining_command_line(\%opt, $regex);
+    my @what;
+    if ( @ARGV ) {
+        @what = $App::Ack::is_windows ? <@ARGV> : @ARGV;
+
+        # Show filenames unless we've specified one single file
+        $opt{show_filename} = (@what > 1) || (!-f $what[0]);
+    }
+    else {
+        if ( $opt{is_filter} ) {
+            # We're going into filter mode
+            for ( qw( f l ) ) {
+                $opt{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );
+            }
+            $opt{show_filename} = 0;
+            App::Ack::search( '-', $regex, %opt );
+            exit 0;
+        }
+        else {
+            @what = '.'; # Assume current directory
+            $opt{show_filename} = 1;
+        }
+    }
 
     my $file_filter = $opt{all} ? \&App::Ack::dash_a_file_filter : \&App::Ack::is_interesting;
     my $descend_filter = $opt{n} ? sub {0} : \&App::Ack::skipdir_filter;

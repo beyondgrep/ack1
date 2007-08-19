@@ -642,6 +642,31 @@ sub search {
     return $nmatches;
 }   # search()
 
+=head2 apply_defaults
+
+Apply the default options
+
+=cut
+
+sub apply_defaults {
+    my $opt = shift;
+
+    my $to_screen = -t *STDOUT;
+    my %defaults = (
+        all     => 0,
+        color   => $to_screen && !$App::Ack::is_windows,
+        follow  => 0,
+        group   => $to_screen,
+        m       => 0,
+    );
+    while ( my ($key,$value) = each %defaults ) {
+        if ( not defined $opt->{$key} ) {
+            $opt->{$key} = $value;
+        }
+    }
+
+    return;
+}
 
 
 1; # End of App::Ack

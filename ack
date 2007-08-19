@@ -29,15 +29,6 @@ sub main {
     # Priorities! Get the --thpppt checking out of the way.
     /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
 
-    my $to_screen = -t *STDOUT;
-    my %defaults = (
-        all     => 0,
-        color   => $to_screen && !$App::Ack::is_windows,
-        follow  => 0,
-        group   => $to_screen,
-        m       => 0,
-    );
-
     my %opt;
     my %options = (
         1           => \$opt{1},
@@ -108,12 +99,7 @@ sub main {
         $opt{m} = 1;
     }
 
-    # Apply defaults
-    while ( my ($key,$value) = each %defaults ) {
-        if ( not defined $opt{$key} ) {
-            $opt{$key} = $value;
-        }
-    }
+    App::Ack::apply_defaults(\%opt);
 
     if ( defined( my $val = $opt{o} ) ) {
         if ( $val eq '' ) {

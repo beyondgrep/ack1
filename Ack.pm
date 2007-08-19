@@ -693,19 +693,36 @@ sub filetypes_supported_unset {
     return grep { defined $App::Ack::type_wanted{$_} && ($App::Ack::type_wanted{$_} == 0) } filetypes_supported();
 }
 
-sub _print_files {
+=head2 print_files( $iter, $one )
+
+Prints all the files returned by the iterator.  If I<$one> is set,
+stop after the first.
+
+=cut
+
+sub print_files {
     my ($iter, $one) = @_;
     while ( defined ( my $file = $iter->() ) ) {
         print "$file\n";
         last if $one;
     }
-    
+
     return;
 }
 
-sub _print_selected_files {
-    my ($iter, $case_insensitive, $group, $one) = @_;
-    my $regex = $case_insensitive ? qr/$group/i : qr/$group/;
+=head2 print_selected_files( $iter, $regex, $one )
+
+Prints all the files returned by the iterator matching I<$regex>.
+If I<$one> is set, stop after the first.
+
+=cut
+
+
+sub print_selected_files {
+    my $iter = shift;
+    my $regex = shift;
+    my $one = shift;
+
     while ( defined ( my $file = $iter->() ) ) {
         if ( $file =~ m/$regex/o ) {
             print "$file\n";

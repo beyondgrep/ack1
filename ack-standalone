@@ -160,10 +160,11 @@ sub main {
 
 
     if ( $opt{f} ) {
-        App::Ack::_print_files($iter, $opt{1});
+        App::Ack::print_files($iter, $opt{1});
     }
     elsif ( $opt{g} ) {
-        App::Ack::_print_selected_files($iter, $opt{i}, $opt{g}, $opt{1});
+        my $regex = $opt{i} ? qr/$opt{g}/i : qr/$opt{g}/;
+        App::Ack::print_selected_files($iter, $regex, $opt{1});
     }
     else {
         $opt{show_filename} = 0 if $opt{h};
@@ -1272,19 +1273,24 @@ sub filetypes_supported_unset {
     return grep { defined $App::Ack::type_wanted{$_} && ($App::Ack::type_wanted{$_} == 0) } filetypes_supported();
 }
 
-sub _print_files {
+
+sub print_files {
     my ($iter, $one) = @_;
     while ( defined ( my $file = $iter->() ) ) {
         print "$file\n";
         last if $one;
     }
-    
+
     return;
 }
 
-sub _print_selected_files {
-    my ($iter, $case_insensitive, $group, $one) = @_;
-    my $regex = $case_insensitive ? qr/$group/i : qr/$group/;
+
+
+sub print_selected_files {
+    my $iter = shift;
+    my $regex = shift;
+    my $one = shift;
+
     while ( defined ( my $file = $iter->() ) ) {
         if ( $file =~ m/$regex/o ) {
             print "$file\n";

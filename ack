@@ -182,7 +182,7 @@ sub main {
     $opt{show_filename} = 1 if $opt{H};
     $opt{show_filename} = 0 if $opt{o};
 
-    my $file_filter = $opt{all} ? \&dash_a : \&is_interesting;
+    my $file_filter = $opt{all} ? \&dash_a : \&App::Ack::is_interesting;
     my $descend_filter = $opt{n} ? sub {0} : \&App::Ack::skipdir_filter;
 
     my $iter =
@@ -218,22 +218,6 @@ sub main {
         }
     }
     exit 0;
-}
-
-sub is_interesting {
-    return if /^\./;
-
-    my $include;
-    my $exclude;
-
-    for my $type ( App::Ack::filetypes( $File::Next::name ) ) {
-        if ( defined $App::Ack::type_wanted{$type} ) {
-            $include = 1 if $App::Ack::type_wanted{$type};
-            $exclude = 1 if not $App::Ack::type_wanted{$type};
-        }
-    }
-
-    return ( $include && not $exclude );
 }
 
 sub dash_a {

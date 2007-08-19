@@ -474,4 +474,26 @@ sub load_colors {
     $ENV{ACK_COLOR_FILENAME} ||= 'bold green';
 }
 
+=head2 is_interesting
+
+File type filter, filtering based on the wanted file types
+
+=cut
+sub is_interesting {
+    return if /^\./;
+
+    my $include;
+    my $exclude;
+
+    for my $type ( App::Ack::filetypes( $File::Next::name ) ) {
+        if ( defined $App::Ack::type_wanted{$type} ) {
+            $include = 1 if $App::Ack::type_wanted{$type};
+            $exclude = 1 if not $App::Ack::type_wanted{$type};
+        }
+    }
+
+    return ( $include && not $exclude );
+}
+
+
 1; # End of App::Ack

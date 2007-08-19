@@ -716,4 +716,35 @@ sub _print_selected_files {
     return;
 }
 
+sub _process_remaining_command_line {
+    my ($opt, $regex) = @_;
+
+    my @what;
+    if ( @ARGV ) {
+        @what = $App::Ack::is_windows ? <@ARGV> : @ARGV;
+
+        # Show filenames unless we've specified one single file
+        $opt->{show_filename} = (@what > 1) || (!-f $what[0]);
+    }
+    else {
+        my $is_filter = !-t STDIN;
+        if ( $is_filter ) {
+            # We're going into filter mode
+            for ( qw( f l ) ) {
+                $opt->{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );
+            }
+            $opt->{show_filename} = 0;
+            App::Ack::search( '-', $regex, %$opt );
+            exit 0;
+        }
+        else {
+            @what = '.'; # Assume current directory
+            $opt->{show_filename} = 1;
+        }
+    }
+
+    return @what;
+}
+
+
 1; # End of App::Ack

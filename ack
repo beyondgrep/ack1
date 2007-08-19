@@ -71,7 +71,7 @@ sub main {
     else {
         if ( $opt{is_filter} ) {
             # We're going into filter mode
-            for ( qw( f l ) ) {
+            for ( qw( f g l ) ) {
                 $opt{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );
             }
             $opt{show_filename} = 0;

@@ -26,6 +26,7 @@ our %ignore_dirs;
 our $path_sep;
 our $is_cygwin;
 our $is_windows;
+our %type_wanted;
 
 BEGIN {
     %ignore_dirs = (

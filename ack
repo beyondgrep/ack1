@@ -8,7 +8,6 @@ our $VERSION   = '1.65_01';
 
 # These are all our globals.
 my %opt;
-my %type_wanted;
 
 use File::Next 0.40;
 use App::Ack ();
@@ -75,8 +74,8 @@ sub main {
             my $type = shift;
             my $wanted = ($type =~ s/^no//) ? 0 : 1; # must not be undef later
 
-            if ( exists $type_wanted{ $type } ) {
-                $type_wanted{ $type } = $wanted;
+            if ( exists $App::Ack::type_wanted{ $type } ) {
+                $App::Ack::type_wanted{ $type } = $wanted;
             }
             else {
                 App::Ack::die( qq{Unknown --type "$type"} );
@@ -86,7 +85,7 @@ sub main {
 
     my @filetypes_supported = App::Ack::filetypes_supported();
     for my $i ( @filetypes_supported ) {
-        $options{ "$i!" } = \$type_wanted{ $i };
+        $options{ "$i!" } = \$App::Ack::type_wanted{ $i };
     }
 
     # Stick any default switches at the beginning, so they can be overridden
@@ -124,13 +123,13 @@ sub main {
         $opt{o} = eval qq[ sub { $val } ];
     }
 
-    my $filetypes_supported_set =   grep { defined $type_wanted{$_} && ($type_wanted{$_} == 1) } @filetypes_supported;
-    my $filetypes_supported_unset = grep { defined $type_wanted{$_} && ($type_wanted{$_} == 0) } @filetypes_supported;
+    my $filetypes_supported_set =   grep { defined $App::Ack::type_wanted{$_} && ($App::Ack::type_wanted{$_} == 1) } @filetypes_supported;
+    my $filetypes_supported_unset = grep { defined $App::Ack::type_wanted{$_} && ($App::Ack::type_wanted{$_} == 0) } @filetypes_supported;
 
     # If anyone says --no-whatever, we assume all other types must be on.
     if ( !$filetypes_supported_set ) {
-        for my $i ( keys %type_wanted ) {
-            $type_wanted{$i} = 1 unless ( defined( $type_wanted{$i} ) || $i eq 'binary' || $i eq 'text' || $i eq 'skipped' );
+        for my $i ( keys %App::Ack::type_wanted ) {
+            $App::Ack::type_wanted{$i} = 1 unless ( defined( $App::Ack::type_wanted{$i} ) || $i eq 'binary' || $i eq 'text' || $i eq 'skipped' );
         }
     }
 
@@ -228,9 +227,9 @@ sub is_interesting {
     my $exclude;
 
     for my $type ( App::Ack::filetypes( $File::Next::name ) ) {
-        if ( defined $type_wanted{$type} ) {
-            $include = 1 if $type_wanted{$type};
-            $exclude = 1 if not $type_wanted{$type};
+        if ( defined $App::Ack::type_wanted{$type} ) {
+            $include = 1 if $App::Ack::type_wanted{$type};
+            $exclude = 1 if not $App::Ack::type_wanted{$type};
         }
     }
 

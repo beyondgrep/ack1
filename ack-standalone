@@ -146,10 +146,6 @@ sub main {
 
     my @what = App::Ack::_process_remaining_command_line(\%opt, $regex);
 
-    $opt{show_filename} = 0 if $opt{h};
-    $opt{show_filename} = 1 if $opt{H};
-    $opt{show_filename} = 0 if $opt{o};
-
     my $file_filter = $opt{all} ? \&App::Ack::dash_a : \&App::Ack::is_interesting;
     my $descend_filter = $opt{n} ? sub {0} : \&App::Ack::skipdir_filter;
 
@@ -170,6 +166,10 @@ sub main {
         App::Ack::_print_selected_files($iter, $opt{i}, $opt{g}, $opt{1});
     }
     else {
+        $opt{show_filename} = 0 if $opt{h};
+        $opt{show_filename} = 1 if $opt{H};
+        $opt{show_filename} = 0 if $opt{o};
+
         my $nmatches = 0;
         while ( defined ( my $file = $iter->() ) ) {
             $nmatches += App::Ack::search( $file, $regex, %opt );

@@ -503,13 +503,13 @@ sub is_interesting {
     return ( $include && not $exclude );
 }
 
-=head2 dash_a
+=head2 dash_a_file_filter
 
 File filter for the -a option
 
 =cut
 
-sub dash_a {
+sub dash_a_file_filter {
     return App::Ack::is_searchable( $File::Next::name );
 }
 

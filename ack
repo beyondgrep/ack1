@@ -148,7 +148,7 @@ sub main {
 
     my @what = App::Ack::_process_remaining_command_line(\%opt, $regex);
 
-    my $file_filter = $opt{all} ? \&App::Ack::dash_a : \&App::Ack::is_interesting;
+    my $file_filter = $opt{all} ? \&App::Ack::dash_a_file_filter : \&App::Ack::is_interesting;
     my $descend_filter = $opt{n} ? sub {0} : \&App::Ack::skipdir_filter;
 
     my $iter =

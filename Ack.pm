@@ -14,8 +14,10 @@ Version 1.65_01
 =cut
 
 our $VERSION;
+our $COPYRIGHT;
 BEGIN {
     $VERSION = '1.65_01';
+    $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 }
 
 our %types;
@@ -422,7 +424,7 @@ Returns the version information for ack.
 =cut
 
 sub get_version_statement {
-    my $copyright = shift;
+    my $copyright = get_copyright();
     return <<"END_OF_VERSION";
 ack $App::Ack::VERSION
 
@@ -441,9 +443,19 @@ Prints the version information for ack.
 =cut
 
 sub print_version_statement {
-    print get_version_statement( shift );
+    print get_version_statement();
 
     return;
+}
+
+=head2 get_copyright 
+
+Return the copyright for ack.
+
+=cut
+
+sub get_copyright {
+    return $COPYRIGHT;
 }
 
 1; # End of App::Ack

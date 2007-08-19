@@ -4,7 +4,6 @@ use warnings;
 use strict;
 
 our $VERSION   = '1.65_01';
-our $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.
@@ -70,7 +69,7 @@ MAIN: {
         'w|word-regexp'         => \$opt{w},
 
 
-        'version'   => sub { App::Ack::print_version_statement( $COPYRIGHT ); exit 1; },
+        'version'   => sub { App::Ack::print_version_statement(); exit 1; },
         'help|?:s'  => sub { shift; App::Ack::show_help(@_); exit; },
         'help-types'=> sub { App::Ack::show_help_types(); exit; },
         'man'       => sub {require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit; },

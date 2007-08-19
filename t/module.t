@@ -3,13 +3,18 @@
 use warnings;
 use strict;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 delete $ENV{ACK_OPTIONS};
 
 use lib 't';
 
 BEGIN {
     use_ok( 'App::Ack' );
+}
+
+{
+    my $copyright = App::Ack::get_copyright();
+    like $copyright, qr{Copyright\s\d+-\d+\sAndy Lester}, 'Copyright';
 }
 
 {

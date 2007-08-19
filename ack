@@ -111,8 +111,8 @@ sub main {
         $opt{o} = eval qq[ sub { $val } ];
     }
 
-    my $filetypes_supported_set =   grep { defined $App::Ack::type_wanted{$_} && ($App::Ack::type_wanted{$_} == 1) } @filetypes_supported;
-    my $filetypes_supported_unset = grep { defined $App::Ack::type_wanted{$_} && ($App::Ack::type_wanted{$_} == 0) } @filetypes_supported;
+    my $filetypes_supported_set   = App::Ack::filetypes_supported_set();
+    my $filetypes_supported_unset = App::Ack::filetypes_supported_unset();
 
     # If anyone says --no-whatever, we assume all other types must be on.
     if ( !$filetypes_supported_set ) {

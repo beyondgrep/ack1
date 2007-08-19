@@ -668,5 +668,24 @@ sub apply_defaults {
     return;
 }
 
+=head2 filetypes_supported_set
+
+True/False - are the filetypes set?
+
+=cut
+
+sub filetypes_supported_set {
+    return grep { defined $App::Ack::type_wanted{$_} && ($App::Ack::type_wanted{$_} == 1) } filetypes_supported();
+}
+
+=head2 filetypes_supported_unset
+
+True/False - are the filetypes unset?
+
+=cut
+
+sub filetypes_supported_unset {
+    return grep { defined $App::Ack::type_wanted{$_} && ($App::Ack::type_wanted{$_} == 0) } filetypes_supported();
+}
 
 1; # End of App::Ack

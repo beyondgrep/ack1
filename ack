@@ -7,7 +7,6 @@ our $VERSION   = '1.65_01';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.
-my %opt;
 
 use File::Next 0.40;
 use App::Ack ();
@@ -15,9 +14,7 @@ use Getopt::Long;
 
 App::Ack::load_colors();
 
-main();
-
-sub main {
+MAIN: {
     if ( $App::Ack::VERSION ne $main::VERSION ) {
         App::Ack::die( "Program/library version mismatch\n\t$0 is $main::VERSION\n\t$INC{'App/Ack.pm'} is $App::Ack::VERSION" );
     }
@@ -25,6 +22,10 @@ sub main {
         App::Ack::warn( 'ACK_SWITCHES is no longer supported.  Use ACK_OPTIONS.' );
     }
 
+    main();
+}
+
+sub main {
     # Priorities! Get the --thpppt checking out of the way.
     /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
 
@@ -37,6 +38,7 @@ sub main {
         m       => 0,
     );
 
+    my %opt;
     my %options = (
         1           => \$opt{1},
         a           => \$opt{all},

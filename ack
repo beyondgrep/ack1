@@ -7,7 +7,6 @@ our $VERSION   = '1.65_01';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.
-my $is_windows;
 my %opt;
 my %type_wanted;
 
@@ -15,13 +14,8 @@ use File::Next 0.40;
 use App::Ack ();
 use Getopt::Long;
 
-BEGIN {
-    $is_windows = ($^O =~ /MSWin32/);
-    eval 'use Term::ANSIColor ();' unless $is_windows;
+App::Ack::load_colors();
 
-    $ENV{ACK_COLOR_MATCH}    ||= 'black on_yellow';
-    $ENV{ACK_COLOR_FILENAME} ||= 'bold green';
-}
 main();
 
 sub main {
@@ -38,7 +32,7 @@ sub main {
     my $to_screen = -t *STDOUT;
     my %defaults = (
         all     => 0,
-        color   => $to_screen && !$is_windows,
+        color   => $to_screen && !$App::Ack::is_windows,
         follow  => 0,
         group   => $to_screen,
         m       => 0,
@@ -164,7 +158,7 @@ sub main {
 
     my @what;
     if ( @ARGV ) {
-        @what = $is_windows ? <@ARGV> : @ARGV;
+        @what = $App::Ack::is_windows ? <@ARGV> : @ARGV;
 
         # Show filenames unless we've specified one single file
         $opt{show_filename} = (@what > 1) || (!-f $what[0]);

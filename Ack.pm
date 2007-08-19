@@ -25,6 +25,7 @@ our %mappings;
 our %ignore_dirs;
 our $path_sep;
 our $is_cygwin;
+our $is_windows;
 
 BEGIN {
     %ignore_dirs = (
@@ -456,6 +457,20 @@ Return the copyright for ack.
 
 sub get_copyright {
     return $COPYRIGHT;
+}
+
+=head2 load_colors
+
+Set default colors, load Term::ANSIColor on non Windows platforms
+
+=cut
+
+sub load_colors {
+    $is_windows = ($^O =~ /MSWin32/);
+    eval 'use Term::ANSIColor ();' unless $is_windows;
+
+    $ENV{ACK_COLOR_MATCH}    ||= 'black on_yellow';
+    $ENV{ACK_COLOR_FILENAME} ||= 'bold green';
 }
 
 1; # End of App::Ack

@@ -11,6 +11,10 @@ my $is_windows;
 my %opt;
 my %type_wanted;
 
+use File::Next 0.40;
+use App::Ack ();
+use Getopt::Long;
+
 BEGIN {
     $is_windows = ($^O =~ /MSWin32/);
     eval 'use Term::ANSIColor ();' unless $is_windows;
@@ -18,12 +22,9 @@ BEGIN {
     $ENV{ACK_COLOR_MATCH}    ||= 'black on_yellow';
     $ENV{ACK_COLOR_FILENAME} ||= 'bold green';
 }
+main();
 
-use File::Next 0.40;
-use App::Ack ();
-use Getopt::Long;
-
-MAIN: {
+sub main {
     if ( $App::Ack::VERSION ne $main::VERSION ) {
         App::Ack::die( "Program/library version mismatch\n\t$0 is $main::VERSION\n\t$INC{'App/Ack.pm'} is $App::Ack::VERSION" );
     }

@@ -11,6 +11,8 @@ my $is_windows;
 my %opt;
 my %type_wanted;
 
+use Getopt::Long;
+
 BEGIN {
     $is_windows = ($^O =~ /MSWin32/);
     eval 'use Term::ANSIColor ();' unless $is_windows;
@@ -18,10 +20,9 @@ BEGIN {
     $ENV{ACK_COLOR_MATCH}    ||= 'black on_yellow';
     $ENV{ACK_COLOR_FILENAME} ||= 'bold green';
 }
+main();
 
-use Getopt::Long;
-
-MAIN: {
+sub main {
     if ( $App::Ack::VERSION ne $main::VERSION ) {
         App::Ack::die( "Program/library version mismatch\n\t$0 is $main::VERSION\n\t$INC{'App/Ack.pm'} is $App::Ack::VERSION" );
     }
@@ -696,6 +697,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Gabor Szabo,
 Tod Hagan,
 Michael Hendricks,
 Ævar Arnfjörð Bjarmason,

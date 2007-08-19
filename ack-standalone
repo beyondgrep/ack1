@@ -708,7 +708,7 @@ BEGIN {
 sub get_command_line_options {
     my %opt;
 
-    my $options = {
+    my $getopt_specs = {
         1                       => \$opt{1},
         a                       => \$opt{all},
         'all!'                  => \$opt{all},
@@ -756,7 +756,7 @@ sub get_command_line_options {
 
     my @filetypes_supported = App::Ack::filetypes_supported();
     for my $i ( @filetypes_supported ) {
-        $options->{ "$i!" } = \$App::Ack::type_wanted{ $i };
+        $getopt_specs->{ "$i!" } = \$App::Ack::type_wanted{ $i };
     }
 
     # Stick any default switches at the beginning, so they can be overridden
@@ -764,8 +764,10 @@ sub get_command_line_options {
     unshift @ARGV, split( ' ', $ENV{ACK_OPTIONS} ) if defined $ENV{ACK_OPTIONS};
 
     Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
-    Getopt::Long::GetOptions( %$options ) && App::Ack::options_sanity_check( %opt ) or
+    Getopt::Long::GetOptions( %{$getopt_specs} ) && App::Ack::options_sanity_check( %opt ) or
         App::Ack::die( 'See ack --help or ack --man for options.' );
+
+    $opt{is_filter} = !-t STDIN;
 
     # Handle new -L the old way: as -l and -v
     if ( $opt{L} ) {
@@ -1316,8 +1318,7 @@ sub _process_remaining_command_line {
         $opt->{show_filename} = (@what > 1) || (!-f $what[0]);
     }
     else {
-        my $is_filter = !-t STDIN;
-        if ( $is_filter ) {
+        if ( $opt->{is_filter} ) {
             # We're going into filter mode
             for ( qw( f l ) ) {
                 $opt->{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );

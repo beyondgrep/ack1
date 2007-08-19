@@ -479,6 +479,7 @@ sub load_colors {
 File type filter, filtering based on the wanted file types
 
 =cut
+
 sub is_interesting {
     return if /^\./;
 
@@ -493,6 +494,16 @@ sub is_interesting {
     }
 
     return ( $include && not $exclude );
+}
+
+=head2 dash_a
+
+File filter for the -a option
+
+=cut
+
+sub dash_a {
+    return App::Ack::is_searchable( $File::Next::name );
 }
 
 

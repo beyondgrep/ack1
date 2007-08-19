@@ -693,4 +693,13 @@ sub filetypes_supported_unset {
     return grep { defined $App::Ack::type_wanted{$_} && ($App::Ack::type_wanted{$_} == 0) } filetypes_supported();
 }
 
+sub _print_files {
+    my ($iter, $one) = @_;
+    while ( defined ( my $file = $iter->() ) ) {
+        print "$file\n";
+        last if $one;
+    }
+}
+
+
 1; # End of App::Ack

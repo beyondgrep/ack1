@@ -28,6 +28,8 @@ our $is_cygwin;
 our $is_windows;
 our %type_wanted;
 
+use File::Spec ();
+
 BEGIN {
     %ignore_dirs = (
         '.git'  => 'Git',
@@ -78,7 +80,6 @@ BEGIN {
         xml         => [qw( xml dtd xslt )],
     );
 
-    use File::Spec ();
     $path_sep = File::Spec->catfile( '', '' );
     $path_sep = quotemeta( $path_sep );
 
@@ -435,7 +436,6 @@ $copyright
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 END_OF_VERSION
-
 }
 
 =head2 print_version_statement( $copyright )
@@ -472,6 +472,8 @@ sub load_colors {
 
     $ENV{ACK_COLOR_MATCH}    ||= 'black on_yellow';
     $ENV{ACK_COLOR_FILENAME} ||= 'bold green';
+
+    return;
 }
 
 =head2 is_interesting

@@ -38,9 +38,6 @@ DASH_V: {
     sets_match( \@results, \@expected, 'Looking for first non-match' );
 }
 
-# XXX Also check for -v -1 and hits in multiple files
-
-
 DASH_F: {
     my @files = qw( t/swamp );
     my @args = qw( -1 -f );

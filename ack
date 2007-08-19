@@ -243,7 +243,7 @@ sub search {
     # Negated counting is a pain, so I'm putting it in its own
     # optimizable subroutine.
     if ( $opt{v} ) {
-        return _search_v( $fh, $is_binary, $filename, $regex, %opt );
+        return App::Ack::_search_v( $fh, $is_binary, $filename, $regex, %opt );
     }
 
     my $nmatches = 0;
@@ -306,48 +306,6 @@ sub search {
     return $nmatches;
 }   # search()
 
-
-sub _search_v {
-    my $fh = shift;
-    my $is_binary = shift;
-    my $filename = shift;
-    my $regex = shift;
-    my %opt = @_;
-
-    my $nmatches = 0; # Although in here, it's really $n_non_matches. :-)
-
-    my $show_lines = !($opt{l} || $opt{count});
-    local $_ = undef;
-    while (<$fh>) {
-        if ( /$regex/o ) {
-            return 0 if $opt{l}; # For list mode, any match means we can bail
-            next;
-        }
-        else {
-            ++$nmatches;
-            if ( $show_lines ) {
-                if ( $is_binary ) {
-                    print "Binary file $filename matches\n";
-                    last;
-                }
-                print "${filename}:" if $opt{show_filename};
-                print $_;
-                last if $opt{m} && ( $nmatches >= $opt{m} );
-            }
-        }
-    } # while
-    close $fh or App::Ack::warn( "$filename: $!" );
-
-    if ( $opt{count} ) {
-        print "${filename}:" if $opt{show_filename};
-        print "${nmatches}\n";
-    }
-    else {
-        print "$filename\n" if $opt{l};
-    }
-
-    return $nmatches;
-} # _search_v()
 
 =encoding utf8
 

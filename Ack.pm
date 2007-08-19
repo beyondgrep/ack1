@@ -506,5 +506,47 @@ sub dash_a {
     return App::Ack::is_searchable( $File::Next::name );
 }
 
+sub _search_v {
+    my $fh = shift;
+    my $is_binary = shift;
+    my $filename = shift;
+    my $regex = shift;
+    my %opt = @_;
+
+    my $nmatches = 0; # Although in here, it's really $n_non_matches. :-)
+
+    my $show_lines = !($opt{l} || $opt{count});
+    local $_ = undef;
+    while (<$fh>) {
+        if ( /$regex/o ) {
+            return 0 if $opt{l}; # For list mode, any match means we can bail
+            next;
+        }
+        else {
+            ++$nmatches;
+            if ( $show_lines ) {
+                if ( $is_binary ) {
+                    print "Binary file $filename matches\n";
+                    last;
+                }
+                print "${filename}:" if $opt{show_filename};
+                print $_;
+                last if $opt{m} && ( $nmatches >= $opt{m} );
+            }
+        }
+    } # while
+    close $fh or App::Ack::warn( "$filename: $!" );
+
+    if ( $opt{count} ) {
+        print "${filename}:" if $opt{show_filename};
+        print "${nmatches}\n";
+    }
+    else {
+        print "$filename\n" if $opt{l};
+    }
+
+    return $nmatches;
+} # _search_v()
+
 
 1; # End of App::Ack

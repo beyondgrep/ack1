@@ -548,5 +548,98 @@ sub _search_v {
     return $nmatches;
 } # _search_v()
 
+=head2 search
+
+Main search method
+
+=cut
+
+sub search {
+    my $filename = shift;
+    my $regex = shift;
+    my %opt = @_;
+
+    my $is_binary;
+
+    my $fh;
+    if ( $filename eq '-' ) {
+        $fh = *STDIN;
+        $is_binary = 0;
+    }
+    else {
+        if ( !open( $fh, '<', $filename ) ) {
+            App::Ack::warn( "$filename: $!" );
+            return;
+        }
+        $is_binary = -B $filename;
+    }
+
+    # Negated counting is a pain, so I'm putting it in its own
+    # optimizable subroutine.
+    if ( $opt{v} ) {
+        return App::Ack::_search_v( $fh, $is_binary, $filename, $regex, %opt );
+    }
+
+    my $nmatches = 0;
+    local $_ = undef;
+    while (<$fh>) {
+        next unless $opt{passthru} || /$regex/o;
+        ++$nmatches;
+        next if $opt{count}; # Counting means no lines
+
+        # No point in searching more if we only want a list,
+        # and don't want a count.
+        last if $opt{l};
+
+        if ( $is_binary ) {
+            print "Binary file $filename matches\n";
+            last;
+        }
+
+        my $out;
+        if ( $opt{o} ) {
+            $out = $opt{o}->() . "\n";
+        }
+        else {
+            $out = $_;
+            $out =~ s/($regex)/Term::ANSIColor::colored($1,$ENV{ACK_COLOR_MATCH})/eg if $opt{color};
+        }
+
+        if ( $opt{show_filename} ) {
+            my $display_filename =
+                $opt{color}
+                    ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} )
+                    : $filename;
+            if ( $opt{group} ) {
+                print "$display_filename\n" if $nmatches == 1;
+                print "$.:";
+            }
+            else {
+                print "${display_filename}:$.:";
+            }
+        }
+        print $out;
+
+        last if $opt{m} && ( $nmatches >= $opt{m} );
+    } # while
+    close $fh or App::Ack::warn( "$filename: $!" );
+
+    if ( $opt{count} ) {
+        if ( $nmatches || !$opt{l} ) {
+            print "${filename}:" if $opt{show_filename};
+            print "${nmatches}\n";
+        }
+    }
+    elsif ( $opt{l} ) {
+        print "$filename\n" if $nmatches;
+    }
+    else {
+        print "\n" if $nmatches && $opt{show_filename} && $opt{group};
+    }
+
+    return $nmatches;
+}   # search()
+
+
 
 1; # End of App::Ack

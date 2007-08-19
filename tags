@@ -18,12 +18,16 @@ BACK_ANCHOR	t/ack-g.t	/^BACK_ANCHOR: {$/;"	l
 BINARY_FILES	t/interesting.t	/^BINARY_FILES: {$/;"	l
 CASE_INSENSITIVE	t/ack-g.t	/^CASE_INSENSITIVE: {$/;"	l
 DASH_C	t/ack-c.t	/^DASH_C: {$/;"	l
+DASH_C	t/ack-passthru.t	/^DASH_C: {$/;"	l
 DASH_C	t/ack-v.t	/^DASH_C: {$/;"	l
 DASH_CAPITAL_L	t/ack-c.t	/^DASH_CAPITAL_L: {$/;"	l
+DASH_F	t/ack-1.t	/^DASH_F: {$/;"	l
 DASH_F	t/zero.t	/^DASH_F: {$/;"	l
+DASH_G	t/ack-1.t	/^DASH_G: {$/;"	l
 DASH_L	t/ack-c.t	/^DASH_L: {$/;"	l
 DASH_L	t/ack-v.t	/^DASH_L: {$/;"	l
 DASH_LC	t/ack-c.t	/^DASH_LC: {$/;"	l
+DASH_V	t/ack-1.t	/^DASH_V: {$/;"	l
 Example	Ack.pm	/^Example: ack -i select$/;"	l
 FAIL_MATCHING_VIA_CONTENT	t/filetypes.t	/^FAIL_MATCHING_VIA_CONTENT: {$/;"	l
 FRONT_ANCHOR	t/ack-g.t	/^FRONT_ANCHOR: {$/;"	l
@@ -35,7 +39,10 @@ HANDLE_ZEROES	t/zero.t	/^HANDLE_ZEROES: {$/;"	l
 MAIN	ack	/^MAIN: {$/;"	l
 MATCH_VIA_CONTENT	t/filetypes.t	/^MATCH_VIA_CONTENT: {$/;"	l
 METACHARACTERS	t/ack-g.t	/^METACHARACTERS: {$/;"	l
+MY	Makefile.PL	/^sub MY::postamble {$/;"	s
+MY	Makefile.PL	/^sub MY::top_targets {$/;"	s
 Miscellaneous	Ack.pm	/^Miscellaneous:$/;"	l
+NORMAL	t/ack-passthru.t	/^NORMAL: {$/;"	l
 NO_METACHARCTERS	t/ack-g.t	/^NO_METACHARCTERS: {$/;"	l
 PARROT_FILES_DESCEND	t/interesting.t	/^PARROT_FILES_DESCEND: {$/;"	l
 PARROT_FILES_NODESCEND	t/interesting.t	/^PARROT_FILES_NODESCEND: {$/;"	l
@@ -43,6 +50,7 @@ PARROT_FILES_NODESCEND_EMPTY	t/interesting.t	/^PARROT_FILES_NODESCEND_EMPTY: {$/
 PERL_FILES	t/interesting.t	/^PERL_FILES: {$/;"	l
 PERL_FILES_BY_NAME	t/interesting.t	/^PERL_FILES_BY_NAME: {$/;"	l
 PERL_FILES_GLOBBED	t/interesting.t	/^PERL_FILES_GLOBBED: {$/;"	l
+SINGLE_TEXT_MATCH	t/ack-1.t	/^SINGLE_TEXT_MATCH: {$/;"	l
 Searching	Ack.pm	/^Searching:$/;"	l
 TEXT	Ack.pm	/^use constant TEXT => 'text';$/;"	c
 TRAILING_METACHAR_BACKSLASH_W	t/ack-w.t	/^TRAILING_METACHAR_BACKSLASH_W: {$/;"	l
@@ -57,20 +65,26 @@ _opty	Ack.pm	/^sub _opty {$/;"	s
 _search_v	ack	/^sub _search_v {$/;"	s
 _thpppt	Ack.pm	/^sub _thpppt {$/;"	s
 check_with	t/ack-type.t	/^sub check_with {$/;"	s
+critic	Makefile.PL	/^critic:$/;"	l
 dash_a	ack	/^sub dash_a {$/;"	s
 die	Ack.pm	/^sub die { ## no critic (ProhibitBuiltinHomonyms)$/;"	s
 filetypes	Ack.pm	/^sub filetypes {$/;"	s
 filetypes_supported	Ack.pm	/^sub filetypes_supported {$/;"	s
+get_version_statement	Ack.pm	/^sub get_version_statement {$/;"	s
 is_filetype	t/Util.pm	/^sub is_filetype {$/;"	s
 is_interesting	ack	/^sub is_interesting {$/;"	s
 is_searchable	Ack.pm	/^sub is_searchable {$/;"	s
+lists_match	t/Util.pm	/^sub lists_match {$/;"	s
 option_in_usage	t/longopts.t	/^sub option_in_usage {$/;"	s
 options_sanity_check	Ack.pm	/^sub options_sanity_check {$/;"	s
+print_version_statement	Ack.pm	/^sub print_version_statement {$/;"	s
+prof	Makefile.PL	/^prof: all$/;"	l
+run_ack	t/Util.pm	/^sub run_ack {$/;"	s
 search	ack	/^sub search {$/;"	s
 sets_match	t/Util.pm	/^sub sets_match {$/;"	s
 show_help	Ack.pm	/^sub show_help {$/;"	s
 show_help_types	Ack.pm	/^sub show_help_types {$/;"	s
 skipdir_filter	Ack.pm	/^sub skipdir_filter {$/;"	s
 slurp	t/Util.pm	/^sub slurp {$/;"	s
-version_statement	Ack.pm	/^sub version_statement {$/;"	s
+tags	Makefile.PL	/^tags:$/;"	l
 warn	Ack.pm	/^sub warn { ## no critic (ProhibitBuiltinHomonyms)$/;"	s

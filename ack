@@ -190,13 +190,7 @@ sub main {
         App::Ack::_print_files($iter, $opt{1});
     }
     elsif ( $opt{g} ) {
-        my $regex = $opt{i} ? qr/$opt{g}/i : qr/$opt{g}/;
-        while ( defined ( my $file = $iter->() ) ) {
-            if ( $file =~ m/$regex/o ) {
-                print "$file\n";
-                last if $opt{1};
-            }
-        }
+        App::Ack::_print_selected_files($iter, $opt{i}, $opt{g}, $opt{1});
     }
     else {
         my $nmatches = 0;

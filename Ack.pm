@@ -699,7 +699,21 @@ sub _print_files {
         print "$file\n";
         last if $one;
     }
+    
+    return;
 }
 
+sub _print_selected_files {
+    my ($iter, $case_insensitive, $group, $one) = @_;
+    my $regex = $case_insensitive ? qr/$group/i : qr/$group/;
+    while ( defined ( my $file = $iter->() ) ) {
+        if ( $file =~ m/$regex/o ) {
+            print "$file\n";
+            last if $one;
+        }
+    }
+
+    return;
+}
 
 1; # End of App::Ack

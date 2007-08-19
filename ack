@@ -30,7 +30,9 @@ sub main {
     /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
 
     my %opt;
-    my %options = (
+    my $options;
+    {
+    $options = {
         1           => \$opt{1},
         a           => \$opt{all},
         'all!'      => \$opt{all},
@@ -74,11 +76,12 @@ sub main {
                 App::Ack::die( qq{Unknown --type "$type"} );
             }
         }, # type sub
-    );
+    };
 
     my @filetypes_supported = App::Ack::filetypes_supported();
     for my $i ( @filetypes_supported ) {
-        $options{ "$i!" } = \$App::Ack::type_wanted{ $i };
+        $options->{ "$i!" } = \$App::Ack::type_wanted{ $i };
+    }
     }
 
     # Stick any default switches at the beginning, so they can be overridden
@@ -86,7 +89,7 @@ sub main {
     unshift @ARGV, split( ' ', $ENV{ACK_OPTIONS} ) if defined $ENV{ACK_OPTIONS};
 
     Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
-    GetOptions( %options ) && App::Ack::options_sanity_check( %opt ) or
+    GetOptions( %$options ) && App::Ack::options_sanity_check( %opt ) or
         App::Ack::die( 'See ack --help or ack --man for options.' );
 
     # Handle new -L the old way: as -l and -v

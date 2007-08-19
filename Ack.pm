@@ -29,6 +29,7 @@ our $is_windows;
 our %type_wanted;
 
 use File::Spec ();
+use Getopt::Long ();
 
 BEGIN {
     %ignore_dirs = (
@@ -101,6 +102,97 @@ If you want to know about the F<ack> program, see the F<ack> file itself.
 No user-serviceable parts inside.  F<ack> is all that should use this.
 
 =head1 FUNCTIONS
+
+=head2 get_command_line_options()
+
+=cut
+
+sub get_command_line_options {
+    my %opt;
+
+    my $options = {
+        1                       => \$opt{1},
+        a                       => \$opt{all},
+        'all!'                  => \$opt{all},
+        c                       => \$opt{count},
+        'color!'                => \$opt{color},
+        count                   => \$opt{count},
+        f                       => \$opt{f},
+        'g=s'                   => \$opt{g},
+        'follow!'               => \$opt{follow},
+        'group!'                => \$opt{group},
+        h                       => \$opt{h},
+        H                       => \$opt{H},
+        'i|ignore-case'         => \$opt{i},
+        'l|files-with-matches'  => \$opt{l},
+        'L|files-without-match' => \$opt{L},
+        'm|max-count=i'         => \$opt{m},
+        n                       => \$opt{n},
+        'o|output:s'            => \$opt{o},
+        'passthru'              => \$opt{passthru},
+        'Q|literal'             => \$opt{Q},
+        'sort-files'            => \$opt{sort_files},
+        'v|invert-match'        => \$opt{v},
+        'w|word-regexp'         => \$opt{w},
+
+
+        'version'   => sub { App::Ack::print_version_statement(); exit 1; },
+        'help|?:s'  => sub { shift; App::Ack::show_help(@_); exit; },
+        'help-types'=> sub { App::Ack::show_help_types(); exit; },
+        'man'       => sub {require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit; },
+
+        'type=s'    => sub {
+            # Whatever --type=xxx they specify, set it manually in the hash
+            my $dummy = shift;
+            my $type = shift;
+            my $wanted = ($type =~ s/^no//) ? 0 : 1; # must not be undef later
+
+            if ( exists $App::Ack::type_wanted{ $type } ) {
+                $App::Ack::type_wanted{ $type } = $wanted;
+            }
+            else {
+                App::Ack::die( qq{Unknown --type "$type"} );
+            }
+        }, # type sub
+    };
+
+    my @filetypes_supported = App::Ack::filetypes_supported();
+    for my $i ( @filetypes_supported ) {
+        $options->{ "$i!" } = \$App::Ack::type_wanted{ $i };
+    }
+
+    # Stick any default switches at the beginning, so they can be overridden
+    # by the command line switches.
+    unshift @ARGV, split( ' ', $ENV{ACK_OPTIONS} ) if defined $ENV{ACK_OPTIONS};
+
+    Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
+    Getopt::Long::GetOptions( %$options ) && App::Ack::options_sanity_check( %opt ) or
+        App::Ack::die( 'See ack --help or ack --man for options.' );
+
+    # Handle new -L the old way: as -l and -v
+    if ( $opt{L} ) {
+        $opt{l} = $opt{v} = 1;
+    }
+
+    # Make the -m do work for us if we have -1
+    if ( $opt{1} ) {
+        $opt{m} = 1;
+    }
+
+    App::Ack::apply_defaults(\%opt);
+
+    if ( defined( my $val = $opt{o} ) ) {
+        if ( $val eq '' ) {
+            $val = q{$&};
+        }
+        else {
+            $val = qq{"$val"};
+        }
+        $opt{o} = eval qq[ sub { $val } ];
+    }
+
+    return %opt;
+}
 
 =head2 skipdir_filter
 

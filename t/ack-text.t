@@ -39,6 +39,7 @@ ACK_F_TEXT: {
         t/filetypes.t
         t/interesting.t
         t/longopts.t
+        t/module.t
         t/pod-coverage.t
         t/pod.t
         t/standalone.t

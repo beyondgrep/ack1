@@ -6,6 +6,21 @@ NEXT
     confuse it.  I added a requirement of Test::Harness 2.50.  The
     specific version is somewhat arbitrary.
 
+    [ENHANCEMENTS]
+    Added the -1 switch, which makes ack only give one match of
+    whatever it is you're looking for, and stop searching after it
+    finds it.  Say that you know there's a Perl file with "foo" in
+    the name, you can do
+
+        ack -1 --perl -g foo
+
+    and ack will show the first file matching "foo", and stop once
+    it finds the file.
+
+    [INTERNALS]
+    Split up more of the code into functions in App::Ack.  This is
+    to make things easier for Gabor Szabo's wack project.
+
 1.65_01 Fri Aug 10 00:28:55 CDT 2007
 
     [ENHANCEMENTS]

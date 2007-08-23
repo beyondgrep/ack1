@@ -14,8 +14,10 @@ Version 1.65_01
 =cut
 
 our $VERSION;
+our $COPYRIGHT;
 BEGIN {
     $VERSION = '1.65_01';
+    $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 }
 
 our %types;
@@ -23,6 +25,11 @@ our %mappings;
 our %ignore_dirs;
 our $path_sep;
 our $is_cygwin;
+our $is_windows;
+our %type_wanted;
+
+use File::Spec ();
+use Getopt::Long ();
 
 BEGIN {
     %ignore_dirs = (
@@ -74,7 +81,6 @@ BEGIN {
         xml         => [qw( xml dtd xslt )],
     );
 
-    use File::Spec ();
     $path_sep = File::Spec->catfile( '', '' );
     $path_sep = quotemeta( $path_sep );
 
@@ -96,6 +102,99 @@ If you want to know about the F<ack> program, see the F<ack> file itself.
 No user-serviceable parts inside.  F<ack> is all that should use this.
 
 =head1 FUNCTIONS
+
+=head2 get_command_line_options()
+
+=cut
+
+sub get_command_line_options {
+    my %opt;
+
+    my $getopt_specs = {
+        1                       => \$opt{1},
+        a                       => \$opt{all},
+        'all!'                  => \$opt{all},
+        c                       => \$opt{count},
+        'color!'                => \$opt{color},
+        count                   => \$opt{count},
+        f                       => \$opt{f},
+        'g=s'                   => \$opt{g},
+        'follow!'               => \$opt{follow},
+        'group!'                => \$opt{group},
+        h                       => \$opt{h},
+        H                       => \$opt{H},
+        'i|ignore-case'         => \$opt{i},
+        'l|files-with-matches'  => \$opt{l},
+        'L|files-without-match' => \$opt{L},
+        'm|max-count=i'         => \$opt{m},
+        n                       => \$opt{n},
+        'o|output:s'            => \$opt{o},
+        'passthru'              => \$opt{passthru},
+        'Q|literal'             => \$opt{Q},
+        'sort-files'            => \$opt{sort_files},
+        'v|invert-match'        => \$opt{v},
+        'w|word-regexp'         => \$opt{w},
+
+
+        'version'   => sub { App::Ack::print_version_statement(); exit 1; },
+        'help|?:s'  => sub { shift; App::Ack::show_help(@_); exit; },
+        'help-types'=> sub { App::Ack::show_help_types(); exit; },
+        'man'       => sub {require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit; },
+
+        'type=s'    => sub {
+            # Whatever --type=xxx they specify, set it manually in the hash
+            my $dummy = shift;
+            my $type = shift;
+            my $wanted = ($type =~ s/^no//) ? 0 : 1; # must not be undef later
+
+            if ( exists $App::Ack::type_wanted{ $type } ) {
+                $App::Ack::type_wanted{ $type } = $wanted;
+            }
+            else {
+                App::Ack::die( qq{Unknown --type "$type"} );
+            }
+        }, # type sub
+    };
+
+    my @filetypes_supported = App::Ack::filetypes_supported();
+    for my $i ( @filetypes_supported ) {
+        $getopt_specs->{ "$i!" } = \$App::Ack::type_wanted{ $i };
+    }
+
+    # Stick any default switches at the beginning, so they can be overridden
+    # by the command line switches.
+    unshift @ARGV, split( ' ', $ENV{ACK_OPTIONS} ) if defined $ENV{ACK_OPTIONS};
+
+    Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
+    Getopt::Long::GetOptions( %{$getopt_specs} ) && App::Ack::options_sanity_check( %opt ) or
+        App::Ack::die( 'See ack --help or ack --man for options.' );
+
+    $opt{is_filter} = !-t STDIN;
+
+    # Handle new -L the old way: as -l and -v
+    if ( $opt{L} ) {
+        $opt{l} = $opt{v} = 1;
+    }
+
+    # Make the -m do work for us if we have -1
+    if ( $opt{1} ) {
+        $opt{m} = 1;
+    }
+
+    App::Ack::apply_defaults(\%opt);
+
+    if ( defined( my $val = $opt{o} ) ) {
+        if ( $val eq '' ) {
+            $val = q{$&};
+        }
+        else {
+            $val = qq{"$val"};
+        }
+        $opt{o} = eval qq[ sub { $val } ];
+    }
+
+    return %opt;
+}
 
 =head2 skipdir_filter
 
@@ -277,9 +376,14 @@ sub filetypes_supported {
     return keys %mappings;
 }
 
-sub _thpppt {
+sub _get_thpppt {
     my $y = q{_   /|,\\'!.x',=(www)=,   U   };
     $y =~ tr/,x!w/\nOo_/;
+    return $y;
+}
+
+sub _thpppt {
+    my $y = _get_thpppt();
     print "$y ack $_[0]!\n";
     exit 0;
 }
@@ -415,15 +519,15 @@ sub _listify {
     return @whats ? join( ', ', @whats ) . " and $end" : $end;
 }
 
-=head2 version_statement( $copyright )
+=head2 get_version_statement( $copyright )
 
-Prints the version information for ack.
+Returns the version information for ack.
 
 =cut
 
-sub version_statement {
-    my $copyright = shift;
-    print <<"END_OF_VERSION";
+sub get_version_statement {
+    my $copyright = get_copyright();
+    return <<"END_OF_VERSION";
 ack $App::Ack::VERSION
 
 $copyright
@@ -431,6 +535,293 @@ $copyright
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 END_OF_VERSION
+}
+
+=head2 print_version_statement( $copyright )
+
+Prints the version information for ack.
+
+=cut
+
+sub print_version_statement {
+    print get_version_statement();
+
+    return;
+}
+
+=head2 get_copyright 
+
+Return the copyright for ack.
+
+=cut
+
+sub get_copyright {
+    return $COPYRIGHT;
+}
+
+=head2 load_colors
+
+Set default colors, load Term::ANSIColor on non Windows platforms
+
+=cut
+
+sub load_colors {
+    $is_windows = ($^O =~ /MSWin32/);
+    eval 'use Term::ANSIColor ();' unless $is_windows;
+
+    $ENV{ACK_COLOR_MATCH}    ||= 'black on_yellow';
+    $ENV{ACK_COLOR_FILENAME} ||= 'bold green';
+
+    return;
+}
+
+=head2 is_interesting
+
+File type filter, filtering based on the wanted file types
+
+=cut
+
+sub is_interesting {
+    return if /^\./;
+
+    my $include;
+    my $exclude;
+
+    for my $type ( App::Ack::filetypes( $File::Next::name ) ) {
+        if ( defined $App::Ack::type_wanted{$type} ) {
+            $include = 1 if $App::Ack::type_wanted{$type};
+            $exclude = 1 if not $App::Ack::type_wanted{$type};
+        }
+    }
+
+    return ( $include && not $exclude );
+}
+
+=head2 dash_a_file_filter
+
+File filter for the -a option
+
+=cut
+
+sub dash_a_file_filter {
+    return App::Ack::is_searchable( $File::Next::name );
+}
+
+sub _search_v {
+    my $fh = shift;
+    my $is_binary = shift;
+    my $filename = shift;
+    my $regex = shift;
+    my %opt = @_;
+
+    my $nmatches = 0; # Although in here, it's really $n_non_matches. :-)
+
+    my $show_lines = !($opt{l} || $opt{count});
+    local $_ = undef;
+    while (<$fh>) {
+        if ( /$regex/o ) {
+            return 0 if $opt{l}; # For list mode, any match means we can bail
+            next;
+        }
+        else {
+            ++$nmatches;
+            if ( $show_lines ) {
+                if ( $is_binary ) {
+                    print "Binary file $filename matches\n";
+                    last;
+                }
+                print "${filename}:" if $opt{show_filename};
+                print $_;
+                last if $opt{m} && ( $nmatches >= $opt{m} );
+            }
+        }
+    } # while
+    close $fh or App::Ack::warn( "$filename: $!" );
+
+    if ( $opt{count} ) {
+        print "${filename}:" if $opt{show_filename};
+        print "${nmatches}\n";
+    }
+    else {
+        print "$filename\n" if $opt{l};
+    }
+
+    return $nmatches;
+} # _search_v()
+
+=head2 search
+
+Main search method
+
+=cut
+
+sub search {
+    my $filename = shift;
+    my $regex = shift;
+    my %opt = @_;
+
+    my $is_binary;
+
+    my $fh;
+    if ( $filename eq '-' ) {
+        $fh = *STDIN;
+        $is_binary = 0;
+    }
+    else {
+        if ( !open( $fh, '<', $filename ) ) {
+            App::Ack::warn( "$filename: $!" );
+            return;
+        }
+        $is_binary = -B $filename;
+    }
+
+    # Negated counting is a pain, so I'm putting it in its own
+    # optimizable subroutine.
+    if ( $opt{v} ) {
+        return App::Ack::_search_v( $fh, $is_binary, $filename, $regex, %opt );
+    }
+
+    my $nmatches = 0;
+    local $_ = undef;
+    while (<$fh>) {
+        next unless $opt{passthru} || /$regex/o;
+        ++$nmatches;
+        next if $opt{count}; # Counting means no lines
+
+        # No point in searching more if we only want a list,
+        # and don't want a count.
+        last if $opt{l};
+
+        if ( $is_binary ) {
+            print "Binary file $filename matches\n";
+            last;
+        }
+
+        my $out;
+        if ( $opt{o} ) {
+            $out = $opt{o}->() . "\n";
+        }
+        else {
+            $out = $_;
+            $out =~ s/($regex)/Term::ANSIColor::colored($1,$ENV{ACK_COLOR_MATCH})/eg if $opt{color};
+        }
+
+        if ( $opt{show_filename} ) {
+            my $display_filename =
+                $opt{color}
+                    ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} )
+                    : $filename;
+            if ( $opt{group} ) {
+                print "$display_filename\n" if $nmatches == 1;
+                print "$.:";
+            }
+            else {
+                print "${display_filename}:$.:";
+            }
+        }
+        print $out;
+
+        last if $opt{m} && ( $nmatches >= $opt{m} );
+    } # while
+    close $fh or App::Ack::warn( "$filename: $!" );
+
+    if ( $opt{count} ) {
+        if ( $nmatches || !$opt{l} ) {
+            print "${filename}:" if $opt{show_filename};
+            print "${nmatches}\n";
+        }
+    }
+    elsif ( $opt{l} ) {
+        print "$filename\n" if $nmatches;
+    }
+    else {
+        print "\n" if $nmatches && $opt{show_filename} && $opt{group};
+    }
+
+    return $nmatches;
+}   # search()
+
+=head2 apply_defaults
+
+Apply the default options
+
+=cut
+
+sub apply_defaults {
+    my $opt = shift;
+
+    my $to_screen = -t *STDOUT;
+    my %defaults = (
+        all     => 0,
+        color   => $to_screen && !$App::Ack::is_windows,
+        follow  => 0,
+        group   => $to_screen,
+        m       => 0,
+    );
+    while ( my ($key,$value) = each %defaults ) {
+        if ( not defined $opt->{$key} ) {
+            $opt->{$key} = $value;
+        }
+    }
+
+    return;
+}
+
+=head2 filetypes_supported_set
+
+True/False - are the filetypes set?
+
+=cut
+
+sub filetypes_supported_set {
+    return grep { defined $App::Ack::type_wanted{$_} && ($App::Ack::type_wanted{$_} == 1) } filetypes_supported();
+}
+
+=head2 filetypes_supported_unset
+
+True/False - are the filetypes unset?
+
+=cut
+
+sub filetypes_supported_unset {
+    return grep { defined $App::Ack::type_wanted{$_} && ($App::Ack::type_wanted{$_} == 0) } filetypes_supported();
+}
+
+=head2 print_files( $iter, $one )
+
+Prints all the files returned by the iterator.  If I<$one> is set,
+stop after the first.
+
+=cut
+
+sub print_files {
+    my ($iter, $one) = @_;
+    while ( defined ( my $file = $iter->() ) ) {
+        print "$file\n";
+        last if $one;
+    }
+
+    return;
+}
+
+=head2 print_selected_files( $iter, $regex, $one )
+
+Prints all the files returned by the iterator matching I<$regex>.
+If I<$one> is set, stop after the first.
+
+=cut
+
+sub print_selected_files {
+    my $iter = shift;
+    my $regex = shift;
+    my $one = shift;
+
+    while ( defined ( my $file = $iter->() ) ) {
+        if ( $file =~ m/$regex/o ) {
+            print "$file\n";
+            last if $one;
+        }
+    }
 
     return;
 }

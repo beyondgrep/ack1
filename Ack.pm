@@ -309,6 +309,11 @@ sub options_sanity_check {
         $ok = 0 if _option_conflict( \%opts, $switch, [qw( A B C o m group l )] );
     }
 
+    # No sense to have negation with -o or --output
+    for my $switch ( qw( v ) ) {
+        $ok = 0 if _option_conflict( \%opts, $switch, [qw( o option )] );
+    }
+
     return $ok;
 }
 

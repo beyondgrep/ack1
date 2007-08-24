@@ -128,7 +128,8 @@ sub get_command_line_options {
         'L|files-without-match' => \$opt{L},
         'm|max-count=i'         => \$opt{m},
         n                       => \$opt{n},
-        'o|output:s'            => \$opt{o},
+        o                       => \$opt{o},
+        'output=s'              => \$opt{output},
         'passthru'              => \$opt{passthru},
         'Q|literal'             => \$opt{Q},
         'sort-files'            => \$opt{sort_files},
@@ -183,14 +184,14 @@ sub get_command_line_options {
 
     App::Ack::apply_defaults(\%opt);
 
-    if ( defined( my $val = $opt{o} ) ) {
-        if ( $val eq '' ) {
-            $val = q{$&};
-        }
-        else {
-            $val = qq{"$val"};
-        }
-        $opt{o} = eval qq[ sub { $val } ];
+    # XXX This can get simplified
+    if ( $opt{o} ) {
+        $opt{output} = eval qq[ sub { $& } ];
+    }
+
+    if ( defined( my $val = $opt{output} ) ) {
+        $val = qq{"$val"};
+        $opt{output} = eval qq[ sub { $val } ];
     }
 
     return %opt;
@@ -698,8 +699,8 @@ sub search {
         }
 
         my $out;
-        if ( $opt{o} ) {
-            $out = $opt{o}->() . "\n";
+        if ( $opt{output} ) {
+            $out = $opt{output}->() . "\n";
         }
         else {
             $out = $_;

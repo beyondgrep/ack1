@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use File::Next ();
 delete $ENV{ACK_OPTIONS};
 
@@ -25,6 +25,34 @@ NO_O: {
         And I know you hate me, and you got the right
         For the gravel in ya gut and the spit in ya eye
         Cause I'm the son-of-a-bitch that named you Sue."
+EOF
+    s/^\s+// for @expected;
+
+    my @results = run_ack( @args, @files );
+
+    lists_match( \@results, \@expected, 'Find all the things' );
+}
+
+
+WITH_O: {
+    my @files = qw( t/text/boy-named-sue.txt );
+    my @args = ( '"the\\s+\\S+"', '--text', '-o' );
+    my @expected = split( /\n/, <<EOF );
+        the meanest
+        the moon
+        the honky-tonks
+        the dirty
+        the eyes
+        the wall
+        the street
+        the mud
+        the blood
+        the beer.
+        the name
+        the right
+        the gravel
+        the spit
+        the son-of-a-bitch
 EOF
     s/^\s+// for @expected;
 

@@ -1,0 +1,34 @@
+#!perl
+
+use warnings;
+use strict;
+
+use Test::More tests => 1;
+use File::Next ();
+delete $ENV{ACK_OPTIONS};
+
+use lib 't';
+use Util;
+
+NO_O: {
+    my @files = qw( t/text/boy-named-sue.txt );
+    my @args = ( '"the\\s+\\S+"', '--text' );
+    my @expected = split( /\n/, <<EOF );
+        But the meanest thing that he ever did
+        But I made me a vow to the moon and stars
+        That I'd search the honky-tonks and bars
+        Sat the dirty, mangy dog that named me Sue.
+        Well, I hit him hard right between the eyes
+        And we crashed through the wall and into the street
+        Kicking and a-gouging in the mud and the blood and the beer.
+        And it's the name that helped to make you strong."
+        And I know you hate me, and you got the right
+        For the gravel in ya gut and the spit in ya eye
+        Cause I'm the son-of-a-bitch that named you Sue."
+EOF
+    s/^\s+// for @expected;
+
+    my @results = run_ack( @args, @files );
+
+    lists_match( \@results, \@expected, 'Find all the things' );
+}

@@ -20,9 +20,7 @@ ACK_F: {
 
     my @files = qw( t );
     my @args = qw( -f --binary );
-    my $cmd = "$^X ./ack-standalone @args @files";
-    my @results = `$cmd`;
-    chomp @results;
+    my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Looking for binary' );
 }

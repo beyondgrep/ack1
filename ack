@@ -3,26 +3,15 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.64';
-our $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
+our $VERSION   = '1.66';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.
-my $is_windows;
-my %opt;
-my %type_wanted;
-
-BEGIN {
-    $is_windows = ($^O =~ /MSWin32/);
-    eval 'use Term::ANSIColor ();' unless $is_windows;
-
-    $ENV{ACK_COLOR_MATCH}    ||= 'black on_yellow';
-    $ENV{ACK_COLOR_FILENAME} ||= 'bold green';
-}
 
 use File::Next 0.40;
 use App::Ack ();
-use Getopt::Long;
+
+App::Ack::load_colors();
 
 MAIN: {
     if ( $App::Ack::VERSION ne $main::VERSION ) {
@@ -32,120 +21,33 @@ MAIN: {
         App::Ack::warn( 'ACK_SWITCHES is no longer supported.  Use ACK_OPTIONS.' );
     }
 
+    main();
+}
+
+sub main {
     # Priorities! Get the --thpppt checking out of the way.
     /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
 
-    my $to_screen = -t *STDOUT;
-    my %defaults = (
-        all     => 0,
-        color   => $to_screen && !$is_windows,
-        follow  => 0,
-        group   => $to_screen,
-        m       => 0,
-    );
+    my %opt = App::Ack::get_command_line_options();
 
-    my %options = (
-        a           => \$opt{all},
-        'all!'      => \$opt{all},
-        c           => \$opt{count},
-        'color!'    => \$opt{color},
-        count       => \$opt{count},
-        f           => \$opt{f},
-        'g=s'       => \$opt{g},
-        'follow!'   => \$opt{follow},
-        'group!'    => \$opt{group},
-        h           => \$opt{h},
-        H           => \$opt{H},
-        'i|ignore-case'         => \$opt{i},
-        'l|files-with-matches'  => \$opt{l},
-        'L|files-without-match' => \$opt{L},
-        'm|max-count=i'         => \$opt{m},
-        n                       => \$opt{n},
-        'o|output:s'            => \$opt{o},
-        'Q|literal'             => \$opt{Q},
-        'sort-files'            => \$opt{sort_files},
-        'v|invert-match'        => \$opt{v},
-        'w|word-regexp'         => \$opt{w},
-
-
-        'version'   => sub { App::Ack::version_statement( $COPYRIGHT ); exit 1; },
-        'help|?:s'  => sub { shift; App::Ack::show_help(@_); exit; },
-        'help-types'=> sub { App::Ack::show_help_types(); exit; },
-        'man'       => sub {require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit},
-
-        'type=s'    => sub {
-            # Whatever --type=xxx they specify, set it manually in the hash
-            my $dummy = shift;
-            my $type = shift;
-            my $wanted = ($type =~ s/^no//) ? 0 : 1; # must not be undef later
-
-            if ( exists $type_wanted{ $type } ) {
-                $type_wanted{ $type } = $wanted;
-            }
-            else {
-                App::Ack::die( qq{Unknown --type "$type"} );
-            }
-        }, # type sub
-    );
-
-    my @filetypes_supported = App::Ack::filetypes_supported();
-    for my $i ( @filetypes_supported ) {
-        $options{ "$i!" } = \$type_wanted{ $i };
-    }
-
-    # Stick any default switches at the beginning, so they can be overridden
-    # by the command line switches.
-    unshift @ARGV, split( ' ', $ENV{ACK_OPTIONS} ) if defined $ENV{ACK_OPTIONS};
-
-    Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
-    GetOptions( %options ) && App::Ack::options_sanity_check( %opt ) or
-        App::Ack::die( 'See ack --help or ack --man for options.' );
-
-    if ( $opt{A} || $opt{B} ) {
-        App::Ack::die( q{Sorry, but the -A, -B and -C options haven't actually been implemented yet.} );
-    }
-
-    # Handle new -L the old way: as -l and -v
-    if ( $opt{L} ) {
-        $opt{l} = $opt{v} = 1;
-    }
-
-    # Apply defaults
-    while ( my ($key,$value) = each %defaults ) {
-        if ( not defined $opt{$key} ) {
-            $opt{$key} = $value;
-        }
-    }
-
-    if ( defined( my $val = $opt{o} ) ) {
-        if ( $val eq '' ) {
-            $val = q{$&};
-        }
-        else {
-            $val = qq{"$val"};
-        }
-        $opt{o} = eval qq[ sub { $val } ];
-    }
-
-    my $filetypes_supported_set =   grep { defined $type_wanted{$_} && ($type_wanted{$_} == 1) } @filetypes_supported;
-    my $filetypes_supported_unset = grep { defined $type_wanted{$_} && ($type_wanted{$_} == 0) } @filetypes_supported;
+    my $filetypes_supported_set   = App::Ack::filetypes_supported_set();
+    my $filetypes_supported_unset = App::Ack::filetypes_supported_unset();
 
     # If anyone says --no-whatever, we assume all other types must be on.
     if ( !$filetypes_supported_set ) {
-        for my $i ( keys %type_wanted ) {
-            $type_wanted{$i} = 1 unless ( defined( $type_wanted{$i} ) || $i eq 'binary' || $i eq 'text' || $i eq 'skipped' );
+        for my $i ( keys %App::Ack::type_wanted ) {
+            $App::Ack::type_wanted{$i} = 1 unless ( defined( $App::Ack::type_wanted{$i} ) || $i eq 'binary' || $i eq 'text' || $i eq 'skipped' );
         }
     }
 
-    my $file_matching = $opt{f} || $opt{g};
-    if ( !@ARGV && !$file_matching ) {
-        App::Ack::show_help();
-        exit 1;
-    }
-
     my $regex;
+    my $file_matching = $opt{f} || $opt{g};
 
     if ( !$file_matching ) {
+        if ( !@ARGV ) {
+            App::Ack::show_help();
+            exit 1;
+        }
         # REVIEW: This shouldn't be able to happen because of the help
         # check above.
         $regex = shift @ARGV or App::Ack::die( 'No regex specified' );
@@ -161,20 +63,19 @@ MAIN: {
 
     my @what;
     if ( @ARGV ) {
-        @what = $is_windows ? <@ARGV> : @ARGV;
+        @what = $App::Ack::is_windows ? <@ARGV> : @ARGV;
 
         # Show filenames unless we've specified one single file
         $opt{show_filename} = (@what > 1) || (!-f $what[0]);
     }
     else {
-        my $is_filter = !-t STDIN;
-        if ( $is_filter ) {
+        if ( $opt{is_filter} ) {
             # We're going into filter mode
-            for ( qw( f l ) ) {
+            for ( qw( f g l ) ) {
                 $opt{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );
             }
             $opt{show_filename} = 0;
-            search( '-', $regex, %opt );
+            App::Ack::search( '-', $regex, %opt );
             exit 0;
         }
         else {
@@ -182,11 +83,8 @@ MAIN: {
             $opt{show_filename} = 1;
         }
     }
-    $opt{show_filename} = 0 if $opt{h};
-    $opt{show_filename} = 1 if $opt{H};
-    $opt{show_filename} = 0 if $opt{o};
 
-    my $file_filter = $opt{all} ? \&dash_a : \&is_interesting;
+    my $file_filter = $opt{all} ? \&App::Ack::dash_a_file_filter : \&App::Ack::is_interesting;
     my $descend_filter = $opt{n} ? sub {0} : \&App::Ack::skipdir_filter;
 
     my $iter =
@@ -200,173 +98,27 @@ MAIN: {
 
 
     if ( $opt{f} ) {
-        while ( defined ( my $file = $iter->() ) ) {
-            print "$file\n";
-        }
+        App::Ack::print_files($iter, $opt{1});
     }
     elsif ( $opt{g} ) {
-        while ( defined ( my $file = $iter->() ) ) {
-            print "$file\n" if $file =~ m/$opt{g}/o;
-        }
+        my $regex = $opt{i} ? qr/$opt{g}/i : qr/$opt{g}/;
+        App::Ack::print_selected_files($iter, $regex, $opt{1});
     }
     else {
+        $opt{show_filename} = 0 if $opt{h};
+        $opt{show_filename} = 1 if $opt{H};
+        $opt{show_filename} = 0 if $opt{output};
+
+        my $nmatches = 0;
         while ( defined ( my $file = $iter->() ) ) {
-            search( $file, $regex, %opt );
+            $nmatches += App::Ack::search( $file, $regex, %opt );
+            last if $nmatches && $opt{1};
         }
     }
     exit 0;
 }
 
-sub is_interesting {
-    return if /^\./;
-
-    my $include;
-    my $exclude;
-
-    for my $type ( App::Ack::filetypes( $File::Next::name ) ) {
-        if ( defined $type_wanted{$type} ) {
-            $include = 1 if $type_wanted{$type};
-            $exclude = 1 if not $type_wanted{$type};
-        }
-    }
-
-    return ( $include && not $exclude );
-}
-
-sub dash_a {
-    return App::Ack::is_searchable( $File::Next::name );
-}
-
-sub search {
-    my $filename = shift;
-    my $regex = shift;
-    my %opt = @_;
-
-    my $is_binary;
-
-    my $fh;
-    if ( $filename eq '-' ) {
-        $fh = *STDIN;
-        $is_binary = 0;
-    }
-    else {
-        if ( !open( $fh, '<', $filename ) ) {
-            App::Ack::warn( "$filename: $!" );
-            return;
-        }
-        $is_binary = -B $filename;
-    }
-
-    # Negated counting is a pain, so I'm putting it in its own
-    # optimizable subroutine.
-    if ( $opt{v} ) {
-        return _search_v( $fh, $is_binary, $filename, $regex, %opt );
-    }
-
-    my $nmatches = 0;
-    local $_ = undef;
-    while (<$fh>) {
-        next unless /$regex/o;
-        ++$nmatches;
-        next if $opt{count}; # Counting means no lines
-
-        # No point in searching more if we only want a list,
-        # and don't want a count.
-        last if $opt{l};
-
-        if ( $is_binary ) {
-            print "Binary file $filename matches\n";
-            last;
-        }
-
-        my $out;
-        if ( $opt{o} ) {
-            $out = $opt{o}->() . "\n";
-        }
-        else {
-            $out = $_;
-            $out =~ s/($regex)/Term::ANSIColor::colored($1,$ENV{ACK_COLOR_MATCH})/eg if $opt{color};
-        }
-
-        if ( $opt{show_filename} ) {
-            my $display_filename =
-                $opt{color}
-                    ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} )
-                    : $filename;
-            if ( $opt{group} ) {
-                print "$display_filename\n" if $nmatches == 1;
-                print "$.:";
-            }
-            else {
-                print "${display_filename}:$.:";
-            }
-        }
-        print $out;
-
-        last if $opt{m} && ( $nmatches >= $opt{m} );
-    } # while
-    close $fh or App::Ack::warn( "$filename: $!" );
-
-    if ( $opt{count} ) {
-        if ( $nmatches || !$opt{l} ) {
-            print "${filename}:" if $opt{show_filename};
-            print "${nmatches}\n";
-        }
-    }
-    elsif ( $opt{l} ) {
-        print "$filename\n" if $nmatches;
-    }
-    else {
-        print "\n" if $nmatches && $opt{show_filename} && $opt{group};
-    }
-
-    return;
-}   # search()
-
-
-sub _search_v {
-    my $fh = shift;
-    my $is_binary = shift;
-    my $filename = shift;
-    my $regex = shift;
-    my %opt = @_;
-
-    my $nmatches = 0; # Although in here, it's really $n_non_matches. :-)
-
-    my $show_lines = !($opt{l} || $opt{count});
-    local $_ = undef;
-    while (<$fh>) {
-        if ( /$regex/o ) {
-            return if $opt{l}; # For list mode, any match means we can bail
-            next;
-        }
-        else {
-            ++$nmatches;
-            if ( $show_lines ) {
-                if ( $is_binary ) {
-                    print "Binary file $filename matches\n";
-                    last;
-                }
-                print "${filename}:" if $opt{show_filename};
-                print $_;
-                last if $opt{m} && ( $nmatches >= $opt{m} );
-            }
-        }
-    } # while
-    close $fh or App::Ack::warn( "$filename: $!" );
-
-    if ( $opt{count} ) {
-        print "${filename}:" if $opt{show_filename};
-        print "${nmatches}\n";
-    }
-    else {
-        print "$filename\n" if $opt{l};
-    }
-
-    return;
-} # _search_v()
-
-=encoding utf-8
+=encoding utf8
 
 =head1 NAME
 
@@ -379,7 +131,7 @@ ack - grep-like text finder
 
 =head1 DESCRIPTION
 
-Ack is designed as a replacement for F<grep>.
+Ack is designed as a replacement for 99% of the uses of F<grep>.
 
 Ack searches the named input FILEs (or standard input if no files are
 named, or the file name - is given) for lines containing a match to the
@@ -530,6 +282,15 @@ highlighting)
 Output the evaluation of I<expr> for each line (turns off text
 highlighting)
 
+=item B<--passthru>
+
+Prints all lines, whether or not they match the expression.  Highlighting
+will still work, though, so it can be used to highlight matches while
+still seeing the entire file, as in:
+
+    # Watch a log file, and highlight a certain IP address
+    $ tail -f ~/access.log | ack --passthru 123.45.67.89
+
 =item B<-Q>, B<--literal>
 
 Quote all metacharacters.  PATTERN is treated as a literal.
@@ -541,9 +302,9 @@ listings to be deterministic between runs of I<ack>.
 
 =item B<--thpppt>
 
-Display the crucial Bill The Cat logo.  Note that the exact spelling
-of B<--thpppppt> is not important.  It's checked against a regular
-expression.
+Display the all-important Bill The Cat logo.  Note that the exact
+spelling of B<--thpppppt> is not important.  It's checked against
+a regular expression.
 
 =item B<--type=TYPE>, B<--type=noTYPE>
 
@@ -680,6 +441,8 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Gabor Szabo,
+Tod Hagan,
 Michael Hendricks,
 Ævar Arnfjörð Bjarmason,
 Piers Cawley,

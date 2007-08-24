@@ -7,13 +7,14 @@ format.  For example, both --type=perl and --perl work.
 Note that some extensions may appear in multiple types.  For example,
 .pod files are both Perl and Parrot.
 
-    --[no]asm       .s .S
+    --[no]asm       .s
     --[no]binary    Binary files, as defined by Perl's -B op (default: off)
     --[no]cc        .c .h .xs
-    --[no]cpp       .cpp .m .h .C .H
+    --[no]cpp       .cpp .m .h
     --[no]csharp    .cs
     --[no]css       .css
     --[no]elisp     .el
+    --[no]fortran   .f .f77 .f90 .f95 .f03 .for .ftn .fpp
     --[no]haskell   .hs .lhs
     --[no]hh        .h
     --[no]html      .htm .html .shtml

@@ -12,8 +12,18 @@ sub slurp {
     return @files;
 }
 
+sub run_ack {
+    my @args = @_;
 
-sub sets_match {
+    my $cmd = "$^X ./ack-standalone @_";
+    my @results = `$cmd`;
+    chomp @results;
+
+    return @results;
+}
+
+# Use this one if order is important
+sub lists_match {
     my @actual = @{+shift};
     my @expected = @{+shift};
     my $msg = shift;
@@ -27,11 +37,21 @@ sub sets_match {
 
     eval 'use Test::Differences';
     if ( !$@ ) {
-        return eq_or_diff( [sort @actual], [sort @expected], $msg );
+        return eq_or_diff( [@actual], [@expected], $msg );
     }
     else {
-        return is_deeply( [sort @actual], [sort @expected], $msg );
+        return is_deeply( [@actual], [@expected], $msg );
     }
+}
+
+# Use this one if you don't care about order of the lines
+sub sets_match {
+    my @actual = @{+shift};
+    my @expected = @{+shift};
+    my $msg = shift;
+
+    local $Test::Builder::Level = $Test::Builder::Level + 1; ## no critic
+    return lists_match( [sort @actual], [sort @expected], $msg );
 }
 
 sub is_filetype {

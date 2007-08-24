@@ -10,10 +10,13 @@ ack-standalone
 squash
 
 t/00-load.t
+t/ack-1.t
 t/ack-a.t
 t/ack-binary.t
 t/ack-c.t
 t/ack-g.t
+t/ack-o.t
+t/ack-passthru.t
 t/ack-text.t
 t/ack-type.t
 t/ack-v.t
@@ -21,6 +24,7 @@ t/ack-w.t
 t/filetypes.t
 t/interesting.t
 t/longopts.t
+t/module.t
 t/pod.t
 t/pod-coverage.t
 t/standalone.t
@@ -46,6 +50,8 @@ t/swamp/Makefile.PL
 t/swamp/blib/ignore.pir
 t/swamp/blib/ignore.pm
 t/swamp/blib/ignore.pod
+t/swamp/crystallography-weenies.f
+t/swamp/pipe-stress-freaks.F
 t/swamp/c-header.h
 t/swamp/c-source.c
 t/swamp/html.htm
@@ -60,6 +66,7 @@ t/swamp/perl.cgi
 t/swamp/perl.pl
 t/swamp/perl.pm
 t/swamp/perl.pod
+t/text/4th-of-july.txt
 t/text/boy-named-sue.txt
 t/text/freedom-of-choice.txt
 t/text/science-of-myth.txt

@@ -107,7 +107,7 @@ sub main {
     else {
         $opt{show_filename} = 0 if $opt{h};
         $opt{show_filename} = 1 if $opt{H};
-        $opt{show_filename} = 0 if $opt{o};
+        $opt{show_filename} = 0 if $opt{output};
 
         my $nmatches = 0;
         while ( defined ( my $file = $iter->() ) ) {

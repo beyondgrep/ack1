@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use File::Next ();
 delete $ENV{ACK_OPTIONS};
 
@@ -59,4 +59,19 @@ EOF
     my @results = run_ack( @args, @files );
 
     lists_match( \@results, \@expected, 'Find all the things' );
+}
+
+
+WITH_OUTPUT: {
+    my @files = qw( t/text/ );
+    my @args = ( q{--output='x$1x'}, '-a', '"question(\\S+)"' );
+    my @expected = qw(
+        xedx
+        xs.x
+        x.x
+    );
+
+    my @results = run_ack( @args, @files );
+
+    sets_match( \@results, \@expected, 'Find all the things' );
 }

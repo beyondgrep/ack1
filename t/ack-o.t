@@ -41,7 +41,7 @@ WITH_O: {
         the meanest
         the moon
         the honky-tonks
-        the dirty
+        the dirty,
         the eyes
         the wall
         the street

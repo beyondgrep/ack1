@@ -6,6 +6,9 @@ NEXT
     confuse it.  I added a requirement of Test::Harness 2.50.  The
     specific version is somewhat arbitrary.
 
+    The -o and --output switches now properly show all matches on
+    a line, not just the first one.
+
     [ENHANCEMENTS]
     Added the -1 switch, which makes ack only give one match of
     whatever it is you're looking for, and stop searching after it

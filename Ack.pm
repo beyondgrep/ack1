@@ -699,7 +699,10 @@ sub search {
 
         my $out;
         if ( $opt{output} ) {
-            $out = $opt{output}->() . "\n";
+            $out = '';
+            while ( /$regex/go ) {
+                $out .= $opt{output}->() . "\n";
+            }
         }
         else {
             $out = $_;

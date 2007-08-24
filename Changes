@@ -1,6 +1,6 @@
 Changelog for ack
 
-NEXT
+1.66    Fri Aug 24 00:04:02 CDT 2007
     [FIXES]
     New Macs are shipping with Test::Harness 1.85, and ack's test
     confuse it.  I added a requirement of Test::Harness 2.50.  The
@@ -23,6 +23,7 @@ NEXT
     [INTERNALS]
     Split up more of the code into functions in App::Ack.  This is
     to make things easier for Gabor Szabo's wack project.
+
 
 1.65_01 Fri Aug 10 00:28:55 CDT 2007
 

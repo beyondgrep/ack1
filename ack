@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.65_01';
+our $VERSION   = '1.66';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.
@@ -131,7 +131,7 @@ ack - grep-like text finder
 
 =head1 DESCRIPTION
 
-Ack is designed as a replacement for F<grep>.
+Ack is designed as a replacement for 99% of the uses of F<grep>.
 
 Ack searches the named input FILEs (or standard input if no files are
 named, or the file name - is given) for lines containing a match to the

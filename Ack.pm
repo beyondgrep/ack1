@@ -128,7 +128,7 @@ sub get_command_line_options {
         'L|files-without-match' => \$opt{L},
         'm|max-count=i'         => \$opt{m},
         n                       => \$opt{n},
-        o                       => \$opt{o},
+        o                       => sub { $opt{output} = '$&' },
         'output=s'              => \$opt{output},
         'passthru'              => \$opt{passthru},
         'Q|literal'             => \$opt{Q},
@@ -184,14 +184,8 @@ sub get_command_line_options {
 
     App::Ack::apply_defaults(\%opt);
 
-    # XXX This can get simplified
-    if ( $opt{o} ) {
-        $opt{output} = eval qq[ sub { $& } ];
-    }
-
     if ( defined( my $val = $opt{output} ) ) {
-        $val = qq{"$val"};
-        $opt{output} = eval qq[ sub { $val } ];
+        $opt{output} = eval qq[ sub { "$val" } ];
     }
 
     return %opt;

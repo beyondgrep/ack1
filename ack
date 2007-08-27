@@ -118,8 +118,6 @@ sub main {
     exit 0;
 }
 
-=encoding utf8
-
 =head1 NAME
 
 ack - grep-like text finder

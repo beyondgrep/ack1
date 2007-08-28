@@ -402,6 +402,20 @@ L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=ack>.
 I will be notified, and then you'll automatically be notified of progress on
 your bug as I make changes.
 
+=head1 ENHANCEMENTS
+
+There is a list of enhancements I want to make to F<ack> in the ack
+issues list at Google Code: L<http://code.google.com/p/ack/issues/list>
+
+Yes, we want to be able to specify filetypes.
+
+Yes, we want to display context.
+
+Yes, we want to add support for a F<.ackrc> file.
+
+Please look in the issues list before requesting an enhancement.
+And, of course, patches are always welcome.
+
 =head1 SUPPORT
 
 Support for and information about F<ack> can be found at:

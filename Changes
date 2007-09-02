@@ -1,5 +1,10 @@
 Changelog for ack
 
+NEXT
+    [ENHANCEMENTS]
+    Little bitty speed enhancements inside.  Nothing major, but it
+    all adds up, especially on something as commonly-used as ack.
+
 1.66    Fri Aug 24 00:04:02 CDT 2007
     [FIXES]
     New Macs are shipping with Test::Harness 1.85, and ack's test

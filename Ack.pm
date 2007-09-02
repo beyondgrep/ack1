@@ -620,24 +620,24 @@ sub search {
 
     $regex = qr// if $opt->{passthru}; # Always match in passthru mode
 
-    my $is_binary;
+    my $could_be_binary;
     my $fh;
     if ( $filename eq '-' ) {
         $fh = *STDIN;
-        $is_binary = 0;
+        $could_be_binary = 0;
     }
     else {
         if ( !open( $fh, '<', $filename ) ) {
             App::Ack::warn( "$filename: $!" );
             return;
         }
-        $is_binary = -B $filename;
+        $could_be_binary = 1;
     }
 
     # Negated counting is a pain, so I'm putting it in its own
     # optimizable subroutine.
     if ( $opt->{v} ) {
-        return _search_v( $fh, $is_binary, $filename, $regex, $opt );
+        return _search_v( $fh, $could_be_binary, $filename, $regex, $opt );
     }
 
     my $display_filename;
@@ -652,9 +652,12 @@ sub search {
         # and don't want a count.
         last if $opt->{l};
 
-        if ( $is_binary ) {
-            print "Binary file $filename matches\n";
-            last;
+        if ( $could_be_binary ) {
+            if ( -B $filename ) {
+                print "Binary file $filename matches\n";
+                last;
+            }
+            $could_be_binary = 0;
         }
 
         if ( $opt->{show_filename} ) {
@@ -706,7 +709,7 @@ sub search {
 
 sub _search_v {
     my $fh = shift;
-    my $is_binary = shift;
+    my $could_be_binary = shift;
     my $filename = shift;
     my $regex = shift;
     my $opt = shift;
@@ -723,9 +726,12 @@ sub _search_v {
         else {
             ++$nmatches;
             if ( $show_lines ) {
-                if ( $is_binary ) {
-                    print "Binary file $filename matches\n";
-                    last;
+                if ( $could_be_binary ) {
+                    if ( -B $filename ) {
+                        print "Binary file $filename matches\n";
+                        last;
+                    }
+                    $could_be_binary = 0;
                 }
                 print "${filename}:" if $opt->{show_filename};
                 print $_;

@@ -682,6 +682,7 @@ sub search {
         return _search_v( $fh, $is_binary, $filename, $regex, %opt );
     }
 
+    my $display_filename;
     my $nmatches = 0;
     local $_ = undef;
     while (<$fh>) {
@@ -711,10 +712,12 @@ sub search {
         }
 
         if ( $opt{show_filename} ) {
-            my $display_filename =
-                $opt{color}
-                    ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} )
-                    : $filename;
+            if ( not defined $display_filename ) {
+                $display_filename =
+                    $opt{color}
+                        ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} )
+                        : $filename;
+            }
             if ( $opt{group} ) {
                 print "$display_filename\n" if $nmatches == 1;
                 print "$.:";

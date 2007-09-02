@@ -137,9 +137,9 @@ sub get_command_line_options {
         'w|word-regexp'         => \$opt{w},
 
 
-        'version'   => sub { App::Ack::print_version_statement(); exit 1; },
-        'help|?:s'  => sub { shift; App::Ack::show_help(@_); exit; },
-        'help-types'=> sub { App::Ack::show_help_types(); exit; },
+        'version'   => sub { print_version_statement(); exit 1; },
+        'help|?:s'  => sub { shift; show_help(@_); exit; },
+        'help-types'=> sub { show_help_types(); exit; },
         'man'       => sub {require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit; },
 
         'type=s'    => sub {
@@ -148,8 +148,8 @@ sub get_command_line_options {
             my $type = shift;
             my $wanted = ($type =~ s/^no//) ? 0 : 1; # must not be undef later
 
-            if ( exists $App::Ack::type_wanted{ $type } ) {
-                $App::Ack::type_wanted{ $type } = $wanted;
+            if ( exists $type_wanted{ $type } ) {
+                $type_wanted{ $type } = $wanted;
             }
             else {
                 App::Ack::die( qq{Unknown --type "$type"} );
@@ -157,9 +157,9 @@ sub get_command_line_options {
         }, # type sub
     };
 
-    my @filetypes_supported = App::Ack::filetypes_supported();
+    my @filetypes_supported = filetypes_supported();
     for my $i ( @filetypes_supported ) {
-        $getopt_specs->{ "$i!" } = \$App::Ack::type_wanted{ $i };
+        $getopt_specs->{ "$i!" } = \$type_wanted{ $i };
     }
 
     # Stick any default switches at the beginning, so they can be overridden
@@ -167,7 +167,7 @@ sub get_command_line_options {
     unshift @ARGV, split( ' ', $ENV{ACK_OPTIONS} ) if defined $ENV{ACK_OPTIONS};
 
     Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
-    Getopt::Long::GetOptions( %{$getopt_specs} ) && App::Ack::options_sanity_check( %opt ) or
+    Getopt::Long::GetOptions( %{$getopt_specs} ) && options_sanity_check( %opt ) or
         App::Ack::die( 'See ack --help or ack --man for options.' );
 
     $opt{is_filter} = !-t STDIN;
@@ -182,7 +182,7 @@ sub get_command_line_options {
         $opt{m} = 1;
     }
 
-    App::Ack::apply_defaults(\%opt);
+    apply_defaults(\%opt);
 
     if ( defined( my $val = $opt{output} ) ) {
         $opt{output} = eval qq[ sub { "$val" } ];
@@ -528,7 +528,7 @@ Returns the version information for ack.
 sub get_version_statement {
     my $copyright = get_copyright();
     return <<"END_OF_VERSION";
-ack $App::Ack::VERSION
+ack $VERSION
 
 $copyright
 
@@ -587,10 +587,10 @@ sub is_interesting {
     my $include;
     my $exclude;
 
-    for my $type ( App::Ack::filetypes( $File::Next::name ) ) {
-        if ( defined $App::Ack::type_wanted{$type} ) {
-            $include = 1 if $App::Ack::type_wanted{$type};
-            $exclude = 1 if not $App::Ack::type_wanted{$type};
+    for my $type ( filetypes( $File::Next::name ) ) {
+        if ( defined $type_wanted{$type} ) {
+            $include = 1 if $type_wanted{$type};
+            $exclude = 1 if not $type_wanted{$type};
         }
     }
 
@@ -604,7 +604,7 @@ File filter for the -a option
 =cut
 
 sub dash_a_file_filter {
-    return App::Ack::is_searchable( $File::Next::name );
+    return is_searchable( $File::Next::name );
 }
 
 sub _search_v {
@@ -678,7 +678,7 @@ sub search {
     # Negated counting is a pain, so I'm putting it in its own
     # optimizable subroutine.
     if ( $opt{v} ) {
-        return App::Ack::_search_v( $fh, $is_binary, $filename, $regex, %opt );
+        return _search_v( $fh, $is_binary, $filename, $regex, %opt );
     }
 
     my $nmatches = 0;
@@ -777,7 +777,7 @@ True/False - are the filetypes set?
 =cut
 
 sub filetypes_supported_set {
-    return grep { defined $App::Ack::type_wanted{$_} && ($App::Ack::type_wanted{$_} == 1) } filetypes_supported();
+    return grep { defined $type_wanted{$_} && ($type_wanted{$_} == 1) } filetypes_supported();
 }
 
 =head2 filetypes_supported_unset
@@ -787,7 +787,7 @@ True/False - are the filetypes unset?
 =cut
 
 sub filetypes_supported_unset {
-    return grep { defined $App::Ack::type_wanted{$_} && ($App::Ack::type_wanted{$_} == 0) } filetypes_supported();
+    return grep { defined $type_wanted{$_} && ($type_wanted{$_} == 0) } filetypes_supported();
 }
 
 =head2 print_files( $iter, $one )

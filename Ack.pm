@@ -642,6 +642,7 @@ sub search {
 
     my $display_filename;
     my $nmatches = 0;
+    my $output_func = $opt->{output};
     local $_ = undef;
     while (<$fh>) {
         next unless /$regex/o;
@@ -676,9 +677,9 @@ sub search {
             }
         }
 
-        if ( $opt->{output} ) {
+        if ( $output_func ) {
             while ( /$regex/go ) {
-                print $opt->{output}->(), "\n";
+                print $output_func->(), "\n";
             }
         }
         else {

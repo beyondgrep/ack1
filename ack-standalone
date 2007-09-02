@@ -1200,8 +1200,9 @@ sub search {
     my $regex = shift;
     my %opt = @_;
 
-    my $is_binary;
+    $regex = qr// if $opt{passthru}; # Always match in passthru mode
 
+    my $is_binary;
     my $fh;
     if ( $filename eq '-' ) {
         $fh = *STDIN;
@@ -1224,7 +1225,7 @@ sub search {
     my $nmatches = 0;
     local $_ = undef;
     while (<$fh>) {
-        next unless $opt{passthru} || /$regex/o;
+        next unless /$regex/o;
         ++$nmatches;
         next if $opt{count}; # Counting means no lines
 

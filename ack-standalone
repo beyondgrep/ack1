@@ -1262,9 +1262,8 @@ sub search {
             }
         }
         else {
-            my $out = $_;
-            $out =~ s/($regex)/Term::ANSIColor::colored($1,$ENV{ACK_COLOR_MATCH})/eg if $opt{color};
-            print $out;
+            s/($regex)/Term::ANSIColor::colored($1,$ENV{ACK_COLOR_MATCH})/eg if $opt{color};
+            print;
         }
 
         last if $opt{m} && ( $nmatches >= $opt{m} );

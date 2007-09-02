@@ -646,7 +646,7 @@ sub search {
     while (<$fh>) {
         next unless /$regex/o;
         ++$nmatches;
-        next if $opt->{count}; # Counting means no lines
+        next if $opt->{count}; # Counting means no lines get displayed
 
         # No point in searching more if we only want a list,
         # and don't want a count.
@@ -676,7 +676,6 @@ sub search {
             }
         }
 
-        my $out;
         if ( $opt->{output} ) {
             while ( /$regex/go ) {
                 print $opt->{output}->(), "\n";

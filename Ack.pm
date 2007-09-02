@@ -264,7 +264,7 @@ sub filetypes {
 
     if ( $header =~ /^#!/ ) {
         return ($1,TEXT)       if $header =~ /\b(ruby|p(erl|hp|ython))\b/;
-        return ('shell','text')  if $header =~ /\b(?:ba|c|k|z)?sh\b/;
+        return ('shell',TEXT)  if $header =~ /\b(?:ba|c|k|z)?sh\b/;
     }
     return ('xml',TEXT) if $header =~ /<\?xml /;
 

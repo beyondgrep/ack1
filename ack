@@ -75,7 +75,7 @@ sub main {
                 $opt{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );
             }
             $opt{show_filename} = 0;
-            App::Ack::search( '-', $regex, %opt );
+            App::Ack::search( '-', $regex, \%opt );
             exit 0;
         }
         else {
@@ -111,7 +111,7 @@ sub main {
 
         my $nmatches = 0;
         while ( defined ( my $file = $iter->() ) ) {
-            $nmatches += App::Ack::search( $file, $regex, %opt );
+            $nmatches += App::Ack::search( $file, $regex, \%opt );
             last if $nmatches && $opt{1};
         }
     }

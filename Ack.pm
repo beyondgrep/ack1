@@ -699,18 +699,6 @@ sub search {
             last;
         }
 
-        my $out;
-        if ( $opt{output} ) {
-            $out = '';
-            while ( /$regex/go ) {
-                $out .= $opt{output}->() . "\n";
-            }
-        }
-        else {
-            $out = $_;
-            $out =~ s/($regex)/Term::ANSIColor::colored($1,$ENV{ACK_COLOR_MATCH})/eg if $opt{color};
-        }
-
         if ( $opt{show_filename} ) {
             if ( not defined $display_filename ) {
                 $display_filename =
@@ -726,7 +714,18 @@ sub search {
                 print "${display_filename}:$.:";
             }
         }
-        print $out;
+
+        my $out;
+        if ( $opt{output} ) {
+            while ( /$regex/go ) {
+                print $opt{output}->(), "\n";
+            }
+        }
+        else {
+            my $out = $_;
+            $out =~ s/($regex)/Term::ANSIColor::colored($1,$ENV{ACK_COLOR_MATCH})/eg if $opt{color};
+            print $out;
+        }
 
         last if $opt{m} && ( $nmatches >= $opt{m} );
     } # while

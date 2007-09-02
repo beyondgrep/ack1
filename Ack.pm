@@ -311,7 +311,7 @@ sub options_sanity_check {
 
     # No sense to have negation with -o or --output
     for my $switch ( qw( v ) ) {
-        $ok = 0 if _option_conflict( \%opts, $switch, [qw( o option )] );
+        $ok = 0 if _option_conflict( \%opts, $switch, [qw( o option passthru )] );
     }
 
     return $ok;
@@ -607,48 +607,6 @@ sub dash_a_file_filter {
     return is_searchable( $File::Next::name );
 }
 
-sub _search_v {
-    my $fh = shift;
-    my $is_binary = shift;
-    my $filename = shift;
-    my $regex = shift;
-    my $opt = shift;
-
-    my $nmatches = 0; # Although in here, it's really $n_non_matches. :-)
-
-    my $show_lines = !($opt->{l} || $opt->{count});
-    local $_ = undef;
-    while (<$fh>) {
-        if ( /$regex/o ) {
-            return 0 if $opt->{l}; # For list mode, any match means we can bail
-            next;
-        }
-        else {
-            ++$nmatches;
-            if ( $show_lines ) {
-                if ( $is_binary ) {
-                    print "Binary file $filename matches\n";
-                    last;
-                }
-                print "${filename}:" if $opt->{show_filename};
-                print $_;
-                last if $opt->{m} && ( $nmatches >= $opt->{m} );
-            }
-        }
-    } # while
-    close $fh or App::Ack::warn( "$filename: $!" );
-
-    if ( $opt->{count} ) {
-        print "${filename}:" if $opt->{show_filename};
-        print "${nmatches}\n";
-    }
-    else {
-        print "$filename\n" if $opt->{l};
-    }
-
-    return $nmatches;
-} # _search_v()
-
 =head2 search
 
 Main search method
@@ -745,6 +703,48 @@ sub search {
 
     return $nmatches;
 }   # search()
+
+sub _search_v {
+    my $fh = shift;
+    my $is_binary = shift;
+    my $filename = shift;
+    my $regex = shift;
+    my $opt = shift;
+
+    my $nmatches = 0; # Although in here, it's really $n_non_matches. :-)
+
+    my $show_lines = !($opt->{l} || $opt->{count});
+    local $_ = undef;
+    while (<$fh>) {
+        if ( /$regex/o ) {
+            return 0 if $opt->{l}; # For list mode, any match means we can bail
+            next;
+        }
+        else {
+            ++$nmatches;
+            if ( $show_lines ) {
+                if ( $is_binary ) {
+                    print "Binary file $filename matches\n";
+                    last;
+                }
+                print "${filename}:" if $opt->{show_filename};
+                print $_;
+                last if $opt->{m} && ( $nmatches >= $opt->{m} );
+            }
+        }
+    } # while
+    close $fh or App::Ack::warn( "$filename: $!" );
+
+    if ( $opt->{count} ) {
+        print "${filename}:" if $opt->{show_filename};
+        print "${nmatches}\n";
+    }
+    else {
+        print "$filename\n" if $opt->{l};
+    }
+
+    return $nmatches;
+} # _search_v()
 
 =head2 apply_defaults
 

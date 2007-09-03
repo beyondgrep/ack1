@@ -340,6 +340,27 @@ sub _opty {
     return length($opt)>1 ? "--$opt" : "-$opt";
 }
 
+
+=head2 build_regex( $str, \%opts )
+
+Returns a regex object based on a string and command-line options.
+
+=cut
+
+sub build_regex {
+    my $str = shift;
+    my $opt = shift;
+
+    $str = quotemeta( $str ) if $opt->{Q};
+    if ( $opt->{w} ) {
+        $str = "\\b$str" if $str =~ /^\w/;
+        $str = "$str\\b" if $str =~ /\w$/;
+    }
+
+    return $opt->{i} ? qr/$str/i : qr/$str/;
+}
+
+
 =head2 warn( @_ )
 
 Put out an ack-specific warning.

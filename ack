@@ -21,13 +21,13 @@ MAIN: {
         App::Ack::warn( 'ACK_SWITCHES is no longer supported.  Use ACK_OPTIONS.' );
     }
 
+    # Priorities! Get the --thpppt checking out of the way.
+    /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
+
     main();
 }
 
 sub main {
-    # Priorities! Get the --thpppt checking out of the way.
-    /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
-
     my %opt = App::Ack::get_command_line_options();
 
     my $filetypes_supported_set   = App::Ack::filetypes_supported_set();
@@ -48,17 +48,7 @@ sub main {
             App::Ack::show_help();
             exit 1;
         }
-        # REVIEW: This shouldn't be able to happen because of the help
-        # check above.
-        $regex = shift @ARGV or App::Ack::die( 'No regex specified' );
-
-        $regex = quotemeta( $regex ) if $opt{Q};
-        if ( $opt{w} ) {
-            $regex = "\\b$regex" if $regex =~ /^\w/;
-            $regex = "$regex\\b" if $regex =~ /\w$/;
-        }
-
-        $regex = $opt{i} ? qr/$regex/i : qr/$regex/;
+        $regex = App::Ack::build_regex( shift @ARGV, \%opt );
     }
 
     my @what;

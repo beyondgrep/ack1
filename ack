@@ -31,7 +31,6 @@ sub main {
     my %opt = App::Ack::get_command_line_options();
 
     my $filetypes_supported_set   = App::Ack::filetypes_supported_set();
-    my $filetypes_supported_unset = App::Ack::filetypes_supported_unset();
 
     # If anyone says --no-whatever, we assume all other types must be on.
     if ( !$filetypes_supported_set ) {

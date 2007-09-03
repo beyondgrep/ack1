@@ -809,16 +809,6 @@ sub filetypes_supported_set {
     return grep { defined $type_wanted{$_} && ($type_wanted{$_} == 1) } filetypes_supported();
 }
 
-=head2 filetypes_supported_unset
-
-True/False - are the filetypes unset?
-
-=cut
-
-sub filetypes_supported_unset {
-    return grep { defined $type_wanted{$_} && ($type_wanted{$_} == 0) } filetypes_supported();
-}
-
 =head2 print_files( $iter, $one )
 
 Prints all the files returned by the iterator.  If I<$one> is set,

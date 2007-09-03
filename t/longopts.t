@@ -9,7 +9,7 @@ This tests whether L<ack(1)>'s command line options work as expected.
 
 =cut
 
-use Test::More tests => 32;
+use Test::More tests => 30;
 use File::Next 0.34; # For the reslash() function
 delete $ENV{ACK_OPTIONS};
 
@@ -17,7 +17,7 @@ my $swamp = 't/swamp';
 my $ack   = './ack-standalone';
 
 # Help
-for ( qw( -h --help ) ) {
+for ( qw( --help ) ) {
     like
         qx{ $^X $ack $_ },
         qr{ ^Usage: .* Example: }xs,

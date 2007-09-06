@@ -4,9 +4,10 @@ use warnings;
 use strict;
 
 use Test::More tests => 4;
-delete $ENV{ACK_OPTIONS};
+use lib 't';
+use Util;
 
-use IPC::Open3;
+delete $ENV{ACK_OPTIONS};
 
 my $ack = 'ack-standalone';
 
@@ -19,15 +20,14 @@ else {
     ok( -x $ack, 'executable' );
 }
 
-my $pid = open3( my $wh, my $rh, undef,
-                    $^X, $ack, 'package', $ack );
+FIND_PACKAGES: {
+    my @expected = (
+        'package File::Next;',
+        'package App::Ack;',
+    );
+    my @files = ( $ack );
+    my @args = qw( ^package -h );
+    my @results = run_ack( @args, @files );
 
-my @actual = <$rh>;
-s/\r?\n$// for @actual;
-s/^\d+:// for @actual;
-
-my @expected = (
-    'package File::Next;',
-    'package App::Ack;',
-);
-is_deeply( \@actual, \@expected, 'Got expected output' );
+    lists_match( \@results, \@expected, 'Looking for packages' );
+}

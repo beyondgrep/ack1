@@ -33,19 +33,23 @@ MAIN: {
 
 sub main {
     my %opt = App::Ack::get_command_line_options();
-
-    my $filetypes_supported_set   = App::Ack::filetypes_supported_set();
-
-    # If anyone says --no-whatever, we assume all other types must be on.
-    if ( !$filetypes_supported_set ) {
-        for my $i ( keys %App::Ack::type_wanted ) {
-            $App::Ack::type_wanted{$i} = 1 unless ( defined( $App::Ack::type_wanted{$i} ) || $i eq 'binary' || $i eq 'text' || $i eq 'skipped' );
+    if ( !-t STDIN ) {
+        # We're going into filter mode
+        for ( qw( f g l ) ) {
+            $opt{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );
         }
+        $opt{show_filename} = 0;
+        my $regex = App::Ack::build_regex( shift @ARGV, \%opt );
+        if ( my $nargs = @ARGV ) {
+            my $s = $nargs == 1 ? '' : 's';
+            App::Ack::warn( "Ignoring $nargs argument$s on the command-line while acting as a filter." );
+        }
+        App::Ack::search( '-', $regex, \%opt );
+        exit 0;
     }
 
     my $regex;
     my $file_matching = $opt{f} || $opt{g};
-
     if ( !$file_matching ) {
         @ARGV or App::Ack::die( 'No regular expression found.' );
         $regex = App::Ack::build_regex( shift @ARGV, \%opt );
@@ -59,20 +63,10 @@ sub main {
         $opt{show_filename} = (@what > 1) || (!-f $what[0]);
     }
     else {
-        if ( $opt{is_filter} ) {
-            # We're going into filter mode
-            for ( qw( f g l ) ) {
-                $opt{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );
-            }
-            $opt{show_filename} = 0;
-            App::Ack::search( '-', $regex, \%opt );
-            exit 0;
-        }
-        else {
-            @what = '.'; # Assume current directory
-            $opt{show_filename} = 1;
-        }
+        @what = '.'; # Assume current directory
+        $opt{show_filename} = 1;
     }
+    #XXX Barf if the starting points don't exist
 
     my $iter =
         File::Next::files( {
@@ -88,6 +82,7 @@ sub main {
         }, @what );
 
 
+    App::Ack::filetype_setup();
     if ( $opt{f} ) {
         App::Ack::print_files($iter, $opt{1});
     }

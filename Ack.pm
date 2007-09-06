@@ -170,8 +170,6 @@ sub get_command_line_options {
     Getopt::Long::GetOptions( %{$getopt_specs} ) && options_sanity_check( %opt ) or
         App::Ack::die( 'See ack --help or ack --man for options.' );
 
-    $opt{is_filter} = !-t STDIN;
-
     # Handle new -L the old way: as -l and -v
     if ( $opt{L} ) {
         $opt{l} = $opt{v} = 1;
@@ -846,6 +844,22 @@ sub print_selected_files {
     }
 
     return;
+}
+
+=head2 filetype_setup()
+
+Minor housekeeping before we go matching files.
+
+=cut
+
+sub filetype_setup {
+    my $filetypes_supported_set = App::Ack::filetypes_supported_set();
+    # If anyone says --no-whatever, we assume all other types must be on.
+    if ( !$filetypes_supported_set ) {
+        for my $i ( keys %App::Ack::type_wanted ) {
+            $App::Ack::type_wanted{$i} = 1 unless ( defined( $App::Ack::type_wanted{$i} ) || $i eq 'binary' || $i eq 'text' || $i eq 'skipped' );
+        }
+    }
 }
 
 1; # End of App::Ack

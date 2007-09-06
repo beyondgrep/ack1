@@ -3,11 +3,24 @@
 use warnings;
 use strict;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 delete $ENV{ACK_OPTIONS};
 
 use lib 't';
 use Util;
+
+NO_STARTDIR: {
+    my @expected = qw(
+    );
+    my $regex = 'Makefile';
+
+    my @files = qw( t/foo/non-existent );
+    my @args = ( '-g', $regex );
+    my @results = run_ack( @args, @files );
+
+    sets_match( \@results, \@expected, "Looking for $regex" );
+}
+
 
 NO_METACHARCTERS: {
     my @expected = qw(

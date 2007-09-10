@@ -860,6 +860,7 @@ sub filetype_setup {
             $App::Ack::type_wanted{$i} = 1 unless ( defined( $App::Ack::type_wanted{$i} ) || $i eq 'binary' || $i eq 'text' || $i eq 'skipped' );
         }
     }
+    return;
 }
 
 1; # End of App::Ack

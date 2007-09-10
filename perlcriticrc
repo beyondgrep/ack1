@@ -19,9 +19,10 @@ allow_leading_tabs = 0
 [-RegularExpressions::RequireExtendedFormatting]
 [-RegularExpressions::RequireLineBoundaryMatching]
 
+[-ValuesAndExpressions::ProhibitNoisyQuotes]
 [-ValuesAndExpressions::ProhibitEmptyQuotes]
 
 [Variables::ProhibitPackageVars]
-add_packages = Test::Builder App::Ack
+add_packages = Test::Builder App::Ack File::Next
 
 [-Variables::ProhibitPunctuationVars]

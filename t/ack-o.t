@@ -64,7 +64,7 @@ EOF
 
 WITH_OUTPUT: {
     my @files = qw( t/text/ );
-    my @args = ( q{--output='x$1x'}, '-a', '"question(\\S+)"' );
+    my @args = qw( --output='x$1x' -a "question(\\S+)" );
     my @expected = qw(
         xedx
         xs.x

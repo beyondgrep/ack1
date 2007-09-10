@@ -1144,7 +1144,7 @@ sub is_interesting {
         }
     }
 
-    return ( $include && not $exclude );
+    return ( $include && !$exclude );
 }
 
 

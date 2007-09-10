@@ -21,4 +21,7 @@ allow_leading_tabs = 0
 
 [-ValuesAndExpressions::ProhibitEmptyQuotes]
 
+[Variables::ProhibitPackageVars]
+add_packages = Test::Builder App::Ack
+
 [-Variables::ProhibitPunctuationVars]

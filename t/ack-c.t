@@ -30,7 +30,7 @@ DASH_CAPITAL_L: {
     );
 
     # -L and -l -v are identical
-    for my $switches ( ['-L'], ['-l','-v'] ) {
+    for my $switches ( (['-L'], ['-l','-v']) ) {
         my @files = qw( t/text );
         my @args = ( 'religion', '-a', @{$switches} );
         my @results = run_ack( @args, @files );

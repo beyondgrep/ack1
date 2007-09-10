@@ -613,7 +613,7 @@ sub is_interesting {
         }
     }
 
-    return ( $include && not $exclude );
+    return ( $include && !$exclude );
 }
 
 =head2 dash_a_file_filter

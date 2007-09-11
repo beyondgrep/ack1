@@ -604,16 +604,19 @@ sub is_interesting {
     return if /^\./;
 
     my $include;
-    my $exclude;
 
     for my $type ( filetypes( $File::Next::name ) ) {
         if ( defined $type_wanted{$type} ) {
-            $include = 1 if $type_wanted{$type};
-            $exclude = 1 if not $type_wanted{$type};
+            if ( $type_wanted{$type} ) {
+                $include = 1;
+            }
+            else {
+                return;
+            }
         }
     }
 
-    return ( $include && !$exclude );
+    return $include;
 }
 
 =head2 dash_a_file_filter

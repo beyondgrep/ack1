@@ -50,7 +50,7 @@ critic:
 	perlcritic -1 -q -profile perlcriticrc ack Ack.pm t/*.t
 
 prof: all
-	perl -d:DProf -Mblib ack --color --group -w foo ~/parrot >> /dev/null 2>&1
+	perl -d:DProf ack-standalone --color --group -w foo ~/parrot >> /dev/null 2>&1
 	dprofpp
 
 ACK             = ack

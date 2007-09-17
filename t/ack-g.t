@@ -54,11 +54,11 @@ METACHARACTERS: {
 
 FRONT_ANCHOR: {
     my @expected = qw(
-        squash
+        t/standalone.t
     );
-    my $regex = '^s';
+    my $regex = '^t/st';
 
-    my @files = qw( . );
+    my @files = qw( t );
     my @args = ( '-g', $regex );
     my @results = run_ack( @args, @files );
 
@@ -72,7 +72,7 @@ BACK_ANCHOR: {
     );
     my $regex = 'g$';
 
-    my @files = qw( . );
+    my @files = qw( t );
     my @args = ( '-a', '-g', $regex );
     my @results = run_ack( @args, @files );
 

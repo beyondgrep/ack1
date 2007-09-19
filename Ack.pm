@@ -729,6 +729,7 @@ sub search {
     return $nmatches;
 }   # search()
 
+
 sub _search_v {
     my $fh = shift;
     my $could_be_binary = shift;

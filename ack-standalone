@@ -1,4 +1,4 @@
-#!/usr/bin/env perl
+#!/usr/bin/env perl -T
 
 use warnings;
 use strict;
@@ -1249,6 +1249,7 @@ sub search {
 
     return $nmatches;
 }   # search()
+
 
 sub _search_v {
     my $fh = shift;

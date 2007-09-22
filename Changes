@@ -5,6 +5,12 @@ NEXT
     Little bitty speed enhancements inside.  Nothing major, but it
     all adds up, especially on something as commonly-used as ack.
 
+    ack now runs under -T (taint mode).  This is just a good idea,
+    although there's nothing that ack does that executes code.  Thanks to
+    Bill Ricker for bringing this up via what turns out to be a non-issue,
+    but still nudged me to do this.
+
+
 1.66    Fri Aug 24 00:04:02 CDT 2007
     [FIXES]
     New Macs are shipping with Test::Harness 1.85, and ack's test

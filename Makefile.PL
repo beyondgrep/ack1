@@ -58,17 +58,18 @@ APP_ACK_PM      = Ack.pm
 STANDALONE      = ack-standalone
 ACK_HELP        = ack-help.txt
 ACK_HELP_TYPES  = ack-help-types.txt
+PERL_T          = $(PERL) -T
 
 $(STANDALONE) : $(ACK) $(APP_ACK_PM) squash Makefile
-	$(PERL) squash ack File::Next $(APP_ACK_PM) > $(STANDALONE)
+	$(PERL_T) squash ack File::Next $(APP_ACK_PM) > $(STANDALONE)
 	$(CHMOD) +x $(STANDALONE)
-	$(PERL) -c $(STANDALONE)
+	$(PERL_T) -c $(STANDALONE)
 
 $(ACK_HELP) : $(STANDALONE)
-	$(PERL) $(STANDALONE) --help > $(ACK_HELP) || perl -e0
+	$(PERL_T) $(STANDALONE) --help > $(ACK_HELP) || perl -e0
 
 $(ACK_HELP_TYPES) : $(STANDALONE)
-	$(PERL) $(STANDALONE) --help=types > $(ACK_HELP_TYPES) || perl -e0
+	$(PERL_T) $(STANDALONE) --help=types > $(ACK_HELP_TYPES) || perl -e0
 
 MAKE_FRAG
 

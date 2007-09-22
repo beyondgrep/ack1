@@ -16,9 +16,7 @@ SINGLE_TEXT_MATCH: {
 
     my @files = qw( t/text );
     my @args = qw( Sue! -1 -h --text );
-    my $cmd = "$^X ./ack-standalone @args @files";
-    my @results = `$cmd`;
-    chomp @results;
+    my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Looking for first instance of Sue!' );
 }
@@ -31,9 +29,7 @@ DASH_V: {
 
     my @files = qw( t/text/boy-named-sue.txt );
     my @args = qw( Sue! -1 -h -v --text );
-    my $cmd = "$^X ./ack-standalone @args @files";
-    my @results = `$cmd`;
-    chomp @results;
+    my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Looking for first non-match' );
 }
@@ -41,10 +37,7 @@ DASH_V: {
 DASH_F: {
     my @files = qw( t/swamp );
     my @args = qw( -1 -f );
-    my $cmd = "$^X ./ack-standalone @args @files";
-    print "Running $cmd\n";
-    my @results = `$cmd`;
-    chomp @results;
+    my @results = run_ack( @args, @files );
 
     is( scalar @results, 1, 'Should only get one file back' );
     like( $results[0], qr{^t/swamp/}, 'One of the files from the swamp' );
@@ -55,10 +48,7 @@ DASH_G: {
     my $regex = 'Makefile';
     my @files = qw( t/ );
     my @args = ( '-1', '-g', $regex );
-    my $cmd = "$^X ./ack-standalone @args @files";
-    print "Running $cmd\n";
-    my @results = `$cmd`;
-    chomp @results;
+    my @results = run_ack( @args, @files );
 
     is( scalar @results, 1, "Should only get one file back from $regex" );
     like( $results[0], qr{^t/swamp/Makefile(\.PL)?$}, 'The one file matches one of the two Makefile files' );

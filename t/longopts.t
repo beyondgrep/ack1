@@ -19,7 +19,7 @@ my $ack   = './ack-standalone';
 # Help
 for ( qw( --help ) ) {
     like
-        qx{ $^X $ack $_ },
+        qx{ $^X -T $ack $_ },
         qr{ ^Usage: .* Example: }xs,
         qq{$_ output is correct};
     option_in_usage( $_ );
@@ -28,7 +28,7 @@ for ( qw( --help ) ) {
 # Version
 for ( qw( --version ) ) {
     like
-        qx{ $^X $ack $_ },
+        qx{ $^X -T $ack $_ },
         qr{ ^ack .* Copyright .* Perl }xs,
         qq{$_ output is correct};
     option_in_usage( $_ );
@@ -37,7 +37,7 @@ for ( qw( --version ) ) {
 # Ignore case
 for ( qw( -i --ignore-case ) ) {
     like
-        qx{ $^X $ack $_ "upper case" t/swamp/options.pl },
+        qx{ $^X -T $ack $_ "upper case" t/swamp/options.pl },
         qr{UPPER CASE},
         qq{$_ works correctly for ascii};
     option_in_usage( $_ );
@@ -46,7 +46,7 @@ for ( qw( -i --ignore-case ) ) {
 # Invert match
 for ( qw( -v --invert-match ) ) {
     unlike
-        qx{ $^X $ack $_ "use warnings" t/swamp/options.pl },
+        qx{ $^X -T $ack $_ "use warnings" t/swamp/options.pl },
         qr{use warnings},
         qq{$_ works correctly};
     option_in_usage( $_ );
@@ -55,11 +55,11 @@ for ( qw( -v --invert-match ) ) {
 # Word regexp
 for ( qw( -w --word-regexp ) ) {
     like
-        qx{ $^X $ack $_ "word" t/swamp/options.pl },
+        qx{ $^X -T $ack $_ "word" t/swamp/options.pl },
         qr{ word },
         qq{$_ ignores non-words};
     unlike
-        qx{ $^X $ack $_ "word" t/swamp/options.pl },
+        qx{ $^X -T $ack $_ "word" t/swamp/options.pl },
         qr{notaword},
         qq{$_ ignores non-words};
     option_in_usage( $_ );
@@ -68,7 +68,7 @@ for ( qw( -w --word-regexp ) ) {
 # Literal
 for ( qw( -Q --literal ) ) {
     like
-        qx{ $^X $ack $_ "[abc]" t/swamp/options.pl },
+        qx{ $^X -T $ack $_ "[abc]" t/swamp/options.pl },
         qr{\Q[abc]\E},
         qq{$_ matches a literal string};
     option_in_usage( $_ );
@@ -79,7 +79,7 @@ my $expected = File::Next::reslash( 't/swamp/options.pl' );
 # Files with matches
 for ( qw( -l --files-with-matches ) ) {
     like
-        qx{ $^X $ack $_ "use strict" t/swamp/options.pl },
+        qx{ $^X -T $ack $_ "use strict" t/swamp/options.pl },
         qr{\Q$expected},
         qq{$_ prints matching files};
     option_in_usage( $_ );
@@ -88,7 +88,7 @@ for ( qw( -l --files-with-matches ) ) {
 # Files without match
 for ( qw( -L --files-without-match ) ) {
     like
-        qx{ $^X $ack $_ "use snorgledork" t/swamp/options.pl },
+        qx{ $^X -T $ack $_ "use snorgledork" t/swamp/options.pl },
         qr{\Q$expected},
         qq{$_ prints matching files};
     option_in_usage( $_ );
@@ -98,7 +98,7 @@ my $usage;
 sub option_in_usage {
     my $opt = shift;
 
-    $usage = qx{ $^X $ack --help } unless $usage;
+    $usage = qx{ $^X -T $ack --help } unless $usage;
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
     return ok( $usage =~ qr/\Q$opt\E\b/s, "Found $opt in usage" );

@@ -25,7 +25,6 @@ my @expected = qw(
     t/etc/shebang.sh.xxx
 );
 
-my @results = sort `$^X ./ack-standalone -f -a t/etc`;
-chomp @results;
+my @results = run_ack( qw( -f -a t/etc ) );
 
 sets_match( \@results, \@expected, 'File lists match' );

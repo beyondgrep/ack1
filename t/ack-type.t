@@ -101,8 +101,7 @@ sub check_with {
 
     my @expected = sort @{$expected};
 
-    my @results = sort `$^X ./ack-standalone -f $options`;
-    chomp @results;
+    my @results = run_ack( '-f', $options );
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
     return sets_match( \@results, \@expected, "File lists match via $options" );

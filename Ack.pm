@@ -23,9 +23,10 @@ BEGIN {
 our %types;
 our %mappings;
 our %ignore_dirs;
-our $path_sep;
+our $path_sep_regex;
 our $is_cygwin;
 our $is_windows;
+our $to_screen;
 our %type_wanted;
 
 use File::Spec ();
@@ -81,8 +82,6 @@ BEGIN {
         xml         => [qw( xml dtd xslt )],
     );
 
-    $path_sep = File::Spec->catfile( '', '' );
-    $path_sep = quotemeta( $path_sep );
 
     while ( my ($type,$exts) = each %mappings ) {
         if ( ref $exts ) {
@@ -92,7 +91,9 @@ BEGIN {
         }
     }
 
+    $path_sep_regex = quotemeta( File::Spec->catfile( '', '' ) );
     $is_cygwin = ($^O eq 'cygwin');
+    $to_screen = -t *STDOUT;
 }
 
 =head1 SYNOPSIS
@@ -111,7 +112,7 @@ sub get_command_line_options {
     my %opt;
 
     my $getopt_specs = {
-        1                       => \$opt{1},
+        1                       => sub { $opt{1} = $opt{m} = 1 },
         a                       => \$opt{all},
         'all!'                  => \$opt{all},
         c                       => \$opt{count},
@@ -125,7 +126,7 @@ sub get_command_line_options {
         H                       => \$opt{H},
         'i|ignore-case'         => \$opt{i},
         'l|files-with-matches'  => \$opt{l},
-        'L|files-without-match' => \$opt{L},
+        'L|files-without-match' => sub { $opt{l} = $opt{v} = 1 },
         'm|max-count=i'         => \$opt{m},
         n                       => \$opt{n},
         o                       => sub { $opt{output} = '$&' },
@@ -170,16 +171,6 @@ sub get_command_line_options {
     Getopt::Long::GetOptions( %{$getopt_specs} ) && options_sanity_check( %opt ) or
         App::Ack::die( 'See ack --help or ack --man for options.' );
 
-    # Handle new -L the old way: as -l and -v
-    if ( $opt{L} ) {
-        $opt{l} = $opt{v} = 1;
-    }
-
-    # Make the -m do work for us if we have -1
-    if ( $opt{1} ) {
-        $opt{m} = 1;
-    }
-
     apply_defaults(\%opt);
 
     if ( defined( my $val = $opt{output} ) ) {
@@ -221,10 +212,10 @@ sub filetypes {
 
     return 'skipped' unless is_searchable( $filename );
 
-    return ('make',TEXT) if $filename =~ m{$path_sep?Makefile$}io;
+    return ('make',TEXT) if $filename =~ m{$path_sep_regex?Makefile$}io;
 
     # If there's an extension, look it up
-    if ( $filename =~ m{\.([^\.$path_sep]+)$}o ) {
+    if ( $filename =~ m{\.([^\.$path_sep_regex]+)$}o ) {
         my $ref = $types{lc $1};
         return (@{$ref},TEXT) if $ref;
     }
@@ -264,7 +255,9 @@ sub filetypes {
         return ($1,TEXT)       if $header =~ /\b(ruby|p(?:erl|hp|ython))\b/;
         return ('shell',TEXT)  if $header =~ /\b(?:ba|c|k|z)?sh\b/;
     }
-    return ('xml',TEXT) if $header =~ /<\?xml /;
+    else {
+        return ('xml',TEXT)    if $header =~ /\Q<?xml /;
+    }
 
     return (TEXT);
 }
@@ -280,7 +273,7 @@ sub is_searchable {
     my $filename = shift;
 
     return if $filename =~ /~$/;
-    return if $filename =~ m{$path_sep?(?:#.+#|core\.\d+)$}o;
+    return if $filename =~ m{$path_sep_regex?(?:#.+#|core\.\d+)$}o;
 
     return 1;
 }
@@ -297,14 +290,11 @@ sub options_sanity_check {
     my $ok = 1;
 
     # List mode doesn't make sense with any of these
-    $ok = 0 if _option_conflict( \%opts, 'l', [qw( A B C o group )] );
-
-    # XXX This should work, I would think.
-    $ok = 0 if _option_conflict( \%opts, 'l', [qw( m )] );
+    $ok = 0 if _option_conflict( \%opts, 'l', [qw( f g )] );
 
     # File-searching is definitely irrelevant on these
-    for my $switch ( qw( f g ) ) {
-        $ok = 0 if _option_conflict( \%opts, $switch, [qw( A B C o m group l )] );
+    for my $switch ( qw( f g l ) ) {
+        $ok = 0 if _option_conflict( \%opts, $switch, [qw( A B C o group )] );
     }
 
     # No sense to have negation with -o or --output
@@ -619,15 +609,6 @@ sub is_interesting {
     return $include;
 }
 
-=head2 dash_a_file_filter
-
-File filter for the -a option
-
-=cut
-
-sub dash_a_file_filter {
-    return is_searchable( $File::Next::name );
-}
 
 =head2 search
 
@@ -784,7 +765,6 @@ Apply the default options
 sub apply_defaults {
     my $opt = shift;
 
-    my $to_screen = -t *STDOUT;
     my %defaults = (
         all     => 0,
         color   => $to_screen && !$App::Ack::is_windows,

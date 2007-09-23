@@ -71,7 +71,7 @@ sub main {
     my $iter =
         File::Next::files( {
             file_filter     => $opt{all}
-                                    ? \&App::Ack::dash_a_file_filter
+                                    ? sub { return App::Ack::is_searchable( $File::Next::name ) }
                                     : \&App::Ack::is_interesting,
             descend_filter  => $opt{n}
                                     ? sub {0}

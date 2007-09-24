@@ -632,7 +632,7 @@ sub search {
     else {
         if ( !open( $fh, '<', $filename ) ) {
             App::Ack::warn( "$filename: $!" );
-            return;
+            return 0;
         }
         $could_be_binary = 1;
     }

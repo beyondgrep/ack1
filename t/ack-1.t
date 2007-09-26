@@ -38,9 +38,10 @@ DASH_F: {
     my @files = qw( t/swamp );
     my @args = qw( -1 -f );
     my @results = run_ack( @args, @files );
+    my $test_path = File::Next::reslash( 't/swamp/' );
 
     is( scalar @results, 1, 'Should only get one file back' );
-    like( $results[0], qr{^t/swamp/}, 'One of the files from the swamp' );
+    like( $results[0], qr{^\Q$test_path\E}, 'One of the files from the swamp' );
 }
 
 
@@ -49,7 +50,8 @@ DASH_G: {
     my @files = qw( t/ );
     my @args = ( '-1', '-g', $regex );
     my @results = run_ack( @args, @files );
+    my $test_path = File::Next::reslash( 't/swamp/Makefile' );
 
     is( scalar @results, 1, "Should only get one file back from $regex" );
-    like( $results[0], qr{^t/swamp/Makefile(\.PL)?$}, 'The one file matches one of the two Makefile files' );
+    like( $results[0], qr{^\Q$test_path\E(\.PL)?$}, 'The one file matches one of the two Makefile files' );
 }

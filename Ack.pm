@@ -111,7 +111,11 @@ No user-serviceable parts inside.  F<ack> is all that should use this.
 =cut
 
 sub read_ackrc {
-    my @files = ( $ENV{ACKRC}, bsd_glob( '~/.ackrc', GLOB_TILDE ) );
+    my @files = (
+        $ENV{ACKRC},
+        bsd_glob( '~/.ackrc', GLOB_TILDE ),
+        bsd_glob( '~/_ackrc', GLOB_TILDE ),
+    );
     for my $filename ( @files ) {
         if ( defined $filename && -e $filename ) {
             open( my $fh, '<', $filename ) or die "$filename: $!\n";

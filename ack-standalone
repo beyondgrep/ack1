@@ -1212,7 +1212,12 @@ sub search {
             }
         }
         else {
-            s/($regex)/Term::ANSIColor::colored($1,$ENV{ACK_COLOR_MATCH})/eg if $opt->{color};
+            if ( $opt->{color} ) {
+                if ( s/($regex)/Term::ANSIColor::colored($1,$ENV{ACK_COLOR_MATCH})/eg ) {
+                    # Before \n, reset the color and clear to end of line
+                    s/\n$/\e[0m\e[K\n/;
+                }
+            }
             print;
         }
 

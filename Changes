@@ -1,6 +1,10 @@
 Changelog for ack
 
 NEXT
+    [FIXES]
+    Color coding no longer "smears" the following line if the colored
+    part of the match wraps to the next line.
+
     [ENHANCEMENTS]
     Little bitty speed enhancements inside.  Nothing major, but it
     all adds up, especially on something as commonly-used as ack.

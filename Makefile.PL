@@ -36,6 +36,13 @@ sub MY::top_targets {
 sub MY::postamble {
     my $file_next_filename = qx(perldoc -l File::Next);
     my $postamble = <<'MAKE_FRAG';
+ACK             = ack
+APP_ACK_PM      = Ack.pm
+STANDALONE      = ack-standalone
+ACK_HELP        = ack-help.txt
+ACK_HELP_TYPES  = ack-help-types.txt
+PERL_T          = $(PERL) -T
+
 .PHONY: tags critic
 
 tags:
@@ -50,15 +57,8 @@ critic:
 	perlcritic -1 -q -profile perlcriticrc ack Ack.pm t/*.t
 
 prof: all
-	perl -d:DProf ack-standalone --color --group -w foo ~/parrot >> /dev/null 2>&1
+	$(PERL_T) -d:DProf ack-standalone --color --group -w foo ~/parrot >> /dev/null 2>&1
 	dprofpp
-
-ACK             = ack
-APP_ACK_PM      = Ack.pm
-STANDALONE      = ack-standalone
-ACK_HELP        = ack-help.txt
-ACK_HELP_TYPES  = ack-help-types.txt
-PERL_T          = $(PERL) -T
 
 $(STANDALONE) : $(ACK) $(APP_ACK_PM) squash Makefile
 	$(PERL_T) squash ack File::Next $(APP_ACK_PM) > $(STANDALONE)

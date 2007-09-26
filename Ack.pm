@@ -93,6 +93,7 @@ BEGIN {
 
     $path_sep_regex = quotemeta( File::Spec->catfile( '', '' ) );
     $is_cygwin = ($^O eq 'cygwin');
+    $is_windows = ($^O =~ /MSWin32/);
     $to_screen = -t *STDOUT;
 }
 
@@ -575,11 +576,12 @@ Set default colors, load Term::ANSIColor on non Windows platforms
 =cut
 
 sub load_colors {
-    $is_windows = ($^O =~ /MSWin32/);
-    eval 'use Term::ANSIColor ();' unless $is_windows;
+    if ( not $is_windows ) {
+        eval 'use Term::ANSIColor ()';
 
-    $ENV{ACK_COLOR_MATCH}    ||= 'black on_yellow';
-    $ENV{ACK_COLOR_FILENAME} ||= 'bold green';
+        $ENV{ACK_COLOR_MATCH}    ||= 'black on_yellow';
+        $ENV{ACK_COLOR_FILENAME} ||= 'bold green';
+    }
 
     return;
 }

@@ -6,6 +6,8 @@ NEXT
     part of the match wraps to the next line.
 
     [ENHANCEMENTS]
+    Support for an .ackrc file.
+
     Little bitty speed enhancements inside.  Nothing major, but it
     all adds up, especially on something as commonly-used as ack.
 

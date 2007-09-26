@@ -11,9 +11,10 @@ our $VERSION   = '1.67_01';
 use File::Next 0.40;
 use App::Ack ();
 
-App::Ack::load_colors();
-
 MAIN: {
+    App::Ack::read_ackrc();
+    App::Ack::load_colors();
+
     if ( $App::Ack::VERSION ne $main::VERSION ) {
         App::Ack::die( "Program/library version mismatch\n\t$0 is $main::VERSION\n\t$INC{'App/Ack.pm'} is $App::Ack::VERSION" );
     }
@@ -279,6 +280,10 @@ still seeing the entire file, as in:
 
 Quote all metacharacters.  PATTERN is treated as a literal.
 
+=item B<--rc=file>
+
+Specify a path to an alternate F<.ackrc> file.
+
 =item B<--sort-files>
 
 Sorts the found files lexically.  Use this if you want your file
@@ -320,9 +325,30 @@ C<\b> metacharacters.
 
 =back
 
+=head1 THE .ackrc FILE
+
+The F<.ackrc> file contains command-line options that are prepended
+to the command line before processing.  Multiple options may live
+on multiple lines.  Lines beginning with a # are ignored.  A F<.ackrc>
+might look like this:
+
+    # Always sort the files
+    --sort-files
+
+    # Always color, even if piping to a filter
+    --color
+
+F<ack> looks in your home directory for the F<.ackrc>.  You can
+specify another location with the F<ACKRC> variable, below.
+
 =head1 ENVIRONMENT VARIABLES
 
 =over 4
+
+=item ACKRC
+
+Specifies the location of the F<.ackrc> file.  If this file doesn't
+exist, F<ack> looks in the default location.
 
 =item ACK_OPTIONS
 

@@ -30,6 +30,7 @@ our $to_screen;
 our %type_wanted;
 
 use File::Spec ();
+use File::Glob ':glob';
 use Getopt::Long ();
 
 BEGIN {
@@ -105,6 +106,27 @@ No user-serviceable parts inside.  F<ack> is all that should use this.
 
 =head1 FUNCTIONS
 
+=head2 read_ackrc
+
+=cut
+
+sub read_ackrc {
+    my @files = ( $ENV{ACKRC}, bsd_glob( '~/.ackrc', GLOB_TILDE ) );
+    for my $filename ( @files ) {
+        if ( defined $filename && -e $filename ) {
+            open( my $fh, '<', $filename ) or die "$filename: $!\n";
+            my @lines = grep { /./ && !/^\s*#/ } <$fh>;
+            chomp @lines;
+            close $fh or die "$filename: $!\n";
+
+            unshift( @ARGV, @lines );
+            last;
+        }
+    }
+
+    return;
+}
+
 =head2 get_command_line_options()
 
 =cut
@@ -159,8 +181,7 @@ sub get_command_line_options {
         }, # type sub
     };
 
-    my @filetypes_supported = filetypes_supported();
-    for my $i ( @filetypes_supported ) {
+    for my $i ( filetypes_supported() ) {
         $getopt_specs->{ "$i!" } = \$type_wanted{ $i };
     }
 

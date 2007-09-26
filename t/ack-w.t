@@ -23,7 +23,8 @@ TRAILING_PUNC: {
 }
 
 TRAILING_METACHAR_BACKSLASH_W: {
-    local $TODO = q{I can't figure why the -w works from the command line, but not inside this test};
+    local $TODO = q{I can't figure why the -w works from the command line, but not inside this test}
+        unless $^O eq 'MSWin32';
     my @expected = (
         'At an old saloon on a street of mud,',
         'Kicking and a-gouging in the mud and the blood and the beer.',

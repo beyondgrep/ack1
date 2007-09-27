@@ -10,7 +10,7 @@ our $VERSION   = '1.67_01';
 
 
 MAIN: {
-    App::Ack::read_ackrc();
+    unshift( @ARGV, App::Ack::read_ackrc() );
     App::Ack::load_colors();
 
     if ( $App::Ack::VERSION ne $main::VERSION ) {
@@ -675,13 +675,14 @@ BEGIN {
 }
 
 our %types;
+our %type_wanted;
 our %mappings;
 our %ignore_dirs;
+
 our $path_sep_regex;
 our $is_cygwin;
 our $is_windows;
 our $to_screen;
-our %type_wanted;
 
 use File::Spec ();
 use File::Glob ':glob';
@@ -771,8 +772,7 @@ sub read_ackrc {
             chomp @lines;
             close $fh or die "$filename: $!\n";
 
-            unshift( @ARGV, @lines );
-            last;
+            return @lines;
         }
     }
 

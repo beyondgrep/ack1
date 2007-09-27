@@ -12,7 +12,7 @@ use File::Next 0.40;
 use App::Ack ();
 
 MAIN: {
-    App::Ack::read_ackrc();
+    unshift( @ARGV, App::Ack::read_ackrc() );
     App::Ack::load_colors();
 
     if ( $App::Ack::VERSION ne $main::VERSION ) {

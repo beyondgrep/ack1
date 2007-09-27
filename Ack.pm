@@ -21,13 +21,14 @@ BEGIN {
 }
 
 our %types;
+our %type_wanted;
 our %mappings;
 our %ignore_dirs;
+
 our $path_sep_regex;
 our $is_cygwin;
 our $is_windows;
 our $to_screen;
-our %type_wanted;
 
 use File::Spec ();
 use File::Glob ':glob';
@@ -108,6 +109,8 @@ No user-serviceable parts inside.  F<ack> is all that should use this.
 
 =head2 read_ackrc
 
+Reads the contents of the .ackrc file and returns the arguments.
+
 =cut
 
 sub read_ackrc {
@@ -128,8 +131,7 @@ sub read_ackrc {
             chomp @lines;
             close $fh or die "$filename: $!\n";
 
-            unshift( @ARGV, @lines );
-            last;
+            return @lines;
         }
     }
 
@@ -137,6 +139,8 @@ sub read_ackrc {
 }
 
 =head2 get_command_line_options()
+
+Gets command-line arguments and does the Ack-specific tweaking.
 
 =cut
 

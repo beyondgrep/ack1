@@ -65,7 +65,6 @@ apply_defaults	Ack.pm	/^sub apply_defaults {$/;"	s
 build_regex	Ack.pm	/^sub build_regex {$/;"	s
 check_with	t/ack-type.t	/^sub check_with {$/;"	s
 critic	Makefile.PL	/^critic:$/;"	l
-dash_a_file_filter	Ack.pm	/^sub dash_a_file_filter {$/;"	s
 die	Ack.pm	/^sub die { ## no critic (ProhibitBuiltinHomonyms)$/;"	s
 filetype_setup	Ack.pm	/^sub filetype_setup {$/;"	s
 filetypes	Ack.pm	/^sub filetypes {$/;"	s
@@ -87,6 +86,7 @@ print_files	Ack.pm	/^sub print_files {$/;"	s
 print_selected_files	Ack.pm	/^sub print_selected_files {$/;"	s
 print_version_statement	Ack.pm	/^sub print_version_statement {$/;"	s
 prof	Makefile.PL	/^prof: all$/;"	l
+read_ackrc	Ack.pm	/^sub read_ackrc {$/;"	s
 run_ack	t/Util.pm	/^sub run_ack {$/;"	s
 search	Ack.pm	/^sub search {$/;"	s
 sets_match	t/Util.pm	/^sub sets_match {$/;"	s

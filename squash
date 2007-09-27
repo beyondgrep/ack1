@@ -26,7 +26,7 @@ for my $arg ( @ARGV ) {
         my $skip = ($filename ne 'ack') && (/^=/ .. /^=cut/);
         if ( !$skip ) {
             # Replace the shebang line
-            s{^#!.+}{#!/usr/bin/env perl -T};
+            s{^#!.+}{#!/usr/bin/env perl};
 
             # Remove Perl::Critic comments.
             # I'd like to remove all comments, but this is a start

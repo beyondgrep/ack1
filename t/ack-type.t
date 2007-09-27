@@ -9,7 +9,7 @@ use File::Next 0.34; # For the reslash() function
 use lib 't';
 use Util qw( sets_match );
 
-delete $ENV{ACK_OPTIONS};
+delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 my $cc = [qw(
     t/swamp/c-source.c

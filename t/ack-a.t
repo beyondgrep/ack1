@@ -7,7 +7,7 @@ use Test::More tests => 1;
 use lib 't';
 use Util;
 
-delete $ENV{ACK_OPTIONS};
+delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 # new files in t/etc must be listed here
 my @expected = qw(

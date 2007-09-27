@@ -7,7 +7,7 @@ use Test::More tests => 4;
 use lib 't';
 use Util;
 
-delete $ENV{ACK_OPTIONS};
+delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 my $ack = 'ack-standalone';
 

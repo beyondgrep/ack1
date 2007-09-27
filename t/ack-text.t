@@ -6,7 +6,8 @@ use strict;
 use Test::More tests => 1;
 use App::Ack ();
 use File::Next ();
-delete $ENV{ACK_OPTIONS};
+
+delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
 use Util;

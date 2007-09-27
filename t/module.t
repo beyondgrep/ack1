@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 use Test::More tests => 4;
-delete $ENV{ACK_OPTIONS};
+delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
 

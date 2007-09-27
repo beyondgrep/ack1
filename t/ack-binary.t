@@ -3,10 +3,11 @@
 use warnings;
 use strict;
 
+delete @ENV{qw( ACK_OPTIONS ACKRC )};
+
 use Test::More tests => 2;
 use App::Ack ();
 use File::Next ();
-delete $ENV{ACK_OPTIONS};
 
 use lib 't';
 use Util;

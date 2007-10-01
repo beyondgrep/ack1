@@ -6,6 +6,9 @@ NEXT
 
     Check for ~/_ackrc, too.
 
+    [ENHANCEMENTS]
+    Added still more sanity checks on option conflicts.
+
 
 1.67_01     Wed Sep 26 13:36:18 CDT 2007
     [FIXES]

@@ -15,7 +15,18 @@ sub slurp {
 sub run_ack {
     my @args = @_;
 
-    my $cmd = "$^X -T ./ack-standalone @_";
+    my $cmd = "$^X -T ./ack-standalone @args";
+    my @results = `$cmd`;
+    chomp @results;
+
+    return @results;
+}
+
+sub pipe_into_ack {
+    my $input = shift;
+    my @args = @_;
+
+    my $cmd = "cat $input | $^X -T ./ack-standalone @args";
     my @results = `$cmd`;
     chomp @results;
 

@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 2;
+use Test::More tests => 4;
 use File::Next ();
 delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
@@ -44,16 +44,15 @@ DASH_C: {
     lists_match( \@results, \@expected, q{Still lookin' for you, in passthru mode} );
 }
 
-#HIGHLIGHTING: {
-#    my @files = qw( t/text/4th-of-july.txt );
-#    my @args = qw( July --text --passthru --color );
-#    my @results = run_ack( @args, @files );
-#
-#    cmp_ok( scalar @results, '=', scalar @full_lyrics, 'Got all the lines back' );
-#
-#    my @escaped_lines = grep { /\e/ } @results;
-#    is( scalar @escaped_lines, 3, 'Three lines are highlighted' );
-#}
+HIGHLIGHTING: {
+    my @ack_args = qw( July --text --passthru --color );
+    my @results = pipe_into_ack( 't/text/4th-of-july.txt', @ack_args );
+
+    cmp_ok( scalar @results, '=', scalar @full_lyrics, 'Got all the lines back' );
+
+    my @escaped_lines = grep { /\e/ } @results;
+    is( scalar @escaped_lines, 3, 'Three lines are highlighted' );
+}
 
 __DATA__
 Alone with the morning burning red

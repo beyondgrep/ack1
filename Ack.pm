@@ -661,8 +661,6 @@ sub search {
     my $regex = shift;
     my $opt = shift;
 
-    $regex = qr// if $opt->{passthru}; # Always match in passthru mode
-
     my $could_be_binary;
     my $fh;
     if ( $filename eq '-' ) {
@@ -688,7 +686,10 @@ sub search {
     my $output_func = $opt->{output};
     local $_ = undef;
     while (<$fh>) {
-        next unless /$regex/o;
+        if ( !/$regex/o ) {
+            print if $opt->{passthru};
+            next;
+        }
         ++$nmatches;
         next if $opt->{count}; # Counting means no lines get displayed
 
@@ -703,7 +704,6 @@ sub search {
             }
             $could_be_binary = 0;
         }
-
         if ( $opt->{show_filename} ) {
             if ( not defined $display_filename ) {
                 $display_filename =

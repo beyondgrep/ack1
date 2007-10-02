@@ -51,7 +51,7 @@ HIGHLIGHTING: {
     cmp_ok( scalar @results, '=', scalar @full_lyrics, 'Got all the lines back' );
 
     my @escaped_lines = grep { /\e/ } @results;
-    is( scalar @escaped_lines, 3, 'Three lines are highlighted' );
+    is( scalar @escaped_lines, 2, 'Only two lines are highlighted' );
 }
 
 __DATA__

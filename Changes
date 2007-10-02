@@ -6,6 +6,10 @@ NEXT
 
     Check for ~/_ackrc, too.
 
+    --passthru would highlight every single zero-width space between
+    characters.  Oops.  The effect would be to have your output be
+    15x larger than necessary.
+
     [ENHANCEMENTS]
     Added still more sanity checks on option conflicts.
 

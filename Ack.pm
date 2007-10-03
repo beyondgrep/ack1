@@ -655,6 +655,8 @@ sub is_interesting {
 Opens the file specified by I<$filename> and returns a filehandle and
 a flag that says whether it could be binary.
 
+If there's a failure, it throws a warning and returns an empty list.
+
 =cut
 
 sub open_file {
@@ -686,11 +688,11 @@ Main search method
 =cut
 
 sub search {
+    my $fh = shift;
+    my $could_be_binary = shift;
     my $filename = shift;
     my $regex = shift;
     my $opt = shift;
-
-    my ($fh,$could_be_binary) = open_file( $filename );
 
     # Negated counting is a pain, so I'm putting it in its own
     # optimizable subroutine.

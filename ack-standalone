@@ -1328,20 +1328,18 @@ sub _search_v {
             return 0 if $opt->{l}; # For list mode, any match means we can bail
             next;
         }
-        else {
-            ++$nmatches;
-            if ( $show_lines ) {
-                if ( $could_be_binary ) {
-                    if ( -B $filename ) {
-                        print "Binary file $filename matches\n";
-                        last;
-                    }
-                    $could_be_binary = 0;
+        ++$nmatches;
+        if ( $show_lines ) {
+            if ( $could_be_binary ) {
+                if ( -B $filename ) {
+                    print "Binary file $filename matches\n";
+                    last;
                 }
-                print "${filename}:" if $opt->{show_filename};
-                print $_;
-                last if $opt->{m} && ( $nmatches >= $opt->{m} );
+                $could_be_binary = 0;
             }
+            print "${filename}:" if $opt->{show_filename};
+            print $_;
+            last if $opt->{m} && ( $nmatches >= $opt->{m} );
         }
     } # while
     close $fh or App::Ack::warn( "$filename: $!" );

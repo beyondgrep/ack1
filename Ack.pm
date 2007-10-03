@@ -650,6 +650,35 @@ sub is_interesting {
 }
 
 
+=head2 open_file( $filename )
+
+Opens the file specified by I<$filename> and returns a filehandle and
+a flag that says whether it could be binary.
+
+=cut
+
+sub open_file {
+    my $filename = shift;
+
+    my $fh;
+    my $could_be_binary;
+
+    if ( $filename eq '-' ) {
+        $fh = *STDIN;
+        $could_be_binary = 0;
+    }
+    else {
+        if ( !open( $fh, '<', $filename ) ) {
+            App::Ack::warn( "$filename: $!" );
+            return;
+        }
+        $could_be_binary = 1;
+    }
+
+    return ($fh,$could_be_binary);
+}
+
+
 =head2 search
 
 Main search method
@@ -661,19 +690,7 @@ sub search {
     my $regex = shift;
     my $opt = shift;
 
-    my $could_be_binary;
-    my $fh;
-    if ( $filename eq '-' ) {
-        $fh = *STDIN;
-        $could_be_binary = 0;
-    }
-    else {
-        if ( !open( $fh, '<', $filename ) ) {
-            App::Ack::warn( "$filename: $!" );
-            return 0;
-        }
-        $could_be_binary = 1;
-    }
+    my ($fh,$could_be_binary) = open_file( $filename );
 
     # Negated counting is a pain, so I'm putting it in its own
     # optimizable subroutine.

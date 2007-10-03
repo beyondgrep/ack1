@@ -1234,7 +1234,7 @@ sub search {
     # Negated counting is a pain, so I'm putting it in its own
     # optimizable subroutine.
     if ( $opt->{v} ) {
-        return _search_v( $fh, $could_be_binary, $filename, $regex, $opt );
+        return search_v( $fh, $could_be_binary, $filename, $regex, $opt );
     }
 
     my $display_filename;
@@ -1312,7 +1312,8 @@ sub search {
 }   # search()
 
 
-sub _search_v {
+
+sub search_v {
     my $fh = shift;
     my $could_be_binary = shift;
     my $filename = shift;
@@ -1353,7 +1354,7 @@ sub _search_v {
     }
 
     return $nmatches;
-} # _search_v()
+} # search_v()
 
 
 sub apply_defaults {

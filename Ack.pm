@@ -695,7 +695,7 @@ sub search {
     # Negated counting is a pain, so I'm putting it in its own
     # optimizable subroutine.
     if ( $opt->{v} ) {
-        return _search_v( $fh, $could_be_binary, $filename, $regex, $opt );
+        return search_v( $fh, $could_be_binary, $filename, $regex, $opt );
     }
 
     my $display_filename;
@@ -773,7 +773,13 @@ sub search {
 }   # search()
 
 
-sub _search_v {
+=head2 search_v( $fh, $could_be_binary, $filename, $regex, $opt )
+
+Optimized version of C<search()>.
+
+=cut
+
+sub search_v {
     my $fh = shift;
     my $could_be_binary = shift;
     my $filename = shift;
@@ -814,7 +820,7 @@ sub _search_v {
     }
 
     return $nmatches;
-} # _search_v()
+} # search_v()
 
 =head2 apply_defaults
 

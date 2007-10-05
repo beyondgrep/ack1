@@ -89,7 +89,7 @@ sub main {
     }
     elsif ( $opt{g} ) {
         my $regex = $opt{i} ? qr/$opt{g}/i : qr/$opt{g}/;
-        App::Ack::print_selected_files($iter, $regex, $opt{1});
+        App::Ack::print_files($iter, $opt{1}, $regex);
     }
     else {
         $opt{show_filename} = 0 if $opt{h};

@@ -87,7 +87,7 @@ sub main {
     }
     elsif ( $opt{g} ) {
         my $regex = $opt{i} ? qr/$opt{g}/i : qr/$opt{g}/;
-        App::Ack::print_selected_files($iter, $regex, $opt{1});
+        App::Ack::print_files($iter, $opt{1}, $regex);
     }
     else {
         $opt{show_filename} = 0 if $opt{h};
@@ -1383,25 +1383,15 @@ sub filetypes_supported_set {
 }
 
 
+
 sub print_files {
-    my ($iter, $one) = @_;
-    while ( defined ( my $file = $iter->() ) ) {
-        print "$file\n";
-        last if $one;
-    }
-
-    return;
-}
-
-
-sub print_selected_files {
     my $iter = shift;
-    my $regex = shift;
     my $one = shift;
+    my $regex = shift;
 
     while ( defined ( my $file = $iter->() ) ) {
-        if ( $file =~ m/$regex/o ) {
-            print "$file\n";
+        if ( (not defined $regex) || ($file =~ m/$regex/o) ) {
+            print $file, "\n";
             last if $one;
         }
     }

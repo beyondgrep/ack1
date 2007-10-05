@@ -859,38 +859,22 @@ sub filetypes_supported_set {
     return grep { defined $type_wanted{$_} && ($type_wanted{$_} == 1) } filetypes_supported();
 }
 
-=head2 print_files( $iter, $one )
 
-Prints all the files returned by the iterator.  If I<$one> is set,
-stop after the first.
-
-=cut
-
-sub print_files {
-    my ($iter, $one) = @_;
-    while ( defined ( my $file = $iter->() ) ) {
-        print "$file\n";
-        last if $one;
-    }
-
-    return;
-}
-
-=head2 print_selected_files( $iter, $regex, $one )
+=head2 print_files( $iter, $one [, $regex] )
 
 Prints all the files returned by the iterator matching I<$regex>.
 If I<$one> is set, stop after the first.
 
 =cut
 
-sub print_selected_files {
+sub print_files {
     my $iter = shift;
-    my $regex = shift;
     my $one = shift;
+    my $regex = shift;
 
     while ( defined ( my $file = $iter->() ) ) {
-        if ( $file =~ m/$regex/o ) {
-            print "$file\n";
+        if ( (not defined $regex) || ($file =~ m/$regex/o) ) {
+            print $file, "\n";
             last if $one;
         }
     }

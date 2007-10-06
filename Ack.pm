@@ -771,7 +771,7 @@ sub search {
 
 =head2 search_v( $fh, $could_be_binary, $filename, $regex, $opt )
 
-Optimized version of C<search()>.
+Optimized version of C<search()> that searches for non-matches.
 
 =cut
 

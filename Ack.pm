@@ -694,12 +694,6 @@ sub search {
     my $regex = shift;
     my $opt = shift;
 
-    # Negated counting is a pain, so I'm putting it in its own
-    # optimizable subroutine.
-    if ( $opt->{v} ) {
-        return search_v( $fh, $could_be_binary, $filename, $regex, $opt );
-    }
-
     my $display_filename;
     my $nmatches = 0;
     my $output_func = $opt->{output};

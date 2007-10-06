@@ -95,9 +95,15 @@ sub main {
         $opt{show_filename} = 0 if $opt{output};
 
         my $nmatches = 0;
-        while ( defined ( my $file = $iter->() ) ) {
-            my ($fh,$could_be_binary) = App::Ack::open_file( $file );
-            $nmatches += App::Ack::search( $fh, $could_be_binary, $file, $regex, \%opt );
+        while ( defined ( my $filename = $iter->() ) ) {
+            my ($fh,$could_be_binary) = App::Ack::open_file( $filename );
+            # Negated counting is a pain, so I'm putting it in its own optimizable subroutine.
+            if ( $opt{v} ) {
+                $nmatches += App::Ack::search_v( $fh, $could_be_binary, $filename, $regex, \%opt );
+            }
+            else {
+                $nmatches += App::Ack::search( $fh, $could_be_binary, $filename, $regex, \%opt );
+            }
             last if $nmatches && $opt{1};
         }
     }
@@ -1231,12 +1237,6 @@ sub search {
     my $filename = shift;
     my $regex = shift;
     my $opt = shift;
-
-    # Negated counting is a pain, so I'm putting it in its own
-    # optimizable subroutine.
-    if ( $opt->{v} ) {
-        return search_v( $fh, $could_be_binary, $filename, $regex, $opt );
-    }
 
     my $display_filename;
     my $nmatches = 0;

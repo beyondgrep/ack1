@@ -766,13 +766,13 @@ sub search {
 }   # search()
 
 
-=head2 search_l_and_c
+=head2 search_and_list
 
-Optimized version of searching for -l
+Optimized version of searching for -l and --count
 
 =cut
 
-sub search_l_and_c {
+sub search_and_list {
     my $fh = shift;
     my $filename = shift;
     my $regex = shift;
@@ -796,7 +796,7 @@ sub search_l_and_c {
     }
 
     return $nmatches;
-}   # search_l()
+}   # search_and_list()
 
 
 =head2 search_v( $fh, $could_be_binary, $filename, $regex, $opt )

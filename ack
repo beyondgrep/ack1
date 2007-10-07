@@ -110,7 +110,7 @@ sub main {
 
             # -v has -l handling, too, so check for -v first
             elsif ( $opt{l} || $opt{count} ) {
-                $nmatches += App::Ack::search_l_and_c( $fh, $filename, $regex, \%opt );
+                $nmatches += App::Ack::search_and_list( $fh, $filename, $regex, \%opt );
                 last if $opt{m} && ( $nmatches >= $opt{m} );
             }
             else {

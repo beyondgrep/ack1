@@ -322,7 +322,7 @@ sub options_sanity_check {
     my $ok = 1;
 
     # List mode doesn't make sense with any of these
-    $ok = 0 if _option_conflict( \%opts, 'l', [qw( f g group o option passthru )] );
+    $ok = 0 if _option_conflict( \%opts, 'l', [qw( f g group o output passthru )] );
 
     # Passthru negates the need for a lot of switches
     $ok = 0 if _option_conflict( \%opts, 'passthru', [qw( f g group l )] );
@@ -334,9 +334,8 @@ sub options_sanity_check {
 
     # No sense to have negation with -o or --output
     for my $switch ( qw( v ) ) {
-        $ok = 0 if _option_conflict( \%opts, $switch, [qw( o option passthru )] );
+        $ok = 0 if _option_conflict( \%opts, $switch, [qw( o output passthru )] );
     }
-
 
     return $ok;
 }

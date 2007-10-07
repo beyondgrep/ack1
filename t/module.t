@@ -14,7 +14,7 @@ BEGIN {
 
 {
     my $copyright = App::Ack::get_copyright();
-    like $copyright, qr{Copyright\s\d+-\d+\sAndy Lester}, 'Copyright';
+    like $copyright, qr{Copyright \d+-\d+ Andy Lester}, 'Copyright';
 }
 
 {

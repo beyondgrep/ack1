@@ -1,6 +1,6 @@
 Changelog for ack
 
-NEXT
+1.67_02     Sun Oct  7 14:50:38 CDT 2007
     [FIXES]
     ack no longer uses -T, but the tests still use it.
 

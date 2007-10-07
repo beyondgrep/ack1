@@ -281,10 +281,7 @@ sub filetypes {
         return;
     }
     my $header = <$fh>;
-    if ( not close $fh ) {
-        App::Ack::warn( "$filename: $!" );
-        return;
-    }
+    App::Ack::close_file( $fh, $filename ) or return;
 
     if ( $header =~ /^#!/ ) {
         return ($1,TEXT)       if $header =~ /\b(ruby|p(?:erl|hp|ython))\b/;
@@ -680,6 +677,20 @@ sub open_file {
     return ($fh,$could_be_binary);
 }
 
+=head2 close_file( $fh, $filename )
+
+Close L<$fh> opened from L<$filename>.
+
+=cut
+
+sub close_file {
+    if ( close $_[0] ) {
+        return 1;
+    }
+    App::Ack::warn( "$_[1]: $!" );
+    return 0;
+}
+
 
 =head2 search
 
@@ -704,11 +715,6 @@ sub search {
             next;
         }
         ++$nmatches;
-        next if $opt->{count}; # Counting means no lines get displayed
-
-        # No point in searching more if we only want a list,
-        # and don't want a count.
-        last if $opt->{l};
 
         if ( $could_be_binary ) {
             if ( -B $filename ) {
@@ -750,23 +756,47 @@ sub search {
 
         last if $opt->{m} && ( $nmatches >= $opt->{m} );
     } # while
-    close $fh or App::Ack::warn( "$filename: $!" );
+    App::Ack::close_file( $fh, $filename );
 
-    if ( $opt->{count} ) {
-        if ( $nmatches || !$opt->{l} ) {
-            print "${filename}:" if $opt->{show_filename};
-            print "${nmatches}\n";
-        }
-    }
-    elsif ( $opt->{l} ) {
-        print "$filename\n" if $nmatches;
-    }
-    else {
-        print "\n" if $nmatches && $opt->{show_filename} && $opt->{group};
+    if ( $nmatches && $opt->{show_filename} && $opt->{group} ) {
+        print "\n";
     }
 
     return $nmatches;
 }   # search()
+
+
+=head2 search_l_and_c
+
+Optimized version of searching for -l
+
+=cut
+
+sub search_l_and_c {
+    my $fh = shift;
+    my $filename = shift;
+    my $regex = shift;
+    my $opt = shift;
+
+    local $_ = undef;
+    my $nmatches = 0;
+
+    while (<$fh>) {
+        if ( /$regex/o ) {
+            ++$nmatches;
+            last unless $opt->{count};
+        }
+    }
+    App::Ack::close_file( $fh, $filename );
+
+    if ( $nmatches || !$opt->{l} ) {
+        print $filename;
+        print ":$nmatches" if $opt->{count};
+        print "\n";
+    }
+
+    return $nmatches;
+}   # search_l()
 
 
 =head2 search_v( $fh, $could_be_binary, $filename, $regex, $opt )
@@ -805,14 +835,14 @@ sub search_v {
             last if $opt->{m} && ( $nmatches >= $opt->{m} );
         }
     } # while
-    close $fh or App::Ack::warn( "$filename: $!" );
+    App::Ack::close_file( $fh, $filename );
 
     if ( $opt->{count} ) {
         print "${filename}:" if $opt->{show_filename};
         print "${nmatches}\n";
     }
-    else {
-        print "$filename\n" if $opt->{l};
+    elsif ( $opt->{l} ) {
+        print $filename, "\n";
     }
 
     return $nmatches;

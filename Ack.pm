@@ -708,8 +708,9 @@ sub search {
     my $nmatches = 0;
     my $output_func = $opt->{output};
 
+    my $v = $opt->{v};
     while (<$fh>) {
-        if ( !/$regex/o ) {
+        if ( $v ? /$regex/o : !/$regex/o ) {
             print if $opt->{passthru};
             next;
         }
@@ -766,7 +767,8 @@ sub search {
 
 =head2 search_and_list
 
-Optimized version of searching for -l and --count
+Optimized version of searching for -l and --count, which do not
+show lines.
 
 =cut
 
@@ -809,39 +811,6 @@ sub search_and_list {
     return $nmatches ? 1 : 0;
 }   # search_and_list()
 
-
-=head2 search_v( $fh, $could_be_binary, $filename, $regex, $opt )
-
-Optimized version of C<search()> that searches for non-matches.
-
-=cut
-
-sub search_v {
-    my $fh = shift;
-    my $could_be_binary = shift;
-    my $filename = shift;
-    my $regex = shift;
-    my $opt = shift;
-
-    my $nmatches = 0; # Although in here, it's really $n_non_matches. :-)
-
-    while (<$fh>) {
-        next if /$regex/o;
-        ++$nmatches;
-        if ( $could_be_binary ) {
-            if ( -B $filename ) {
-                print "Binary file $filename matches\n";
-                last;
-            }
-            $could_be_binary = 0;
-        }
-        print $filename, ':' if $opt->{show_filename};
-        print;
-        last if $opt->{m} && ( $nmatches >= $opt->{m} );
-    } # while
-
-    return $nmatches;
-} # search_v()
 
 =head2 apply_defaults
 

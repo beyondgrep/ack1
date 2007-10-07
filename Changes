@@ -13,6 +13,8 @@ NEXT
     [ENHANCEMENTS]
     Added still more sanity checks on option conflicts.
 
+    The output for -v negative searching now matches regular searching.
+
 
 1.67_01     Wed Sep 26 13:36:18 CDT 2007
     [FIXES]

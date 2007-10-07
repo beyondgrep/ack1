@@ -825,35 +825,21 @@ sub search_v {
     my $opt = shift;
 
     my $nmatches = 0; # Although in here, it's really $n_non_matches. :-)
-    my $show_lines = !($opt->{l} || $opt->{count});
 
     while (<$fh>) {
-        if ( /$regex/o ) {
-            return 0 if $opt->{l}; # For list mode, any match means we can bail
-            next;
-        }
+        next if /$regex/o;
         ++$nmatches;
-        if ( $show_lines ) {
-            if ( $could_be_binary ) {
-                if ( -B $filename ) {
-                    print "Binary file $filename matches\n";
-                    last;
-                }
-                $could_be_binary = 0;
+        if ( $could_be_binary ) {
+            if ( -B $filename ) {
+                print "Binary file $filename matches\n";
+                last;
             }
-            print $filename, ':' if $opt->{show_filename};
-            print;
-            last if $opt->{m} && ( $nmatches >= $opt->{m} );
+            $could_be_binary = 0;
         }
-    } # while
-
-    if ( $opt->{count} ) {
         print $filename, ':' if $opt->{show_filename};
-        print $nmatches, "\n";
-    }
-    elsif ( $opt->{l} ) {
-        print $filename, "\n";
-    }
+        print;
+        last if $opt->{m} && ( $nmatches >= $opt->{m} );
+    } # while
 
     return $nmatches;
 } # search_v()

@@ -756,7 +756,6 @@ sub search {
 
         last if $opt->{m} && ( $nmatches >= $opt->{m} );
     } # while
-    App::Ack::close_file( $fh, $filename );
 
     if ( $nmatches && $opt->{show_filename} && $opt->{group} ) {
         print "\n";
@@ -787,7 +786,6 @@ sub search_and_list {
             last unless $opt->{count};
         }
     }
-    App::Ack::close_file( $fh, $filename );
 
     if ( $nmatches || !$opt->{l} ) {
         print $filename;
@@ -835,7 +833,6 @@ sub search_v {
             last if $opt->{m} && ( $nmatches >= $opt->{m} );
         }
     } # while
-    App::Ack::close_file( $fh, $filename );
 
     if ( $opt->{count} ) {
         print "${filename}:" if $opt->{show_filename};

@@ -116,6 +116,7 @@ sub main {
             else {
                 $nmatches += App::Ack::search( $fh, $could_be_binary, $filename, $regex, \%opt );
             }
+            App::Ack::close_file( $fh, $filename );
             last if $nmatches && $opt{1};
         }
     }

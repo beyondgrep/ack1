@@ -789,7 +789,7 @@ sub search_and_list {
 
     if ( $nmatches || !$opt->{l} ) {
         print $filename;
-        print ":$nmatches" if $opt->{count};
+        print ':', $nmatches if $opt->{count};
         print "\n";
     }
 
@@ -828,15 +828,15 @@ sub search_v {
                 }
                 $could_be_binary = 0;
             }
-            print "${filename}:" if $opt->{show_filename};
-            print $_;
+            print $filename, ':' if $opt->{show_filename};
+            print;
             last if $opt->{m} && ( $nmatches >= $opt->{m} );
         }
     } # while
 
     if ( $opt->{count} ) {
-        print "${filename}:" if $opt->{show_filename};
-        print "${nmatches}\n";
+        print $filename, ':' if $opt->{show_filename};
+        print $nmatches, "\n";
     }
     elsif ( $opt->{l} ) {
         print $filename, "\n";

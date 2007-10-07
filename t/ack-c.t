@@ -18,7 +18,7 @@ DASH_L: {
     my @args = qw( religion -i -a -l );
     my @results = run_ack( @args, @files );
 
-    sets_match( \@results, \@expected, 'Looking for religion' );
+    sets_match( \@results, \@expected, 'Looking for religion with -l' );
 }
 
 DASH_CAPITAL_L: {
@@ -35,7 +35,7 @@ DASH_CAPITAL_L: {
         my @args = ( 'religion', '-a', @{$switches} );
         my @results = run_ack( @args, @files );
 
-        sets_match( \@results, \@expected, 'Looking for religion' );
+        sets_match( \@results, \@expected, "Looking for religion with @{$switches}" );
     }
 }
 

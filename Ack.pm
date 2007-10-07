@@ -708,7 +708,7 @@ sub search {
     my $display_filename;
     my $nmatches = 0;
     my $output_func = $opt->{output};
-    local $_ = undef;
+
     while (<$fh>) {
         if ( !/$regex/o ) {
             print if $opt->{passthru};
@@ -777,7 +777,6 @@ sub search_and_list {
     my $regex = shift;
     my $opt = shift;
 
-    local $_ = undef;
     my $nmatches = 0;
 
     while (<$fh>) {
@@ -811,9 +810,8 @@ sub search_v {
     my $opt = shift;
 
     my $nmatches = 0; # Although in here, it's really $n_non_matches. :-)
-
     my $show_lines = !($opt->{l} || $opt->{count});
-    local $_ = undef;
+
     while (<$fh>) {
         if ( /$regex/o ) {
             return 0 if $opt->{l}; # For list mode, any match means we can bail

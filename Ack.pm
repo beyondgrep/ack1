@@ -778,21 +778,36 @@ sub search_and_list {
     my $opt = shift;
 
     my $nmatches = 0;
+    my $v = $opt->{v};
+    my $count = $opt->{count};
 
     while (<$fh>) {
-        if ( /$regex/o ) {
-            ++$nmatches;
-            last unless $opt->{count};
+        if ( $v ) {
+            if ( /$regex/o ) {
+                return 0 unless $count;
+            }
+            else {
+                ++$nmatches;
+            }
+        }
+        else {
+            if ( /$regex/o ) {
+                ++$nmatches;
+                last unless $count;
+            }
         }
     }
 
-    if ( $nmatches || !$opt->{l} ) {
+    if ( $nmatches ) {
         print $filename;
-        print ':', $nmatches if $opt->{count};
+        print ':', $nmatches if $count;
         print "\n";
     }
+    elsif ( $count && !$opt->{l} ) {
+        print "$filename:0\n";;
+    }
 
-    return $nmatches;
+    return $nmatches ? 1 : 0;
 }   # search_and_list()
 
 

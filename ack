@@ -103,16 +103,15 @@ sub main {
 
         while ( defined ( my $filename = $iter->() ) ) {
             my ($fh,$could_be_binary) = App::Ack::open_file( $filename );
-            # Negated counting is a pain, so I'm putting it in its own optimizable subroutine.
-            if ( $opt{v} ) {
-                $nmatches += App::Ack::search_v( $fh, $could_be_binary, $filename, $regex, \%opt );
-            }
-
-            # -v has -l handling, too, so check for -v first
-            elsif ( $opt{l} || $opt{count} ) {
+            if ( $opt{l} || $opt{count} ) {
                 $nmatches += App::Ack::search_and_list( $fh, $filename, $regex, \%opt );
                 last if $opt{m} && ( $nmatches >= $opt{m} );
             }
+            # Negated counting is a pain, so I'm putting it in its own optimizable subroutine.
+            elsif ( $opt{v} ) {
+                $nmatches += App::Ack::search_v( $fh, $could_be_binary, $filename, $regex, \%opt );
+            }
+            # -v has -l handling, too, so check for -v first
             else {
                 $nmatches += App::Ack::search( $fh, $could_be_binary, $filename, $regex, \%opt );
             }

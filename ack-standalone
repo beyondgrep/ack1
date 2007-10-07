@@ -101,16 +101,15 @@ sub main {
 
         while ( defined ( my $filename = $iter->() ) ) {
             my ($fh,$could_be_binary) = App::Ack::open_file( $filename );
-            # Negated counting is a pain, so I'm putting it in its own optimizable subroutine.
-            if ( $opt{v} ) {
-                $nmatches += App::Ack::search_v( $fh, $could_be_binary, $filename, $regex, \%opt );
-            }
-
-            # -v has -l handling, too, so check for -v first
-            elsif ( $opt{l} || $opt{count} ) {
+            if ( $opt{l} || $opt{count} ) {
                 $nmatches += App::Ack::search_and_list( $fh, $filename, $regex, \%opt );
                 last if $opt{m} && ( $nmatches >= $opt{m} );
             }
+            # Negated counting is a pain, so I'm putting it in its own optimizable subroutine.
+            elsif ( $opt{v} ) {
+                $nmatches += App::Ack::search_v( $fh, $could_be_binary, $filename, $regex, \%opt );
+            }
+            # -v has -l handling, too, so check for -v first
             else {
                 $nmatches += App::Ack::search( $fh, $could_be_binary, $filename, $regex, \%opt );
             }
@@ -1323,21 +1322,36 @@ sub search_and_list {
     my $opt = shift;
 
     my $nmatches = 0;
+    my $v = $opt->{v};
+    my $count = $opt->{count};
 
     while (<$fh>) {
-        if ( /$regex/o ) {
-            ++$nmatches;
-            last unless $opt->{count};
+        if ( $v ) {
+            if ( /$regex/o ) {
+                return 0 unless $count;
+            }
+            else {
+                ++$nmatches;
+            }
+        }
+        else {
+            if ( /$regex/o ) {
+                ++$nmatches;
+                last unless $count;
+            }
         }
     }
 
-    if ( $nmatches || !$opt->{l} ) {
+    if ( $nmatches ) {
         print $filename;
-        print ':', $nmatches if $opt->{count};
+        print ':', $nmatches if $count;
         print "\n";
     }
+    elsif ( $count && !$opt->{l} ) {
+        print "$filename:0\n";;
+    }
 
-    return $nmatches;
+    return $nmatches ? 1 : 0;
 }   # search_and_list()
 
 

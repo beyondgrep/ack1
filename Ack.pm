@@ -788,8 +788,8 @@ sub search_and_list {
     my $v = $opt->{v};
     my $count = $opt->{count};
 
-    while (<$fh>) {
-        if ( $v ) {
+    if ( $v ) {
+        while (<$fh>) {
             if ( /$regex/o ) {
                 return 0 unless $count;
             }
@@ -797,7 +797,9 @@ sub search_and_list {
                 ++$nmatches;
             }
         }
-        else {
+    }
+    else {
+        while (<$fh>) {
             if ( /$regex/o ) {
                 ++$nmatches;
                 last unless $count;

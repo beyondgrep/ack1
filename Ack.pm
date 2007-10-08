@@ -713,6 +713,7 @@ sub search {
     my $show_filename = $opt->{show_filename};
     my $max = $opt->{m};
     my $group = $opt->{group};
+    my $color = $opt->{color};
 
     while (<$fh>) {
         if ( $v ? /$regex/o : !/$regex/o ) {
@@ -731,7 +732,7 @@ sub search {
         if ( $show_filename ) {
             if ( not defined $display_filename ) {
                 $display_filename =
-                    $opt->{color}
+                    $color
                         ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} )
                         : $filename;
             }
@@ -750,7 +751,7 @@ sub search {
             }
         }
         else {
-            if ( $opt->{color} ) {
+            if ( $color ) {
                 if ( s/($regex)/Term::ANSIColor::colored($1,$ENV{ACK_COLOR_MATCH})/eg ) {
                     # Before \n, reset the color and clear to end of line
                     s/\n$/\e[0m\e[K\n/;

@@ -1,5 +1,10 @@
 Changelog for ack
 
+NEXT
+
+    [INTERNALS]
+    Added tests for ack -h and -H.
+
 1.67_02     Sun Oct  7 14:50:38 CDT 2007
     [FIXES]
     ack no longer uses -T, but the tests still use it.

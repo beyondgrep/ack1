@@ -691,7 +691,7 @@ sub close_file {
 }
 
 
-=head2 search
+=head2 search( $fh, $could_be_binary, $filename, $regex, \%opt )
 
 Main search method
 
@@ -709,9 +709,11 @@ sub search {
     my $output_func = $opt->{output};
 
     my $v = $opt->{v};
+    my $passthru = $opt->{passthru};
+    my $show_filename = $opt->{show_filename};
     while (<$fh>) {
         if ( $v ? /$regex/o : !/$regex/o ) {
-            print if $opt->{passthru};
+            print if $passthru;
             next;
         }
         ++$nmatches;
@@ -723,7 +725,7 @@ sub search {
             }
             $could_be_binary = 0;
         }
-        if ( $opt->{show_filename} ) {
+        if ( $show_filename ) {
             if ( not defined $display_filename ) {
                 $display_filename =
                     $opt->{color}
@@ -731,12 +733,12 @@ sub search {
                         : $filename;
             }
             if ( $opt->{group} ) {
-                print "$display_filename\n" if $nmatches == 1;
-                print "$.:";
+                print $display_filename, "\n" if $nmatches == 1;
             }
             else {
-                print "${display_filename}:$.:";
+                print $display_filename, ':';
             }
+            print $., ':';
         }
 
         if ( $output_func ) {
@@ -765,7 +767,7 @@ sub search {
 }   # search()
 
 
-=head2 search_and_list
+=head2 search_and_list( $fh, $filename, $regex, \%opt )
 
 Optimized version of searching for -l and --count, which do not
 show lines.
@@ -805,7 +807,7 @@ sub search_and_list {
         print "\n";
     }
     elsif ( $count && !$opt->{l} ) {
-        print "$filename:0\n";;
+        print "$filename:0\n";
     }
 
     return $nmatches ? 1 : 0;

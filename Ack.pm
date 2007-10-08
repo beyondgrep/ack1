@@ -711,6 +711,9 @@ sub search {
     my $v = $opt->{v};
     my $passthru = $opt->{passthru};
     my $show_filename = $opt->{show_filename};
+    my $max = $opt->{m};
+    my $group = $opt->{group};
+
     while (<$fh>) {
         if ( $v ? /$regex/o : !/$regex/o ) {
             print if $passthru;
@@ -732,7 +735,7 @@ sub search {
                         ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} )
                         : $filename;
             }
-            if ( $opt->{group} ) {
+            if ( $group ) {
                 print $display_filename, "\n" if $nmatches == 1;
             }
             else {
@@ -756,10 +759,10 @@ sub search {
             print;
         }
 
-        last if $opt->{m} && ( $nmatches >= $opt->{m} );
+        last if $max && ( $nmatches >= $max );
     } # while
 
-    if ( $nmatches && $opt->{show_filename} && $opt->{group} ) {
+    if ( $nmatches && $show_filename && $group ) {
         print "\n";
     }
 

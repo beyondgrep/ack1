@@ -67,7 +67,7 @@ smallprof: all
 	sort -k 2nr,2 smallprof.out | less
 
 $(STANDALONE) : $(ACK) $(APP_ACK_PM) squash Makefile
-	$(PERL_T) squash ack File::Next $(APP_ACK_PM) > $(STANDALONE)
+	$(PERL) squash ack File::Next $(APP_ACK_PM) > $(STANDALONE)
 	$(CHMOD) +x $(STANDALONE)
 	$(PERL_T) -c $(STANDALONE)
 

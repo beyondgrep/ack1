@@ -474,6 +474,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Nigel Metheringham,
 Gabor Szabo,
 Tod Hagan,
 Michael Hendricks,
@@ -805,8 +806,8 @@ sub get_command_line_options {
         'g=s'                   => \$opt{g},
         'follow!'               => \$opt{follow},
         'group!'                => \$opt{group},
-        h                       => \$opt{h},
-        H                       => \$opt{H},
+        'h|no-filename'         => \$opt{h},
+        'H|with-filename'       => \$opt{H},
         'i|ignore-case'         => \$opt{i},
         'l|files-with-matches'  => \$opt{l},
         'L|files-without-match' => sub { $opt{l} = $opt{v} = 1 },

@@ -1,9 +1,14 @@
 Changelog for ack
 
 NEXT
+    [FIXES]
+    Implemented --with-filename and --no-filename, which were
+    documented but never implemented.  Thanks to Nigel Metheringham
+    for the heads-up.
 
     [INTERNALS]
     Added tests for ack -h and -H.
+
 
 1.67_02     Sun Oct  7 14:50:38 CDT 2007
     [FIXES]

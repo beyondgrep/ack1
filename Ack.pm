@@ -785,10 +785,9 @@ sub search_and_list {
     my $opt = shift;
 
     my $nmatches = 0;
-    my $v = $opt->{v};
     my $count = $opt->{count};
 
-    if ( $v ) {
+    if ( $opt->{v} ) {
         while (<$fh>) {
             if ( /$regex/o ) {
                 return 0 unless $count;

@@ -57,13 +57,15 @@ critic:
 	perlcritic -1 -q -profile perlcriticrc ack Ack.pm t/*.t
 
 prof: all
-#	$(PERL_T) -d:DProf ack-standalone --color --group -w foo ~/parrot >> /dev/null 2>&1
-	$(PERL_T) -d:DProf ack-standalone -l -w foo ~/parrot >> /dev/null 2>&1
+	$(PERL_T) -d:DProf ack-standalone --color --group -w foo ~/parrot >> /dev/null 2>&1
+	dprofpp -R
+
+profiler: all
+	$(PERL_T) -MDevel::Profiler ack-standalone --color --group -w foo ~/parrot >> /dev/null 2>&1
 	dprofpp -R
 
 smallprof: all
-#	$(PERL_T) -d:SmallProf ack-standalone --color --group -w foo ~/parrot >> /dev/null 2>&1
-	$(PERL_T) -d:SmallProf ack-standalone -l -w foo ~/parrot >> /dev/null 2>&1
+	$(PERL_T) -d:SmallProf ack-standalone --color --group -w foo ~/parrot >> /dev/null 2>&1
 	sort -k 2nr,2 smallprof.out | less
 
 $(STANDALONE) : $(ACK) $(APP_ACK_PM) squash Makefile

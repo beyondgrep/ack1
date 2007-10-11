@@ -14,6 +14,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]csharp    .cs
     --[no]css       .css
     --[no]elisp     .el
+    --[no]erlang    .erl
     --[no]fortran   .f .f77 .f90 .f95 .f03 .for .ftn .fpp
     --[no]haskell   .hs .lhs
     --[no]hh        .h

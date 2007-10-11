@@ -6,6 +6,9 @@ NEXT
     documented but never implemented.  Thanks to Nigel Metheringham
     for the heads-up.
 
+    [ENHANCEMENTS]
+    Added Erlang support.
+
     [INTERNALS]
     Added tests for ack -h and -H.
 

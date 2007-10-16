@@ -3,11 +3,24 @@
 use warnings;
 use strict;
 
-use Test::More tests => 5;
-delete $ENV{ACK_OPTIONS};
+use Test::More tests => 6;
+delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
 use Util;
+
+NO_STARTDIR: {
+    my @expected = qw(
+    );
+    my $regex = 'Makefile';
+
+    my @files = qw( t/foo/non-existent );
+    my @args = ( '-g', $regex );
+    my @results = run_ack( @args, @files );
+
+    sets_match( \@results, \@expected, "Looking for $regex" );
+}
+
 
 NO_METACHARCTERS: {
     my @expected = qw(
@@ -41,11 +54,11 @@ METACHARACTERS: {
 
 FRONT_ANCHOR: {
     my @expected = qw(
-        squash
+        t/standalone.t
     );
-    my $regex = '^s';
+    my $regex = '^t/st';
 
-    my @files = qw( . );
+    my @files = qw( t );
     my @args = ( '-g', $regex );
     my @results = run_ack( @args, @files );
 
@@ -59,7 +72,7 @@ BACK_ANCHOR: {
     );
     my $regex = 'g$';
 
-    my @files = qw( . );
+    my @files = qw( t );
     my @args = ( '-a', '-g', $regex );
     my @results = run_ack( @args, @files );
 

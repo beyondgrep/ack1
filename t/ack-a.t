@@ -7,7 +7,7 @@ use Test::More tests => 1;
 use lib 't';
 use Util;
 
-delete $ENV{ACK_OPTIONS};
+delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 # new files in t/etc must be listed here
 my @expected = qw(
@@ -25,7 +25,6 @@ my @expected = qw(
     t/etc/shebang.sh.xxx
 );
 
-my @results = sort `$^X ./ack-standalone -f -a t/etc`;
-chomp @results;
+my @results = run_ack( qw( -f -a t/etc ) );
 
 sets_match( \@results, \@expected, 'File lists match' );

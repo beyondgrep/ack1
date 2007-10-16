@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 use Test::More tests => 5;
-delete $ENV{ACK_OPTIONS};
+delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
 use Util;
@@ -18,7 +18,7 @@ DASH_L: {
     my @args = qw( religion -i -a -l );
     my @results = run_ack( @args, @files );
 
-    sets_match( \@results, \@expected, 'Looking for religion' );
+    sets_match( \@results, \@expected, 'Looking for religion with -l' );
 }
 
 DASH_CAPITAL_L: {
@@ -30,12 +30,12 @@ DASH_CAPITAL_L: {
     );
 
     # -L and -l -v are identical
-    for my $switches ( ['-L'], ['-l','-v'] ) {
+    for my $switches ( (['-L'], ['-l','-v']) ) {
         my @files = qw( t/text );
         my @args = ( 'religion', '-a', @{$switches} );
         my @results = run_ack( @args, @files );
 
-        sets_match( \@results, \@expected, 'Looking for religion' );
+        sets_match( \@results, \@expected, "Looking for religion with @{$switches}" );
     }
 }
 

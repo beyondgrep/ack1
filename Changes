@@ -1,5 +1,51 @@
 Changelog for ack
 
+1.68    Tue Oct 16 14:58:27 CDT 2007
+    [FIXES]
+    Implemented --with-filename and --no-filename, which were
+    documented but never implemented.  Thanks to Nigel Metheringham
+    for the heads-up.
+
+    [ENHANCEMENTS]
+    Added Erlang support.
+
+    [INTERNALS]
+    Added tests for ack -h and -H.
+
+
+1.67_02     Sun Oct  7 14:50:38 CDT 2007
+    [FIXES]
+    ack no longer uses -T, but the tests still use it.
+
+    Check for ~/_ackrc, too.
+
+    --passthru would highlight every single zero-width space between
+    characters.  Oops.  The effect would be to have your output be
+    15x larger than necessary.
+
+    [ENHANCEMENTS]
+    Added still more sanity checks on option conflicts.
+
+    The output for -v negative searching now matches regular searching.
+
+
+1.67_01     Wed Sep 26 13:36:18 CDT 2007
+    [FIXES]
+    Color coding no longer "smears" the following line if the colored
+    part of the match wraps to the next line.
+
+    [ENHANCEMENTS]
+    Support for an .ackrc file.
+
+    Little bitty speed enhancements inside.  Nothing major, but it
+    all adds up, especially on something as commonly-used as ack.
+
+    ack now runs under -T (taint mode).  This is just a good idea,
+    although there's nothing that ack does that executes code.  Thanks to
+    Bill Ricker for bringing this up via what turns out to be a non-issue,
+    but still nudged me to do this.
+
+
 1.66    Fri Aug 24 00:04:02 CDT 2007
     [FIXES]
     New Macs are shipping with Test::Harness 1.85, and ack's test

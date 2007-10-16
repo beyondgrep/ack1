@@ -5,15 +5,15 @@ use strict;
 
 use Test::More tests => 3;
 use File::Next ();
-delete $ENV{ACK_OPTIONS};
+delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
 use Util;
 
 NO_O: {
     my @files = qw( t/text/boy-named-sue.txt );
-    my @args = ( '"the\\s+\\S+"', '--text' );
-    my @expected = split( /\n/, <<EOF );
+    my @args = qw( "the\\s+\\S+" --text );
+    my @expected = split( /\n/, <<'EOF' );
         But the meanest thing that he ever did
         But I made me a vow to the moon and stars
         That I'd search the honky-tonks and bars
@@ -36,8 +36,8 @@ EOF
 
 WITH_O: {
     my @files = qw( t/text/boy-named-sue.txt );
-    my @args = ( '"the\\s+\\S+"', '--text', '-o' );
-    my @expected = split( /\n/, <<EOF );
+    my @args = qw( "the\\s+\\S+" --text -o );
+    my @expected = split( /\n/, <<'EOF' );
         the meanest
         the moon
         the honky-tonks
@@ -64,7 +64,9 @@ EOF
 
 WITH_OUTPUT: {
     my @files = qw( t/text/ );
-    my @args = ( q{--output='x$1x'}, '-a', '"question(\\S+)"' );
+    my @args = ($^O eq 'MSWin32')
+        ? qw( --output="x$1x" -a "question(\\S+)" )
+        : qw( --output='x$1x' -a "question(\\S+)" );
     my @expected = qw(
         xedx
         xs.x

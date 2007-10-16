@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 use Test::More tests => 4;
-delete $ENV{ACK_OPTIONS};
+delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
 
@@ -14,7 +14,7 @@ BEGIN {
 
 {
     my $copyright = App::Ack::get_copyright();
-    like $copyright, qr{Copyright\s\d+-\d+\sAndy Lester}, 'Copyright';
+    like $copyright, qr{Copyright \d+-\d+ Andy Lester}, 'Copyright';
 }
 
 {

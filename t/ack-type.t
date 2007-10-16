@@ -9,7 +9,7 @@ use File::Next 0.34; # For the reslash() function
 use lib 't';
 use Util qw( sets_match );
 
-delete $ENV{ACK_OPTIONS};
+delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 my $cc = [qw(
     t/swamp/c-source.c
@@ -40,6 +40,7 @@ my $perl = [qw(
     t/ack-binary.t
     t/ack-c.t
     t/ack-g.t
+    t/ack-h.t
     t/ack-o.t
     t/ack-passthru.t
     t/ack-text.t
@@ -101,8 +102,7 @@ sub check_with {
 
     my @expected = sort @{$expected};
 
-    my @results = sort `$^X ./ack-standalone -f $options`;
-    chomp @results;
+    my @results = run_ack( '-f', $options );
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
     return sets_match( \@results, \@expected, "File lists match via $options" );

@@ -6,7 +6,8 @@ use strict;
 use Test::More tests => 1;
 use App::Ack ();
 use File::Next ();
-delete $ENV{ACK_OPTIONS};
+
+delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
 use Util;
@@ -20,6 +21,7 @@ ACK_F_TEXT: {
         t/ack-binary.t
         t/ack-c.t
         t/ack-g.t
+        t/ack-h.t
         t/ack-o.t
         t/ack-passthru.t
         t/ack-text.t

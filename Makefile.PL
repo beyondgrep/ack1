@@ -36,6 +36,13 @@ sub MY::top_targets {
 sub MY::postamble {
     my $file_next_filename = qx(perldoc -l File::Next);
     my $postamble = <<'MAKE_FRAG';
+ACK             = ack
+APP_ACK_PM      = Ack.pm
+STANDALONE      = ack-standalone
+ACK_HELP        = ack-help.txt
+ACK_HELP_TYPES  = ack-help-types.txt
+PERL_T          = $(PERL) -T
+
 .PHONY: tags critic
 
 tags:
@@ -50,25 +57,27 @@ critic:
 	perlcritic -1 -q -profile perlcriticrc ack Ack.pm t/*.t
 
 prof: all
-	perl -d:DProf -Mblib ack -w foo ~/parrot >> /dev/null 2>&1
-	dprofpp
+	$(PERL_T) -d:DProf ack-standalone --color --group -w foo ~/parrot >> /dev/null 2>&1
+	dprofpp -R
 
-ACK             = ack
-APP_ACK_PM      = Ack.pm
-STANDALONE      = ack-standalone
-ACK_HELP        = ack-help.txt
-ACK_HELP_TYPES  = ack-help-types.txt
+profiler: all
+	$(PERL_T) -MDevel::Profiler ack-standalone --color --group -w foo ~/parrot >> /dev/null 2>&1
+	dprofpp -R
+
+smallprof: all
+	$(PERL_T) -d:SmallProf ack-standalone --color --group -w foo ~/parrot >> /dev/null 2>&1
+	sort -k 2nr,2 smallprof.out | less
 
 $(STANDALONE) : $(ACK) $(APP_ACK_PM) squash Makefile
 	$(PERL) squash ack File::Next $(APP_ACK_PM) > $(STANDALONE)
 	$(CHMOD) +x $(STANDALONE)
-	$(PERL) -c $(STANDALONE)
+	$(PERL_T) -c $(STANDALONE)
 
 $(ACK_HELP) : $(STANDALONE)
-	$(PERL) $(STANDALONE) --help > $(ACK_HELP) || perl -e0
+	$(PERL_T) $(STANDALONE) --help > $(ACK_HELP) || perl -e0
 
 $(ACK_HELP_TYPES) : $(STANDALONE)
-	$(PERL) $(STANDALONE) --help=types > $(ACK_HELP_TYPES) || perl -e0
+	$(PERL_T) $(STANDALONE) --help=types > $(ACK_HELP_TYPES) || perl -e0
 
 MAKE_FRAG
 

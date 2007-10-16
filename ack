@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.66';
+our $VERSION   = '1.68';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.
@@ -11,9 +11,10 @@ our $VERSION   = '1.66';
 use File::Next 0.40;
 use App::Ack ();
 
-App::Ack::load_colors();
-
 MAIN: {
+    unshift( @ARGV, App::Ack::read_ackrc() );
+    App::Ack::load_colors();
+
     if ( $App::Ack::VERSION ne $main::VERSION ) {
         App::Ack::die( "Program/library version mismatch\n\t$0 is $main::VERSION\n\t$INC{'App/Ack.pm'} is $App::Ack::VERSION" );
     }
@@ -21,44 +22,38 @@ MAIN: {
         App::Ack::warn( 'ACK_SWITCHES is no longer supported.  Use ACK_OPTIONS.' );
     }
 
+    # Priorities! Get the --thpppt checking out of the way.
+    /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
+    if ( !@ARGV ) {
+        App::Ack::show_help();
+        exit 1;
+    }
+
     main();
 }
 
 sub main {
-    # Priorities! Get the --thpppt checking out of the way.
-    /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
-
     my %opt = App::Ack::get_command_line_options();
-
-    my $filetypes_supported_set   = App::Ack::filetypes_supported_set();
-    my $filetypes_supported_unset = App::Ack::filetypes_supported_unset();
-
-    # If anyone says --no-whatever, we assume all other types must be on.
-    if ( !$filetypes_supported_set ) {
-        for my $i ( keys %App::Ack::type_wanted ) {
-            $App::Ack::type_wanted{$i} = 1 unless ( defined( $App::Ack::type_wanted{$i} ) || $i eq 'binary' || $i eq 'text' || $i eq 'skipped' );
+    if ( !-t STDIN ) {
+        # We're going into filter mode
+        for ( qw( f g l ) ) {
+            $opt{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );
         }
+        $opt{show_filename} = 0;
+        my $regex = App::Ack::build_regex( shift @ARGV, \%opt );
+        if ( my $nargs = @ARGV ) {
+            my $s = $nargs == 1 ? '' : 's';
+            App::Ack::warn( "Ignoring $nargs argument$s on the command-line while acting as a filter." );
+        }
+        App::Ack::search( \*STDIN, 0, '-', $regex, \%opt );
+        exit 0;
     }
 
     my $regex;
     my $file_matching = $opt{f} || $opt{g};
-
     if ( !$file_matching ) {
-        if ( !@ARGV ) {
-            App::Ack::show_help();
-            exit 1;
-        }
-        # REVIEW: This shouldn't be able to happen because of the help
-        # check above.
-        $regex = shift @ARGV or App::Ack::die( 'No regex specified' );
-
-        $regex = quotemeta( $regex ) if $opt{Q};
-        if ( $opt{w} ) {
-            $regex = "\\b$regex" if $regex =~ /^\w/;
-            $regex = "$regex\\b" if $regex =~ /\w$/;
-        }
-
-        $regex = $opt{i} ? qr/$regex/i : qr/$regex/;
+        @ARGV or App::Ack::die( 'No regular expression found.' );
+        $regex = App::Ack::build_regex( shift @ARGV, \%opt );
     }
 
     my @what;
@@ -69,40 +64,41 @@ sub main {
         $opt{show_filename} = (@what > 1) || (!-f $what[0]);
     }
     else {
-        if ( $opt{is_filter} ) {
-            # We're going into filter mode
-            for ( qw( f g l ) ) {
-                $opt{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );
-            }
-            $opt{show_filename} = 0;
-            App::Ack::search( '-', $regex, %opt );
-            exit 0;
-        }
-        else {
-            @what = '.'; # Assume current directory
-            $opt{show_filename} = 1;
-        }
+        @what = '.'; # Assume current directory
+        $opt{show_filename} = 1;
     }
-
-    my $file_filter = $opt{all} ? \&App::Ack::dash_a_file_filter : \&App::Ack::is_interesting;
-    my $descend_filter = $opt{n} ? sub {0} : \&App::Ack::skipdir_filter;
+    #XXX Barf if the starting points don't exist
 
     my $iter =
         File::Next::files( {
-            file_filter     => $file_filter,
-            descend_filter  => $descend_filter,
+            file_filter     => $opt{all}
+                                    ? sub { return App::Ack::is_searchable( $File::Next::name ) }
+                                    : \&App::Ack::is_interesting,
+            descend_filter  => $opt{n}
+                                    ? sub {0}
+                                    : \&App::Ack::skipdir_filter,
             error_handler   => sub { my $msg = shift; App::Ack::warn( $msg ) },
             sort_files      => $opt{sort_files},
             follow_symlinks => $opt{follow},
         }, @what );
 
 
+    App::Ack::filetype_setup();
     if ( $opt{f} ) {
         App::Ack::print_files($iter, $opt{1});
     }
     elsif ( $opt{g} ) {
         my $regex = $opt{i} ? qr/$opt{g}/i : qr/$opt{g}/;
-        App::Ack::print_selected_files($iter, $regex, $opt{1});
+        App::Ack::print_files($iter, $opt{1}, $regex);
+    }
+    elsif ( $opt{l} || $opt{count} ) {
+        my $nmatches = 0;
+        while ( defined ( my $filename = $iter->() ) ) {
+            my ($fh) = App::Ack::open_file( $filename );
+            $nmatches += App::Ack::search_and_list( $fh, $filename, $regex, \%opt );
+            App::Ack::close_file( $fh, $filename );
+            last if $nmatches && $opt{1};
+        }
     }
     else {
         $opt{show_filename} = 0 if $opt{h};
@@ -110,15 +106,15 @@ sub main {
         $opt{show_filename} = 0 if $opt{output};
 
         my $nmatches = 0;
-        while ( defined ( my $file = $iter->() ) ) {
-            $nmatches += App::Ack::search( $file, $regex, %opt );
+        while ( defined ( my $filename = $iter->() ) ) {
+            my ($fh,$could_be_binary) = App::Ack::open_file( $filename );
+            $nmatches += App::Ack::search( $fh, $could_be_binary, $filename, $regex, \%opt );
+            App::Ack::close_file( $fh, $filename );
             last if $nmatches && $opt{1};
         }
     }
     exit 0;
 }
-
-=encoding utf8
 
 =head1 NAME
 
@@ -295,6 +291,10 @@ still seeing the entire file, as in:
 
 Quote all metacharacters.  PATTERN is treated as a literal.
 
+=item B<--rc=file>
+
+Specify a path to an alternate F<.ackrc> file.
+
 =item B<--sort-files>
 
 Sorts the found files lexically.  Use this if you want your file
@@ -336,9 +336,30 @@ C<\b> metacharacters.
 
 =back
 
+=head1 THE .ackrc FILE
+
+The F<.ackrc> file contains command-line options that are prepended
+to the command line before processing.  Multiple options may live
+on multiple lines.  Lines beginning with a # are ignored.  A F<.ackrc>
+might look like this:
+
+    # Always sort the files
+    --sort-files
+
+    # Always color, even if piping to a filter
+    --color
+
+F<ack> looks in your home directory for the F<.ackrc>.  You can
+specify another location with the F<ACKRC> variable, below.
+
 =head1 ENVIRONMENT VARIABLES
 
 =over 4
+
+=item ACKRC
+
+Specifies the location of the F<.ackrc> file.  If this file doesn't
+exist, F<ack> looks in the default location.
 
 =item ACK_OPTIONS
 
@@ -404,6 +425,20 @@ L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=ack>.
 I will be notified, and then you'll automatically be notified of progress on
 your bug as I make changes.
 
+=head1 ENHANCEMENTS
+
+There is a list of enhancements I want to make to F<ack> in the ack
+issues list at Google Code: L<http://code.google.com/p/ack/issues/list>
+
+Yes, we want to be able to specify filetypes.
+
+Yes, we want to display context.
+
+Yes, we want to add support for a F<.ackrc> file.
+
+Please look in the issues list before requesting an enhancement.
+And, of course, patches are always welcome.
+
 =head1 SUPPORT
 
 Support for and information about F<ack> can be found at:
@@ -441,6 +476,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Nigel Metheringham,
 Gabor Szabo,
 Tod Hagan,
 Michael Hendricks,

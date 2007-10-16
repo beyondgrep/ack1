@@ -5,7 +5,8 @@ use strict;
 
 use Test::More tests => 3;
 use File::Next 0.22;
-delete $ENV{ACK_OPTIONS};
+
+delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
 use Util;
@@ -46,7 +47,7 @@ HANDLE_ZEROES: {
 
 DASH_F: {
     my @args = qw( -f --perl );
-    my $cmd = "$^X ../../ack-standalone @args";
+    my $cmd = "$^X -T ../../ack-standalone @args";
     my @results = `$cmd`;
     chomp @results;
 

@@ -1,6 +1,6 @@
 Changelog for ack
 
-NEXT
+1.68    Tue Oct 16 14:58:27 CDT 2007
     [FIXES]
     Implemented --with-filename and --no-filename, which were
     documented but never implemented.  Thanks to Nigel Metheringham

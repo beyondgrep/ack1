@@ -1,5 +1,7 @@
 package main;
-use 5.6.1;
+
+require 5.006001;
+
 use strict;
 use warnings;
 use ExtUtils::MakeMaker;

@@ -3,7 +3,8 @@ Changelog for ack
 NEXT
 
     [ENHANCEMENTS]
-    Skips directory autom4te.cache, a cache for autoconf tools.
+    Skips directory autom4te.cache, a cache for autoconf tools, and
+    cover_db, used by Devel::Cover.
 
 1.68    Tue Oct 16 14:58:27 CDT 2007
     [FIXES]

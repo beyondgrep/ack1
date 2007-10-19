@@ -47,7 +47,7 @@ File finding:
 File inclusion/exclusion:
   -n                    No descending into subdirectories
   -a, --all             All files, regardless of extension (but still skips
-                        autom4te.cache, blib, CVS, _darcs, .git, .pc, RCS, SCCS and .svn dirs)
+                        autom4te.cache, blib, cover_db, CVS, _darcs, .git, .pc, RCS, SCCS and .svn dirs)
   --perl                Include only Perl files.
   --type=perl           Include only Perl files.
   --noperl              Exclude Perl files.

@@ -44,7 +44,8 @@ BEGIN {
         SCCS    => 'SCCS',
         _darcs  => 'darcs',
         blib    => 'Perl module building',
-        'autom4te.cache' => 'autoconf cache',
+        'autom4te.cache'    => 'autoconf cache',
+        'cover_db'          => 'Devel::Cover results',
     );
 
     %mappings = (

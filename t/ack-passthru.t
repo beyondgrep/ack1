@@ -10,6 +10,8 @@ delete @ENV{qw( ACK_OPTIONS ACKRC )};
 use lib 't';
 use Util;
 
+my $is_windows = ($^O =~ /MSWin32/);
+
 my @full_lyrics = <DATA>;
 chomp @full_lyrics;
 
@@ -45,6 +47,8 @@ DASH_C: {
 }
 
 HIGHLIGHTING: {
+    skip 'Highlighting does not work on Windows', 2 if $is_windows;
+
     my @ack_args = qw( July --text --passthru --color );
     my @results = pipe_into_ack( 't/text/4th-of-july.txt', @ack_args );
 

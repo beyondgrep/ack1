@@ -437,9 +437,8 @@ your bug as I make changes.
 There is a list of enhancements I want to make to F<ack> in the ack
 issues list at Google Code: L<http://code.google.com/p/ack/issues/list>
 
-Yes, we want to be able to specify filetypes.
-
-Yes, we want to add support for a F<.ackrc> file.
+Yes, we want to be able to specify our own filetypes, so you can
+say .snork files are recognized as Java, or whatever.
 
 Please look in the issues list before requesting an enhancement.
 And, of course, patches are always welcome.

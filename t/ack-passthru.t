@@ -47,6 +47,7 @@ DASH_C: {
 }
 
 HIGHLIGHTING: {
+SKIP: {
     skip 'Highlighting does not work on Windows', 2 if $is_windows;
 
     my @ack_args = qw( July --text --passthru --color );
@@ -56,6 +57,7 @@ HIGHLIGHTING: {
 
     my @escaped_lines = grep { /\e/ } @results;
     is( scalar @escaped_lines, 2, 'Only two lines are highlighted' );
+}
 }
 
 __DATA__

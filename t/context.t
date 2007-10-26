@@ -93,6 +93,7 @@ EOF
 
 # highlighting works with context
 HIGHLIGHTING: {
+SKIP: {
     skip 'Highlighting does not work on Windows', 2 if $is_windows;
 
     my @ack_args = qw( July -C5 --text --color );
@@ -100,6 +101,7 @@ HIGHLIGHTING: {
     my @escaped_lines = grep { /\e/ } @results;
     is( scalar @escaped_lines, 2, 'Only two lines are highlighted' );
     is( scalar @results, 18, 'Expecting altogether 18 lines back' );
+}
 }
 
 # TODO: How do I test this?

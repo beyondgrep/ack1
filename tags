@@ -7,10 +7,15 @@
 ACK_BINARY	t/ack-binary.t	/^ACK_BINARY: {$/;"	l
 ACK_F	t/ack-binary.t	/^ACK_F: {$/;"	l
 ACK_F_TEXT	t/ack-text.t	/^ACK_F_TEXT: {$/;"	l
+ACK_G	t/context.t	/^ACK_G: {$/;"	l
+AFTER	t/context.t	/^AFTER: {$/;"	l
 App::Ack	Ack.pm	/^package App::Ack;$/;"	p
 BACK_ANCHOR	t/ack-g.t	/^BACK_ANCHOR: {$/;"	l
+BEFORE	t/context.t	/^BEFORE: {$/;"	l
+BEFORE_WITH_LINE_NO	t/context.t	/^BEFORE_WITH_LINE_NO: {$/;"	l
 BINARY_FILES	t/interesting.t	/^BINARY_FILES: {$/;"	l
 CASE_INSENSITIVE	t/ack-g.t	/^CASE_INSENSITIVE: {$/;"	l
+CONTEXT_DEFAULT	t/context.t	/^CONTEXT_DEFAULT: {$/;"	l
 DASH_C	t/ack-c.t	/^DASH_C: {$/;"	l
 DASH_C	t/ack-passthru.t	/^DASH_C: {$/;"	l
 DASH_C	t/ack-v.t	/^DASH_C: {$/;"	l
@@ -27,6 +32,8 @@ FAIL_MATCHING_VIA_CONTENT	t/filetypes.t	/^FAIL_MATCHING_VIA_CONTENT: {$/;"	l
 FIND_PACKAGES	t/standalone.t	/^FIND_PACKAGES: {$/;"	l
 FRONT_ANCHOR	t/ack-g.t	/^FRONT_ANCHOR: {$/;"	l
 HANDLE_ZEROES	t/zero.t	/^HANDLE_ZEROES: {$/;"	l
+HIGHLIGHTING	t/ack-passthru.t	/^HIGHLIGHTING: {$/;"	l
+HIGHLIGHTING	t/context.t	/^HIGHLIGHTING: {$/;"	l
 MAIN	ack	/^MAIN: {$/;"	l
 MATCH_VIA_CONTENT	t/filetypes.t	/^MATCH_VIA_CONTENT: {$/;"	l
 METACHARACTERS	t/ack-g.t	/^METACHARACTERS: {$/;"	l
@@ -38,6 +45,8 @@ NORMAL	t/ack-passthru.t	/^NORMAL: {$/;"	l
 NO_METACHARCTERS	t/ack-g.t	/^NO_METACHARCTERS: {$/;"	l
 NO_O	t/ack-o.t	/^NO_O: {$/;"	l
 NO_STARTDIR	t/ack-g.t	/^NO_STARTDIR: {$/;"	l
+NO_SWITCHES_MULTIPLE_FILES	t/ack-h.t	/^NO_SWITCHES_MULTIPLE_FILES: {$/;"	l
+NO_SWITCHES_ONE_FILE	t/ack-h.t	/^NO_SWITCHES_ONE_FILE: {$/;"	l
 PARROT_FILES_DESCEND	t/interesting.t	/^PARROT_FILES_DESCEND: {$/;"	l
 PARROT_FILES_NODESCEND	t/interesting.t	/^PARROT_FILES_NODESCEND: {$/;"	l
 PARROT_FILES_NODESCEND_EMPTY	t/interesting.t	/^PARROT_FILES_NODESCEND_EMPTY: {$/;"	l
@@ -52,18 +61,19 @@ TRAILING_METACHAR_DOT	t/ack-w.t	/^TRAILING_METACHAR_DOT: {$/;"	l
 TRAILING_PUNC	t/ack-w.t	/^TRAILING_PUNC: {$/;"	l
 Usage	Ack.pm	/^Usage: ack [OPTION]... PATTERN [FILES]$/;"	l
 WITH_O	t/ack-o.t	/^WITH_O: {$/;"	l
+WITH_O	t/context.t	/^WITH_O: {$/;"	l
 WITH_OUTPUT	t/ack-o.t	/^WITH_OUTPUT: {$/;"	l
+WITH_SWITCHES_MULTIPLE_FILES	t/ack-h.t	/^WITH_SWITCHES_MULTIPLE_FILES: {$/;"	l
+WITH_SWITCHES_ONE_FILE	t/ack-h.t	/^WITH_SWITCHES_ONE_FILE: {$/;"	l
 _get_thpppt	Ack.pm	/^sub _get_thpppt {$/;"	s
 _key	Ack.pm	/^sub _key {$/;"	s
 _listify	Ack.pm	/^sub _listify {$/;"	s
 _my_program	Ack.pm	/^sub _my_program {$/;"	s
-_option_conflict	Ack.pm	/^sub _option_conflict {$/;"	s
-_opty	Ack.pm	/^sub _opty {$/;"	s
-_search_v	Ack.pm	/^sub _search_v {$/;"	s
 _thpppt	Ack.pm	/^sub _thpppt {$/;"	s
 apply_defaults	Ack.pm	/^sub apply_defaults {$/;"	s
 build_regex	Ack.pm	/^sub build_regex {$/;"	s
 check_with	t/ack-type.t	/^sub check_with {$/;"	s
+close_file	Ack.pm	/^sub close_file {$/;"	s
 critic	Makefile.PL	/^critic:$/;"	l
 die	Ack.pm	/^sub die { ## no critic (ProhibitBuiltinHomonyms)$/;"	s
 filetype_setup	Ack.pm	/^sub filetype_setup {$/;"	s
@@ -80,19 +90,23 @@ lists_match	t/Util.pm	/^sub lists_match {$/;"	s
 load_colors	Ack.pm	/^sub load_colors {$/;"	s
 main	Makefile.PL	/^package main;$/;"	p
 main	ack	/^sub main {$/;"	s
+open_file	Ack.pm	/^sub open_file {$/;"	s
 option_in_usage	t/longopts.t	/^sub option_in_usage {$/;"	s
-options_sanity_check	Ack.pm	/^sub options_sanity_check {$/;"	s
+pipe_into_ack	t/Util.pm	/^sub pipe_into_ack {$/;"	s
 print_files	Ack.pm	/^sub print_files {$/;"	s
-print_selected_files	Ack.pm	/^sub print_selected_files {$/;"	s
+print_match_or_context	Ack.pm	/^sub print_match_or_context {$/;"	s
 print_version_statement	Ack.pm	/^sub print_version_statement {$/;"	s
 prof	Makefile.PL	/^prof: all$/;"	l
+profiler	Makefile.PL	/^profiler: all$/;"	l
 read_ackrc	Ack.pm	/^sub read_ackrc {$/;"	s
 run_ack	t/Util.pm	/^sub run_ack {$/;"	s
 search	Ack.pm	/^sub search {$/;"	s
+search_and_list	Ack.pm	/^sub search_and_list {$/;"	s
 sets_match	t/Util.pm	/^sub sets_match {$/;"	s
 show_help	Ack.pm	/^sub show_help {$/;"	s
 show_help_types	Ack.pm	/^sub show_help_types {$/;"	s
 skipdir_filter	Ack.pm	/^sub skipdir_filter {$/;"	s
 slurp	t/Util.pm	/^sub slurp {$/;"	s
+smallprof	Makefile.PL	/^smallprof: all$/;"	l
 tags	Makefile.PL	/^tags:$/;"	l
 warn	Ack.pm	/^sub warn { ## no critic (ProhibitBuiltinHomonyms)$/;"	s

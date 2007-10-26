@@ -1,12 +1,27 @@
 Changelog for ack
 
-NEXT
-    [FIXES]
-    t/passthru.t now passes on Windows.
-
+1.69_01
     [ENHANCEMENTS]
+    Added -A, -B and -C options for showing context after, before
+    and around your match, respectively.  Thanks very much to Torsten
+    Blix for writing code and tests for this most popular request.
+
     Skips directory autom4te.cache, a cache for autoconf tools, and
     cover_db, used by Devel::Cover.
+
+
+    [FEATURES REMOVED]
+    ack used to check for options that didn't make sense together,
+    like "ack -l --group", and wouldn't run.  Now, with the ability
+    to have options in the environment, and in your .ackrc file, I
+    was getting a lot of conflicts that didn't make sense.  If I
+    specify "ack -l --group" on the command line, I should get an
+    error, but if I do "ack -l" and I have "--group" in my .ackrc,
+    that shouldn't throw an error.
+
+    So I know what I want the behavior to be, but I don't know how
+    I want to code it.  So, in the meantime, I'm removing the
+    feature.
 
 
 1.68    Tue Oct 16 14:58:27 CDT 2007

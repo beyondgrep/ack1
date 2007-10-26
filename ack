@@ -183,9 +183,6 @@ annoying to you, use I<grep>.
 If you truly want to search every file and every directory, I<ack>
 won't do it.  You'll need to rely on I<grep>.
 
-If you need context around your matches, use I<grep>, but check
-back in on I<ack> in the near future, because I'm adding it.
-
 =head1 OPTIONS
 
 =over 4
@@ -194,6 +191,18 @@ back in on I<ack> in the near future, because I'm adding it.
 
 Operate on all files, regardless of type (but still skip directories
 like F<blib>, F<CVS>, etc.)
+
+=item B<-A I<NUM>>, B<--after-context=I<NUM>>
+
+Print I<NUM> lines of trailing context after matching lines.
+
+=item B<-B I<NUM>>, B<--after-context=I<NUM>>
+
+Print I<NUM> lines of leading context before matching lines.
+
+=item B<-C [I<NUM>]>, B<--after-context[=I<NUM>]>
+
+Print I<NUM> lines (default 2) of context around matching lines.
 
 =item B<-c>, B<--count>
 
@@ -432,8 +441,6 @@ issues list at Google Code: L<http://code.google.com/p/ack/issues/list>
 
 Yes, we want to be able to specify filetypes.
 
-Yes, we want to display context.
-
 Yes, we want to add support for a F<.ackrc> file.
 
 Please look in the issues list before requesting an enhancement.
@@ -476,6 +483,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Torsten Blix,
 Nigel Metheringham,
 Gabor Szabo,
 Tod Hagan,

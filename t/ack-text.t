@@ -28,6 +28,7 @@ ACK_F_TEXT: {
         t/ack-type.t
         t/ack-w.t
         t/ack-v.t
+        t/context.t
         t/etc/buttonhook.html.xxx
         t/etc/buttonhook.noxml.xxx
         t/etc/buttonhook.rfc.xxx

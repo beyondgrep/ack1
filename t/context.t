@@ -63,7 +63,7 @@ Well, I grew up quick and I grew up mean,
     -- "A Boy Named Sue", Johnny Cash
 EOF
 
-    my $regex = q/'[nN]amed Sue'/;
+    my $regex = q/"[nN]amed Sue"/;
 
     my @files = qw( t/text/boy-named-sue.txt );
     my @args = ( '--text', '-A2', $regex );

@@ -705,8 +705,8 @@ sub search {
                     $after--;
                 }
                 else {
-                    push @before, [$_, $.];
-                    shift @before if @before > $before_context;
+                    push @before, $_, $.;
+                    splice( @before, 0, 2 ) if @before > ($before_context * 2);
                 }
             }
             next;
@@ -721,7 +721,7 @@ sub search {
             $could_be_binary = 0;
         }
         if ( $keep_context ) {
-            print_match_or_context( $opt, 0, map { @{$_} } @before );
+            print_match_or_context( $opt, 0, @before );
             @before = ();
             $after = $after_context;
         }

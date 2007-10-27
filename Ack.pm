@@ -698,8 +698,10 @@ sub search {
 
     while (<$fh>) {
         if ( $v ? /$regex/o : !/$regex/o ) {
-            print if $passthru;
-            if ( $keep_context ) {
+            if ( $passthru ) {
+                print;
+            }
+            elsif ( $keep_context ) {
                 if ( $after ) {
                     print_match_or_context( $opt, 0, $_, $. );
                     $after--;
@@ -710,9 +712,9 @@ sub search {
                 }
             }
             next;
-        } 
-        ++$nmatches;
+        }
 
+        ++$nmatches;
         if ( $could_be_binary ) {
             if ( -B $filename ) {
                 print "Binary file $filename matches\n";

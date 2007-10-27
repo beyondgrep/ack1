@@ -1269,9 +1269,9 @@ sub search {
                 }
             }
             next;
-        } 
-        ++$nmatches;
+        }
 
+        ++$nmatches;
         if ( $could_be_binary ) {
             if ( -B $filename ) {
                 print "Binary file $filename matches\n";

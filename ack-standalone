@@ -1301,8 +1301,6 @@ sub search {
 sub print_match_or_context {
     my $opt      = shift; # opts array
     my $is_match = shift; # is there a match on the line?
-    local $_     = shift; # line to print
-    my $line_no  = shift; # line number of that line
 
     my $sep = $is_match ? ':' : '-';
     my $output_func = $opt->{output};
@@ -1319,34 +1317,39 @@ sub print_match_or_context {
         }
     }
 
-    if ( $keep_context && !$output_func ) {
-        if ( ( $last_output_line != $line_no - 1 ) &&
-            ( $any_output || ( !$opt->{group} && $context_overall_output_count++ > 0 ) ) ) {
-            print "--\n";
+    local $_;    # line to print
+    my $line_no; # line number of that line
+
+    while ( ($_,$line_no) = splice( @_, 0, 2 ) ) {
+        if ( $keep_context && !$output_func ) {
+            if ( ( $last_output_line != $line_no - 1 ) &&
+                ( $any_output || ( !$opt->{group} && $context_overall_output_count++ > 0 ) ) ) {
+                print "--\n";
+            }
+            # to ensure separators between different files when --nogroup
+
+            $last_output_line = $line_no;
         }
-        # to ensure separators between different files when --nogroup
+        $any_output = 1;
 
-        $last_output_line = $line_no;
-    }
-    $any_output = 1;
-
-    if ( $opt->{show_filename} ) {
-        print $display_filename, $sep unless $opt->{group};
-        print $line_no, $sep;
-    }
-
-    if ( $output_func ) {
-        while ( /$regex/go ) {
-            print $output_func->(), "\n";
+        if ( $opt->{show_filename} ) {
+            print $display_filename, $sep unless $opt->{group};
+            print $line_no, $sep;
         }
-    }
-    else {
-        if ( $color && $is_match ) {
-            if ( s/($regex)/Term::ANSIColor::colored($1,$ENV{ACK_COLOR_MATCH})/eg ) {
-                s/\n$/\e[0m\e[K\n/;     # Before \n, reset the color and clear to end of line
+
+        if ( $output_func ) {
+            while ( /$regex/go ) {
+                print $output_func->(), "\n";
             }
         }
-        print;
+        else {
+            if ( $color && $is_match ) {
+                if ( s/($regex)/Term::ANSIColor::colored($1,$ENV{ACK_COLOR_MATCH})/eg ) {
+                    s/\n$/\e[0m\e[K\n/;     # Before \n, reset the color and clear to end of line
+                }
+            }
+            print;
+        }
     }
 } # print_match_or_context()
 

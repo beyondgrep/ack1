@@ -664,7 +664,6 @@ Main search method
 
     my $output_func;
     my $show_filename;
-    my $group;
     my $color;
     my $keep_context;
 
@@ -687,7 +686,6 @@ sub search {
     $display_filename = undef;
     $output_func = $opt->{output};
     $show_filename = $opt->{show_filename};
-    $group = $opt->{group};
     $color = $opt->{color};
 
     # for context processing
@@ -706,7 +704,7 @@ sub search {
             print if $passthru;
             if ( $keep_context ) {
                 if ( $after ) {
-                    print_match_or_context( $_, $., 0 );
+                    print_match_or_context( $_, $., 0, $opt );
                     $after--;
                 }
                 else {
@@ -727,17 +725,17 @@ sub search {
         }
         if ( $keep_context ) {
             for my $i ( @before ) {
-                print_match_or_context( @{$i}[0,1], 0 );
+                print_match_or_context( @{$i}[0,1], 0, $opt );
             }
             @before = ();
             $after = $after_context;
         }
-        print_match_or_context( $_, $., 1 );
+        print_match_or_context( $_, $., 1, $opt );
 
         last if $max && ( $nmatches >= $max );
     } # while
 
-    if ( $nmatches && $show_filename && $group ) {
+    if ( $nmatches && $show_filename && $opt->{group} ) {
         print "\n";
     }
 
@@ -745,7 +743,7 @@ sub search {
 }   # search()
 
 
-=head2 print_match_or_context( $line, $line_no, $is_match )
+=head2 print_match_or_context( $line, $line_no, $is_match, $opt )
 
 Prints out a matching line or a line of context around a match.
 
@@ -755,6 +753,8 @@ sub print_match_or_context {
     local $_     = shift; # line to print
     my $line_no  = shift; # line number of that line
     my $is_match = shift; # is there a match on the line?
+    my $opt      = shift; # opts array
+
     my $sep = $is_match ? ':' : '-';
 
     if ( $show_filename ) {
@@ -764,14 +764,14 @@ sub print_match_or_context {
                     ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} )
                     : $filename;
         }
-        if ( $group && !$any_output ) {
+        if ( $opt->{group} && !$any_output ) {
             print $display_filename, "\n";
         }
     }
 
     if ( $keep_context && !$output_func ) {
         if ( ( $last_output_line != $line_no - 1 ) &&
-            ( $any_output || ( !$group && $context_overall_output_count++ > 0 ) ) ) {
+            ( $any_output || ( !$opt->{group} && $context_overall_output_count++ > 0 ) ) ) {
             print "--\n";
         }
         # to ensure separators between different files when --nogroup
@@ -781,7 +781,7 @@ sub print_match_or_context {
     $any_output = 1;
 
     if ( $show_filename ) {
-        print $display_filename, $sep unless $group;
+        print $display_filename, $sep unless $opt->{group};
         print $line_no, $sep;
     }
 

@@ -701,7 +701,7 @@ sub search {
             print if $passthru;
             if ( $keep_context ) {
                 if ( $after ) {
-                    print_match_or_context( $_, $., 0, $opt );
+                    print_match_or_context( $opt, 0, $_, $. );
                     $after--;
                 }
                 else {
@@ -722,12 +722,12 @@ sub search {
         }
         if ( $keep_context ) {
             for my $i ( @before ) {
-                print_match_or_context( @{$i}[0,1], 0, $opt );
+                print_match_or_context( $opt, 0, @{$i}[0,1] );
             }
             @before = ();
             $after = $after_context;
         }
-        print_match_or_context( $_, $., 1, $opt );
+        print_match_or_context( $opt, 1, $_, $. );
 
         last if $max && ( $nmatches >= $max );
     } # while
@@ -740,17 +740,17 @@ sub search {
 }   # search()
 
 
-=head2 print_match_or_context( $line, $line_no, $is_match, $opt )
+=head2 print_match_or_context( $opt, $is_match, $line, $line_no )
 
 Prints out a matching line or a line of context around a match.
 
 =cut
 
 sub print_match_or_context {
+    my $opt      = shift; # opts array
+    my $is_match = shift; # is there a match on the line?
     local $_     = shift; # line to print
     my $line_no  = shift; # line number of that line
-    my $is_match = shift; # is there a match on the line?
-    my $opt      = shift; # opts array
 
     my $sep = $is_match ? ':' : '-';
     my $output_func = $opt->{output};

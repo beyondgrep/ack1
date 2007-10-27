@@ -721,9 +721,7 @@ sub search {
             $could_be_binary = 0;
         }
         if ( $keep_context ) {
-            for my $i ( @before ) {
-                print_match_or_context( $opt, 0, @{$i}[0,1] );
-            }
+            print_match_or_context( $opt, 0, map { @{$_} } @before );
             @before = ();
             $after = $after_context;
         }

@@ -662,8 +662,6 @@ Main search method
     my $regex;
     my $display_filename;
 
-    my $output_func;
-    my $show_filename;
     my $color;
     my $keep_context;
 
@@ -684,8 +682,7 @@ sub search {
     my $nmatches = 0;
 
     $display_filename = undef;
-    $output_func = $opt->{output};
-    $show_filename = $opt->{show_filename};
+    my $show_filename = $opt->{show_filename};
     $color = $opt->{color};
 
     # for context processing
@@ -756,8 +753,9 @@ sub print_match_or_context {
     my $opt      = shift; # opts array
 
     my $sep = $is_match ? ':' : '-';
+    my $output_func = $opt->{output};
 
-    if ( $show_filename ) {
+    if ( $opt->{show_filename} ) {
         if ( not defined $display_filename ) {
             $display_filename =
                 $color
@@ -780,7 +778,7 @@ sub print_match_or_context {
     }
     $any_output = 1;
 
-    if ( $show_filename ) {
+    if ( $opt->{show_filename} ) {
         print $display_filename, $sep unless $opt->{group};
         print $line_no, $sep;
     }

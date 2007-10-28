@@ -891,7 +891,7 @@ sub get_command_line_options {
     }
     if ( defined( my $l = $opt{line} ) ) {
         # --line=1 --line=5 is equivalent to --line=1,5
-        my @lines = split( /,/, join( ',', @$l ) );
+        my @lines = split( /,/, join( ',', @{$l} ) );
 
         # --line=1-3 is equivalent to --line=1,2,3
         @lines = map {
@@ -912,15 +912,15 @@ sub get_command_line_options {
             @ret
         } @lines;
 
-        my %uniq;
-        @uniq{ @lines } = ();
-        if (@lines != 0) {
+        if ( @lines ) {
+            my %uniq;
+            @uniq{ @lines } = ();
             $opt{line} = [ sort { $a <=> $b } keys %uniq ];   # numerical sort and each line occurs only once!
         }
         else {
             # happens if there are only ignored --line directives
             #   => ignore --line option completly
-            $opt{line} = undef; 
+            App::Ack::die( 'All --line options are invalid.' );
         }
     }
 

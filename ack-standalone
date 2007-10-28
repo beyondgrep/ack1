@@ -48,7 +48,7 @@ sub main {
     }
 
     my $regex;
-    my $file_matching = $opt{f} || $opt{g};
+    my $file_matching = $opt{f} || $opt{g} || $opt{line};
     if ( !$file_matching ) {
         @ARGV or App::Ack::die( 'No regular expression found.' );
         $regex = App::Ack::build_regex( shift @ARGV, \%opt );
@@ -88,6 +88,15 @@ sub main {
     elsif ( $opt{g} ) {
         my $regex = $opt{i} ? qr/$opt{g}/i : qr/$opt{g}/;
         App::Ack::print_files($iter, $opt{1}, $regex);
+    }
+    elsif ( $opt{line} ) {
+        my $nmatches = 0;
+        while ( defined ( my $filename = $iter->() ) ) {
+            my ($fh,$could_be_binary) = App::Ack::open_file( $filename );
+            $nmatches += App::Ack::print_lines_of_file( $fh, $could_be_binary, $filename, \%opt );
+            App::Ack::close_file( $fh, $filename );
+            last if $nmatches && $opt{1};
+        }
     }
     elsif ( $opt{l} || $opt{count} ) {
         my $nmatches = 0;
@@ -258,6 +267,13 @@ Print a short help statement.
 =item B<-i>, B<--ignore-case>
 
 Ignore case in the search strings.
+
+=item B<--line=I<NUM>>
+
+Only print line I<NUM> of each file. Multiple lines can be given with multiple
+B<--line> options or as a comma separated list (B<--line=3,5,7>). B<--line=4-7>
+also works. The lines are always output in ascending order, no matter the
+order given on the command line.
 
 =item B<-l>, B<--files-with-matches>
 
@@ -822,6 +838,7 @@ sub get_command_line_options {
         'h|no-filename'         => \$opt{h},
         'H|with-filename'       => \$opt{H},
         'i|ignore-case'         => \$opt{i},
+        'line=s@'               => \$opt{line},
         'l|files-with-matches'  => \$opt{l},
         'L|files-without-match' => sub { $opt{l} = $opt{v} = 1 },
         'm|max-count=i'         => \$opt{m},
@@ -871,6 +888,40 @@ sub get_command_line_options {
 
     if ( defined( my $val = $opt{output} ) ) {
         $opt{output} = eval qq[ sub { "$val" } ];
+    }
+    if ( defined( my $l = $opt{line} ) ) {
+        # --line=1 --line=5 is equivalent to --line=1,5
+        my @lines = split( /,/, join( ',', @$l ) );
+
+        # --line=1-3 is equivalent to --line=1,2,3
+        @lines = map {
+            my @ret;
+            if ( /-/ ) {
+                my ($from, $to) = split /-/, $_;
+                if ( $from > $to ) {
+                    App::Ack::warn( "ignoring --line=$from-$to" );
+                    @ret = ();
+                }
+                else {
+                    @ret = ( $from .. $to );
+                }
+            }
+            else {
+                @ret = ( $_ );
+            };
+            @ret
+        } @lines;
+
+        my %uniq;
+        @uniq{ @lines } = ();
+        if (@lines != 0) {
+            $opt{line} = [ sort { $a <=> $b } keys %uniq ];   # numerical sort and each line occurs only once!
+        }
+        else {
+            # happens if there are only ignored --line directives
+            #   => ignore --line option completly
+            $opt{line} = undef; 
+        }
     }
 
     return %opt;
@@ -941,7 +992,7 @@ sub is_searchable {
     my $filename = shift;
 
     return if $filename =~ /~$/;
-    return if $filename =~ m{$path_sep_regex?(?:#.+#|core\.\d+)$}o;
+    return if $filename =~ m{$path_sep_regex?(?:#.+#|core\.\d+|[._].*\.swp)$}o;
 
     return 1;
 }
@@ -1028,6 +1079,7 @@ Searching:
   -Q, --literal         Quote all metacharacters; expr is literal
 
 Search output:
+  --line=NUM            Only print line(s) NUM of each file
   -l, --files-with-matches
                         Only print filenames containing matches
   -L, --files-without-match
@@ -1396,6 +1448,70 @@ sub search_and_list {
 
     return $nmatches ? 1 : 0;
 }   # search_and_list()
+
+
+
+sub print_lines_of_file {
+    my $fh = shift;
+    my $could_be_binary = shift;
+    my $filename = shift;
+    my $opt = shift;
+
+    my $display_filename;
+    my $nmatches = 0;
+    my $show_filename = $opt->{show_filename};
+    my @lines = @{$opt->{line}};
+    my $group = $opt->{group};
+    my $color = $opt->{color};
+    my $max   = $opt->{m};
+
+    return unless @lines;
+
+    while (<$fh>) {
+        if ( $could_be_binary ) {
+            if ( -B $filename ) {
+                print "Binary file $filename skipped\n";
+                last;
+            }
+            $could_be_binary = 0;
+        }
+
+        last unless @lines;
+        if ( $. == $lines[0] ) {
+            shift @lines;
+            ++$nmatches;
+        }
+        else {
+            next;
+        }
+
+        if ( $show_filename ) {
+            if ( not defined $display_filename ) {
+                $display_filename =
+                    $color
+                        ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} )
+                        : $filename;
+            }
+            if ( $group ) {
+                print $display_filename, "\n" if $nmatches == 1;
+            }
+            else {
+                print $display_filename, ':';
+            }
+            print $., ':';
+        }
+
+        print;
+
+        last if $max && ( $nmatches >= $max );
+    } # while
+
+    if ( $nmatches && $show_filename && $group ) {
+        print "\n";
+    }
+
+    return $nmatches;
+}   # print_lines_of_file()
 
 
 

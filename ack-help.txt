@@ -16,6 +16,7 @@ Searching:
   -Q, --literal         Quote all metacharacters; expr is literal
 
 Search output:
+  --line=NUM            Only print line(s) NUM of each file
   -l, --files-with-matches
                         Only print filenames containing matches
   -L, --files-without-match

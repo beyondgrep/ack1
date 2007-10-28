@@ -167,6 +167,7 @@ sub get_command_line_options {
         'h|no-filename'         => \$opt{h},
         'H|with-filename'       => \$opt{H},
         'i|ignore-case'         => \$opt{i},
+        'line=s@'               => \$opt{line},
         'l|files-with-matches'  => \$opt{l},
         'L|files-without-match' => sub { $opt{l} = $opt{v} = 1 },
         'm|max-count=i'         => \$opt{m},
@@ -216,6 +217,40 @@ sub get_command_line_options {
 
     if ( defined( my $val = $opt{output} ) ) {
         $opt{output} = eval qq[ sub { "$val" } ];
+    }
+    if ( defined( my $l = $opt{line} ) ) {
+        # --line=1 --line=5 is equivalent to --line=1,5
+        my @lines = split( /,/, join( ',', @$l ) );
+
+        # --line=1-3 is equivalent to --line=1,2,3
+        @lines = map {
+            my @ret;
+            if ( /-/ ) {
+                my ($from, $to) = split /-/, $_;
+                if ( $from > $to ) {
+                    App::Ack::warn( "ignoring --line=$from-$to" );
+                    @ret = ();
+                }
+                else {
+                    @ret = ( $from .. $to );
+                }
+            }
+            else {
+                @ret = ( $_ );
+            };
+            @ret
+        } @lines;
+
+        my %uniq;
+        @uniq{ @lines } = ();
+        if (@lines != 0) {
+            $opt{line} = [ sort { $a <=> $b } keys %uniq ];   # numerical sort and each line occurs only once!
+        }
+        else {
+            # happens if there are only ignored --line directives
+            #   => ignore --line option completly
+            $opt{line} = undef; 
+        }
     }
 
     return %opt;
@@ -305,13 +340,19 @@ sub filetypes {
 Returns true if the filename is one that we can search, and false
 if it's one that we should ignore like a coredump or a backup file.
 
+Recognized files:
+  /~$/            - Unix backup files
+  /#.+#$/         - Emacs swap files
+  /[._].*\.swp$/  - Vi(m) swap files
+  /core\.\d+$/    - core dumps
+
 =cut
 
 sub is_searchable {
     my $filename = shift;
 
     return if $filename =~ /~$/;
-    return if $filename =~ m{$path_sep_regex?(?:#.+#|core\.\d+)$}o;
+    return if $filename =~ m{$path_sep_regex?(?:#.+#|core\.\d+|[._].*\.swp)$}o;
 
     return 1;
 }
@@ -423,6 +464,7 @@ Searching:
   -Q, --literal         Quote all metacharacters; expr is literal
 
 Search output:
+  --line=NUM            Only print line(s) NUM of each file
   -l, --files-with-matches
                         Only print filenames containing matches
   -L, --files-without-match
@@ -850,6 +892,75 @@ sub search_and_list {
 
     return $nmatches ? 1 : 0;
 }   # search_and_list()
+
+
+=head2 print_lines_of_file( $fh, $could_be_binary, $filename, \%opt )
+
+Prints the lines with numbers given in $opt{line}
+
+=cut
+
+sub print_lines_of_file {
+    my $fh = shift;
+    my $could_be_binary = shift;
+    my $filename = shift;
+    my $opt = shift;
+
+    my $display_filename;
+    my $nmatches = 0;
+    my $show_filename = $opt->{show_filename};
+    my @lines = @{$opt->{line}};
+    my $group = $opt->{group};
+    my $color = $opt->{color};
+    my $max   = $opt->{m};
+
+    return unless @lines;
+
+    while (<$fh>) {
+        if ( $could_be_binary ) {
+            if ( -B $filename ) {
+                print "Binary file $filename skipped\n";
+                last;
+            }
+            $could_be_binary = 0;
+        }
+
+        last unless @lines;
+        if ( $. == $lines[0] ) {
+            shift @lines;
+            ++$nmatches;
+        }
+        else {
+            next;
+        }
+
+        if ( $show_filename ) {
+            if ( not defined $display_filename ) {
+                $display_filename =
+                    $color
+                        ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} )
+                        : $filename;
+            }
+            if ( $group ) {
+                print $display_filename, "\n" if $nmatches == 1;
+            }
+            else {
+                print $display_filename, ':';
+            }
+            print $., ':';
+        }
+
+        print;
+
+        last if $max && ( $nmatches >= $max );
+    } # while
+
+    if ( $nmatches && $show_filename && $group ) {
+        print "\n";
+    }
+
+    return $nmatches;
+}   # print_lines_of_file()
 
 
 =head2 apply_defaults

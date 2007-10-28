@@ -50,7 +50,7 @@ sub main {
     }
 
     my $regex;
-    my $file_matching = $opt{f} || $opt{g};
+    my $file_matching = $opt{f} || $opt{g} || $opt{line};
     if ( !$file_matching ) {
         @ARGV or App::Ack::die( 'No regular expression found.' );
         $regex = App::Ack::build_regex( shift @ARGV, \%opt );
@@ -90,6 +90,15 @@ sub main {
     elsif ( $opt{g} ) {
         my $regex = $opt{i} ? qr/$opt{g}/i : qr/$opt{g}/;
         App::Ack::print_files($iter, $opt{1}, $regex);
+    }
+    elsif ( $opt{line} ) {
+        my $nmatches = 0;
+        while ( defined ( my $filename = $iter->() ) ) {
+            my ($fh,$could_be_binary) = App::Ack::open_file( $filename );
+            $nmatches += App::Ack::print_lines_of_file( $fh, $could_be_binary, $filename, \%opt );
+            App::Ack::close_file( $fh, $filename );
+            last if $nmatches && $opt{1};
+        }
     }
     elsif ( $opt{l} || $opt{count} ) {
         my $nmatches = 0;
@@ -260,6 +269,13 @@ Print a short help statement.
 =item B<-i>, B<--ignore-case>
 
 Ignore case in the search strings.
+
+=item B<--line=I<NUM>>
+
+Only print line I<NUM> of each file. Multiple lines can be given with multiple
+B<--line> options or as a comma separated list (B<--line=3,5,7>). B<--line=4-7>
+also works. The lines are always output in ascending order, no matter the
+order given on the command line.
 
 =item B<-l>, B<--files-with-matches>
 

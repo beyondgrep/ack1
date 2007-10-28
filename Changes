@@ -1,5 +1,10 @@
 Changelog for ack
 
+NEXT
+    [ENHANCEMENTS]
+    Added --line argument.
+
+
 1.69_01
     [ENHANCEMENTS]
     Added -A, -B and -C options for showing context after, before

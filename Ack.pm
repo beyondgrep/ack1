@@ -704,7 +704,6 @@ Main search method
     my $regex;
     my $display_filename;
 
-    my $color;
     my $keep_context;
 
     my $last_output_line; # number of the last line that has been output
@@ -725,7 +724,6 @@ sub search {
 
     $display_filename = undef;
     my $show_filename = $opt->{show_filename};
-    $color = $opt->{color};
 
     # for context processing
     $last_output_line = -1;
@@ -801,6 +799,7 @@ sub print_match_or_context {
     my $is_match = shift; # is there a match on the line?
     my $line_no  = shift;
 
+    my $color = $opt->{color};
     if ( $opt->{show_filename} ) {
         if ( not defined $display_filename ) {
             $display_filename =
@@ -825,7 +824,6 @@ sub print_match_or_context {
 
             $last_output_line = $line_no;
         }
-        $any_output = 1;
 
         if ( $opt->{show_filename} ) {
             print $display_filename, $sep unless $opt->{group};
@@ -845,7 +843,8 @@ sub print_match_or_context {
             }
             print;
         }
-        $line_no++;
+        $any_output = 1;
+        ++$line_no;
     }
 } # print_match_or_context()
 

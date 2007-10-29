@@ -34,6 +34,12 @@ FRONT_ANCHOR	t/ack-g.t	/^FRONT_ANCHOR: {$/;"	l
 HANDLE_ZEROES	t/zero.t	/^HANDLE_ZEROES: {$/;"	l
 HIGHLIGHTING	t/ack-passthru.t	/^HIGHLIGHTING: {$/;"	l
 HIGHLIGHTING	t/context.t	/^HIGHLIGHTING: {$/;"	l
+LINE_1	t/ack-line.t	/^LINE_1: {$/;"	l
+LINE_1_AND_5	t/ack-line.t	/^LINE_1_AND_5: {$/;"	l
+LINE_1_AND_5_AND_NON_EXISTENT	t/ack-line.t	/^LINE_1_AND_5_AND_NON_EXISTENT: {$/;"	l
+LINE_1_COMMA_5	t/ack-line.t	/^LINE_1_COMMA_5: {$/;"	l
+LINE_1_MULTIPLE_FILES	t/ack-line.t	/^LINE_1_MULTIPLE_FILES: {$/;"	l
+LINE_1_TO_5	t/ack-line.t	/^LINE_1_TO_5: {$/;"	l
 MAIN	ack	/^MAIN: {$/;"	l
 MATCH_VIA_CONTENT	t/filetypes.t	/^MATCH_VIA_CONTENT: {$/;"	l
 METACHARACTERS	t/ack-g.t	/^METACHARACTERS: {$/;"	l
@@ -54,6 +60,8 @@ PERL_FILES	t/interesting.t	/^PERL_FILES: {$/;"	l
 PERL_FILES_BY_NAME	t/interesting.t	/^PERL_FILES_BY_NAME: {$/;"	l
 PERL_FILES_GLOBBED	t/interesting.t	/^PERL_FILES_GLOBBED: {$/;"	l
 SINGLE_TEXT_MATCH	t/ack-1.t	/^SINGLE_TEXT_MATCH: {$/;"	l
+SKIP	t/ack-passthru.t	/^    SKIP: {$/;"	l
+SKIP	t/context.t	/^    SKIP: {$/;"	l
 Searching	Ack.pm	/^Searching:$/;"	l
 TEXT	Ack.pm	/^use constant TEXT => 'text';$/;"	c
 TRAILING_METACHAR_BACKSLASH_W	t/ack-w.t	/^TRAILING_METACHAR_BACKSLASH_W: {$/;"	l
@@ -94,6 +102,7 @@ open_file	Ack.pm	/^sub open_file {$/;"	s
 option_in_usage	t/longopts.t	/^sub option_in_usage {$/;"	s
 pipe_into_ack	t/Util.pm	/^sub pipe_into_ack {$/;"	s
 print_files	Ack.pm	/^sub print_files {$/;"	s
+print_lines_of_file	Ack.pm	/^sub print_lines_of_file {$/;"	s
 print_match_or_context	Ack.pm	/^sub print_match_or_context {$/;"	s
 print_version_statement	Ack.pm	/^sub print_version_statement {$/;"	s
 prof	Makefile.PL	/^prof: all$/;"	l

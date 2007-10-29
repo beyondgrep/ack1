@@ -736,6 +736,7 @@ sub search {
     $keep_context = ($before_context || $after_context) && !$passthru;
 
     my @before;
+    my $before_starts_at_line;
     my $after = 0; # number of lines still to print after a match
 
     while (<$fh>) {
@@ -749,8 +750,14 @@ sub search {
                     $after--;
                 }
                 else {
-                    push @before, $., $_;
-                    splice( @before, 0, 2 ) if @before > ($before_context * 2);
+                    if ( !@before ) {
+                        $before_starts_at_line = $.
+                    }
+                    push @before, $_;
+                    if ( @before > $before_context ) {
+                        shift @before;
+                        ++$before_starts_at_line;
+                    }
                 }
             }
             next;
@@ -765,8 +772,9 @@ sub search {
             $could_be_binary = 0;
         }
         if ( $keep_context ) {
-            print_match_or_context( $opt, 0, @before );
+            print_match_or_context( $opt, 0, $before_starts_at_line, @before );
             @before = ();
+            undef $before_starts_at_line;
             $after = $after_context;
         }
         print_match_or_context( $opt, 1, $., $_ );
@@ -782,7 +790,7 @@ sub search {
 }   # search()
 
 
-=head2 print_match_or_context( $opt, $is_match, $line_no, $line )
+=head2 print_match_or_context( $opt, $is_match, $starting_line_no, @lines )
 
 Prints out a matching line or a line of context around a match.
 
@@ -791,6 +799,7 @@ Prints out a matching line or a line of context around a match.
 sub print_match_or_context {
     my $opt      = shift; # opts array
     my $is_match = shift; # is there a match on the line?
+    my $line_no  = shift;
 
     my $sep = $is_match ? ':' : '-';
     my $output_func = $opt->{output};
@@ -807,10 +816,7 @@ sub print_match_or_context {
         }
     }
 
-    local $_;    # line to print
-    my $line_no; # line number of that line
-
-    while ( ($line_no,$_) = splice( @_, 0, 2 ) ) {
+    for ( @_ ) {
         if ( $keep_context && !$output_func ) {
             if ( ( $last_output_line != $line_no - 1 ) &&
                 ( $any_output || ( !$opt->{group} && $context_overall_output_count++ > 0 ) ) ) {
@@ -840,6 +846,7 @@ sub print_match_or_context {
             }
             print;
         }
+        $line_no++;
     }
 } # print_match_or_context()
 

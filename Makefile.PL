@@ -59,6 +59,7 @@ critic:
 	perlcritic -1 -q -profile perlcriticrc ack Ack.pm t/*.t
 
 PROF_ARGS = ack-standalone --color --group -w foo ~/parrot -C2
+
 prof: all
 	$(PERL_T) -d:DProf $(PROF_ARGS) >> /dev/null 2>&1
 	dprofpp -R

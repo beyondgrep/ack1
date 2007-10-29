@@ -15,7 +15,7 @@ LINE_1: {
     );
 
     my @files = qw( t/text/boy-named-sue.txt );
-    my @args = qw( --line=1 --text );
+    my @args = qw( --lines=1 --text );
     my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Looking for line 1' );
@@ -28,7 +28,7 @@ LINE_1_AND_5: {
     );
 
     my @files = qw( t/text/boy-named-sue.txt );
-    my @args = qw( --line=1 --line=5 --text );
+    my @args = qw( --lines=1 --lines=5 --text );
     my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Looking for lines 1 and 5' );
@@ -41,7 +41,7 @@ LINE_1_COMMA_5: {
     );
 
     my @files = qw( t/text/boy-named-sue.txt );
-    my @args = ( '--line=1,5', '--text' );
+    my @args = ( '--lines=1,5', '--text' );
     my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Looking for lines 1, 5' );
@@ -57,7 +57,7 @@ But the meanest thing that he ever did
 EOF
 
     my @files = qw( t/text/boy-named-sue.txt );
-    my @args = qw( --line=1-5 --text );
+    my @args = qw( --lines=1-5 --text );
     my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Looking for lines 1 to 5' );
@@ -70,7 +70,7 @@ LINE_1_AND_5_AND_NON_EXISTENT: {
     );
 
     my @files = qw( t/text/boy-named-sue.txt );
-    my @args = ( '--line=1,5,1000', '--text' );
+    my @args = ( '--lines=1,5,1000', '--text' );
     my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Looking for non existent line' );
@@ -85,7 +85,7 @@ $target_file2:1:/*  A Bison parser, made from plural.y
 EOF
 
     my @files = qw( t/swamp/ );
-    my @args = qw( --cc --line=1 );
+    my @args = qw( --cc --lines=1 );
     my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Looking for first line in multiple files' );

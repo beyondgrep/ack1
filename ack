@@ -50,7 +50,7 @@ sub main {
     }
 
     my $regex;
-    my $file_matching = $opt{f} || $opt{g} || $opt{line};
+    my $file_matching = $opt{f} || $opt{g} || $opt{lines};
     if ( !$file_matching ) {
         @ARGV or App::Ack::die( 'No regular expression found.' );
         $regex = App::Ack::build_regex( shift @ARGV, \%opt );
@@ -91,7 +91,7 @@ sub main {
         my $regex = $opt{i} ? qr/$opt{g}/i : qr/$opt{g}/;
         App::Ack::print_files($iter, $opt{1}, $regex);
     }
-    elsif ( $opt{line} ) {
+    elsif ( $opt{lines} ) {
         my $nmatches = 0;
         while ( defined ( my $filename = $iter->() ) ) {
             my ($fh,$could_be_binary) = App::Ack::open_file( $filename );

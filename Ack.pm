@@ -167,7 +167,7 @@ sub get_command_line_options {
         'h|no-filename'         => \$opt{h},
         'H|with-filename'       => \$opt{H},
         'i|ignore-case'         => \$opt{i},
-        'line=s@'               => \$opt{line},
+        'lines=s@'              => \$opt{lines},
         'l|files-with-matches'  => \$opt{l},
         'L|files-without-match' => sub { $opt{l} = $opt{v} = 1 },
         'm|max-count=i'         => \$opt{m},
@@ -218,7 +218,7 @@ sub get_command_line_options {
     if ( defined( my $val = $opt{output} ) ) {
         $opt{output} = eval qq[ sub { "$val" } ];
     }
-    if ( defined( my $l = $opt{line} ) ) {
+    if ( defined( my $l = $opt{lines} ) ) {
         # --line=1 --line=5 is equivalent to --line=1,5
         my @lines = split( /,/, join( ',', @{$l} ) );
 
@@ -244,7 +244,7 @@ sub get_command_line_options {
         if ( @lines ) {
             my %uniq;
             @uniq{ @lines } = ();
-            $opt{line} = [ sort { $a <=> $b } keys %uniq ];   # numerical sort and each line occurs only once!
+            $opt{lines} = [ sort { $a <=> $b } keys %uniq ];   # numerical sort and each line occurs only once!
         }
         else {
             # happens if there are only ignored --line directives
@@ -745,11 +745,11 @@ sub search {
             }
             elsif ( $keep_context ) {
                 if ( $after ) {
-                    print_match_or_context( $opt, 0, $_, $. );
+                    print_match_or_context( $opt, 0, $., $_ );
                     $after--;
                 }
                 else {
-                    push @before, $_, $.;
+                    push @before, $., $_;
                     splice( @before, 0, 2 ) if @before > ($before_context * 2);
                 }
             }
@@ -769,7 +769,7 @@ sub search {
             @before = ();
             $after = $after_context;
         }
-        print_match_or_context( $opt, 1, $_, $. );
+        print_match_or_context( $opt, 1, $., $_ );
 
         last if $max && ( $nmatches >= $max );
     } # while
@@ -782,7 +782,7 @@ sub search {
 }   # search()
 
 
-=head2 print_match_or_context( $opt, $is_match, $line, $line_no )
+=head2 print_match_or_context( $opt, $is_match, $line_no, $line )
 
 Prints out a matching line or a line of context around a match.
 
@@ -810,7 +810,7 @@ sub print_match_or_context {
     local $_;    # line to print
     my $line_no; # line number of that line
 
-    while ( ($_,$line_no) = splice( @_, 0, 2 ) ) {
+    while ( ($line_no,$_) = splice( @_, 0, 2 ) ) {
         if ( $keep_context && !$output_func ) {
             if ( ( $last_output_line != $line_no - 1 ) &&
                 ( $any_output || ( !$opt->{group} && $context_overall_output_count++ > 0 ) ) ) {
@@ -896,7 +896,7 @@ sub search_and_list {
 
 =head2 print_lines_of_file( $fh, $could_be_binary, $filename, \%opt )
 
-Prints the lines with numbers given in $opt{line}
+Prints the lines with numbers given in $opt{lines}
 
 =cut
 
@@ -909,7 +909,7 @@ sub print_lines_of_file {
     my $display_filename;
     my $nmatches = 0;
     my $show_filename = $opt->{show_filename};
-    my @lines = @{$opt->{line}};
+    my @lines = @{$opt->{lines}};
     my $group = $opt->{group};
     my $color = $opt->{color};
     my $max   = $opt->{m};

@@ -801,9 +801,6 @@ sub print_match_or_context {
     my $is_match = shift; # is there a match on the line?
     my $line_no  = shift;
 
-    my $sep = $is_match ? ':' : '-';
-    my $output_func = $opt->{output};
-
     if ( $opt->{show_filename} ) {
         if ( not defined $display_filename ) {
             $display_filename =
@@ -816,6 +813,8 @@ sub print_match_or_context {
         }
     }
 
+    my $sep = $is_match ? ':' : '-';
+    my $output_func = $opt->{output};
     for ( @_ ) {
         if ( $keep_context && !$output_func ) {
             if ( ( $last_output_line != $line_no - 1 ) &&

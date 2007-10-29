@@ -846,6 +846,8 @@ sub print_match_or_context {
         $any_output = 1;
         ++$line_no;
     }
+
+    return;
 } # print_match_or_context()
 
 } # scope around search() and print_match_or_context()

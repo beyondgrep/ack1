@@ -77,11 +77,13 @@ LINE_1_AND_5_AND_NON_EXISTENT: {
 }
 
 LINE_1_MULTIPLE_FILES: {
-    my $target_file1 = File::Next::reslash( 't/swamp/c-header.h' );
-    my $target_file2 = File::Next::reslash( 't/swamp/c-source.c' );
+    my @target_file = (
+        File::Next::reslash( 't/swamp/c-header.h' ),
+        File::Next::reslash( 't/swamp/c-source.c' )
+    );
     my @expected = split( /\n/, <<"EOF" );
-$target_file1:1:/*    perl.h
-$target_file2:1:/*  A Bison parser, made from plural.y
+$target_file[0]:1:/*    perl.h
+$target_file[1]:1:/*  A Bison parser, made from plural.y
 EOF
 
     my @files = qw( t/swamp/ );

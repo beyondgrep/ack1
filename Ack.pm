@@ -87,7 +87,6 @@ BEGIN {
         xml         => [qw( xml dtd xslt )],
     );
 
-
     while ( my ($type,$exts) = each %mappings ) {
         if ( ref $exts ) {
             for my $ext ( @{$exts} ) {

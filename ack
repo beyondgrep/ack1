@@ -91,21 +91,6 @@ sub main {
         my $regex = $opt{i} ? qr/$opt{g}/i : qr/$opt{g}/;
         App::Ack::print_files($iter, $opt{1}, $regex);
     }
-    elsif ( $opt{lines} ) {
-        # XXX This entire block is too much cut-n-paste.
-        # XXX The lines stuff should be part of search()
-        $opt{show_filename} = 0 if $opt{h};
-        $opt{show_filename} = 1 if $opt{H};
-        $opt{show_filename} = 0 if $opt{output};
-
-        my $nmatches = 0;
-        while ( defined ( my $filename = $iter->() ) ) {
-            my ($fh,$could_be_binary) = App::Ack::open_file( $filename );
-            $nmatches += App::Ack::print_lines_of_file( $fh, $could_be_binary, $filename, \%opt );
-            App::Ack::close_file( $fh, $filename );
-            last if $nmatches && $opt{1};
-        }
-    }
     elsif ( $opt{l} || $opt{count} ) {
         my $nmatches = 0;
         while ( defined ( my $filename = $iter->() ) ) {

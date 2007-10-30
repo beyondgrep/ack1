@@ -247,7 +247,6 @@ sub get_command_line_options {
         }
         else {
             # happens if there are only ignored --line directives
-            #   => ignore --line option completly
             App::Ack::die( 'All --line options are invalid.' );
         }
     }
@@ -724,6 +723,16 @@ sub search {
     $display_filename = undef;
     my $show_filename = $opt->{show_filename};
 
+    # for --line processing
+    my ($has_lines, @lines) = (0, );
+    if ( defined $opt->{lines} ) {
+        $has_lines = 1;
+        @lines = ( @{$opt->{lines}}, -1 );
+        # regex is undefined when --line is given, but is needed in print_match_or_context()
+        # so use a regex that never matches
+        $regex ||= qr/aa^/;
+    }
+
     # for context processing
     $last_output_line = -1;
     $any_output = 0;
@@ -737,7 +746,9 @@ sub search {
     my $after = 0; # number of lines still to print after a match
 
     while (<$fh>) {
-        if ( $v ? /$regex/o : !/$regex/o ) {
+        if ( $has_lines
+               ? $. != $lines[0]
+               : $v ? /$regex/o : !/$regex/o ) {
             if ( $passthru ) {
                 print;
             }
@@ -761,6 +772,8 @@ sub search {
         }
 
         ++$nmatches;
+        shift @lines if $has_lines;
+
         if ( $could_be_binary ) {
             if ( -B $filename ) {
                 print "Binary file $filename matches\n";
@@ -898,75 +911,6 @@ sub search_and_list {
 
     return $nmatches ? 1 : 0;
 }   # search_and_list()
-
-
-=head2 print_lines_of_file( $fh, $could_be_binary, $filename, \%opt )
-
-Prints the lines with numbers given in $opt{lines}
-
-=cut
-
-sub print_lines_of_file {
-    my $fh = shift;
-    my $could_be_binary = shift;
-    my $filename = shift;
-    my $opt = shift;
-
-    my $display_filename;
-    my $nmatches = 0;
-    my $show_filename = $opt->{show_filename};
-    my @lines = @{$opt->{lines}};
-    my $group = $opt->{group};
-    my $color = $opt->{color};
-    my $max   = $opt->{m};
-
-    return unless @lines;
-
-    while (<$fh>) {
-        if ( $could_be_binary ) {
-            if ( -B $filename ) {
-                print "Binary file $filename skipped\n";
-                last;
-            }
-            $could_be_binary = 0;
-        }
-
-        last unless @lines;
-        if ( $. == $lines[0] ) {
-            shift @lines;
-            ++$nmatches;
-        }
-        else {
-            next;
-        }
-
-        if ( $show_filename ) {
-            if ( not defined $display_filename ) {
-                $display_filename =
-                    $color
-                        ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} )
-                        : $filename;
-            }
-            if ( $group ) {
-                print $display_filename, "\n" if $nmatches == 1;
-            }
-            else {
-                print $display_filename, ':';
-            }
-            print $., ':';
-        }
-
-        print;
-
-        last if $max && ( $nmatches >= $max );
-    } # while
-
-    if ( $nmatches && $show_filename && $group ) {
-        print "\n";
-    }
-
-    return $nmatches;
-}   # print_lines_of_file()
 
 
 =head2 apply_defaults

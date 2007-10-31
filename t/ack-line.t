@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
@@ -124,4 +124,29 @@ EOF
     my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Looking for first line in multiple files' );
+}
+
+
+LINE_1_CONTEXT: {
+    my @target_file = (
+        File::Next::reslash( 't/swamp/c-header.h' ),
+        File::Next::reslash( 't/swamp/c-source.c' )
+    );
+    my @expected = split( /\n/, <<"EOF" );
+$target_file[0]:1:/*    perl.h
+$target_file[0]-2- *
+$target_file[0]-3- *    Copyright (C) 1993, 1994, 1995, 1996, 1997, 1998, 1999,
+$target_file[0]-4- *    2000, 2001, 2002, 2003, 2004, 2005, 2006, by Larry Wall and others
+--
+$target_file[1]:1:/*  A Bison parser, made from plural.y
+$target_file[1]-2-    by GNU Bison version 1.28  */
+$target_file[1]-3-
+$target_file[1]-4-#define YYBISON 1  /* Identify Bison output.  */
+EOF
+
+    my @files = qw( t/swamp/ );
+    my @args = qw( --cc --lines=1 --after=3 --sort );
+    my @results = run_ack( @args, @files );
+
+    lists_match( \@results, \@expected, 'Looking for first line in multiple files' );
 }

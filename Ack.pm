@@ -746,13 +746,12 @@ sub search {
     my $show_filename = $opt->{show_filename};
 
     # for --line processing
-    my ($has_lines, @lines) = (0, );
+    my $has_lines = 0;
+    my @lines;
     if ( defined $opt->{lines} ) {
         $has_lines = 1;
         @lines = ( @{$opt->{lines}}, -1 );
-        # regex is undefined when --line is given, but is needed in print_match_or_context()
-        # so use a regex that never matches
-        $regex ||= qr/aa^/;
+        undef $regex; # Don't match when printing matching line
     }
 
     # for context processing
@@ -870,7 +869,7 @@ sub print_match_or_context {
             }
         }
         else {
-            if ( $color && $is_match ) {
+            if ( $color && $is_match && $regex ) {
                 if ( s/($regex)/Term::ANSIColor::colored($1,$ENV{ACK_COLOR_MATCH})/eg ) {
                     s/\n$/\e[0m\e[K\n/;     # Before \n, reset the color and clear to end of line
                 }

@@ -91,6 +91,25 @@ EOF
     lists_match( \@results, \@expected, "Looking for $regex - context defaults to 2" );
 }
 
+# -m1 must not stop the ending context from displaying
+CONTEXT_DEFAULT: {
+    my @expected = split( /\n/, <<"EOF" );
+And it got a lot of laughs from a' lots of folks,
+It seems I had to fight my whole life through.
+Some gal would giggle and I'd turn red
+And some guy'd laugh and I'd bust his head,
+I tell ya, life ain't easy for a boy named Sue.
+EOF
+
+    my $regex = 'giggle';
+
+    my @files = qw( t/text/boy-named-sue.txt );
+    my @args = ( '--text', '-1', '-C', $regex );
+    my @results = run_ack( @args, @files );
+
+    lists_match( \@results, \@expected, "Looking for $regex with -1" );
+}
+
 # highlighting works with context
 HIGHLIGHTING: {
     SKIP: {

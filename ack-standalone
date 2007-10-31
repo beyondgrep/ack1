@@ -876,6 +876,16 @@ sub get_command_line_options {
 
     apply_defaults(\%opt);
 
+    if ( defined $opt{m} && $opt{m} <= 0 ) {
+        App::Ack::die( '-m must be greater than zero' );
+    }
+
+    for ( qw( before_context after_context ) ) {
+        if ( defined $opt{$_} && $opt{$_} < 0 ) {
+            App::Ack::die( "--$_ may not be negative" );
+        }
+    }
+
     if ( defined( my $val = $opt{output} ) ) {
         $opt{output} = eval qq[ sub { "$val" } ];
     }
@@ -1469,7 +1479,6 @@ sub apply_defaults {
         color          => $to_screen && !$App::Ack::is_windows,
         follow         => 0,
         group          => $to_screen,
-        m              => 0,
         before_context => 0,
         after_context  => 0,
     );

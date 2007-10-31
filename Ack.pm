@@ -833,6 +833,7 @@ sub print_match_or_context {
     my $line_no  = shift;
 
     my $color = $opt->{color};
+    my $group = $opt->{group};
     if ( $opt->{show_filename} ) {
         if ( not defined $display_filename ) {
             $display_filename =
@@ -840,7 +841,7 @@ sub print_match_or_context {
                     ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} )
                     : $filename;
         }
-        if ( $opt->{group} && !$any_output ) {
+        if ( $group && !$any_output ) {
             print $display_filename, "\n";
         }
     }
@@ -850,7 +851,7 @@ sub print_match_or_context {
     for ( @_ ) {
         if ( $keep_context && !$output_func ) {
             if ( ( $last_output_line != $line_no - 1 ) &&
-                ( $any_output || ( !$opt->{group} && $context_overall_output_count++ > 0 ) ) ) {
+                ( $any_output || ( !$group && $context_overall_output_count++ > 0 ) ) ) {
                 print "--\n";
             }
             # to ensure separators between different files when --nogroup
@@ -859,7 +860,7 @@ sub print_match_or_context {
         }
 
         if ( $opt->{show_filename} ) {
-            print $display_filename, $sep unless $opt->{group};
+            print $display_filename, $sep if not $group;
             print $line_no, $sep;
         }
 

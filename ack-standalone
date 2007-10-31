@@ -1369,7 +1369,7 @@ sub search {
         }
         print_match_or_context( $opt, 1, $., $_ );
 
-        last if $max && ( $nmatches >= $max );
+        last if $max && ( $nmatches >= $max ) && !$after;
     } # while
 
     if ( $nmatches && $show_filename && $opt->{group} ) {

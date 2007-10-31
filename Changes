@@ -6,6 +6,9 @@ NEXT
 
     Added sanity checks for -m, --after_context and --before_context.
 
+    [FIXES]
+    -m and -C didn't play nicely together.  Now they do.
+
 
 1.69_01
     [ENHANCEMENTS]

@@ -743,7 +743,6 @@ sub search {
     my $nmatches = 0;
 
     $display_filename = undef;
-    my $show_filename = $opt->{show_filename};
 
     # for --line processing
     my $has_lines = 0;
@@ -813,7 +812,7 @@ sub search {
         last if $max && ( $nmatches >= $max ) && !$after;
     } # while
 
-    if ( $nmatches && $show_filename && $opt->{group} ) {
+    if ( $nmatches && $opt->{show_filename} && $opt->{group} ) {
         print "\n";
     }
 
@@ -835,6 +834,7 @@ sub print_match_or_context {
     my $color = $opt->{color};
     my $group = $opt->{group};
     my $show_filename = $opt->{show_filename};
+
     if ( $show_filename ) {
         if ( not defined $display_filename ) {
             $display_filename =

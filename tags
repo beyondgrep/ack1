@@ -38,8 +38,9 @@ LINE_1	t/ack-line.t	/^LINE_1: {$/;"	l
 LINE_1_AND_5	t/ack-line.t	/^LINE_1_AND_5: {$/;"	l
 LINE_1_AND_5_AND_NON_EXISTENT	t/ack-line.t	/^LINE_1_AND_5_AND_NON_EXISTENT: {$/;"	l
 LINE_1_COMMA_5	t/ack-line.t	/^LINE_1_COMMA_5: {$/;"	l
-LINE_1_MULTIPLE_FILES	t/ack-line.t	/^LINE_1_MULTIPLE_FILES: {$/;"	l
 LINE_1_TO_5	t/ack-line.t	/^LINE_1_TO_5: {$/;"	l
+LINE_1_TO_5_CONTEXT	t/ack-line.t	/^LINE_1_TO_5_CONTEXT: {$/;"	l
+LINE_AND_PASSTHRU	t/ack-line.t	/^LINE_AND_PASSTHRU: {$/;"	l
 MAIN	ack	/^MAIN: {$/;"	l
 MATCH_VIA_CONTENT	t/filetypes.t	/^MATCH_VIA_CONTENT: {$/;"	l
 METACHARACTERS	t/ack-g.t	/^METACHARACTERS: {$/;"	l
@@ -78,7 +79,6 @@ _key	Ack.pm	/^sub _key {$/;"	s
 _listify	Ack.pm	/^sub _listify {$/;"	s
 _my_program	Ack.pm	/^sub _my_program {$/;"	s
 _thpppt	Ack.pm	/^sub _thpppt {$/;"	s
-apply_defaults	Ack.pm	/^sub apply_defaults {$/;"	s
 build_regex	Ack.pm	/^sub build_regex {$/;"	s
 check_with	t/ack-type.t	/^sub check_with {$/;"	s
 close_file	Ack.pm	/^sub close_file {$/;"	s
@@ -102,7 +102,6 @@ open_file	Ack.pm	/^sub open_file {$/;"	s
 option_in_usage	t/longopts.t	/^sub option_in_usage {$/;"	s
 pipe_into_ack	t/Util.pm	/^sub pipe_into_ack {$/;"	s
 print_files	Ack.pm	/^sub print_files {$/;"	s
-print_lines_of_file	Ack.pm	/^sub print_lines_of_file {$/;"	s
 print_match_or_context	Ack.pm	/^sub print_match_or_context {$/;"	s
 print_version_statement	Ack.pm	/^sub print_version_statement {$/;"	s
 prof	Makefile.PL	/^prof: all$/;"	l

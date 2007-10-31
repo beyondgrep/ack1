@@ -834,7 +834,8 @@ sub print_match_or_context {
 
     my $color = $opt->{color};
     my $group = $opt->{group};
-    if ( $opt->{show_filename} ) {
+    my $show_filename = $opt->{show_filename};
+    if ( $show_filename ) {
         if ( not defined $display_filename ) {
             $display_filename =
                 $color
@@ -859,7 +860,7 @@ sub print_match_or_context {
             $last_output_line = $line_no;
         }
 
-        if ( $opt->{show_filename} ) {
+        if ( $show_filename ) {
             print $display_filename, $sep if not $group;
             print $line_no, $sep;
         }

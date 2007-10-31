@@ -212,7 +212,19 @@ sub get_command_line_options {
     Getopt::Long::GetOptions( %{$getopt_specs} ) or
         App::Ack::die( 'See ack --help or ack --man for options.' );
 
-    apply_defaults(\%opt);
+    my %defaults = (
+        all            => 0,
+        color          => $to_screen && !$App::Ack::is_windows,
+        follow         => 0,
+        group          => $to_screen,
+        before_context => 0,
+        after_context  => 0,
+    );
+    while ( my ($key,$value) = each %defaults ) {
+        if ( not defined $opt{$key} ) {
+            $opt{$key} = $value;
+        }
+    }
 
     if ( defined $opt{m} && $opt{m} <= 0 ) {
         App::Ack::die( '-m must be greater than zero' );
@@ -922,32 +934,6 @@ sub search_and_list {
     return $nmatches ? 1 : 0;
 }   # search_and_list()
 
-
-=head2 apply_defaults
-
-Apply the default options
-
-=cut
-
-sub apply_defaults {
-    my $opt = shift;
-
-    my %defaults = (
-        all            => 0,
-        color          => $to_screen && !$App::Ack::is_windows,
-        follow         => 0,
-        group          => $to_screen,
-        before_context => 0,
-        after_context  => 0,
-    );
-    while ( my ($key,$value) = each %defaults ) {
-        if ( not defined $opt->{$key} ) {
-            $opt->{$key} = $value;
-        }
-    }
-
-    return;
-}
 
 =head2 filetypes_supported_set
 

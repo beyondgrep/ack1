@@ -4,6 +4,8 @@ NEXT
     [ENHANCEMENTS]
     Added --lines argument.
 
+    Added sanity checks for -m, --after_context and --before_context.
+
 
 1.69_01
     [ENHANCEMENTS]

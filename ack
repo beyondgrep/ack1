@@ -350,6 +350,10 @@ Display version and copyright information.
 Force PATTERN to match only whole words.  The PATTERN is wrapped with
 C<\b> metacharacters.
 
+=item B<-1>
+
+Same as B<--max-count=1>, stop after one match.
+
 =back
 
 =head1 THE .ackrc FILE

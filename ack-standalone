@@ -348,6 +348,10 @@ Display version and copyright information.
 Force PATTERN to match only whole words.  The PATTERN is wrapped with
 C<\b> metacharacters.
 
+=item B<-1>
+
+Same as B<--max-count=1>, stop after one match.
+
 =back
 
 =head1 THE .ackrc FILE
@@ -1101,6 +1105,7 @@ Search output:
   --output=expr         Output the evaluation of expr for each line
                         (turns off text highlighting)
   -m, --max-count=NUM   Stop searching in a file after NUM matches
+  -1                    Stop searching after one match, same as -m1
   -H, --with-filename   Print the filename for each match
   -h, --no-filename     Suppress the prefixing filename on output
   -c, --count           Show number of lines matching per file

@@ -1339,7 +1339,7 @@ sub search {
                     if ( !@before ) {
                         $before_starts_at_line = $.
                     }
-                    if ( @before >= $before_context ) {
+                    elsif ( @before >= $before_context ) {
                         shift @before;
                         ++$before_starts_at_line;
                     }

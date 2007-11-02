@@ -777,7 +777,7 @@ sub search {
                     print_match_or_context( $opt, 0, $., $_ );
                     $after--;
                 }
-                else {
+                elsif ( $before_context ) {
                     if ( !@before ) {
                         $before_starts_at_line = $.
                     }

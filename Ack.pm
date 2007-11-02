@@ -779,7 +779,7 @@ sub search {
                 }
                 elsif ( $before_context ) {
                     if ( !@before ) {
-                        $before_starts_at_line = $.
+                        $before_starts_at_line = $.;
                     }
                     elsif ( @before >= $before_context ) {
                         shift @before;

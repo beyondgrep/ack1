@@ -1339,11 +1339,11 @@ sub search {
                     if ( !@before ) {
                         $before_starts_at_line = $.
                     }
-                    push @before, $_;
-                    if ( @before > $before_context ) {
+                    if ( @before >= $before_context ) {
                         shift @before;
                         ++$before_starts_at_line;
                     }
+                    push @before, $_;
                 }
             }
             next;

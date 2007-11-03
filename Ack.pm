@@ -772,8 +772,10 @@ sub search {
                : $v ? /$regex/o : !/$regex/o ) {
             if ( $passthru ) {
                 print;
+                next;
             }
-            elsif ( $keep_context ) {
+
+            if ( $keep_context ) {
                 if ( $after ) {
                     print_match_or_context( $opt, 0, $., $_ );
                     $after--;
@@ -790,7 +792,7 @@ sub search {
                 }
             }
             next;
-        }
+        } # not a match
 
         ++$nmatches;
         shift @lines if $has_lines;

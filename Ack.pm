@@ -781,12 +781,14 @@ sub search {
                     $after--;
                 }
                 elsif ( $before_context ) {
-                    if ( !@before ) {
-                        $before_starts_at_line = $.;
+                    if ( @before ) {
+                        if ( @before >= $before_context ) {
+                            shift @before;
+                            ++$before_starts_at_line;
+                        }
                     }
-                    elsif ( @before >= $before_context ) {
-                        shift @before;
-                        ++$before_starts_at_line;
+                    else {
+                        $before_starts_at_line = $.;
                     }
                     push @before, $_;
                 }

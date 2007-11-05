@@ -1,6 +1,6 @@
 Changelog for ack
 
-NEXT
+1.70        Sun Nov  4 21:13:55 CST 2007
     [ENHANCEMENTS]
     Added --lines argument.
 
@@ -12,8 +12,7 @@ NEXT
     -m and -C didn't play nicely together.  Now they do.
 
 
->>>>>>> .r580
-1.69_01
+1.69_01     Fri Oct 26 2007
     [ENHANCEMENTS]
     Added -A, -B and -C options for showing context after, before
     and around your match, respectively.  Thanks very much to Torsten

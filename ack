@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.69_01';
+our $VERSION   = '1.70';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.

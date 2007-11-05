@@ -26,7 +26,7 @@ sub pipe_into_ack {
     my $input = shift;
     my @args = @_;
 
-    my $cmd = "cat $input | $^X -T ./ack-standalone @args";
+    my $cmd = "$^X -pe1 $input | $^X -T ./ack-standalone @args";
     my @results = `$cmd`;
     chomp @results;
 

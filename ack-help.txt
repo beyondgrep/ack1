@@ -16,6 +16,7 @@ Searching:
   -Q, --literal         Quote all metacharacters; expr is literal
 
 Search output:
+  --line=NUM            Only print line(s) NUM of each file
   -l, --files-with-matches
                         Only print filenames containing matches
   -L, --files-without-match
@@ -26,6 +27,7 @@ Search output:
   --output=expr         Output the evaluation of expr for each line
                         (turns off text highlighting)
   -m, --max-count=NUM   Stop searching in a file after NUM matches
+  -1                    Stop searching after one match, same as -m1
   -H, --with-filename   Print the filename for each match
   -h, --no-filename     Suppress the prefixing filename on output
   -c, --count           Show number of lines matching per file
@@ -38,6 +40,15 @@ Search output:
   --[no]color           Highlight the matching text (default: on unless
                         output is redirected, or on Windows)
 
+  -A NUM, --after-context=NUM
+                        Print NUM lines of trailing context after matching
+                        lines.
+  -B NUM, --before-context=NUM
+                        Print NUM lines of leading context before matching
+                        lines.
+  -C [NUM], --context[=NUM]
+                        Print NUM lines (default 2) of output context.
+
 File finding:
   -f                    Only print the files found, without searching.
                         The PATTERN must not be specified.
@@ -47,7 +58,7 @@ File finding:
 File inclusion/exclusion:
   -n                    No descending into subdirectories
   -a, --all             All files, regardless of extension (but still skips
-                        blib, CVS, _darcs, .git, .pc, RCS, SCCS and .svn dirs)
+                        autom4te.cache, blib, cover_db, CVS, _darcs, .git, .pc, RCS, SCCS and .svn dirs)
   --perl                Include only Perl files.
   --type=perl           Include only Perl files.
   --noperl              Exclude Perl files.

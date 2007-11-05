@@ -10,6 +10,8 @@ delete @ENV{qw( ACK_OPTIONS ACKRC )};
 use lib 't';
 use Util;
 
+my $is_windows = ($^O =~ /MSWin32/);
+
 my @full_lyrics = <DATA>;
 chomp @full_lyrics;
 
@@ -45,13 +47,17 @@ DASH_C: {
 }
 
 HIGHLIGHTING: {
-    my @ack_args = qw( July --text --passthru --color );
-    my @results = pipe_into_ack( 't/text/4th-of-july.txt', @ack_args );
+    SKIP: {
+        skip 'Highlighting does not work on Windows', 2 if $is_windows;
 
-    cmp_ok( scalar @results, '=', scalar @full_lyrics, 'Got all the lines back' );
+        my @ack_args = qw( July --text --passthru --color );
+        my @results = pipe_into_ack( 't/text/4th-of-july.txt', @ack_args );
 
-    my @escaped_lines = grep { /\e/ } @results;
-    is( scalar @escaped_lines, 2, 'Only two lines are highlighted' );
+        cmp_ok( scalar @results, '=', scalar @full_lyrics, 'Got all the lines back' );
+
+        my @escaped_lines = grep { /\e/ } @results;
+        is( scalar @escaped_lines, 2, 'Only two lines are highlighted' );
+    }
 }
 
 __DATA__

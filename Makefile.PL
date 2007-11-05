@@ -1,5 +1,7 @@
 package main;
-use 5.6.1;
+
+require 5.006001;
+
 use strict;
 use warnings;
 use ExtUtils::MakeMaker;
@@ -56,16 +58,18 @@ tags:
 critic:
 	perlcritic -1 -q -profile perlcriticrc ack Ack.pm t/*.t
 
+PROF_ARGS = ack-standalone --color --group -w foo ~/parrot -C2
+
 prof: all
-	$(PERL_T) -d:DProf ack-standalone --color --group -w foo ~/parrot >> /dev/null 2>&1
+	$(PERL) -d:DProf $(PROF_ARGS) >> /dev/null 2>&1
 	dprofpp -R
 
 profiler: all
-	$(PERL_T) -MDevel::Profiler ack-standalone --color --group -w foo ~/parrot >> /dev/null 2>&1
+	$(PERL) -MDevel::Profiler $(PROF_ARGS) >> /dev/null 2>&1
 	dprofpp -R
 
 smallprof: all
-	$(PERL_T) -d:SmallProf ack-standalone --color --group -w foo ~/parrot >> /dev/null 2>&1
+	$(PERL) -d:SmallProf $(PROF_ARGS) >> /dev/null 2>&1
 	sort -k 2nr,2 smallprof.out | less
 
 $(STANDALONE) : $(ACK) $(APP_ACK_PM) squash Makefile

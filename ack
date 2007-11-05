@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.68';
+our $VERSION   = '1.70';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.
@@ -50,7 +50,7 @@ sub main {
     }
 
     my $regex;
-    my $file_matching = $opt{f} || $opt{g};
+    my $file_matching = $opt{f} || $opt{g} || $opt{lines};
     if ( !$file_matching ) {
         @ARGV or App::Ack::die( 'No regular expression found.' );
         $regex = App::Ack::build_regex( shift @ARGV, \%opt );
@@ -183,9 +183,6 @@ annoying to you, use I<grep>.
 If you truly want to search every file and every directory, I<ack>
 won't do it.  You'll need to rely on I<grep>.
 
-If you need context around your matches, use I<grep>, but check
-back in on I<ack> in the near future, because I'm adding it.
-
 =head1 OPTIONS
 
 =over 4
@@ -194,6 +191,18 @@ back in on I<ack> in the near future, because I'm adding it.
 
 Operate on all files, regardless of type (but still skip directories
 like F<blib>, F<CVS>, etc.)
+
+=item B<-A I<NUM>>, B<--after-context=I<NUM>>
+
+Print I<NUM> lines of trailing context after matching lines.
+
+=item B<-B I<NUM>>, B<--after-context=I<NUM>>
+
+Print I<NUM> lines of leading context before matching lines.
+
+=item B<-C [I<NUM>]>, B<--after-context[=I<NUM>]>
+
+Print I<NUM> lines (default 2) of context around matching lines.
 
 =item B<-c>, B<--count>
 
@@ -251,6 +260,13 @@ Print a short help statement.
 =item B<-i>, B<--ignore-case>
 
 Ignore case in the search strings.
+
+=item B<--line=I<NUM>>
+
+Only print line I<NUM> of each file. Multiple lines can be given with multiple
+B<--line> options or as a comma separated list (B<--line=3,5,7>). B<--line=4-7>
+also works. The lines are always output in ascending order, no matter the
+order given on the command line.
 
 =item B<-l>, B<--files-with-matches>
 
@@ -333,6 +349,10 @@ Display version and copyright information.
 
 Force PATTERN to match only whole words.  The PATTERN is wrapped with
 C<\b> metacharacters.
+
+=item B<-1>
+
+Same as B<--max-count=1>, stop after one match.
 
 =back
 
@@ -430,11 +450,8 @@ your bug as I make changes.
 There is a list of enhancements I want to make to F<ack> in the ack
 issues list at Google Code: L<http://code.google.com/p/ack/issues/list>
 
-Yes, we want to be able to specify filetypes.
-
-Yes, we want to display context.
-
-Yes, we want to add support for a F<.ackrc> file.
+Yes, we want to be able to specify our own filetypes, so you can
+say .snork files are recognized as Java, or whatever.
 
 Please look in the issues list before requesting an enhancement.
 And, of course, patches are always welcome.
@@ -476,6 +493,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Torsten Blix,
 Nigel Metheringham,
 Gabor Szabo,
 Tod Hagan,

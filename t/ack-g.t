@@ -56,7 +56,8 @@ FRONT_ANCHOR: {
     my @expected = qw(
         t/standalone.t
     );
-    my $regex = '^t/st';
+    # windows shell interprets '\\', so it must be doubled so perl sees '\\'
+    my $regex = '^t[\\\\/]st';
 
     my @files = qw( t );
     my @args = ( '-g', $regex );

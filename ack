@@ -352,7 +352,10 @@ C<\b> metacharacters.
 
 =item B<-1>
 
-Same as B<--max-count=1>, stop after one match.
+Stops after reporting first match of any kind.  This is different
+from B<--max-count=1> or B<-m1>, where only one match per file is
+shown.  Also, B<-1> works with B<-f> and B<-g>, where B<-m> does
+not.
 
 =back
 

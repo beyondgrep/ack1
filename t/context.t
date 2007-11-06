@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 10;
+use Test::More tests => 12;
 delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
@@ -144,23 +144,53 @@ HIGHLIGHTING: {
     }
 }
 
+# grouping works with context (single file)
+GROUPING_SINGLE_FILE: {
+    my $target_file = File::Next::reslash( 't/etc/shebang.rb.xxx' );
+    my @expected = split( /\n/, <<"EOF" );
+$target_file
+1:#!/usr/bin/ruby
+EOF
+    my $regex = 'ruby';
+    my @args = ( '--ruby', '--group', '-C', $regex );
+    my @results = run_ack( @args );
+
+    lists_match( \@results, \@expected, "Looking for $regex in ruby files with grouping" );
+}
+
+
+# grouping works with context and multiple files
+# i.e. a separator line between different matches in the same file and no separator between files
+GROUPING_MULTIPLE_FILES: {
+    my @target_file = (
+        File::Next::reslash( 't/text/boy-named-sue.txt' ),
+        File::Next::reslash( 't/text/science-of-myth.txt' ),
+    );
+    my @expected = split( /\n/, <<"EOF" );
+$target_file[0]
+1:Well, my daddy left home when I was three
+--
+5-But the meanest thing that he ever did
+6:Was before he left, he went and named me Sue.
+
+$target_file[1]
+18-Consider the case of the woman whose faith helped her make it through
+19:When she was raped and cut up, left for dead in her trunk, her beliefs held true
+20-It doesn't matter if it's real or not
+21:'cause some things are better left without a doubt
+EOF
+    my $regex = 'left';
+    my @files = qw( t/text/ );
+    my @args = ( '--text', '--group', '-B1', $regex );
+    my @results = run_ack( @args, @files );
+
+    lists_match( \@results, \@expected, "Looking for $regex in multiple files with grouping" );
+}
+
+
 # TODO: How do I test this?
 # Check grouping, e.g.
 #    ack -B1 left --text t/text
-# produces:
-# t/text/boy-named-sue.txt
-# 1:Well, my daddy left home when I was three
-# --
-# 5-But the meanest thing that he ever did
-# 6:Was before he left, he went and named me Sue.
-# 
-# t/text/science-of-myth.txt
-# 18-Consider the case of the woman whose faith helped her make it through
-# 19:When she was raped and cut up, left for dead in her trunk, her beliefs held true
-# 20-It doesn't matter if it's real or not
-# 21:'cause some things are better left without a doubt
-#
-# i.e. a separator line between different matches in the same file and no separator between files
 
 
 # context does nothing ack -g

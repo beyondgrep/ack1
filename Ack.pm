@@ -36,7 +36,9 @@ use Getopt::Long ();
 
 BEGIN {
     %ignore_dirs = (
+        '.bzr'  => 'Bazaar',
         '.git'  => 'Git',
+        '.hg'   => 'Mercurial',
         '.pc'   => 'quilt',
         '.svn'  => 'Subversion',
         CVS     => 'CVS',

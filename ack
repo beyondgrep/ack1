@@ -496,6 +496,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Ori Avtalion,
 Torsten Blix,
 Nigel Metheringham,
 Gabor Szabo,

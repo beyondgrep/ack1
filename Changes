@@ -1,5 +1,11 @@
 Changelog for ack
 
+NEXT
+    [ENHANCEMENTS]
+    Skips Mercurial's .hg and Bazaar's .bzr directories.  Thanks,
+    Ori Avtalion.
+
+
 1.70        Sun Nov  4 21:13:55 CST 2007
     [ENHANCEMENTS]
     Added --lines argument.

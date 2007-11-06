@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
@@ -91,7 +91,7 @@ EOF
     lists_match( \@results, \@expected, "Looking for $regex - context defaults to 2" );
 }
 
-# -m1 must not stop the ending context from displaying
+# -1 must not stop the ending context from displaying
 CONTEXT_DEFAULT: {
     my @expected = split( /\n/, <<"EOF" );
 And it got a lot of laughs from a' lots of folks,
@@ -108,6 +108,27 @@ EOF
     my @results = run_ack( @args, @files );
 
     lists_match( \@results, \@expected, "Looking for $regex with -1" );
+}
+
+# -m2 should work properly and show only 2 matches
+CONTEXT_MAX_COUNT: {
+    my @expected = split( /\n/, <<"EOF" );
+And some guy'd laugh and I'd bust his head,
+I tell ya, life ain't easy for a boy named Sue.
+
+--
+
+I tell ya, I've fought tougher men
+But I really can't remember when,
+EOF
+
+    my $regex = 'ya';
+
+    my @files = qw( t/text/boy-named-sue.txt );
+    my @args = ( '--text', '-m2', '-C1', $regex );
+    my @results = run_ack( @args, @files );
+
+    lists_match( \@results, \@expected, "Looking for $regex with -m2" );
 }
 
 # highlighting works with context

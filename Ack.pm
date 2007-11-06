@@ -848,9 +848,9 @@ sub print_match_or_context {
                 $color
                     ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} )
                     : $filename;
-        }
-        if ( $group && !$any_output ) {
-            print $display_filename, "\n";
+            if ( $group && !$any_output ) {
+                print $display_filename, "\n";
+            }
         }
     }
 

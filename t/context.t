@@ -151,6 +151,8 @@ GROUPING_SINGLE_FILE: {
 $target_file
 1:#!/usr/bin/ruby
 EOF
+    push @expected, ''; # and an empty line
+
     my $regex = 'ruby';
     my @args = ( '--ruby', '--group', '-C', $regex );
     my @results = run_ack( @args );
@@ -179,6 +181,8 @@ $target_file[1]
 20-It doesn't matter if it's real or not
 21:'cause some things are better left without a doubt
 EOF
+    push @expected, ''; # and an empty line
+
     my $regex = 'left';
     my @files = qw( t/text/ );
     my @args = ( '--text', '--group', '-B1', $regex );
@@ -186,12 +190,6 @@ EOF
 
     lists_match( \@results, \@expected, "Looking for $regex in multiple files with grouping" );
 }
-
-
-# TODO: How do I test this?
-# Check grouping, e.g.
-#    ack -B1 left --text t/text
-
 
 # context does nothing ack -g
 ACK_G: {

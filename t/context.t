@@ -110,7 +110,9 @@ EOF
     lists_match( \@results, \@expected, "Looking for $regex with -1" );
 }
 
-# -m2 should work properly and show only 2 matches
+# -m3 should work properly and show only 3 matches with correct context
+#    even though there is a 4th match in the after context of the third match
+#    ("give _ya_ that name" in the last line)
 CONTEXT_MAX_COUNT: {
     my @expected = split( /\n/, <<"EOF" );
 And some guy'd laugh and I'd bust his head,
@@ -120,15 +122,19 @@ I tell ya, life ain't easy for a boy named Sue.
 
 I tell ya, I've fought tougher men
 But I really can't remember when,
+--
+And if a man's gonna make it, he's gotta be tough
+And I knew I wouldn't be there to help ya along.
+So I give ya that name and I said goodbye
 EOF
 
     my $regex = 'ya';
 
     my @files = qw( t/text/boy-named-sue.txt );
-    my @args = ( '--text', '-m2', '-C1', $regex );
+    my @args = ( '--text', '-m3', '-C1', $regex );
     my @results = run_ack( @args, @files );
 
-    lists_match( \@results, \@expected, "Looking for $regex with -m2" );
+    lists_match( \@results, \@expected, "Looking for $regex with -m3" );
 }
 
 # highlighting works with context

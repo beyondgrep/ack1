@@ -794,6 +794,7 @@ sub search {
                     }
                     push @before, $_;
                 }
+                last if $max && ( $nmatches >= $max ) && !$after;
             }
             next;
         } # not a match
@@ -812,7 +813,11 @@ sub search {
             print_match_or_context( $opt, 0, $before_starts_at_line, @before );
             @before = ();
             undef $before_starts_at_line;
-            $after = $after_context;
+            if ( $max && $nmatches > $max ) {
+                --$after;
+            } else {
+                $after = $after_context;
+            }
         }
         print_match_or_context( $opt, 1, $., $_ );
 

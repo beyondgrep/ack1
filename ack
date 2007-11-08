@@ -450,14 +450,20 @@ your bug as I make changes.
 
 =head1 ENHANCEMENTS
 
+All enhancement requests MUST first be posted to the ack-users
+mailing list at L<http://groups.google.com/group/ack-users>.  I
+will not consider a request without it first getting seen by other
+ack users.
+
 There is a list of enhancements I want to make to F<ack> in the ack
 issues list at Google Code: L<http://code.google.com/p/ack/issues/list>
+Please check there first.
 
 Yes, we want to be able to specify our own filetypes, so you can
 say .snork files are recognized as Java, or whatever.
 
-Please look in the issues list before requesting an enhancement.
-And, of course, patches are always welcome.
+Patches are always welcome, but patches with tests get the most
+attention.
 
 =head1 SUPPORT
 
@@ -468,6 +474,10 @@ Support for and information about F<ack> can be found at:
 =item * The ack homepage
 
 L<http://petdance.com/ack/>
+
+=item * The ack issues list at Google Code
+
+L<http://code.google.com/p/ack/issues/list>
 
 =item * AnnoCPAN: Annotated CPAN documentation
 

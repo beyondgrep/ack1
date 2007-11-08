@@ -82,6 +82,7 @@ _key	Ack.pm	/^sub _key {$/;"	s
 _listify	Ack.pm	/^sub _listify {$/;"	s
 _my_program	Ack.pm	/^sub _my_program {$/;"	s
 _thpppt	Ack.pm	/^sub _thpppt {$/;"	s
+bugtracker	Makefile.PL	/^    bugtracker: http:\/\/code.google.com\/p\/ack\/issues\/list$/;"	l
 build_regex	Ack.pm	/^sub build_regex {$/;"	s
 check_with	t/ack-type.t	/^sub check_with {$/;"	s
 close_file	Ack.pm	/^sub close_file {$/;"	s
@@ -94,6 +95,7 @@ filetypes_supported_set	Ack.pm	/^sub filetypes_supported_set {$/;"	s
 get_command_line_options	Ack.pm	/^sub get_command_line_options {$/;"	s
 get_copyright	Ack.pm	/^sub get_copyright {$/;"	s
 get_version_statement	Ack.pm	/^sub get_version_statement {$/;"	s
+homepage	Makefile.PL	/^    homepage: http:\/\/petdance.com\/ack\/$/;"	l
 is_filetype	t/Util.pm	/^sub is_filetype {$/;"	s
 is_interesting	Ack.pm	/^sub is_interesting {$/;"	s
 is_searchable	Ack.pm	/^sub is_searchable {$/;"	s
@@ -110,6 +112,7 @@ print_version_statement	Ack.pm	/^sub print_version_statement {$/;"	s
 prof	Makefile.PL	/^prof: all$/;"	l
 profiler	Makefile.PL	/^profiler: all$/;"	l
 read_ackrc	Ack.pm	/^sub read_ackrc {$/;"	s
+resources	Makefile.PL	/^resources:$/;"	l
 run_ack	t/Util.pm	/^sub run_ack {$/;"	s
 search	Ack.pm	/^sub search {$/;"	s
 search_and_list	Ack.pm	/^sub search_and_list {$/;"	s

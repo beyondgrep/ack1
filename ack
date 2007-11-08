@@ -34,7 +34,7 @@ MAIN: {
 
 sub main {
     my %opt = App::Ack::get_command_line_options();
-    if ( !-t STDIN ) {
+    if ( !-t STDIN && !eof(STDIN) ) {
         # We're going into filter mode
         for ( qw( f g l ) ) {
             $opt{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );

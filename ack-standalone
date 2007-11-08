@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.70';
+our $VERSION   = '1.72';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.
@@ -32,7 +32,7 @@ MAIN: {
 
 sub main {
     my %opt = App::Ack::get_command_line_options();
-    if ( !-t STDIN ) {
+    if ( !-t STDIN && !eof(STDIN) ) {
         # We're going into filter mode
         for ( qw( f g l ) ) {
             $opt{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );
@@ -350,7 +350,10 @@ C<\b> metacharacters.
 
 =item B<-1>
 
-Same as B<--max-count=1>, stop after one match.
+Stops after reporting first match of any kind.  This is different
+from B<--max-count=1> or B<-m1>, where only one match per file is
+shown.  Also, B<-1> works with B<-f> and B<-g>, where B<-m> does
+not.
 
 =back
 
@@ -445,14 +448,20 @@ your bug as I make changes.
 
 =head1 ENHANCEMENTS
 
+All enhancement requests MUST first be posted to the ack-users
+mailing list at L<http://groups.google.com/group/ack-users>.  I
+will not consider a request without it first getting seen by other
+ack users.
+
 There is a list of enhancements I want to make to F<ack> in the ack
 issues list at Google Code: L<http://code.google.com/p/ack/issues/list>
+Please check there first.
 
 Yes, we want to be able to specify our own filetypes, so you can
 say .snork files are recognized as Java, or whatever.
 
-Please look in the issues list before requesting an enhancement.
-And, of course, patches are always welcome.
+Patches are always welcome, but patches with tests get the most
+attention.
 
 =head1 SUPPORT
 
@@ -463,6 +472,10 @@ Support for and information about F<ack> can be found at:
 =item * The ack homepage
 
 L<http://petdance.com/ack/>
+
+=item * The ack issues list at Google Code
+
+L<http://code.google.com/p/ack/issues/list>
 
 =item * AnnoCPAN: Annotated CPAN documentation
 
@@ -491,6 +504,8 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Kevin Riggle,
+Ori Avtalion,
 Torsten Blix,
 Nigel Metheringham,
 Gabor Szabo,
@@ -700,7 +715,7 @@ use strict;
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.70';
+    $VERSION = '1.72';
     $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 }
 
@@ -720,7 +735,9 @@ use Getopt::Long ();
 
 BEGIN {
     %ignore_dirs = (
+        '.bzr'  => 'Bazaar',
         '.git'  => 'Git',
+        '.hg'   => 'Mercurial',
         '.pc'   => 'quilt',
         '.svn'  => 'Subversion',
         CVS     => 'CVS',
@@ -736,7 +753,7 @@ BEGIN {
         asm         => [qw( s )],
         binary      => q{Binary files, as defined by Perl's -B op (default: off)},
         cc          => [qw( c h xs )],
-        cpp         => [qw( cpp m h )],
+        cpp         => [qw( cpp cc m hpp hh h )],
         csharp      => [qw( cs )],
         css         => [qw( css )],
         elisp       => [qw( el )],
@@ -1104,8 +1121,8 @@ Search output:
   --passthru            Print all lines, whether matching or not
   --output=expr         Output the evaluation of expr for each line
                         (turns off text highlighting)
-  -m, --max-count=NUM   Stop searching in a file after NUM matches
-  -1                    Stop searching after one match, same as -m1
+  -m, --max-count=NUM   Stop searching in each file after NUM matches
+  -1                    Stop searching after one match of any kind
   -H, --with-filename   Print the filename for each match
   -h, --no-filename     Suppress the prefixing filename on output
   -c, --count           Show number of lines matching per file
@@ -1354,6 +1371,7 @@ sub search {
                     }
                     push @before, $_;
                 }
+                last if $max && ( $nmatches >= $max ) && !$after;
             }
             next;
         } # not a match
@@ -1372,7 +1390,11 @@ sub search {
             print_match_or_context( $opt, 0, $before_starts_at_line, @before );
             @before = ();
             undef $before_starts_at_line;
-            $after = $after_context;
+            if ( $max && $nmatches > $max ) {
+                --$after;
+            } else {
+                $after = $after_context;
+            }
         }
         print_match_or_context( $opt, 1, $., $_ );
 
@@ -1403,9 +1425,9 @@ sub print_match_or_context {
                 $color
                     ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} )
                     : $filename;
-        }
-        if ( $group && !$any_output ) {
-            print $display_filename, "\n";
+            if ( $group && !$any_output ) {
+                print $display_filename, "\n";
+            }
         }
     }
 

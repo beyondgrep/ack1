@@ -1,5 +1,21 @@
 Changelog for ack
 
+NEXT
+    Please note that I have moved the bug/issue queue to Google
+    Code at http://code.google.com/p/ack/issues/list.  The RT queue
+    at rt.cpan.org will no longer be maintained.
+
+    [FIXES]
+    The test suite will now run with a TTY, and as part of the
+    Debian packaging process.
+
+    [ENHANCEMENTS]
+    Skips Mercurial's .hg and Bazaar's .bzr directories.  Thanks,
+    Ori Avtalion.
+
+    Added .cc, .hpp, and .hh for C++.  Thanks, Kevin Riggle.
+
+
 1.70        Sun Nov  4 21:13:55 CST 2007
     [ENHANCEMENTS]
     Added --lines argument.

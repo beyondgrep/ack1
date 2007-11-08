@@ -9,14 +9,14 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.70
+Version 1.72
 
 =cut
 
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.70';
+    $VERSION = '1.72';
     $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 }
 
@@ -36,7 +36,9 @@ use Getopt::Long ();
 
 BEGIN {
     %ignore_dirs = (
+        '.bzr'  => 'Bazaar',
         '.git'  => 'Git',
+        '.hg'   => 'Mercurial',
         '.pc'   => 'quilt',
         '.svn'  => 'Subversion',
         CVS     => 'CVS',
@@ -52,7 +54,7 @@ BEGIN {
         asm         => [qw( s )],
         binary      => q{Binary files, as defined by Perl's -B op (default: off)},
         cc          => [qw( c h xs )],
-        cpp         => [qw( cpp m h )],
+        cpp         => [qw( cpp cc m hpp hh h )],
         csharp      => [qw( cs )],
         css         => [qw( css )],
         elisp       => [qw( el )],
@@ -494,8 +496,8 @@ Search output:
   --passthru            Print all lines, whether matching or not
   --output=expr         Output the evaluation of expr for each line
                         (turns off text highlighting)
-  -m, --max-count=NUM   Stop searching in a file after NUM matches
-  -1                    Stop searching after one match, same as -m1
+  -m, --max-count=NUM   Stop searching in each file after NUM matches
+  -1                    Stop searching after one match of any kind
   -H, --with-filename   Print the filename for each match
   -h, --no-filename     Suppress the prefixing filename on output
   -c, --count           Show number of lines matching per file
@@ -792,6 +794,7 @@ sub search {
                     }
                     push @before, $_;
                 }
+                last if $max && ( $nmatches >= $max ) && !$after;
             }
             next;
         } # not a match
@@ -810,7 +813,11 @@ sub search {
             print_match_or_context( $opt, 0, $before_starts_at_line, @before );
             @before = ();
             undef $before_starts_at_line;
-            $after = $after_context;
+            if ( $max && $nmatches > $max ) {
+                --$after;
+            } else {
+                $after = $after_context;
+            }
         }
         print_match_or_context( $opt, 1, $., $_ );
 
@@ -846,9 +853,9 @@ sub print_match_or_context {
                 $color
                     ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} )
                     : $filename;
-        }
-        if ( $group && !$any_output ) {
-            print $display_filename, "\n";
+            if ( $group && !$any_output ) {
+                print $display_filename, "\n";
+            }
         }
     }
 

@@ -26,8 +26,8 @@ Search output:
   --passthru            Print all lines, whether matching or not
   --output=expr         Output the evaluation of expr for each line
                         (turns off text highlighting)
-  -m, --max-count=NUM   Stop searching in a file after NUM matches
-  -1                    Stop searching after one match, same as -m1
+  -m, --max-count=NUM   Stop searching in each file after NUM matches
+  -1                    Stop searching after one match of any kind
   -H, --with-filename   Print the filename for each match
   -h, --no-filename     Suppress the prefixing filename on output
   -c, --count           Show number of lines matching per file
@@ -58,7 +58,7 @@ File finding:
 File inclusion/exclusion:
   -n                    No descending into subdirectories
   -a, --all             All files, regardless of extension (but still skips
-                        autom4te.cache, blib, cover_db, CVS, _darcs, .git, .pc, RCS, SCCS and .svn dirs)
+                        autom4te.cache, blib, .bzr, cover_db, CVS, _darcs, .git, .hg, .pc, RCS, SCCS and .svn dirs)
   --perl                Include only Perl files.
   --type=perl           Include only Perl files.
   --noperl              Exclude Perl files.

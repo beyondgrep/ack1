@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.70';
+our $VERSION   = '1.72';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.
@@ -34,7 +34,7 @@ MAIN: {
 
 sub main {
     my %opt = App::Ack::get_command_line_options();
-    if ( !-t STDIN ) {
+    if ( !-t STDIN && !eof(STDIN) ) {
         # We're going into filter mode
         for ( qw( f g l ) ) {
             $opt{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );
@@ -352,7 +352,10 @@ C<\b> metacharacters.
 
 =item B<-1>
 
-Same as B<--max-count=1>, stop after one match.
+Stops after reporting first match of any kind.  This is different
+from B<--max-count=1> or B<-m1>, where only one match per file is
+shown.  Also, B<-1> works with B<-f> and B<-g>, where B<-m> does
+not.
 
 =back
 
@@ -447,14 +450,20 @@ your bug as I make changes.
 
 =head1 ENHANCEMENTS
 
+All enhancement requests MUST first be posted to the ack-users
+mailing list at L<http://groups.google.com/group/ack-users>.  I
+will not consider a request without it first getting seen by other
+ack users.
+
 There is a list of enhancements I want to make to F<ack> in the ack
 issues list at Google Code: L<http://code.google.com/p/ack/issues/list>
+Please check there first.
 
 Yes, we want to be able to specify our own filetypes, so you can
 say .snork files are recognized as Java, or whatever.
 
-Please look in the issues list before requesting an enhancement.
-And, of course, patches are always welcome.
+Patches are always welcome, but patches with tests get the most
+attention.
 
 =head1 SUPPORT
 
@@ -465,6 +474,10 @@ Support for and information about F<ack> can be found at:
 =item * The ack homepage
 
 L<http://petdance.com/ack/>
+
+=item * The ack issues list at Google Code
+
+L<http://code.google.com/p/ack/issues/list>
 
 =item * AnnoCPAN: Annotated CPAN documentation
 
@@ -493,6 +506,8 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Kevin Riggle,
+Ori Avtalion,
 Torsten Blix,
 Nigel Metheringham,
 Gabor Szabo,

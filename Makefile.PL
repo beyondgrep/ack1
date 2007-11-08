@@ -6,7 +6,7 @@ use strict;
 use warnings;
 use ExtUtils::MakeMaker;
 
-WriteMakefile(
+my %parms = (
     NAME                => 'ack',
     AUTHOR              => 'Andy Lester <andy@petdance.com>',
     ABSTRACT            => 'A grep-like program specifically for large source trees',
@@ -24,6 +24,16 @@ WriteMakefile(
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'ack-1*' },
 );
+
+if ( $ExtUtils::MakeMaker::VERSION eq '6.36' ) {
+    $parms{EXTRA_META} = <<EOF;
+resources:
+    homepage: http://petdance.com/ack/
+    bugtracker: http://code.google.com/p/ack/issues/list
+EOF
+    }
+
+WriteMakefile( %parms );
 
 package MY;
 

@@ -1,6 +1,6 @@
 Changelog for ack
 
-NEXT
+1.72        Wed Nov  7 23:16:46 CST 2007
     Please note that I have moved the bug/issue queue to Google
     Code at http://code.google.com/p/ack/issues/list.  The RT queue
     at rt.cpan.org will no longer be maintained.

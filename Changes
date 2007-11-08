@@ -9,6 +9,8 @@ Changelog for ack
     The test suite will now run with a TTY, and as part of the
     Debian packaging process.
 
+    Fixed some grouping bugs.  Thanks, Torsten Blix.
+
     [ENHANCEMENTS]
     Skips Mercurial's .hg and Bazaar's .bzr directories.  Thanks,
     Ori Avtalion.

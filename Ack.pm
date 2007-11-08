@@ -54,7 +54,7 @@ BEGIN {
         asm         => [qw( s )],
         binary      => q{Binary files, as defined by Perl's -B op (default: off)},
         cc          => [qw( c h xs )],
-        cpp         => [qw( cpp m h )],
+        cpp         => [qw( cpp cc m hpp hh h )],
         csharp      => [qw( cs )],
         css         => [qw( css )],
         elisp       => [qw( el )],

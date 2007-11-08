@@ -494,6 +494,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Kevin Riggle,
 Ori Avtalion,
 Torsten Blix,
 Nigel Metheringham,
@@ -742,7 +743,7 @@ BEGIN {
         asm         => [qw( s )],
         binary      => q{Binary files, as defined by Perl's -B op (default: off)},
         cc          => [qw( c h xs )],
-        cpp         => [qw( cpp m h )],
+        cpp         => [qw( cpp cc m hpp hh h )],
         csharp      => [qw( cs )],
         css         => [qw( css )],
         elisp       => [qw( el )],

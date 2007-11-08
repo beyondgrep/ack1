@@ -5,6 +5,8 @@ NEXT
     Skips Mercurial's .hg and Bazaar's .bzr directories.  Thanks,
     Ori Avtalion.
 
+    Added .cc, .hpp, and .hh for C++.  Thanks, Kevin Riggle.
+
 
 1.70        Sun Nov  4 21:13:55 CST 2007
     [ENHANCEMENTS]

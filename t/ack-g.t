@@ -71,7 +71,7 @@ BACK_ANCHOR: {
     my @expected = qw(
         t/swamp/moose-andy.jpg
     );
-    my $regex = 'g$';
+    my $regex = 'pg$';
 
     my @files = qw( t );
     my @args = ( '-a', '-g', $regex );

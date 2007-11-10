@@ -30,7 +30,7 @@ EOF
 
     my @results = run_ack( @args, @files );
 
-    lists_match( \@results, \@expected, 'Find all the things' );
+    lists_match( \@results, \@expected, 'Find all the things without -o' );
 }
 
 
@@ -58,22 +58,28 @@ EOF
 
     my @results = run_ack( @args, @files );
 
-    lists_match( \@results, \@expected, 'Find all the things' );
+    lists_match( \@results, \@expected, 'Find all the things with -o' );
 }
 
 
+# give a output function and find match in multiple files (so print filenames, just like grep -o)
 WITH_OUTPUT: {
     my @files = qw( t/text/ );
     my @args = ($^O eq 'MSWin32')
         ? qw( --output="x$1x" -a "question(\\S+)" )
         : qw( --output='x$1x' -a "question(\\S+)" );
-    my @expected = qw(
-        xedx
-        xs.x
-        x.x
+
+    my @target_file = (
+        File::Next::reslash( 't/text/science-of-myth.txt' ),
+        File::Next::reslash( 't/text/shut-up-be-happy.txt' ),
+    );
+    my @expected = (
+        "$target_file[0]:1:xedx",
+        "$target_file[1]:15:xs.x",
+        "$target_file[1]:21:x.x",
     );
 
     my @results = run_ack( @args, @files );
 
-    sets_match( \@results, \@expected, 'Find all the things' );
+    sets_match( \@results, \@expected, 'Find all the things with --output function' );
 }

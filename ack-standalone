@@ -849,7 +849,7 @@ sub get_command_line_options {
         'h|no-filename'         => \$opt{h},
         'H|with-filename'       => \$opt{H},
         'i|ignore-case'         => \$opt{i},
-        'lines=s@'              => \$opt{lines},
+        'lines=s'               => sub { shift; my $val = shift; push @{$opt{lines}}, $val },
         'l|files-with-matches'  => \$opt{l},
         'L|files-without-match' => sub { $opt{l} = $opt{v} = 1 },
         'm|max-count=i'         => \$opt{m},

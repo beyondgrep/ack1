@@ -1,13 +1,16 @@
 Changelog for ack
 
 NEXT
+    [THINGS THAT HAVE CHANGED]
+    ack -o emulates grep now and shows filenames unless explicitly
+    suppressed with -h.
+
+    [FIXES]
     Added workaround for older Getopt::Long.
 
     Fixed some testcases so that they are more robust (order of
     files, forward/backward slashes and shellquoting).
 
-    ack -o emulates grep now and shows filenames unless explicitly
-    suppressed with -h.
 
 1.72        Wed Nov  7 23:16:46 CST 2007
     Please note that I have moved the bug/issue queue to Google

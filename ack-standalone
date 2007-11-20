@@ -1386,12 +1386,15 @@ sub search {
             $could_be_binary = 0;
         }
         if ( $keep_context ) {
-            print_match_or_context( $opt, 0, $before_starts_at_line, @before );
-            @before = ();
-            undef $before_starts_at_line;
+            if ( @before ) {
+                print_match_or_context( $opt, 0, $before_starts_at_line, @before );
+                @before = ();
+                undef $before_starts_at_line;
+            }
             if ( $max && $nmatches > $max ) {
                 --$after;
-            } else {
+            }
+            else {
                 $after = $after_context;
             }
         }

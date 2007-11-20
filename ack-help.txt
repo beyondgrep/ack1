@@ -59,6 +59,7 @@ File inclusion/exclusion:
   -n                    No descending into subdirectories
   -a, --all             All files, regardless of extension (but still skips
                         autom4te.cache, blib, .bzr, cover_db, CVS, _darcs, .git, .hg, .pc, RCS, SCCS and .svn dirs)
+  --grep                Really all files, including all directories
   --perl                Include only Perl files.
   --type=perl           Include only Perl files.
   --noperl              Exclude Perl files.

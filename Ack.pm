@@ -161,6 +161,7 @@ sub get_command_line_options {
         c                       => \$opt{count},
         'color!'                => \$opt{color},
         count                   => \$opt{count},
+        'grep'                  => \$opt{grep},
         f                       => \$opt{f},
         'g=s'                   => \$opt{g},
         'follow!'               => \$opt{follow},
@@ -529,6 +530,7 @@ File inclusion/exclusion:
   -n                    No descending into subdirectories
   -a, --all             All files, regardless of extension (but still skips
                         $ignore_dirs dirs)
+  --grep                Really all files, including all directories
   --perl                Include only Perl files.
   --type=perl           Include only Perl files.
   --noperl              Exclude Perl files.

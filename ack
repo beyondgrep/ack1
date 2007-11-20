@@ -71,17 +71,20 @@ sub main {
 
     my $iter =
         File::Next::files( {
-            file_filter     => $opt{all}
-                                    ? sub { return App::Ack::is_searchable( $File::Next::name ) }
-                                    : \&App::Ack::is_interesting,
+            file_filter     => $opt{grep}
+                                    ? sub {1}
+                                    : $opt{all}
+                                        ? sub { return App::Ack::is_searchable( $File::Next::name ) }
+                                        : \&App::Ack::is_interesting,
             descend_filter  => $opt{n}
                                     ? sub {0}
-                                    : \&App::Ack::skipdir_filter,
+                                    : $opt{grep}
+                                        ? sub {1}
+                                        : \&App::Ack::skipdir_filter,
             error_handler   => sub { my $msg = shift; App::Ack::warn( $msg ) },
             sort_files      => $opt{sort_files},
             follow_symlinks => $opt{follow},
         }, @what );
-
 
     App::Ack::filetype_setup();
     if ( $opt{f} ) {
@@ -215,6 +218,11 @@ B<-l>, some line counts may be zeroes.
 B<--color> highlights the matching text.  B<--nocolor> supresses
 the color.  This is on by default unless the output is redirected,
 or running under Windows.
+
+=item B<--grep>
+
+All files and directories (including blib/, core.*, ...) are searched,
+nothing is skipped.
 
 =item B<-f>
 

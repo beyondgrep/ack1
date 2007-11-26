@@ -84,6 +84,7 @@ _my_program	Ack.pm	/^sub _my_program {$/;"	s
 _thpppt	Ack.pm	/^sub _thpppt {$/;"	s
 bugtracker	Makefile.PL	/^    bugtracker: http:\/\/code.google.com\/p\/ack\/issues\/list$/;"	l
 build_regex	Ack.pm	/^sub build_regex {$/;"	s
+check_grep	t/ack-grep.t	/^sub check_grep {$/;"	s
 check_with	t/ack-type.t	/^sub check_with {$/;"	s
 close_file	Ack.pm	/^sub close_file {$/;"	s
 critic	Makefile.PL	/^critic:$/;"	l

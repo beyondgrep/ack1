@@ -771,6 +771,7 @@ sub search {
     my $after = 0; # number of lines still to print after a match
 
     while (<$fh>) {
+        # XXX Optimize away the case when there are no more @lines to find.
         if ( $has_lines
                ? $. != $lines[0]
                : $v ? /$regex/o : !/$regex/o ) {

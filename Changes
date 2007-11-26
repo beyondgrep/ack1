@@ -14,6 +14,8 @@ NEXT
     Fixed some testcases so that they are more robust (order of
     files, forward/backward slashes and shellquoting).
 
+    Fixed a test that would fail if the files weren't sorted.
+
 
 1.72        Wed Nov  7 23:16:46 CST 2007
     Please note that I have moved the bug/issue queue to Google

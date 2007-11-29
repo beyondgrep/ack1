@@ -1,6 +1,6 @@
 Changelog for ack
 
-NEXT
+1.74
     [ENHANCEMENTS]
     Added -u, --unrestricted options that search absolutely all
     files and directories, just like grep.

@@ -1,6 +1,28 @@
 Changelog for ack
 
-NEXT
+1.74        Wed Nov 28 22:08:16 CST 2007
+    [ENHANCEMENTS]
+    Added -u, --unrestricted options that search absolutely all
+    files and directories, just like grep.
+
+    Ignores Codeville's .cdv directories.
+
+    Ignores SourceGear's _sgbak directories.
+
+    [THINGS THAT HAVE CHANGED]
+    ack -o emulates grep now and shows filenames unless explicitly
+    suppressed with -h.
+
+    [FIXES]
+    Added workaround for older Getopt::Long.
+
+    Fixed some testcases so that they are more robust (order of
+    files, forward/backward slashes and shellquoting).
+
+    Fixed a test that would fail if the files weren't sorted.
+
+
+1.72        Wed Nov  7 23:16:46 CST 2007
     Please note that I have moved the bug/issue queue to Google
     Code at http://code.google.com/p/ack/issues/list.  The RT queue
     at rt.cpan.org will no longer be maintained.
@@ -8,6 +30,8 @@ NEXT
     [FIXES]
     The test suite will now run with a TTY, and as part of the
     Debian packaging process.
+
+    Fixed some grouping bugs.  Thanks, Torsten Blix.
 
     [ENHANCEMENTS]
     Skips Mercurial's .hg and Bazaar's .bzr directories.  Thanks,

@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.72';
+our $VERSION   = '1.74';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.
@@ -71,17 +71,20 @@ sub main {
 
     my $iter =
         File::Next::files( {
-            file_filter     => $opt{all}
-                                    ? sub { return App::Ack::is_searchable( $File::Next::name ) }
-                                    : \&App::Ack::is_interesting,
+            file_filter     => $opt{u}
+                                    ? sub {1}
+                                    : $opt{all}
+                                        ? sub { return App::Ack::is_searchable( $File::Next::name ) }
+                                        : \&App::Ack::is_interesting,
             descend_filter  => $opt{n}
                                     ? sub {0}
-                                    : \&App::Ack::skipdir_filter,
+                                    : $opt{u}
+                                        ? sub {1}
+                                        : \&App::Ack::skipdir_filter,
             error_handler   => sub { my $msg = shift; App::Ack::warn( $msg ) },
             sort_files      => $opt{sort_files},
             follow_symlinks => $opt{follow},
         }, @what );
-
 
     App::Ack::filetype_setup();
     if ( $opt{f} ) {
@@ -103,7 +106,6 @@ sub main {
     else {
         $opt{show_filename} = 0 if $opt{h};
         $opt{show_filename} = 1 if $opt{H};
-        $opt{show_filename} = 0 if $opt{output};
 
         my $nmatches = 0;
         while ( defined ( my $filename = $iter->() ) ) {
@@ -336,6 +338,11 @@ over an inclusion.
 Type specifications can be repeated and are ORed together.
 
 See I<ack --help=types> for a list of valid types.
+
+=item B<-u, --unrestricted>
+
+All files and directories (including blib/, core.*, ...) are searched,
+nothing is skipped.
 
 =item B<-v>, B<--invert-match>
 

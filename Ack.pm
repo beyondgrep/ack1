@@ -9,14 +9,14 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.72
+Version 1.74
 
 =cut
 
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.72';
+    $VERSION = '1.74';
     $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 }
 
@@ -37,15 +37,17 @@ use Getopt::Long ();
 BEGIN {
     %ignore_dirs = (
         '.bzr'  => 'Bazaar',
+        '.cdv'  => 'Codeville',
         '.git'  => 'Git',
         '.hg'   => 'Mercurial',
         '.pc'   => 'quilt',
         '.svn'  => 'Subversion',
+        blib    => 'Perl module building',
         CVS     => 'CVS',
         RCS     => 'RCS',
         SCCS    => 'SCCS',
         _darcs  => 'darcs',
-        blib    => 'Perl module building',
+        _sgbak  => 'SourceGear Vault/Fortress',
         'autom4te.cache'    => 'autoconf cache',
         'cover_db'          => 'Devel::Cover results',
     );
@@ -153,14 +155,14 @@ sub get_command_line_options {
 
     my $getopt_specs = {
         1                       => sub { $opt{1} = $opt{m} = 1 },
-        a                       => \$opt{all},
-        'all!'                  => \$opt{all},
+        'a|all-types'           => \$opt{all},
         'A|after-context=i'     => \$opt{after_context},
         'B|before-context=i'    => \$opt{before_context},
         'C|context:i'           => sub { shift; my $val = shift; $opt{before_context} = $opt{after_context} = ($val || 2) },
         c                       => \$opt{count},
         'color!'                => \$opt{color},
         count                   => \$opt{count},
+        'u|unrestricted'        => \$opt{u},
         f                       => \$opt{f},
         'g=s'                   => \$opt{g},
         'follow!'               => \$opt{follow},
@@ -168,7 +170,7 @@ sub get_command_line_options {
         'h|no-filename'         => \$opt{h},
         'H|with-filename'       => \$opt{H},
         'i|ignore-case'         => \$opt{i},
-        'lines=s@'              => \$opt{lines},
+        'lines=s'               => sub { shift; my $val = shift; push @{$opt{lines}}, $val },
         'l|files-with-matches'  => \$opt{l},
         'L|files-without-match' => sub { $opt{l} = $opt{v} = 1 },
         'm|max-count=i'         => \$opt{m},
@@ -373,6 +375,7 @@ Recognized files:
 sub is_searchable {
     my $filename = shift;
 
+    # If these are updated, update the --help message
     return if $filename =~ /~$/;
     return if $filename =~ m{$path_sep_regex?(?:#.+#|core\.\d+|[._].*\.swp)$}o;
 
@@ -526,15 +529,24 @@ File finding:
   --sort-files          Sort the found files lexically.
 
 File inclusion/exclusion:
+  -a, --all-types       All file types searched; directories still skipped
+  -u, --unrestricted    All files and directories searched
   -n                    No descending into subdirectories
-  -a, --all             All files, regardless of extension (but still skips
-                        $ignore_dirs dirs)
   --perl                Include only Perl files.
   --type=perl           Include only Perl files.
   --noperl              Exclude Perl files.
   --type=noperl         Exclude Perl files.
                         See "ack --help type" for supported filetypes.
   --[no]follow          Follow symlinks.  Default is off.
+
+  Directories ignored by default:
+    $ignore_dirs
+
+  Files not checked for type:
+    /~\$/           - Unix backup files
+    /#.+#\$/        - Emacs swap files
+    /[._].*\\.swp\$/ - Vi(m) swap files
+    /core\\.\\d+\$/   - core dumps
 
 Miscellaneous:
   --help                This help
@@ -769,6 +781,7 @@ sub search {
     my $after = 0; # number of lines still to print after a match
 
     while (<$fh>) {
+        # XXX Optimize away the case when there are no more @lines to find.
         if ( $has_lines
                ? $. != $lines[0]
                : $v ? /$regex/o : !/$regex/o ) {
@@ -810,12 +823,15 @@ sub search {
             $could_be_binary = 0;
         }
         if ( $keep_context ) {
-            print_match_or_context( $opt, 0, $before_starts_at_line, @before );
-            @before = ();
-            undef $before_starts_at_line;
+            if ( @before ) {
+                print_match_or_context( $opt, 0, $before_starts_at_line, @before );
+                @before = ();
+                undef $before_starts_at_line;
+            }
             if ( $max && $nmatches > $max ) {
                 --$after;
-            } else {
+            }
+            else {
                 $after = $after_context;
             }
         }

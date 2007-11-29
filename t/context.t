@@ -191,7 +191,7 @@ EOF
 
     my $regex = 'left';
     my @files = qw( t/text/ );
-    my @args = ( '--text', '--group', '-B1', $regex );
+    my @args = ( '--text', '--group', '-B1', '--sort-files', $regex );
     my @results = run_ack( @args, @files );
 
     lists_match( \@results, \@expected, "Looking for $regex in multiple files with grouping" );

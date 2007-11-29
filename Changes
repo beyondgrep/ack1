@@ -1,6 +1,6 @@
 Changelog for ack
 
-1.74
+1.74        Wed Nov 28 22:08:16 CST 2007
     [ENHANCEMENTS]
     Added -u, --unrestricted options that search absolutely all
     files and directories, just like grep.

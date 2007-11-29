@@ -37,15 +37,17 @@ use Getopt::Long ();
 BEGIN {
     %ignore_dirs = (
         '.bzr'  => 'Bazaar',
+        '.cdv'  => 'Codeville',
         '.git'  => 'Git',
         '.hg'   => 'Mercurial',
         '.pc'   => 'quilt',
         '.svn'  => 'Subversion',
+        blib    => 'Perl module building',
         CVS     => 'CVS',
         RCS     => 'RCS',
         SCCS    => 'SCCS',
         _darcs  => 'darcs',
-        blib    => 'Perl module building',
+        _sgbak  => 'SourceGear Vault/Fortress',
         'autom4te.cache'    => 'autoconf cache',
         'cover_db'          => 'Devel::Cover results',
     );

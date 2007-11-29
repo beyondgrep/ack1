@@ -71,14 +71,14 @@ sub main {
 
     my $iter =
         File::Next::files( {
-            file_filter     => $opt{grep}
+            file_filter     => $opt{u}
                                     ? sub {1}
                                     : $opt{all}
                                         ? sub { return App::Ack::is_searchable( $File::Next::name ) }
                                         : \&App::Ack::is_interesting,
             descend_filter  => $opt{n}
                                     ? sub {0}
-                                    : $opt{grep}
+                                    : $opt{u}
                                         ? sub {1}
                                         : \&App::Ack::skipdir_filter,
             error_handler   => sub { my $msg = shift; App::Ack::warn( $msg ) },
@@ -219,11 +219,6 @@ B<--color> highlights the matching text.  B<--nocolor> supresses
 the color.  This is on by default unless the output is redirected,
 or running under Windows.
 
-=item B<--grep>
-
-All files and directories (including blib/, core.*, ...) are searched,
-nothing is skipped.
-
 =item B<-f>
 
 Only print the files that would be searched, without actually doing
@@ -343,6 +338,11 @@ over an inclusion.
 Type specifications can be repeated and are ORed together.
 
 See I<ack --help=types> for a list of valid types.
+
+=item B<-u, --unrestricted>
+
+All files and directories (including blib/, core.*, ...) are searched,
+nothing is skipped.
 
 =item B<-v>, B<--invert-match>
 

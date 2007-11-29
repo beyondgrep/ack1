@@ -20,7 +20,6 @@ ACK_F_TEXT: {
         t/ack-a.t
         t/ack-binary.t
         t/ack-c.t
-        t/ack-grep.t
         t/ack-g.t
         t/ack-h.t
         t/ack-line.t
@@ -28,8 +27,9 @@ ACK_F_TEXT: {
         t/ack-passthru.t
         t/ack-text.t
         t/ack-type.t
-        t/ack-w.t
+        t/ack-u.t
         t/ack-v.t
+        t/ack-w.t
         t/context.t
         t/etc/buttonhook.html.xxx
         t/etc/buttonhook.noxml.xxx

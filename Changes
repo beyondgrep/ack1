@@ -1,8 +1,9 @@
 Changelog for ack
 
 NEXT
-    [NEW]
-    The new option --grep searches all files and directories, no exceptions.
+    [ENHANCEMENTS]
+    Added -u, --unrestricted options that search absolutely all
+    files and directories, just like grep.
 
     [THINGS THAT HAVE CHANGED]
     ack -o emulates grep now and shows filenames unless explicitly

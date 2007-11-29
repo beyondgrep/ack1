@@ -153,15 +153,14 @@ sub get_command_line_options {
 
     my $getopt_specs = {
         1                       => sub { $opt{1} = $opt{m} = 1 },
-        a                       => \$opt{all},
-        'all!'                  => \$opt{all},
+        'a|all-types'           => \$opt{all},
         'A|after-context=i'     => \$opt{after_context},
         'B|before-context=i'    => \$opt{before_context},
         'C|context:i'           => sub { shift; my $val = shift; $opt{before_context} = $opt{after_context} = ($val || 2) },
         c                       => \$opt{count},
         'color!'                => \$opt{color},
         count                   => \$opt{count},
-        'grep'                  => \$opt{grep},
+        'u|unrestricted'        => \$opt{u},
         f                       => \$opt{f},
         'g=s'                   => \$opt{g},
         'follow!'               => \$opt{follow},
@@ -374,6 +373,7 @@ Recognized files:
 sub is_searchable {
     my $filename = shift;
 
+    # If these are updated, update the --help message
     return if $filename =~ /~$/;
     return if $filename =~ m{$path_sep_regex?(?:#.+#|core\.\d+|[._].*\.swp)$}o;
 
@@ -527,16 +527,24 @@ File finding:
   --sort-files          Sort the found files lexically.
 
 File inclusion/exclusion:
+  -a, --all-types       All file types searched; directories still skipped
+  -u, --unrestricted    All files and directories searched
   -n                    No descending into subdirectories
-  -a, --all             All files, regardless of extension (but still skips
-                        $ignore_dirs dirs)
-  --grep                Really all files, including all directories
   --perl                Include only Perl files.
   --type=perl           Include only Perl files.
   --noperl              Exclude Perl files.
   --type=noperl         Exclude Perl files.
                         See "ack --help type" for supported filetypes.
   --[no]follow          Follow symlinks.  Default is off.
+
+  Directories ignored by default:
+    $ignore_dirs
+
+  Files not checked for type:
+    /~\$/           - Unix backup files
+    /#.+#\$/        - Emacs swap files
+    /[._].*\\.swp\$/ - Vi(m) swap files
+    /core\\.\\d+\$/   - core dumps
 
 Miscellaneous:
   --help                This help

@@ -1,5 +1,10 @@
 Changelog for ack
 
+NEXT
+    Excludes backup directories for Mac Interface Builder: ~.dep,
+    ~.dot, ~.nib, ~.plst.  Thanks, Peter Lewis.
+
+
 1.74        Wed Nov 28 22:08:16 CST 2007
     [ENHANCEMENTS]
     Added -u, --unrestricted options that search absolutely all

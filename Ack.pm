@@ -36,20 +36,24 @@ use Getopt::Long ();
 
 BEGIN {
     %ignore_dirs = (
-        '.bzr'  => 'Bazaar',
-        '.cdv'  => 'Codeville',
-        '.git'  => 'Git',
-        '.hg'   => 'Mercurial',
-        '.pc'   => 'quilt',
-        '.svn'  => 'Subversion',
-        blib    => 'Perl module building',
-        CVS     => 'CVS',
-        RCS     => 'RCS',
-        SCCS    => 'SCCS',
-        _darcs  => 'darcs',
-        _sgbak  => 'SourceGear Vault/Fortress',
-        'autom4te.cache'    => 'autoconf cache',
-        'cover_db'          => 'Devel::Cover results',
+        '.bzr'              => 'Bazaar',
+        '.cdv'              => 'Codeville',
+        '~.dep'             => 'Interface Builder',
+        '~.dot'             => 'Interface Builder',
+        '~.nib'             => 'Interface Builder',
+        '~.plst'            => 'Interface Builder',
+        '.git'              => 'Git',
+        '.hg'               => 'Mercurial',
+        '.pc'               => 'quilt',
+        '.svn'              => 'Subversion',
+        blib                => 'Perl module building',
+        CVS                 => 'CVS',
+        RCS                 => 'RCS',
+        SCCS                => 'SCCS',
+        _darcs              => 'darcs',
+        _sgbak              => 'Vault/Fortress',
+        'autom4te.cache'    => 'autoconf',
+        'cover_db'          => 'Devel::Cover',
     );
 
     %mappings = (

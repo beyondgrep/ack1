@@ -170,8 +170,8 @@ specified.  However, it will ignore the shadow directories used by
 many version control systems, and the build directories used by the
 Perl MakeMaker system.
 
-The following directories will never be descended into: F<_darcs>,
-F<CVS>, F<RCS>, F<SCCS>, F<.svn>, F<blib>, F<.git>
+For a complete list of directories that do not get searched, run
+F<ack --help>.
 
 =head1 WHEN TO USE GREP
 

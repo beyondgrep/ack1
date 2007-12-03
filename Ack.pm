@@ -602,7 +602,12 @@ sub _listify {
     return '' if !@whats;
 
     my $end = pop @whats;
-    return @whats ? join( ', ', @whats ) . " and $end" : $end;
+    my $str = @whats ? join( ', ', @whats ) . " and $end" : $end;
+
+    no warnings 'once';
+    require Text::Wrap;
+    $Text::Wrap::columns = 75;
+    return Text::Wrap::wrap( '', '    ', $str );
 }
 
 =head2 get_version_statement( $copyright )

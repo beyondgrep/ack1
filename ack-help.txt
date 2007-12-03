@@ -67,7 +67,8 @@ File inclusion/exclusion:
   --[no]follow          Follow symlinks.  Default is off.
 
   Directories ignored by default:
-    autom4te.cache, blib, .bzr, .cdv, cover_db, CVS, _darcs, ~.dep, ~.dot, .git, .hg, ~.nib, .pc, ~.plst, RCS, SCCS, _sgbak and .svn
+    autom4te.cache, blib, .bzr, .cdv, cover_db, CVS, _darcs, ~.dep, ~.dot,
+    .git, .hg, ~.nib, .pc, ~.plst, RCS, SCCS, _sgbak and .svn
 
   Files not checked for type:
     /~$/           - Unix backup files

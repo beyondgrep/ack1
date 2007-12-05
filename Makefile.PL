@@ -74,6 +74,14 @@ prof: all
 	$(PERL) -d:DProf $(PROF_ARGS) >> /dev/null 2>&1
 	dprofpp -R
 
+dproflb: all
+	$(PERL) -d:DProfLB $(PROF_ARGS) >> /dev/null 2>&1
+	dprofpp -R
+
+fastprof: all
+	$(PERL) -d:FastProf $(PROF_ARGS) >> /dev/null 2>&1
+	fprofpp
+
 profiler: all
 	$(PERL) -MDevel::Profiler $(PROF_ARGS) >> /dev/null 2>&1
 	dprofpp -R

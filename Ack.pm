@@ -835,7 +835,7 @@ sub search {
             if ( @before ) {
                 print_match_or_context( $opt, 0, $before_starts_at_line, @before );
                 @before = ();
-                undef $before_starts_at_line;
+                $before_starts_at_line = 0;
             }
             if ( $max && $nmatches > $max ) {
                 --$after;

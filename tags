@@ -7,6 +7,7 @@
 ACK_BINARY	t/ack-binary.t	/^ACK_BINARY: {$/;"	l
 ACK_F	t/ack-binary.t	/^ACK_F: {$/;"	l
 ACK_F_TEXT	t/ack-text.t	/^ACK_F_TEXT: {$/;"	l
+ACK_F_XML	t/ack-text.t	/^ACK_F_XML: {$/;"	l
 ACK_G	t/context.t	/^ACK_G: {$/;"	l
 AFTER	t/context.t	/^AFTER: {$/;"	l
 App::Ack	Ack.pm	/^package App::Ack;$/;"	p

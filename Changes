@@ -1,8 +1,12 @@
 Changelog for ack
 
 NEXT
+    [ENHANCEMENTS]
     Excludes backup directories for Mac Interface Builder: ~.dep,
     ~.dot, ~.nib, ~.plst.  Thanks, Peter Lewis.
+
+    [FIXES]
+    XML sniffing now is case-insensitive.
 
 
 1.74        Wed Nov 28 22:08:16 CST 2007

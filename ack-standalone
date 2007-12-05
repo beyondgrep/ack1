@@ -1027,7 +1027,7 @@ sub filetypes {
         return ('shell',TEXT)  if $header =~ /\b(?:ba|c|k|z)?sh\b/;
     }
     else {
-        return ('xml',TEXT)    if $header =~ /\Q<?xml /;
+        return ('xml',TEXT)    if $header =~ /\Q<?xml /i;
     }
 
     return (TEXT);

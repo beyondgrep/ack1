@@ -792,7 +792,7 @@ sub search {
     while (<$fh>) {
         # XXX Optimize away the case when there are no more @lines to find.
         if ( $has_lines
-               ? $. != $lines[0]
+               ? $. != $lines[0]  # $lines[0] should be a scalar
                : $v ? /$regex/o : !/$regex/o ) {
             if ( $passthru ) {
                 print;

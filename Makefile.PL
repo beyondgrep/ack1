@@ -82,6 +82,10 @@ fastprof: all
 	$(PERL) -d:FastProf $(PROF_ARGS) >> /dev/null 2>&1
 	fprofpp
 
+profile: all
+	$(PERL) -d:Profile $(PROF_ARGS) >> /dev/null 2>&1
+	less prof.out
+
 profiler: all
 	$(PERL) -MDevel::Profiler $(PROF_ARGS) >> /dev/null 2>&1
 	dprofpp -R

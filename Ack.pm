@@ -166,7 +166,6 @@ sub get_command_line_options {
         c                       => \$opt{count},
         'color!'                => \$opt{color},
         count                   => \$opt{count},
-        'u|unrestricted'        => \$opt{u},
         f                       => \$opt{f},
         'g=s'                   => \$opt{g},
         'follow!'               => \$opt{follow},
@@ -184,6 +183,7 @@ sub get_command_line_options {
         'passthru'              => \$opt{passthru},
         'Q|literal'             => \$opt{Q},
         'sort-files'            => \$opt{sort_files},
+        'u|unrestricted'        => \$opt{u},
         'v|invert-match'        => \$opt{v},
         'w|word-regexp'         => \$opt{w},
 

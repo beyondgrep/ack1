@@ -110,7 +110,19 @@ sub main {
         my $nmatches = 0;
         while ( defined ( my $filename = $iter->() ) ) {
             my ($fh,$could_be_binary) = App::Ack::open_file( $filename );
-            $nmatches += App::Ack::search( $fh, $could_be_binary, $filename, $regex, \%opt );
+            my $needs_line_scan;
+            if ( $regex && !$opt{passthru} ) {
+                $needs_line_scan = App::Ack::needs_line_scan( $fh, $regex );
+                if ( $needs_line_scan ) {
+                    seek( $fh, 0, 0 );
+                }
+            }
+            else {
+                $needs_line_scan = 1;
+            }
+            if ( $needs_line_scan ) {
+                $nmatches += App::Ack::search( $fh, $could_be_binary, $filename, $regex, \%opt );
+            }
             App::Ack::close_file( $fh, $filename );
             last if $nmatches && $opt{1};
         }

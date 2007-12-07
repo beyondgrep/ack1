@@ -108,7 +108,19 @@ sub main {
         my $nmatches = 0;
         while ( defined ( my $filename = $iter->() ) ) {
             my ($fh,$could_be_binary) = App::Ack::open_file( $filename );
-            $nmatches += App::Ack::search( $fh, $could_be_binary, $filename, $regex, \%opt );
+            my $needs_line_scan;
+            if ( $regex && !$opt{passthru} ) {
+                $needs_line_scan = App::Ack::needs_line_scan( $fh, $regex );
+                if ( $needs_line_scan ) {
+                    seek( $fh, 0, 0 );
+                }
+            }
+            else {
+                $needs_line_scan = 1;
+            }
+            if ( $needs_line_scan ) {
+                $nmatches += App::Ack::search( $fh, $could_be_binary, $filename, $regex, \%opt );
+            }
             App::Ack::close_file( $fh, $filename );
             last if $nmatches && $opt{1};
         }
@@ -1327,6 +1339,29 @@ sub close_file {
     App::Ack::warn( "$_[1]: $!" );
     return 0;
 }
+
+
+
+sub needs_line_scan {
+    my $fh = shift;
+    my $regex = shift;
+
+    my $size = -s $fh;
+
+    if ( $size > 100_000 ) {
+        return 1;
+    }
+
+    my $buffer;
+    my $rc = sysread( $fh, $buffer, $size );
+    if ( defined($rc) && ( $rc == $size ) && ( $buffer =~ /$regex/osm ) ) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
 
 
 {

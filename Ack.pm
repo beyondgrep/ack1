@@ -737,6 +737,36 @@ sub close_file {
     return 0;
 }
 
+
+=head2 needs_line_scan( $fh, $regex )
+
+Slurp up an entire file up to 100K, see if there are any matches
+in it, and if so, let us know so we can iterate over it directly.
+If it's bigger than 100K, we have to do the line-by-line, too.
+
+=cut
+
+sub needs_line_scan {
+    my $fh = shift;
+    my $regex = shift;
+
+    my $size = -s $fh;
+
+    if ( $size > 100_000 ) {
+        return 1;
+    }
+
+    my $buffer;
+    my $rc = sysread( $fh, $buffer, $size );
+    if ( defined($rc) && ( $rc == $size ) && ( $buffer =~ /$regex/osm ) ) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
+
 =head2 search( $fh, $could_be_binary, $filename, $regex, \%opt )
 
 Main search method

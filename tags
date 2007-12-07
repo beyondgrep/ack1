@@ -107,6 +107,7 @@ lists_match	t/Util.pm	/^sub lists_match {$/;"	s
 load_colors	Ack.pm	/^sub load_colors {$/;"	s
 main	Makefile.PL	/^package main;$/;"	p
 main	ack	/^sub main {$/;"	s
+needs_line_scan	Ack.pm	/^sub needs_line_scan {$/;"	s
 open_file	Ack.pm	/^sub open_file {$/;"	s
 option_in_usage	t/longopts.t	/^sub option_in_usage {$/;"	s
 pipe_into_ack	t/Util.pm	/^sub pipe_into_ack {$/;"	s
@@ -114,6 +115,7 @@ print_files	Ack.pm	/^sub print_files {$/;"	s
 print_match_or_context	Ack.pm	/^sub print_match_or_context {$/;"	s
 print_version_statement	Ack.pm	/^sub print_version_statement {$/;"	s
 prof	Makefile.PL	/^prof: all$/;"	l
+profile	Makefile.PL	/^profile: all$/;"	l
 profiler	Makefile.PL	/^profiler: all$/;"	l
 read_ackrc	Ack.pm	/^sub read_ackrc {$/;"	s
 resources	Makefile.PL	/^resources:$/;"	l

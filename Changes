@@ -2,6 +2,13 @@ Changelog for ack
 
 NEXT
     [ENHANCEMENTS]
+    Optimized the usually-common case where you're searching through
+    a lot of source files and finding relatively few strings.  ack
+    now slurps up the entire file at once and scans it quickly to
+    decide if it needs to do so line-by-line.  This cuts run-time
+    by about 40% in my test cases, and 70% if context is on.  Thanks
+    to Uri Guttman for the idea.
+
     Excludes backup directories for Mac Interface Builder: ~.dep,
     ~.dot, ~.nib, ~.plst.  Thanks, Peter Lewis.
 

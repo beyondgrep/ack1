@@ -1,6 +1,6 @@
 Changelog for ack
 
-NEXT
+1.75_01     Thu Dec  6 20:37:57 CST 2007
     [ENHANCEMENTS]
     Optimized the usually-common case where you're searching through
     a lot of source files and finding relatively few strings.  ack

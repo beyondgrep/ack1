@@ -68,7 +68,7 @@ BEGIN {
         fortran     => [qw( f f77 f90 f95 f03 for ftn fpp )],
         haskell     => [qw( hs lhs )],
         hh          => [qw( h )],
-        html        => [qw( htm html shtml )],
+        html        => [qw( htm html shtml xhtml )],
         skipped     => q{Files, but not directories, normally skipped by ack (default: off)},
         lisp        => [qw( lisp )],
         java        => [qw( java properties )],

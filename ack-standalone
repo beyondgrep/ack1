@@ -459,11 +459,8 @@ Andy Lester, C<< <andy at petdance.com> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to
-C<bug-ack at rt.cpan.org>, or through the web interface at
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=ack>.
-I will be notified, and then you'll automatically be notified of progress on
-your bug as I make changes.
+Please report any bugs or feature requests to the issues list at
+Google Code: L<http://code.google.com/p/ack/issues/list>
 
 =head1 ENHANCEMENTS
 
@@ -474,8 +471,6 @@ ack users.
 
 There is a list of enhancements I want to make to F<ack> in the ack
 issues list at Google Code: L<http://code.google.com/p/ack/issues/list>
-Please check there first.
-
 Yes, we want to be able to specify our own filetypes, so you can
 say .snork files are recognized as Java, or whatever.
 
@@ -504,10 +499,6 @@ L<http://annocpan.org/dist/ack>
 
 L<http://cpanratings.perl.org/d/ack>
 
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=ack>
-
 =item * Search CPAN
 
 L<http://search.cpan.org/dist/ack>
@@ -523,6 +514,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Thomas Klausner,
 Uri Guttman,
 Peter Lewis,
 Kevin Riggle,

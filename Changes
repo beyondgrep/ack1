@@ -4,6 +4,9 @@ NEXT
     [ENHANCEMENTS]
     Add .xhtml to --html
 
+    [DOCUMENTATION]
+    Removed some old references to rt.cpan.org.
+
 
 1.75_01     Thu Dec  6 20:37:57 CST 2007
     [ENHANCEMENTS]

@@ -10,6 +10,10 @@ NEXT
     Added type --plone (.pt .cpt .metadata .cpy .py). Thanks, Jason
     Porritt.
 
+    [FIXES]
+    Fixed problem with coloring and pattern with backreferences,
+    spotted by Jason Porritt.
+
     [DOCUMENTATION]
     Removed some old references to rt.cpan.org.
 

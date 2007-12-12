@@ -39,6 +39,7 @@ my $perl = [qw(
     t/ack-a.t
     t/ack-binary.t
     t/ack-c.t
+    t/ack-color.t
     t/ack-g.t
     t/ack-h.t
     t/ack-line.t

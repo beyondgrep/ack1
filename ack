@@ -516,6 +516,8 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Jason Porritt,
+Jjgod Jiang,
 Thomas Klausner,
 Uri Guttman,
 Peter Lewis,

@@ -4,6 +4,12 @@ NEXT
     [ENHANCEMENTS]
     Add .xhtml to --html
 
+    Added types --objc (.m .h) and -objcpp (.mm .h) for Objective-C
+    and Objective-C++. Thanks, Jjgod Jiang.
+
+    Added type --plone (.pt .cpt .metadata .cpy .py). Thanks, Jason
+    Porritt.
+
     [DOCUMENTATION]
     Removed some old references to rt.cpan.org.
 

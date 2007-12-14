@@ -10,6 +10,8 @@ NEXT
     Added type --plone (.pt .cpt .metadata .cpy .py). Thanks, Jason
     Porritt.
 
+    Skips Module::Build's _build directory.  Thanks, Elliot Shank.
+
     [FIXES]
     Fixed problem with coloring and pattern with backreferences,
     spotted by Jason Porritt.

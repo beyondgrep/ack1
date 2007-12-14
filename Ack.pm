@@ -54,6 +54,7 @@ BEGIN {
         _sgbak              => 'Vault/Fortress',
         'autom4te.cache'    => 'autoconf',
         'cover_db'          => 'Devel::Cover',
+        _build              => 'Module::Build',
     );
 
     %mappings = (

@@ -185,6 +185,7 @@ sub get_command_line_options {
         o                       => sub { $opt{output} = '$&' },
         'output=s'              => \$opt{output},
         'passthru'              => \$opt{passthru},
+        'print0'                => \$opt{print0},
         'Q|literal'             => \$opt{Q},
         'sort-files'            => \$opt{sort_files},
         'u|unrestricted'        => \$opt{u},
@@ -529,6 +530,9 @@ Search output:
                         lines.
   -C [NUM], --context[=NUM]
                         Print NUM lines (default 2) of output context.
+
+  --print0              Print null byte as separator between filenames,
+                        only works with -f, -g, -l, -L or -c.
 
 File finding:
   -f                    Only print the files found, without searching.
@@ -974,6 +978,7 @@ sub search_and_list {
 
     my $nmatches = 0;
     my $count = $opt->{count};
+    my $ors = $opt->{print0} ? "\0" : "\n"; # output record separator
 
     if ( $opt->{v} ) {
         while (<$fh>) {
@@ -997,10 +1002,10 @@ sub search_and_list {
     if ( $nmatches ) {
         print $filename;
         print ':', $nmatches if $count;
-        print "\n";
+        print $ors;
     }
     elsif ( $count && !$opt->{l} ) {
-        print "$filename:0\n";
+        print "$filename:0", $ors;
     }
 
     return $nmatches ? 1 : 0;
@@ -1018,10 +1023,13 @@ sub filetypes_supported_set {
 }
 
 
-=head2 print_files( $iter, $one [, $regex] )
+=head2 print_files( $iter, $one [, $regex, [, $ors ]] )
 
 Prints all the files returned by the iterator matching I<$regex>.
+
 If I<$one> is set, stop after the first.
+The output record separator I<$ors> defaults to C<"\n"> and defines, what to
+print after each filename.
 
 =cut
 
@@ -1029,10 +1037,12 @@ sub print_files {
     my $iter = shift;
     my $one = shift;
     my $regex = shift;
+    my $ors = shift;
+    $ors = defined $ors ? $ors : "\n";
 
     while ( defined ( my $file = $iter->() ) ) {
         if ( (not defined $regex) || ($file =~ m/$regex/o) ) {
-            print $file, "\n";
+            print $file, $ors;
             last if $one;
         }
     }

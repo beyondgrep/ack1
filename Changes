@@ -12,6 +12,11 @@ NEXT
 
     Skips Module::Build's _build directory.  Thanks, Elliot Shank.
 
+    Added a --print0 option: When outputting filenames (-f, -g, -l,
+    -L, -c) separate them by null bytes instead of new lines.
+    Useful e.g. in conjunction with 'xargs -0' and spaces in
+    filenames.
+
     [FIXES]
     Fixed problem with coloring and pattern with backreferences,
     spotted by Jason Porritt.

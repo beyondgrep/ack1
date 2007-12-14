@@ -44,6 +44,7 @@ my $perl = [qw(
     t/ack-h.t
     t/ack-line.t
     t/ack-o.t
+    t/ack-print0.t
     t/ack-passthru.t
     t/ack-text.t
     t/ack-type.t

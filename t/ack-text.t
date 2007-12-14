@@ -26,6 +26,7 @@ ACK_F_TEXT: {
         t/ack-line.t
         t/ack-o.t
         t/ack-passthru.t
+        t/ack-print0.t
         t/ack-text.t
         t/ack-type.t
         t/ack-u.t

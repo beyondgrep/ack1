@@ -88,11 +88,11 @@ sub main {
 
     App::Ack::filetype_setup();
     if ( $opt{f} ) {
-        App::Ack::print_files($iter, $opt{1});
+        App::Ack::print_files( $iter, $opt{1}, undef, $opt{print0} ? "\0" : "\n" );
     }
     elsif ( $opt{g} ) {
         my $regex = $opt{i} ? qr/$opt{g}/i : qr/$opt{g}/;
-        App::Ack::print_files($iter, $opt{1}, $regex);
+        App::Ack::print_files( $iter, $opt{1}, $regex, $opt{print0} ? "\0" : "\n" );
     }
     elsif ( $opt{l} || $opt{count} ) {
         my $nmatches = 0;
@@ -316,6 +316,15 @@ still seeing the entire file, as in:
 
     # Watch a log file, and highlight a certain IP address
     $ tail -f ~/access.log | ack --passthru 123.45.67.89
+
+=item B<--print0>
+
+Only works in conjunction with -f, -g, -l or -c (filename output). The filenames
+are output separated with a null byte instead of the usual newline. This is
+helpful when dealing with filenames that contain whitespace, e.g.
+
+    # remove all files of type html
+    ack -f --html --print0 | xargs -0 rm -f 
 
 =item B<-Q>, B<--literal>
 

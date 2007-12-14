@@ -86,11 +86,11 @@ sub main {
 
     App::Ack::filetype_setup();
     if ( $opt{f} ) {
-        App::Ack::print_files($iter, $opt{1});
+        App::Ack::print_files( $iter, $opt{1}, undef, $opt{print0} ? "\0" : "\n" );
     }
     elsif ( $opt{g} ) {
         my $regex = $opt{i} ? qr/$opt{g}/i : qr/$opt{g}/;
-        App::Ack::print_files($iter, $opt{1}, $regex);
+        App::Ack::print_files( $iter, $opt{1}, $regex, $opt{print0} ? "\0" : "\n" );
     }
     elsif ( $opt{l} || $opt{count} ) {
         my $nmatches = 0;
@@ -314,6 +314,15 @@ still seeing the entire file, as in:
 
     # Watch a log file, and highlight a certain IP address
     $ tail -f ~/access.log | ack --passthru 123.45.67.89
+
+=item B<--print0>
+
+Only works in conjunction with -f, -g, -l or -c (filename output). The filenames
+are output separated with a null byte instead of the usual newline. This is
+helpful when dealing with filenames that contain whitespace, e.g.
+
+    # remove all files of type html
+    ack -f --html --print0 | xargs -0 rm -f 
 
 =item B<-Q>, B<--literal>
 
@@ -881,6 +890,7 @@ sub get_command_line_options {
         o                       => sub { $opt{output} = '$&' },
         'output=s'              => \$opt{output},
         'passthru'              => \$opt{passthru},
+        'print0'                => \$opt{print0},
         'Q|literal'             => \$opt{Q},
         'sort-files'            => \$opt{sort_files},
         'u|unrestricted'        => \$opt{u},
@@ -1169,6 +1179,9 @@ Search output:
                         lines.
   -C [NUM], --context[=NUM]
                         Print NUM lines (default 2) of output context.
+
+  --print0              Print null byte as separator between filenames,
+                        only works with -f, -g, -l, -L or -c.
 
 File finding:
   -f                    Only print the files found, without searching.
@@ -1548,6 +1561,7 @@ sub search_and_list {
 
     my $nmatches = 0;
     my $count = $opt->{count};
+    my $ors = $opt->{print0} ? "\0" : "\n"; # output record separator
 
     if ( $opt->{v} ) {
         while (<$fh>) {
@@ -1571,10 +1585,10 @@ sub search_and_list {
     if ( $nmatches ) {
         print $filename;
         print ':', $nmatches if $count;
-        print "\n";
+        print $ors;
     }
     elsif ( $count && !$opt->{l} ) {
-        print "$filename:0\n";
+        print "$filename:0", $ors;
     }
 
     return $nmatches ? 1 : 0;
@@ -1592,10 +1606,12 @@ sub print_files {
     my $iter = shift;
     my $one = shift;
     my $regex = shift;
+    my $ors = shift;
+    $ors = defined $ors ? $ors : "\n";
 
     while ( defined ( my $file = $iter->() ) ) {
         if ( (not defined $regex) || ($file =~ m/$regex/o) ) {
-            print $file, "\n";
+            print $file, $ors;
             last if $one;
         }
     }

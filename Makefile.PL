@@ -70,6 +70,9 @@ critic:
 
 PROF_ARGS = ack-standalone --color --group -w foo ~/parrot
 
+timed: all
+	$(PERL) $(PROF_ARGS) >> /dev/null 2>&1
+
 prof: all
 	$(PERL) -d:DProf $(PROF_ARGS) >> /dev/null 2>&1
 	dprofpp -R

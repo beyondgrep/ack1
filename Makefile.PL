@@ -22,7 +22,7 @@ my %parms = (
         'File::Basename'    => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean               => { FILES => 'ack-1*' },
+    clean               => { FILES => 'ack-1* ack-standalone ack-*.txt' },
 );
 
 if ( $ExtUtils::MakeMaker::VERSION eq '6.36' ) {

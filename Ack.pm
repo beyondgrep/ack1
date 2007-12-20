@@ -407,7 +407,7 @@ sub build_regex {
         $str = "$str\\b" if $str =~ /\w$/;
     }
 
-    return $opt->{i} ? qr/$str/i : qr/$str/;
+    return $str;
 }
 
 
@@ -746,7 +746,7 @@ sub close_file {
 }
 
 
-=head2 needs_line_scan( $fh, $regex )
+=head2 needs_line_scan( $fh, $regex, \%opts )
 
 Slurp up an entire file up to 100K, see if there are any matches
 in it, and if so, let us know so we can iterate over it directly.
@@ -757,6 +757,7 @@ If it's bigger than 100K, we have to do the line-by-line, too.
 sub needs_line_scan {
     my $fh = shift;
     my $regex = shift;
+    my $opt = shift;
 
     my $size = -s $fh;
 
@@ -766,12 +767,10 @@ sub needs_line_scan {
 
     my $buffer;
     my $rc = sysread( $fh, $buffer, $size );
-    if ( defined($rc) && ( $rc == $size ) && ( $buffer =~ /$regex/osm ) ) {
-        return 1;
-    }
-    else {
-        return 0;
-    }
+    return 0 unless $rc && ( $rc == $size );
+
+    $regex = $opt->{i} ? qr/$regex/im : qr/$regex/m;
+    return ( $buffer =~ /$regex/ );
 }
 
 
@@ -826,6 +825,10 @@ sub search {
     my @before;
     my $before_starts_at_line;
     my $after = 0; # number of lines still to print after a match
+
+    if ( $regex ) {
+        $regex = $opt->{i} ? qr/$regex/i : qr/$regex/;
+    }
 
     while (<$fh>) {
         # XXX Optimize away the case when there are no more @lines to find.
@@ -980,6 +983,8 @@ sub search_and_list {
     my $count = $opt->{count};
     my $ors = $opt->{print0} ? "\0" : "\n"; # output record separator
 
+    $regex = $opt->{i} ? qr/$regex/i : qr/$regex/;
+
     if ( $opt->{v} ) {
         while (<$fh>) {
             if ( /$regex/o ) {
@@ -1037,8 +1042,12 @@ sub print_files {
     my $iter = shift;
     my $one = shift;
     my $regex = shift;
-    my $ors = shift;
-    $ors = defined $ors ? $ors : "\n";
+    my $opt = shift;
+
+    my $ors = $opt->{print0} ? "\0" : "\n";
+    if ( $regex ) {
+        $regex = $opt->{i} ? qr/$regex/i : qr/$regex/;
+    }
 
     while ( defined ( my $file = $iter->() ) ) {
         if ( (not defined $regex) || ($file =~ m/$regex/o) ) {

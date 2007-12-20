@@ -1,6 +1,10 @@
 Changelog for ack
 
 NEXT
+    [FIXES]
+    Now runs correctly under Perl 5.10.  ack had been relying on a
+    mistaken behavior of Perl 5.8, and Perl 5.10 fixed it.
+
     [ENHANCEMENTS]
     Add .xhtml to --html
 

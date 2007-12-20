@@ -88,11 +88,11 @@ sub main {
 
     App::Ack::filetype_setup();
     if ( $opt{f} ) {
-        App::Ack::print_files( $iter, $opt{1}, undef, $opt{print0} ? "\0" : "\n" );
+        App::Ack::print_files( $iter, $opt{1}, undef, \%opt );
     }
     elsif ( $opt{g} ) {
         my $regex = $opt{i} ? qr/$opt{g}/i : qr/$opt{g}/;
-        App::Ack::print_files( $iter, $opt{1}, $regex, $opt{print0} ? "\0" : "\n" );
+        App::Ack::print_files( $iter, $opt{1}, $regex, \%opt );
     }
     elsif ( $opt{l} || $opt{count} ) {
         my $nmatches = 0;
@@ -112,7 +112,7 @@ sub main {
             my ($fh,$could_be_binary) = App::Ack::open_file( $filename );
             my $needs_line_scan;
             if ( $regex && !$opt{passthru} ) {
-                $needs_line_scan = App::Ack::needs_line_scan( $fh, $regex );
+                $needs_line_scan = App::Ack::needs_line_scan( $fh, $regex, \%opt );
                 if ( $needs_line_scan ) {
                     seek( $fh, 0, 0 );
                 }

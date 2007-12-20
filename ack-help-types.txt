@@ -18,17 +18,20 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]fortran   .f .f77 .f90 .f95 .f03 .for .ftn .fpp
     --[no]haskell   .hs .lhs
     --[no]hh        .h
-    --[no]html      .htm .html .shtml
+    --[no]html      .htm .html .shtml .xhtml
     --[no]java      .java .properties
     --[no]js        .js
     --[no]jsp       .jsp .jspx .jhtm .jhtml
     --[no]lisp      .lisp
     --[no]make      Makefiles
     --[no]mason     .mas .mhtml .mpl .mtxt
+    --[no]objc      .m .h
+    --[no]objcpp    .mm .h
     --[no]ocaml     .ml .mli
     --[no]parrot    .pir .pasm .pmc .ops .pod .pg .tg
     --[no]perl      .pl .pm .pod .t
     --[no]php       .php .phpt .php3 .php4 .php5
+    --[no]plone     .pt .cpt .metadata .cpy .py
     --[no]python    .py
     --[no]ruby      .rb .rhtml .rjs .rxml
     --[no]scheme    .scm

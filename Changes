@@ -1,5 +1,50 @@
 Changelog for ack
 
+1.76        Wed Dec 19 23:23:05 CST 2007
+    [FIXES]
+    Now runs correctly under Perl 5.10.  ack had been relying on a
+    mistaken behavior of Perl 5.8, and Perl 5.10 fixed it.
+
+    [ENHANCEMENTS]
+    Add .xhtml to --html
+
+    Added types --objc (.m .h) and -objcpp (.mm .h) for Objective-C
+    and Objective-C++. Thanks, Jjgod Jiang.
+
+    Added type --plone (.pt .cpt .metadata .cpy .py). Thanks, Jason
+    Porritt.
+
+    Skips Module::Build's _build directory.  Thanks, Elliot Shank.
+
+    Added a --print0 option: When outputting filenames (-f, -g, -l,
+    -L, -c) separate them by null bytes instead of new lines.
+    Useful e.g. in conjunction with 'xargs -0' and spaces in
+    filenames.
+
+    [FIXES]
+    Fixed problem with coloring and pattern with backreferences,
+    spotted by Jason Porritt.
+
+    [DOCUMENTATION]
+    Removed some old references to rt.cpan.org.
+
+
+1.75_01     Thu Dec  6 20:37:57 CST 2007
+    [ENHANCEMENTS]
+    Optimized the usually-common case where you're searching through
+    a lot of source files and finding relatively few strings.  ack
+    now slurps up the entire file at once and scans it quickly to
+    decide if it needs to do so line-by-line.  This cuts run-time
+    by about 40% in my test cases, and 70% if context is on.  Thanks
+    to Uri Guttman for the idea.
+
+    Excludes backup directories for Mac Interface Builder: ~.dep,
+    ~.dot, ~.nib, ~.plst.  Thanks, Peter Lewis.
+
+    [FIXES]
+    XML sniffing now is case-insensitive.
+
+
 1.74        Wed Nov 28 22:08:16 CST 2007
     [ENHANCEMENTS]
     Added -u, --unrestricted options that search absolutely all

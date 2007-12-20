@@ -9,14 +9,14 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.74
+Version 1.76
 
 =cut
 
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.74';
+    $VERSION = '1.76';
     $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 }
 
@@ -36,20 +36,25 @@ use Getopt::Long ();
 
 BEGIN {
     %ignore_dirs = (
-        '.bzr'  => 'Bazaar',
-        '.cdv'  => 'Codeville',
-        '.git'  => 'Git',
-        '.hg'   => 'Mercurial',
-        '.pc'   => 'quilt',
-        '.svn'  => 'Subversion',
-        blib    => 'Perl module building',
-        CVS     => 'CVS',
-        RCS     => 'RCS',
-        SCCS    => 'SCCS',
-        _darcs  => 'darcs',
-        _sgbak  => 'SourceGear Vault/Fortress',
-        'autom4te.cache'    => 'autoconf cache',
-        'cover_db'          => 'Devel::Cover results',
+        '.bzr'              => 'Bazaar',
+        '.cdv'              => 'Codeville',
+        '~.dep'             => 'Interface Builder',
+        '~.dot'             => 'Interface Builder',
+        '~.nib'             => 'Interface Builder',
+        '~.plst'            => 'Interface Builder',
+        '.git'              => 'Git',
+        '.hg'               => 'Mercurial',
+        '.pc'               => 'quilt',
+        '.svn'              => 'Subversion',
+        blib                => 'Perl module building',
+        CVS                 => 'CVS',
+        RCS                 => 'RCS',
+        SCCS                => 'SCCS',
+        _darcs              => 'darcs',
+        _sgbak              => 'Vault/Fortress',
+        'autom4te.cache'    => 'autoconf',
+        'cover_db'          => 'Devel::Cover',
+        _build              => 'Module::Build',
     );
 
     %mappings = (
@@ -64,7 +69,7 @@ BEGIN {
         fortran     => [qw( f f77 f90 f95 f03 for ftn fpp )],
         haskell     => [qw( hs lhs )],
         hh          => [qw( h )],
-        html        => [qw( htm html shtml )],
+        html        => [qw( htm html shtml xhtml )],
         skipped     => q{Files, but not directories, normally skipped by ack (default: off)},
         lisp        => [qw( lisp )],
         java        => [qw( java properties )],
@@ -72,10 +77,13 @@ BEGIN {
         jsp         => [qw( jsp jspx jhtm jhtml )],
         make        => q{Makefiles},
         mason       => [qw( mas mhtml mpl mtxt )],
+        objc        => [qw( m h )],
+        objcpp      => [qw( mm h )],
         ocaml       => [qw( ml mli )],
         parrot      => [qw( pir pasm pmc ops pod pg tg )],
         perl        => [qw( pl pm pod t )],
         php         => [qw( php phpt php3 php4 php5 )],
+        plone       => [qw( pt cpt metadata cpy py )],
         python      => [qw( py )],
         ruby        => [qw( rb rhtml rjs rxml )],
         scheme      => [qw( scm )],
@@ -162,7 +170,6 @@ sub get_command_line_options {
         c                       => \$opt{count},
         'color!'                => \$opt{color},
         count                   => \$opt{count},
-        'u|unrestricted'        => \$opt{u},
         f                       => \$opt{f},
         'g=s'                   => \$opt{g},
         'follow!'               => \$opt{follow},
@@ -178,8 +185,10 @@ sub get_command_line_options {
         o                       => sub { $opt{output} = '$&' },
         'output=s'              => \$opt{output},
         'passthru'              => \$opt{passthru},
+        'print0'                => \$opt{print0},
         'Q|literal'             => \$opt{Q},
         'sort-files'            => \$opt{sort_files},
+        'u|unrestricted'        => \$opt{u},
         'v|invert-match'        => \$opt{v},
         'w|word-regexp'         => \$opt{w},
 
@@ -353,7 +362,7 @@ sub filetypes {
         return ('shell',TEXT)  if $header =~ /\b(?:ba|c|k|z)?sh\b/;
     }
     else {
-        return ('xml',TEXT)    if $header =~ /\Q<?xml /;
+        return ('xml',TEXT)    if $header =~ /\Q<?xml /i;
     }
 
     return (TEXT);
@@ -398,7 +407,7 @@ sub build_regex {
         $str = "$str\\b" if $str =~ /\w$/;
     }
 
-    return $opt->{i} ? qr/$str/i : qr/$str/;
+    return $str;
 }
 
 
@@ -522,6 +531,9 @@ Search output:
   -C [NUM], --context[=NUM]
                         Print NUM lines (default 2) of output context.
 
+  --print0              Print null byte as separator between filenames,
+                        only works with -f, -g, -l, -L or -c.
+
 File finding:
   -f                    Only print the files found, without searching.
                         The PATTERN must not be specified.
@@ -598,7 +610,12 @@ sub _listify {
     return '' if !@whats;
 
     my $end = pop @whats;
-    return @whats ? join( ', ', @whats ) . " and $end" : $end;
+    my $str = @whats ? join( ', ', @whats ) . " and $end" : $end;
+
+    no warnings 'once';
+    require Text::Wrap;
+    $Text::Wrap::columns = 75;
+    return Text::Wrap::wrap( '', '    ', $str );
 }
 
 =head2 get_version_statement( $copyright )
@@ -728,7 +745,36 @@ sub close_file {
     return 0;
 }
 
-=head2 search( $fh, $could_be_binary, $filename, $regex, \%opt )
+
+=head2 needs_line_scan( $fh, $regex, \%opts )
+
+Slurp up an entire file up to 100K, see if there are any matches
+in it, and if so, let us know so we can iterate over it directly.
+If it's bigger than 100K, we have to do the line-by-line, too.
+
+=cut
+
+sub needs_line_scan {
+    my $fh = shift;
+    my $regex = shift;
+    my $opt = shift;
+
+    my $size = -s $fh;
+
+    if ( $size > 100_000 ) {
+        return 1;
+    }
+
+    my $buffer;
+    my $rc = sysread( $fh, $buffer, $size );
+    return 0 unless $rc && ( $rc == $size );
+
+    $regex = $opt->{i} ? qr/$regex/im : qr/$regex/m;
+    return ( $buffer =~ /$regex/ );
+}
+
+
+=head2 search( $fh, $could_be_binary, $filename, \%opt )
 
 Main search method
 
@@ -749,7 +795,6 @@ sub search {
     my $fh = shift;
     my $could_be_binary = shift;
     $filename = shift;
-    $regex = shift;
     my $opt = shift;
 
     my $v = $opt->{v};
@@ -767,6 +812,10 @@ sub search {
         @lines = ( @{$opt->{lines}}, -1 );
         undef $regex; # Don't match when printing matching line
     }
+    else {
+        $regex = $opt->{i} ? qr/$opt->{regex}/i : qr/$opt->{regex}/;
+    }
+
 
     # for context processing
     $last_output_line = -1;
@@ -783,7 +832,7 @@ sub search {
     while (<$fh>) {
         # XXX Optimize away the case when there are no more @lines to find.
         if ( $has_lines
-               ? $. != $lines[0]
+               ? $. != $lines[0]  # $lines[0] should be a scalar
                : $v ? /$regex/o : !/$regex/o ) {
             if ( $passthru ) {
                 print;
@@ -826,7 +875,7 @@ sub search {
             if ( @before ) {
                 print_match_or_context( $opt, 0, $before_starts_at_line, @before );
                 @before = ();
-                undef $before_starts_at_line;
+                $before_starts_at_line = 0;
             }
             if ( $max && $nmatches > $max ) {
                 --$after;
@@ -900,7 +949,7 @@ sub print_match_or_context {
         }
         else {
             if ( $color && $is_match && $regex ) {
-                if ( s/($regex)/Term::ANSIColor::colored($1,$ENV{ACK_COLOR_MATCH})/eg ) {
+                if ( s/$regex/Term::ANSIColor::colored( substr($_, $-[0], $+[0] - $-[0]), $ENV{ACK_COLOR_MATCH} )/eg ) {
                     s/\n$/\e[0m\e[K\n/;     # Before \n, reset the color and clear to end of line
                 }
             }
@@ -916,7 +965,7 @@ sub print_match_or_context {
 } # scope around search() and print_match_or_context()
 
 
-=head2 search_and_list( $fh, $filename, $regex, \%opt )
+=head2 search_and_list( $fh, $filename, \%opt )
 
 Optimized version of searching for -l and --count, which do not
 show lines.
@@ -926,11 +975,13 @@ show lines.
 sub search_and_list {
     my $fh = shift;
     my $filename = shift;
-    my $regex = shift;
     my $opt = shift;
 
     my $nmatches = 0;
     my $count = $opt->{count};
+    my $ors = $opt->{print0} ? "\0" : "\n"; # output record separator
+
+    my $regex = $opt->{i} ? qr/$opt->{regex}/i : qr/$opt->{regex}/;
 
     if ( $opt->{v} ) {
         while (<$fh>) {
@@ -954,10 +1005,10 @@ sub search_and_list {
     if ( $nmatches ) {
         print $filename;
         print ':', $nmatches if $count;
-        print "\n";
+        print $ors;
     }
     elsif ( $count && !$opt->{l} ) {
-        print "$filename:0\n";
+        print "$filename:0", $ors;
     }
 
     return $nmatches ? 1 : 0;
@@ -975,22 +1026,30 @@ sub filetypes_supported_set {
 }
 
 
-=head2 print_files( $iter, $one [, $regex] )
+=head2 print_files( $iter, $one [, $regex, [, $ors ]] )
 
 Prints all the files returned by the iterator matching I<$regex>.
+
 If I<$one> is set, stop after the first.
+The output record separator I<$ors> defaults to C<"\n"> and defines, what to
+print after each filename.
 
 =cut
 
 sub print_files {
     my $iter = shift;
-    my $one = shift;
-    my $regex = shift;
+    my $opt = shift;
+
+    my $regex;
+    if ( $opt->{g} ) {
+        $regex = $opt->{i} ? qr/$opt->{g}/i : qr/$opt->{g}/;
+    }
+    my $ors = $opt->{print0} ? "\0" : "\n";
 
     while ( defined ( my $file = $iter->() ) ) {
         if ( (not defined $regex) || ($file =~ m/$regex/o) ) {
-            print $file, "\n";
-            last if $one;
+            print $file, $ors;
+            last if $opt->{1};
         }
     }
 

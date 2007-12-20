@@ -7,6 +7,7 @@
 ACK_BINARY	t/ack-binary.t	/^ACK_BINARY: {$/;"	l
 ACK_F	t/ack-binary.t	/^ACK_F: {$/;"	l
 ACK_F_TEXT	t/ack-text.t	/^ACK_F_TEXT: {$/;"	l
+ACK_F_XML	t/ack-text.t	/^ACK_F_XML: {$/;"	l
 ACK_G	t/context.t	/^ACK_G: {$/;"	l
 AFTER	t/context.t	/^AFTER: {$/;"	l
 App::Ack	Ack.pm	/^package App::Ack;$/;"	p
@@ -89,6 +90,8 @@ check_with	t/ack-type.t	/^sub check_with {$/;"	s
 close_file	Ack.pm	/^sub close_file {$/;"	s
 critic	Makefile.PL	/^critic:$/;"	l
 die	Ack.pm	/^sub die { ## no critic (ProhibitBuiltinHomonyms)$/;"	s
+dproflb	Makefile.PL	/^dproflb: all$/;"	l
+fastprof	Makefile.PL	/^fastprof: all$/;"	l
 filetype_setup	Ack.pm	/^sub filetype_setup {$/;"	s
 filetypes	Ack.pm	/^sub filetypes {$/;"	s
 filetypes_supported	Ack.pm	/^sub filetypes_supported {$/;"	s
@@ -104,6 +107,7 @@ lists_match	t/Util.pm	/^sub lists_match {$/;"	s
 load_colors	Ack.pm	/^sub load_colors {$/;"	s
 main	Makefile.PL	/^package main;$/;"	p
 main	ack	/^sub main {$/;"	s
+needs_line_scan	Ack.pm	/^sub needs_line_scan {$/;"	s
 open_file	Ack.pm	/^sub open_file {$/;"	s
 option_in_usage	t/longopts.t	/^sub option_in_usage {$/;"	s
 pipe_into_ack	t/Util.pm	/^sub pipe_into_ack {$/;"	s
@@ -111,6 +115,7 @@ print_files	Ack.pm	/^sub print_files {$/;"	s
 print_match_or_context	Ack.pm	/^sub print_match_or_context {$/;"	s
 print_version_statement	Ack.pm	/^sub print_version_statement {$/;"	s
 prof	Makefile.PL	/^prof: all$/;"	l
+profile	Makefile.PL	/^profile: all$/;"	l
 profiler	Makefile.PL	/^profiler: all$/;"	l
 read_ackrc	Ack.pm	/^sub read_ackrc {$/;"	s
 resources	Makefile.PL	/^resources:$/;"	l

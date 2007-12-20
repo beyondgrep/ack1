@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use App::Ack ();
 use File::Next ();
 
@@ -20,11 +20,13 @@ ACK_F_TEXT: {
         t/ack-a.t
         t/ack-binary.t
         t/ack-c.t
+        t/ack-color.t
         t/ack-g.t
         t/ack-h.t
         t/ack-line.t
         t/ack-o.t
         t/ack-passthru.t
+        t/ack-print0.t
         t/ack-text.t
         t/ack-type.t
         t/ack-u.t
@@ -81,4 +83,18 @@ ACK_F_TEXT: {
     my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Looking for text files' );
+}
+
+
+ACK_F_XML: {
+    my @expected = qw(
+        t/etc/buttonhook.rss.xxx
+        t/etc/buttonhook.xml.xxx
+    );
+
+    my @files = qw( t );
+    my @args = qw( -f --xml );
+    my @results = run_ack( @args, @files );
+
+    sets_match( \@results, \@expected, 'Looking for XML files' );
 }

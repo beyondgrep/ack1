@@ -30,6 +30,9 @@ if ( $ExtUtils::MakeMaker::VERSION eq '6.36' ) {
 resources:
     homepage: http://petdance.com/ack/
     bugtracker: http://code.google.com/p/ack/issues/list
+    license: http://dev.perl.org/licenses/
+    Repository: http://code.google.com/p/ack/source
+    MailingList: http://groups.google.com/group/ack-users
 EOF
     }
 
@@ -68,11 +71,26 @@ tags:
 critic:
 	perlcritic -1 -q -profile perlcriticrc ack Ack.pm t/*.t
 
-PROF_ARGS = ack-standalone --color --group -w foo ~/parrot -C2
+PROF_ARGS = ack-standalone --color --group -w foo ~/parrot
+
+timed: all
+	$(PERL) $(PROF_ARGS) >> /dev/null 2>&1
 
 prof: all
 	$(PERL) -d:DProf $(PROF_ARGS) >> /dev/null 2>&1
 	dprofpp -R
+
+dproflb: all
+	$(PERL) -d:DProfLB $(PROF_ARGS) >> /dev/null 2>&1
+	dprofpp -R
+
+fastprof: all
+	$(PERL) -d:FastProf $(PROF_ARGS) >> /dev/null 2>&1
+	fprofpp
+
+profile: all
+	$(PERL) -d:Profile $(PROF_ARGS) >> /dev/null 2>&1
+	less prof.out
 
 profiler: all
 	$(PERL) -MDevel::Profiler $(PROF_ARGS) >> /dev/null 2>&1

@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.74';
+our $VERSION   = '1.76';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.
@@ -40,20 +40,19 @@ sub main {
             $opt{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );
         }
         $opt{show_filename} = 0;
-        my $regex = App::Ack::build_regex( shift @ARGV, \%opt );
+        $opt{regex} = App::Ack::build_regex( shift @ARGV, \%opt );
         if ( my $nargs = @ARGV ) {
             my $s = $nargs == 1 ? '' : 's';
             App::Ack::warn( "Ignoring $nargs argument$s on the command-line while acting as a filter." );
         }
-        App::Ack::search( \*STDIN, 0, '-', $regex, \%opt );
+        App::Ack::search( \*STDIN, 0, '-', \%opt );
         exit 0;
     }
 
-    my $regex;
     my $file_matching = $opt{f} || $opt{g} || $opt{lines};
     if ( !$file_matching ) {
         @ARGV or App::Ack::die( 'No regular expression found.' );
-        $regex = App::Ack::build_regex( shift @ARGV, \%opt );
+        $opt{regex} = App::Ack::build_regex( shift @ARGV, \%opt );
     }
 
     my @what;
@@ -87,18 +86,14 @@ sub main {
         }, @what );
 
     App::Ack::filetype_setup();
-    if ( $opt{f} ) {
-        App::Ack::print_files($iter, $opt{1});
-    }
-    elsif ( $opt{g} ) {
-        my $regex = $opt{i} ? qr/$opt{g}/i : qr/$opt{g}/;
-        App::Ack::print_files($iter, $opt{1}, $regex);
+    if ( $opt{f} || $opt{g} ) {
+        App::Ack::print_files( $iter, \%opt );
     }
     elsif ( $opt{l} || $opt{count} ) {
         my $nmatches = 0;
         while ( defined ( my $filename = $iter->() ) ) {
             my ($fh) = App::Ack::open_file( $filename );
-            $nmatches += App::Ack::search_and_list( $fh, $filename, $regex, \%opt );
+            $nmatches += App::Ack::search_and_list( $fh, $filename, \%opt );
             App::Ack::close_file( $fh, $filename );
             last if $nmatches && $opt{1};
         }
@@ -110,7 +105,19 @@ sub main {
         my $nmatches = 0;
         while ( defined ( my $filename = $iter->() ) ) {
             my ($fh,$could_be_binary) = App::Ack::open_file( $filename );
-            $nmatches += App::Ack::search( $fh, $could_be_binary, $filename, $regex, \%opt );
+            my $needs_line_scan;
+            if ( $opt{regex} && !$opt{passthru} ) {
+                $needs_line_scan = App::Ack::needs_line_scan( $fh, $opt{regex}, \%opt );
+                if ( $needs_line_scan ) {
+                    seek( $fh, 0, 0 );
+                }
+            }
+            else {
+                $needs_line_scan = 1;
+            }
+            if ( $needs_line_scan ) {
+                $nmatches += App::Ack::search( $fh, $could_be_binary, $filename, \%opt );
+            }
             App::Ack::close_file( $fh, $filename );
             last if $nmatches && $opt{1};
         }
@@ -170,8 +177,8 @@ specified.  However, it will ignore the shadow directories used by
 many version control systems, and the build directories used by the
 Perl MakeMaker system.
 
-The following directories will never be descended into: F<_darcs>,
-F<CVS>, F<RCS>, F<SCCS>, F<.svn>, F<blib>, F<.git>
+For a complete list of directories that do not get searched, run
+F<ack --help>.
 
 =head1 WHEN TO USE GREP
 
@@ -304,6 +311,15 @@ still seeing the entire file, as in:
 
     # Watch a log file, and highlight a certain IP address
     $ tail -f ~/access.log | ack --passthru 123.45.67.89
+
+=item B<--print0>
+
+Only works in conjunction with -f, -g, -l or -c (filename output). The filenames
+are output separated with a null byte instead of the usual newline. This is
+helpful when dealing with filenames that contain whitespace, e.g.
+
+    # remove all files of type html
+    ack -f --html --print0 | xargs -0 rm -f 
 
 =item B<-Q>, B<--literal>
 
@@ -449,11 +465,8 @@ Andy Lester, C<< <andy at petdance.com> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to
-C<bug-ack at rt.cpan.org>, or through the web interface at
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=ack>.
-I will be notified, and then you'll automatically be notified of progress on
-your bug as I make changes.
+Please report any bugs or feature requests to the issues list at
+Google Code: L<http://code.google.com/p/ack/issues/list>
 
 =head1 ENHANCEMENTS
 
@@ -464,8 +477,6 @@ ack users.
 
 There is a list of enhancements I want to make to F<ack> in the ack
 issues list at Google Code: L<http://code.google.com/p/ack/issues/list>
-Please check there first.
-
 Yes, we want to be able to specify our own filetypes, so you can
 say .snork files are recognized as Java, or whatever.
 
@@ -494,10 +505,6 @@ L<http://annocpan.org/dist/ack>
 
 L<http://cpanratings.perl.org/d/ack>
 
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=ack>
-
 =item * Search CPAN
 
 L<http://search.cpan.org/dist/ack>
@@ -513,6 +520,11 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Jason Porritt,
+Jjgod Jiang,
+Thomas Klausner,
+Uri Guttman,
+Peter Lewis,
 Kevin Riggle,
 Ori Avtalion,
 Torsten Blix,

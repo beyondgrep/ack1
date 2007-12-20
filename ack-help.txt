@@ -49,6 +49,9 @@ Search output:
   -C [NUM], --context[=NUM]
                         Print NUM lines (default 2) of output context.
 
+  --print0              Print null byte as separator between filenames,
+                        only works with -f, -g, -l, -L or -c.
+
 File finding:
   -f                    Only print the files found, without searching.
                         The PATTERN must not be specified.
@@ -67,7 +70,8 @@ File inclusion/exclusion:
   --[no]follow          Follow symlinks.  Default is off.
 
   Directories ignored by default:
-    autom4te.cache, blib, .bzr, .cdv, cover_db, CVS, _darcs, .git, .hg, .pc, RCS, SCCS, _sgbak and .svn
+    autom4te.cache, blib, _build, .bzr, .cdv, cover_db, CVS, _darcs, ~.dep,
+    ~.dot, .git, .hg, ~.nib, .pc, ~.plst, RCS, SCCS, _sgbak and .svn
 
   Files not checked for type:
     /~$/           - Unix backup files

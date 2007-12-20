@@ -40,20 +40,19 @@ sub main {
             $opt{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );
         }
         $opt{show_filename} = 0;
-        my $regex = App::Ack::build_regex( shift @ARGV, \%opt );
+        $opt{regex} = App::Ack::build_regex( shift @ARGV, \%opt );
         if ( my $nargs = @ARGV ) {
             my $s = $nargs == 1 ? '' : 's';
             App::Ack::warn( "Ignoring $nargs argument$s on the command-line while acting as a filter." );
         }
-        App::Ack::search( \*STDIN, 0, '-', $regex, \%opt );
+        App::Ack::search( \*STDIN, 0, '-', $opt{regex}, \%opt );
         exit 0;
     }
 
-    my $regex;
     my $file_matching = $opt{f} || $opt{g} || $opt{lines};
     if ( !$file_matching ) {
         @ARGV or App::Ack::die( 'No regular expression found.' );
-        $regex = App::Ack::build_regex( shift @ARGV, \%opt );
+        $opt{regex} = App::Ack::build_regex( shift @ARGV, \%opt );
     }
 
     my @what;
@@ -87,18 +86,14 @@ sub main {
         }, @what );
 
     App::Ack::filetype_setup();
-    if ( $opt{f} ) {
-        App::Ack::print_files( $iter, $opt{1}, undef, \%opt );
-    }
-    elsif ( $opt{g} ) {
-        my $regex = $opt{i} ? qr/$opt{g}/i : qr/$opt{g}/;
-        App::Ack::print_files( $iter, $opt{1}, $regex, \%opt );
+    if ( $opt{f} || $opt{g} ) {
+        App::Ack::print_files( $iter, \%opt );
     }
     elsif ( $opt{l} || $opt{count} ) {
         my $nmatches = 0;
         while ( defined ( my $filename = $iter->() ) ) {
             my ($fh) = App::Ack::open_file( $filename );
-            $nmatches += App::Ack::search_and_list( $fh, $filename, $regex, \%opt );
+            $nmatches += App::Ack::search_and_list( $fh, $filename, $opt{regex}, \%opt );
             App::Ack::close_file( $fh, $filename );
             last if $nmatches && $opt{1};
         }
@@ -111,8 +106,8 @@ sub main {
         while ( defined ( my $filename = $iter->() ) ) {
             my ($fh,$could_be_binary) = App::Ack::open_file( $filename );
             my $needs_line_scan;
-            if ( $regex && !$opt{passthru} ) {
-                $needs_line_scan = App::Ack::needs_line_scan( $fh, $regex, \%opt );
+            if ( $opt{regex} && !$opt{passthru} ) {
+                $needs_line_scan = App::Ack::needs_line_scan( $fh, $opt{regex}, \%opt );
                 if ( $needs_line_scan ) {
                     seek( $fh, 0, 0 );
                 }
@@ -121,7 +116,7 @@ sub main {
                 $needs_line_scan = 1;
             }
             if ( $needs_line_scan ) {
-                $nmatches += App::Ack::search( $fh, $could_be_binary, $filename, $regex, \%opt );
+                $nmatches += App::Ack::search( $fh, $could_be_binary, $filename, $opt{regex}, \%opt );
             }
             App::Ack::close_file( $fh, $filename );
             last if $nmatches && $opt{1};

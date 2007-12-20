@@ -1040,19 +1040,18 @@ print after each filename.
 
 sub print_files {
     my $iter = shift;
-    my $one = shift;
-    my $regex = shift;
     my $opt = shift;
 
-    my $ors = $opt->{print0} ? "\0" : "\n";
-    if ( $regex ) {
-        $regex = $opt->{i} ? qr/$regex/i : qr/$regex/;
+    my $regex;
+    if ( $opt->{g} ) {
+        $regex = $opt->{i} ? qr/$opt->{g}/i : qr/$opt->{g}/;
     }
+    my $ors = $opt->{print0} ? "\0" : "\n";
 
     while ( defined ( my $file = $iter->() ) ) {
         if ( (not defined $regex) || ($file =~ m/$regex/o) ) {
             print $file, $ors;
-            last if $one;
+            last if $opt->{1};
         }
     }
 

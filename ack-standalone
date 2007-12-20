@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.75_01';
+our $VERSION   = '1.76';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.
@@ -604,7 +604,7 @@ sub files {
     return sub {
         while (@queue) {
             my ($dir,$file,$fullpath) = splice( @queue, 0, 3 );
-            if ( -f $fullpath ) {
+            if (-f $fullpath) {
                 if ( $filter ) {
                     local $_ = $file;
                     local $File::Next::dir = $dir;
@@ -613,7 +613,7 @@ sub files {
                 }
                 return wantarray ? ($dir,$file,$fullpath) : $fullpath;
             }
-            elsif ( -d _ ) {
+            elsif (-d _) {
                 unshift( @queue, _candidate_files( $parms, $fullpath ) );
             }
         } # while
@@ -694,39 +694,30 @@ sub _candidate_files {
     }
 
     my @newfiles;
-    my $descend_filter = $parms->{descend_filter};
-    my $follow_symlinks = $parms->{follow_symlinks};
-    my $sort_sub = $parms->{sort_files};
-
     while ( defined ( my $file = readdir $dh ) ) {
         next if $skip_dirs{$file};
-        my $has_stat;
 
         # Only do directory checking if we have a descend_filter
         my $fullpath = File::Spec->catdir( $dir, $file );
-        if ( !$follow_symlinks ) {
+        if ( !$parms->{follow_symlinks} ) {
             next if -l $fullpath;
-            $has_stat = 1;
         }
 
-        if ( $descend_filter ) {
-            if ( $has_stat ? (-d _) : (-d $fullpath) ) {
-                local $File::Next::dir = $fullpath;
-                local $_ = $file;
-                next if not $descend_filter->();
-            }
+        if ( $parms->{descend_filter} && -d $fullpath ) {
+            local $File::Next::dir = $fullpath;
+            local $_ = $file;
+            next if not $parms->{descend_filter}->();
         }
-        if ( $sort_sub ) {
-            push( @newfiles, [ $dir, $file, $fullpath ] );
-        }
-        else {
-            push( @newfiles, $dir, $file, $fullpath );
-        }
+        push( @newfiles, $dir, $file, $fullpath );
     }
     closedir $dh;
 
-    if ( $sort_sub ) {
-        return map { @{$_} } sort $sort_sub @newfiles;
+    if ( my $sub = $parms->{sort_files} ) {
+        my @triplets;
+        while ( @newfiles ) {
+            push @triplets, [splice( @newfiles, 0, 3 )];
+        }
+        @newfiles = map { @{$_} } sort $sub @triplets;
     }
 
     return @newfiles;
@@ -743,7 +734,7 @@ use strict;
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.75_01';
+    $VERSION = '1.76';
     $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
 }
 

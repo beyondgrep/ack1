@@ -45,7 +45,7 @@ sub main {
             my $s = $nargs == 1 ? '' : 's';
             App::Ack::warn( "Ignoring $nargs argument$s on the command-line while acting as a filter." );
         }
-        App::Ack::search( \*STDIN, 0, '-', $opt{regex}, \%opt );
+        App::Ack::search( \*STDIN, 0, '-', \%opt );
         exit 0;
     }
 
@@ -93,7 +93,7 @@ sub main {
         my $nmatches = 0;
         while ( defined ( my $filename = $iter->() ) ) {
             my ($fh) = App::Ack::open_file( $filename );
-            $nmatches += App::Ack::search_and_list( $fh, $filename, $opt{regex}, \%opt );
+            $nmatches += App::Ack::search_and_list( $fh, $filename, \%opt );
             App::Ack::close_file( $fh, $filename );
             last if $nmatches && $opt{1};
         }
@@ -116,7 +116,7 @@ sub main {
                 $needs_line_scan = 1;
             }
             if ( $needs_line_scan ) {
-                $nmatches += App::Ack::search( $fh, $could_be_binary, $filename, $opt{regex}, \%opt );
+                $nmatches += App::Ack::search( $fh, $could_be_binary, $filename, \%opt );
             }
             App::Ack::close_file( $fh, $filename );
             last if $nmatches && $opt{1};

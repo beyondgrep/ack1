@@ -774,7 +774,7 @@ sub needs_line_scan {
 }
 
 
-=head2 search( $fh, $could_be_binary, $filename, $regex, \%opt )
+=head2 search( $fh, $could_be_binary, $filename, \%opt )
 
 Main search method
 
@@ -795,7 +795,6 @@ sub search {
     my $fh = shift;
     my $could_be_binary = shift;
     $filename = shift;
-    $regex = shift;
     my $opt = shift;
 
     my $v = $opt->{v};
@@ -813,6 +812,10 @@ sub search {
         @lines = ( @{$opt->{lines}}, -1 );
         undef $regex; # Don't match when printing matching line
     }
+    else {
+        $regex = $opt->{i} ? qr/$opt->{regex}/i : qr/$opt->{regex}/;
+    }
+
 
     # for context processing
     $last_output_line = -1;
@@ -825,10 +828,6 @@ sub search {
     my @before;
     my $before_starts_at_line;
     my $after = 0; # number of lines still to print after a match
-
-    if ( $regex ) {
-        $regex = $opt->{i} ? qr/$regex/i : qr/$regex/;
-    }
 
     while (<$fh>) {
         # XXX Optimize away the case when there are no more @lines to find.
@@ -966,7 +965,7 @@ sub print_match_or_context {
 } # scope around search() and print_match_or_context()
 
 
-=head2 search_and_list( $fh, $filename, $regex, \%opt )
+=head2 search_and_list( $fh, $filename, \%opt )
 
 Optimized version of searching for -l and --count, which do not
 show lines.
@@ -976,14 +975,13 @@ show lines.
 sub search_and_list {
     my $fh = shift;
     my $filename = shift;
-    my $regex = shift;
     my $opt = shift;
 
     my $nmatches = 0;
     my $count = $opt->{count};
     my $ors = $opt->{print0} ? "\0" : "\n"; # output record separator
 
-    $regex = $opt->{i} ? qr/$regex/i : qr/$regex/;
+    my $regex = $opt->{i} ? qr/$opt->{regex}/i : qr/$opt->{regex}/;
 
     if ( $opt->{v} ) {
         while (<$fh>) {

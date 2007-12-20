@@ -30,6 +30,9 @@ if ( $ExtUtils::MakeMaker::VERSION eq '6.36' ) {
 resources:
     homepage: http://petdance.com/ack/
     bugtracker: http://code.google.com/p/ack/issues/list
+    license: http://dev.perl.org/licenses/
+    Repository: http://code.google.com/p/ack/source
+    MailingList: http://groups.google.com/group/ack-users
 EOF
     }
 

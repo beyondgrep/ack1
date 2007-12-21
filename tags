@@ -18,6 +18,7 @@ BINARY_FILES	t/interesting.t	/^BINARY_FILES: {$/;"	l
 CASE_INSENSITIVE	t/ack-g.t	/^CASE_INSENSITIVE: {$/;"	l
 CONTEXT_DEFAULT	t/context.t	/^CONTEXT_DEFAULT: {$/;"	l
 CONTEXT_MAX_COUNT	t/context.t	/^CONTEXT_MAX_COUNT: {$/;"	l
+COUNT_PRINT0	t/ack-print0.t	/^COUNT_PRINT0: {$/;"	l
 DASH_C	t/ack-c.t	/^DASH_C: {$/;"	l
 DASH_C	t/ack-passthru.t	/^DASH_C: {$/;"	l
 DASH_C	t/ack-v.t	/^DASH_C: {$/;"	l
@@ -33,8 +34,11 @@ Example	Ack.pm	/^Example: ack -i select$/;"	l
 FAIL_MATCHING_VIA_CONTENT	t/filetypes.t	/^FAIL_MATCHING_VIA_CONTENT: {$/;"	l
 FIND_PACKAGES	t/standalone.t	/^FIND_PACKAGES: {$/;"	l
 FRONT_ANCHOR	t/ack-g.t	/^FRONT_ANCHOR: {$/;"	l
+F_PRINT0	t/ack-print0.t	/^F_PRINT0: {$/;"	l
 GROUPING_MULTIPLE_FILES	t/context.t	/^GROUPING_MULTIPLE_FILES: {$/;"	l
 GROUPING_SINGLE_FILE	t/context.t	/^GROUPING_SINGLE_FILE: {$/;"	l
+G_NO_PRINT0	t/ack-print0.t	/^G_NO_PRINT0: {$/;"	l
+G_PRINT0	t/ack-print0.t	/^G_PRINT0: {$/;"	l
 HANDLE_ZEROES	t/zero.t	/^HANDLE_ZEROES: {$/;"	l
 HIGHLIGHTING	t/ack-passthru.t	/^HIGHLIGHTING: {$/;"	l
 HIGHLIGHTING	t/context.t	/^HIGHLIGHTING: {$/;"	l
@@ -45,14 +49,18 @@ LINE_1_COMMA_5	t/ack-line.t	/^LINE_1_COMMA_5: {$/;"	l
 LINE_1_TO_5	t/ack-line.t	/^LINE_1_TO_5: {$/;"	l
 LINE_1_TO_5_CONTEXT	t/ack-line.t	/^LINE_1_TO_5_CONTEXT: {$/;"	l
 LINE_AND_PASSTHRU	t/ack-line.t	/^LINE_AND_PASSTHRU: {$/;"	l
+L_PRINT0	t/ack-print0.t	/^L_PRINT0: {$/;"	l
 MAIN	ack	/^MAIN: {$/;"	l
 MATCH_VIA_CONTENT	t/filetypes.t	/^MATCH_VIA_CONTENT: {$/;"	l
+MATCH_WITH_BACKREF	t/ack-color.t	/^MATCH_WITH_BACKREF: {$/;"	l
 METACHARACTERS	t/ack-g.t	/^METACHARACTERS: {$/;"	l
 MY	Makefile.PL	/^package MY;$/;"	p
 MY	Makefile.PL	/^sub MY::postamble {$/;"	s
 MY	Makefile.PL	/^sub MY::top_targets {$/;"	s
+MailingList	Makefile.PL	/^    MailingList: http:\/\/groups.google.com\/group\/ack-users$/;"	l
 Miscellaneous	Ack.pm	/^Miscellaneous:$/;"	l
 NORMAL	t/ack-passthru.t	/^NORMAL: {$/;"	l
+NORMAL_COLOR	t/ack-color.t	/^NORMAL_COLOR: {$/;"	l
 NO_METACHARCTERS	t/ack-g.t	/^NO_METACHARCTERS: {$/;"	l
 NO_O	t/ack-o.t	/^NO_O: {$/;"	l
 NO_STARTDIR	t/ack-g.t	/^NO_STARTDIR: {$/;"	l
@@ -64,7 +72,9 @@ PARROT_FILES_NODESCEND_EMPTY	t/interesting.t	/^PARROT_FILES_NODESCEND_EMPTY: {$/
 PERL_FILES	t/interesting.t	/^PERL_FILES: {$/;"	l
 PERL_FILES_BY_NAME	t/interesting.t	/^PERL_FILES_BY_NAME: {$/;"	l
 PERL_FILES_GLOBBED	t/interesting.t	/^PERL_FILES_GLOBBED: {$/;"	l
+Repository	Makefile.PL	/^    Repository: http:\/\/code.google.com\/p\/ack\/source$/;"	l
 SINGLE_TEXT_MATCH	t/ack-1.t	/^SINGLE_TEXT_MATCH: {$/;"	l
+SKIP	t/ack-color.t	/^    SKIP: {$/;"	l
 SKIP	t/ack-passthru.t	/^    SKIP: {$/;"	l
 SKIP	t/context.t	/^    SKIP: {$/;"	l
 Searching	Ack.pm	/^Searching:$/;"	l
@@ -103,6 +113,7 @@ homepage	Makefile.PL	/^    homepage: http:\/\/petdance.com\/ack\/$/;"	l
 is_filetype	t/Util.pm	/^sub is_filetype {$/;"	s
 is_interesting	Ack.pm	/^sub is_interesting {$/;"	s
 is_searchable	Ack.pm	/^sub is_searchable {$/;"	s
+license	Makefile.PL	/^    license: http:\/\/dev.perl.org\/licenses\/$/;"	l
 lists_match	t/Util.pm	/^sub lists_match {$/;"	s
 load_colors	Ack.pm	/^sub load_colors {$/;"	s
 main	Makefile.PL	/^package main;$/;"	p
@@ -129,4 +140,5 @@ skipdir_filter	Ack.pm	/^sub skipdir_filter {$/;"	s
 slurp	t/Util.pm	/^sub slurp {$/;"	s
 smallprof	Makefile.PL	/^smallprof: all$/;"	l
 tags	Makefile.PL	/^tags:$/;"	l
+timed	Makefile.PL	/^timed: all$/;"	l
 warn	Ack.pm	/^sub warn { ## no critic (ProhibitBuiltinHomonyms)$/;"	s

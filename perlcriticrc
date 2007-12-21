@@ -1,6 +1,8 @@
 [-CodeLayout::ProhibitParensWithBuiltins]
 [CodeLayout::ProhibitHardTabs]
 allow_leading_tabs = 0
+[-CodeLayout::RequireTidyCode]
+# Never works for me.
 
 [-ControlStructures::ProhibitPostfixControls]
 
@@ -24,8 +26,5 @@ functions = open opendir read readline readdir close closedir
 [-ValuesAndExpressions::ProhibitNoisyQuotes]
 [-ValuesAndExpressions::ProhibitEmptyQuotes]
 
-[Variables::ProhibitPackageVars]
-add_packages = Test::Builder App::Ack File::Next
-
+[-Variables::ProhibitPackageVars]
 [-Variables::ProhibitPunctuationVars]
-

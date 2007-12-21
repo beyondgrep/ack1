@@ -41,7 +41,7 @@ LINE_1_COMMA_5: {
     );
 
     my @files = qw( t/text/boy-named-sue.txt );
-    my @args = ( '--lines=1,5', '--text' );
+    my @args = qw( --lines=1,5 --text );
     my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Looking for lines 1, 5' );
@@ -86,7 +86,7 @@ LINE_1_AND_5_AND_NON_EXISTENT: {
     );
 
     my @files = qw( t/text/boy-named-sue.txt );
-    my @args = ( '--lines=1,5,1000', '--text' );
+    my @args = qw( --lines=1,5,1000 --text );
     my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Looking for non existent line' );
@@ -102,7 +102,7 @@ LINE_AND_PASSTHRU: {
 EOF
 
     my @files = qw( t/swamp/perl.pod );
-    my @args = ( '--lines=2', '--passthru' );
+    my @args = qw( --lines=2 --passthru );
     my @results = run_ack( @args, @files );
 
     lists_match( \@results, \@expected, 'Checking --passthru behaviour with --line' );

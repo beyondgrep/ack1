@@ -4,7 +4,6 @@ use warnings;
 use strict;
 
 use Test::More tests => 6;
-use File::Next 0.34; # For the reslash() function
 
 use lib 't';
 use Util qw/run_ack/;

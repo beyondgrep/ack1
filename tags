@@ -10,6 +10,7 @@ ACK_F_TEXT	t/ack-text.t	/^ACK_F_TEXT: {$/;"	l
 ACK_F_XML	t/ack-text.t	/^ACK_F_XML: {$/;"	l
 ACK_G	t/context.t	/^ACK_G: {$/;"	l
 AFTER	t/context.t	/^AFTER: {$/;"	l
+ANCHORED	t/multiline.t	/^ANCHORED: {$/;"	l
 App::Ack	Ack.pm	/^package App::Ack;$/;"	p
 BACK_ANCHOR	t/ack-g.t	/^BACK_ANCHOR: {$/;"	l
 BEFORE	t/context.t	/^BEFORE: {$/;"	l
@@ -82,6 +83,7 @@ TEXT	Ack.pm	/^use constant TEXT => 'text';$/;"	c
 TRAILING_METACHAR_BACKSLASH_W	t/ack-w.t	/^TRAILING_METACHAR_BACKSLASH_W: {$/;"	l
 TRAILING_METACHAR_DOT	t/ack-w.t	/^TRAILING_METACHAR_DOT: {$/;"	l
 TRAILING_PUNC	t/ack-w.t	/^TRAILING_PUNC: {$/;"	l
+UNANCHORED	t/multiline.t	/^UNANCHORED: {$/;"	l
 Usage	Ack.pm	/^Usage: ack [OPTION]... PATTERN [FILES]$/;"	l
 WITH_O	t/ack-o.t	/^WITH_O: {$/;"	l
 WITH_O	t/context.t	/^WITH_O: {$/;"	l

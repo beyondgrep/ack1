@@ -32,6 +32,7 @@ t/filetypes.t
 t/interesting.t
 t/longopts.t
 t/module.t
+t/multiline.t
 t/pod.t
 t/pod-coverage.t
 t/standalone.t

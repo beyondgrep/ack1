@@ -4,7 +4,6 @@ use warnings;
 use strict;
 
 use Test::More tests => 20;
-use File::Next 0.34; # For the reslash() function
 
 use lib 't';
 use Util qw( sets_match );
@@ -57,6 +56,7 @@ my $perl = [qw(
     t/interesting.t
     t/longopts.t
     t/module.t
+    t/multiline.t
     t/pod-coverage.t
     t/pod.t
     t/standalone.t

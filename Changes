@@ -1,9 +1,14 @@
 Changelog for ack
 
+NEXT
+    [FIXES]
+    Added a test for the Perl 5.10 regex bug fixed in 1.76.
+
+
 1.76        Wed Dec 19 23:23:05 CST 2007
     [FIXES]
     Now runs correctly under Perl 5.10.  ack had been relying on a
-    mistaken behavior of Perl 5.8, and Perl 5.10 fixed it.
+    mistaken regex behavior of Perl 5.8, and Perl 5.10 fixed it.
 
     [ENHANCEMENTS]
     Add .xhtml to --html

@@ -13,11 +13,15 @@ use Util;
 my $is_windows = ($^O =~ /MSWin32/);
 
 NORMAL_COLOR: {
-    my @files = qw( t/text/boy-named-sue.txt );
-    my @args = qw( called --color --text );
-    my @results = run_ack( @args, @files );
+    SKIP: {
+        skip 'Highlighting does not work on Windows', 1 if $is_windows;
 
-    ok( ( grep { /\e/ } @results ), 'normal match highlighted' );
+        my @files = qw( t/text/boy-named-sue.txt );
+        my @args = qw( called --color --text );
+        my @results = run_ack( @args, @files );
+
+        ok( ( grep { /\e/ } @results ), 'normal match highlighted' );
+    }
 }
 
 MATCH_WITH_BACKREF: {

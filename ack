@@ -23,7 +23,7 @@ MAIN: {
     }
 
     # Priorities! Get the --thpppt checking out of the way.
-    /^--th[bp]+t$/ && App::Ack::_thpppt($_) for @ARGV;
+    /^--th[pt]+t+$/ && App::Ack::_thpppt($_) for @ARGV;
     if ( !@ARGV ) {
         App::Ack::show_help();
         exit 1;

@@ -4,6 +4,9 @@ NEXT
     [FIXES]
     Added a test for the Perl 5.10 regex bug fixed in 1.76.
 
+    Made the regex for --thppptttt a little more robust.  It used
+    to have to end with a single "t", but now it's more flexible.
+
 
 1.76        Wed Dec 19 23:23:05 CST 2007
     [FIXES]

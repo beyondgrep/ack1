@@ -11,6 +11,10 @@ NEXT
 
 	Updated references in README (removed link to CPAN RT Queue).
 
+	Fixed a problem with files with non-native line-ending (DOS or
+	MacOS on Unix). Instead of the matching line an empty line was
+	output. This was reported by multiple people, thanks!
+
 
 1.76        Wed Dec 19 23:23:05 CST 2007
     [FIXES]

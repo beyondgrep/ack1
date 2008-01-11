@@ -950,7 +950,8 @@ sub print_match_or_context {
         else {
             if ( $color && $is_match && $regex ) {
                 if ( s/$regex/Term::ANSIColor::colored( substr($_, $-[0], $+[0] - $-[0]), $ENV{ACK_COLOR_MATCH} )/eg ) {
-                    s/\n$/\e[0m\e[K\n/;     # Before \n, reset the color and clear to end of line
+					# At the end of the line reset the color and keep existing line ending
+                    s/([\r\n]*)$/\e[0m\e[K$1/;
                 }
             }
             print;

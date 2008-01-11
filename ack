@@ -562,7 +562,7 @@ and Pete Krawczyk.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2005-2007 Andy Lester, all rights reserved.
+Copyright 2005-2008 Andy Lester, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

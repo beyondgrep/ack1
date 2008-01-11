@@ -17,7 +17,7 @@ our $VERSION;
 our $COPYRIGHT;
 BEGIN {
     $VERSION = '1.76';
-    $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
+    $COPYRIGHT = 'Copyright 2005-2008 Andy Lester, all rights reserved.';
 }
 
 our %types;

@@ -17,18 +17,24 @@ You can look for information at:
     Search CPAN
         http://search.cpan.org/dist/ack
 
-    CPAN Request Tracker:
-        http://rt.cpan.org/NoAuth/Bugs.html?Dist=ack
-
     AnnoCPAN, annotated CPAN documentation:
         http://annocpan.org/dist/ack
 
     CPAN Ratings:
         http://cpanratings.perl.org/d/ack
 
+    Project Home at Google Code
+	    http://code.google.com/p/ack/
+
+    Issue list at Google Code (report bugs there)
+        http://code.google.com/p/ack/issues/list
+
+    Mailing List
+	    ack-users@googlegroups.com
+
 COPYRIGHT AND LICENCE
 
-Copyright (C) 2005-2007 Andy Lester
+Copyright (C) 2005-2008 Andy Lester
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

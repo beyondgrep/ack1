@@ -7,6 +7,10 @@ NEXT
     Made the regex for --thppptttt a little more robust.  It used
     to have to end with a single "t", but now it's more flexible.
 
+	Changed year in copyright note to 2008.
+
+	Updated references in README (removed link to CPAN RT Queue).
+
 
 1.76        Wed Dec 19 23:23:05 CST 2007
     [FIXES]

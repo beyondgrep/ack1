@@ -560,7 +560,7 @@ and Pete Krawczyk.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2005-2007 Andy Lester, all rights reserved.
+Copyright 2005-2008 Andy Lester, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
@@ -726,7 +726,7 @@ sub _candidate_files {
     closedir $dh;
 
     if ( $sort_sub ) {
-        return map { @{$_} } sort $sort_sub @newfiles;
+        return map { @{$_} } sort $sort_sub @newfiles; 
     }
 
     return @newfiles;
@@ -744,7 +744,7 @@ our $VERSION;
 our $COPYRIGHT;
 BEGIN {
     $VERSION = '1.76';
-    $COPYRIGHT = 'Copyright 2005-2007 Andy Lester, all rights reserved.';
+    $COPYRIGHT = 'Copyright 2005-2008 Andy Lester, all rights reserved.';
 }
 
 our %types;

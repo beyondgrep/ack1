@@ -91,6 +91,7 @@ sub main {
         my $nmatches = 0;
         while ( defined ( my $filename = $iter->() ) ) {
             my ($fh) = App::Ack::open_file( $filename );
+            next unless defined $fh; # error while opening file
             $nmatches += App::Ack::search_and_list( $fh, $filename, \%opt );
             App::Ack::close_file( $fh, $filename );
             last if $nmatches && $opt{1};
@@ -103,6 +104,7 @@ sub main {
         my $nmatches = 0;
         while ( defined ( my $filename = $iter->() ) ) {
             my ($fh,$could_be_binary) = App::Ack::open_file( $filename );
+            next unless defined $fh; # error while opening file
             my $needs_line_scan;
             if ( $opt{regex} && !$opt{passthru} ) {
                 $needs_line_scan = App::Ack::needs_line_scan( $fh, $opt{regex}, \%opt );

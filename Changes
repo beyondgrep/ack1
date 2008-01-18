@@ -18,6 +18,9 @@ NEXT
     Rewrote a test to work around a bug in old versions of
     Test::More (before 0.48_2).
 
+    Fixed ack failure when encountering unreadable files. Reported
+    by David Dyck, thank you!
+
 
 1.76        Wed Dec 19 23:23:05 CST 2007
     [FIXES]

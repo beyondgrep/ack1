@@ -44,10 +44,13 @@ for ( qw( -i --ignore-case ) ) {
 }
 
 # Invert match
+#   this test was changed from using unlike to using like because
+#   old versions of Test::More::unlike (before 0.48_2) cannot
+#   work with multiline output (which ack produces in this case).
 for ( qw( -v --invert-match ) ) {
-    unlike
+    like
         qx{ $^X -T $ack $_ "use warnings" t/swamp/options.pl },
-        qr{use warnings},
+        qr{use strict;\n\n=head1 NAME}, # no 'use warnings' in between here
         qq{$_ works correctly};
     option_in_usage( $_ );
 }

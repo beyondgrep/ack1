@@ -10,15 +10,14 @@ use lib 't';
 use Util;
 
 NO_STARTDIR: {
-    my @expected = qw(
-    );
+    my @expected = ('ack-standalone: t/foo/non-existent: No such file or directory');
     my $regex = 'Makefile';
 
     my @files = qw( t/foo/non-existent );
     my @args = ( '-g', $regex );
-    my @results = run_ack( @args, @files );
+    my @results = run_ack( @args, @files, '2>&1' ); # redirect STDERR
 
-    sets_match( \@results, \@expected, "Looking for $regex" );
+    sets_match( \@results, \@expected, "Looking for $regex in non-existent file" );
 }
 
 

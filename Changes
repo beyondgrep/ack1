@@ -21,6 +21,10 @@ NEXT
     Fixed ack failure when encountering unreadable files. Reported
     by David Dyck, thank you!
 
+    [ENHANCEMENTS]
+    Ack warns now when the files/directories given on the command
+    line don't exist.
+
 
 1.76        Wed Dec 19 23:23:05 CST 2007
     [FIXES]

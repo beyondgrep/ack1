@@ -66,7 +66,11 @@ sub main {
         @what = '.'; # Assume current directory
         $opt{show_filename} = 1;
     }
-    #XXX Barf if the starting points don't exist
+
+    # Barf if the starting points don't exist
+    for my $start_point (@what) {
+        App::Ack::warn("$start_point: No such file or directory") unless -e $start_point;
+    }
 
     my $iter =
         File::Next::files( {
@@ -522,6 +526,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+David Dyck,
 Jason Porritt,
 Jjgod Jiang,
 Thomas Klausner,

@@ -7,13 +7,16 @@ NEXT
     Made the regex for --thppptttt a little more robust.  It used
     to have to end with a single "t", but now it's more flexible.
 
-	Changed year in copyright note to 2008.
+    Changed year in copyright note to 2008.
 
-	Updated references in README (removed link to CPAN RT Queue).
+    Updated references in README (removed link to CPAN RT Queue).
 
-	Fixed a problem with files with non-native line-ending (DOS or
-	MacOS on Unix). Instead of the matching line an empty line was
-	output. This was reported by multiple people, thanks!
+    Fixed a problem with files with non-native line-ending (DOS or
+    MacOS on Unix). Instead of the matching line an empty line was
+    output. This was reported by multiple people, thanks!
+
+    Rewrote a test to work around a bug in old versions of
+    Test::More (before 0.48_2).
 
 
 1.76        Wed Dec 19 23:23:05 CST 2007

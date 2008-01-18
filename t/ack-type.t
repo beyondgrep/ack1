@@ -53,6 +53,7 @@ my $perl = [qw(
     t/context.t
     t/etc/shebang.pl.xxx
     t/filetypes.t
+    t/file-permission.t
     t/interesting.t
     t/longopts.t
     t/module.t

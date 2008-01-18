@@ -45,6 +45,7 @@ ACK_F_TEXT: {
         t/etc/shebang.rb.xxx
         t/etc/shebang.sh.xxx
         t/filetypes.t
+        t/file-permission.t
         t/interesting.t
         t/longopts.t
         t/module.t

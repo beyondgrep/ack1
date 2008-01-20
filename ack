@@ -460,14 +460,6 @@ step through the results in Vim:
 
 =cut
 
-=head1 GOTCHAS
-
-Note that FILES must still match valid selection rules.  For example,
-
-    ack something --perl foo.rb
-
-will search nothing, because I<foo.rb> is a Ruby file.
-
 =head1 AUTHOR
 
 Andy Lester, C<< <andy at petdance.com> >>

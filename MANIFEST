@@ -29,6 +29,7 @@ t/ack-v.t
 t/ack-w.t
 t/context.t
 t/filetypes.t
+t/file-permission.t
 t/interesting.t
 t/longopts.t
 t/module.t

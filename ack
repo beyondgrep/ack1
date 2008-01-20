@@ -71,14 +71,18 @@ sub main {
     for my $start_point (@what) {
         App::Ack::warn("$start_point: No such file or directory") unless -e $start_point;
     }
+    # Starting points are always search, no matter what
+    my $is_starting_point = sub { return grep { $_ eq $_[0] } @what };
 
     my $iter =
         File::Next::files( {
             file_filter     => $opt{u}
                                     ? sub {1}
                                     : $opt{all}
-                                        ? sub { return App::Ack::is_searchable( $File::Next::name ) }
-                                        : \&App::Ack::is_interesting,
+                                        ? sub { return    $is_starting_point->( $File::Next::name )
+                                                       || App::Ack::is_searchable( $File::Next::name ) }
+                                        : sub { return    $is_starting_point->( $File::Next::name )
+                                                       || App::Ack::is_interesting( @_ ) },
             descend_filter  => $opt{n}
                                     ? sub {0}
                                     : $opt{u}
@@ -176,6 +180,9 @@ including:
 
 =back
 
+There is one exception, however, I<ack> always searches the files
+given on the command line, no matter what type.
+
 =head1 DIRECTORY SELECTION
 
 I<ack> descends through the directory tree of the starting directories
@@ -191,12 +198,8 @@ F<ack --help>.
 I<ack> trumps I<grep> as an everyday tool 99% of the time, but don't
 throw I<grep> away, because there are times you'll still need it.
 
-I<ack> only searches through files of types that it recognizes.  If
-it can't tell what type a file is, then it won't look.  If that's
-annoying to you, use I<grep>.
-
-If you truly want to search every file and every directory, I<ack>
-won't do it.  You'll need to rely on I<grep>.
+I<ack> searches by default only through files of types that it
+recognizes. If you don't want that, use the I<-u> option.
 
 =head1 OPTIONS
 

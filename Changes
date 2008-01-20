@@ -1,6 +1,11 @@
 Changelog for ack
 
 NEXT
+    [THINGS THAT HAVE CHANGED]
+    ack now always searches files given on the command line, even
+    if they are of the wrong type or not recognized or normally
+    skipped.
+
     [FIXES]
     Added a test for the Perl 5.10 regex bug fixed in 1.76.
 

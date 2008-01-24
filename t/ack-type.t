@@ -118,29 +118,29 @@ check_with( '--cc --nohh', $cc );
 
 check_with( '--fortran', $fortran );
 
-# check --create-type
-check_with( '--create-type foo-type=.foo --foo-type', $foo );
-check_with( '--create-type foo-type=.foo --type=foo-type', $foo );
-check_with( '--create-type foo-type=.foo,.bar --foo-type', $foo_bar );
-check_with( '--create-type foo-type=.foo --create-type bar-type=.bar --foo-type --bar-type', $foo_bar );
+# check --type-set
+check_with( '--type-set foo-type=.foo --foo-type', $foo );
+check_with( '--type-set foo-type=.foo --type=foo-type', $foo );
+check_with( '--type-set foo-type=.foo,.bar --foo-type', $foo_bar );
+check_with( '--type-set foo-type=.foo --type-set bar-type=.bar --foo-type --bar-type', $foo_bar );
 
-# check --append-type
-check_with( '--append-type xml=.foo --xml', $foo_xml );
-check_with( '--append-type xml=.foo,.bar --xml', $foo_bar_xml );
+# check --type-add
+check_with( '--type-add xml=.foo --xml', $foo_xml );
+check_with( '--type-add xml=.foo,.bar --xml', $foo_bar_xml );
 
-# check that --create-type redefines
-check_with( '--create-type cc=.foo --cc', $foo );
+# check that --type-set redefines
+check_with( '--type-set cc=.foo --cc', $foo );
 
 # check that builtin types cannot be changed
 for my $builtin ( qw/make skipped text binary/ ) {
-    check_error( "--create-type $builtin=.foo",
-        "ack-standalone: --create-type: Builtin type '$builtin' cannot be changed." );
-    check_error( "--append-type $builtin=.foo",
-        "ack-standalone: --append-type: Builtin type '$builtin' cannot be changed." );
+    check_error( "--type-set $builtin=.foo",
+        "ack-standalone: --type-set: Builtin type '$builtin' cannot be changed." );
+    check_error( "--type-add $builtin=.foo",
+        "ack-standalone: --type-add: Builtin type '$builtin' cannot be changed." );
 }
 
 # check that there is a warning for creating new types with --append_type
-check_warning( "--append-type foo=.foo --foo",
+check_warning( "--type-add foo=.foo --foo",
         "Type 'foo' does not exist, creating with '.foo'" );
 
 sub check_with {

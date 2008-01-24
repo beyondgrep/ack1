@@ -210,11 +210,6 @@ recognizes. If you don't want that, use the I<-u> option.
 Operate on all files, regardless of type (but still skip directories
 like F<blib>, F<CVS>, etc.)
 
-=item B<--append-type I<TYPE>=I<.EXTENSION>[,I<.EXT2>[,...]]>
-
-Files with the given EXTENSION(s) are recognized as being of (the
-existing) type TYPE. See also L</"Defining your own types">.
-
 =item B<-A I<NUM>>, B<--after-context=I<NUM>>
 
 Print I<NUM> lines of trailing context after matching lines.
@@ -239,12 +234,6 @@ B<-l>, some line counts may be zeroes.
 B<--color> highlights the matching text.  B<--nocolor> supresses
 the color.  This is on by default unless the output is redirected,
 or running under Windows.
-
-=item B<--create-type I<TYPE>=I<.EXTENSION>[,I<.EXT2>[,...]]>
-
-Files with the given EXTENSION(s) are recognized as being of type
-TYPE. This replaces an existing definition for type TYPE.  See also
-L</"Defining your own types">. 
 
 =item B<-f>
 
@@ -375,6 +364,18 @@ Type specifications can be repeated and are ORed together.
 
 See I<ack --help=types> for a list of valid types.
 
+=item B<--type-add I<TYPE>=I<.EXTENSION>[,I<.EXT2>[,...]]>
+
+Files with the given EXTENSION(s) are recognized as being of (the
+existing) type TYPE. See also L</"Defining your own types">.
+
+
+=item B<--type-set I<TYPE>=I<.EXTENSION>[,I<.EXT2>[,...]]>
+
+Files with the given EXTENSION(s) are recognized as being of type
+TYPE. This replaces an existing definition for type TYPE.  See also
+L</"Defining your own types">. 
+
 =item B<-u, --unrestricted>
 
 All files and directories (including blib/, core.*, ...) are searched,
@@ -429,22 +430,22 @@ on one command line so that they can be easily copy & pasted.
 I<ack --perl foo> searches for foo in all perl files. I<ack --help=types>
 tells you, that perl files are files ending
 in .pl, .pm, .pod or .t. So what if you would like to include .xs
-files as well when searching for --perl files? I<ack --append-type perl=.xs --perl foo>
-does this for you. B<--append-type> appends
+files as well when searching for --perl files? I<ack --type-add perl=.xs --perl foo>
+does this for you. B<--type-add> appends
 additional extensions to an existing type.
 
 If you want to define a new type, or completely redefine an existing
-type, then use B<--create-type>. I<ack --create-type
+type, then use B<--type-set>. I<ack --type-set
 eiffel=.e,.eiffel> defines the type I<eiffel> to include files with
 the extensions .e or .eiffel. So to search for all eiffel files
-containing the word Bertrand use I<ack --create-type eiffel=.e,.eiffel --eiffel Bertrand>.
+containing the word Bertrand use I<ack --type-set eiffel=.e,.eiffel --eiffel Bertrand>.
 As usual, you can also write B<--type=eiffel>
 instead of B<--eiffel>. Negation also works, so B<--noeiffel> excludes
-all eiffel files from a search. Redefining also works: I<ack --create-type cc=.c,.h>
+all eiffel files from a search. Redefining also works: I<ack --type-set cc=.c,.h>
 and I<.xs> files no longer belong to the type I<cc>.
 
 In order to see all currently defined types, use I<--help types>, e.g.
-I<ack --create-type backup=.bak --append-type perl=.perl --help types>
+I<ack --type-set backup=.bak --type-add perl=.perl --help types>
 
 Restrictions:
 
@@ -458,10 +459,10 @@ cannot be altered.
 =item
 
 The shebang line recognition of the types 'perl', 'ruby', 'php', 'python',
-'shell' and 'xml' cannot be redefined by I<--create-type>, it is always
+'shell' and 'xml' cannot be redefined by I<--type-set>, it is always
 active. However, the shebang line is only examined for files where the
 extension is not recognised. Therefore it is possible to say
-I<ack --create-type perl=.perl --create-type foo=.pl,.pm,.pod,.t --perl --nofoo> and
+I<ack --type-set perl=.perl --type-set foo=.pl,.pm,.pod,.t --perl --nofoo> and
 only find your shiny new I<.perl> files (and all files with unrecognized extensiond
 and perl on the shebang line).
 

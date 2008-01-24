@@ -299,7 +299,7 @@ sub get_command_line_options {
 =head2 def_types_from_ARGV
 
 Go through the command line arguments and look for
-I<--create-type foo=.foo,.bar> and I<--append-type xml=.rdf>.
+I<--type-set foo=.foo,.bar> and I<--type-add xml=.rdf>.
 Remove them from @ARGV and add them to the supported filetypes,
 i.e. into %mappings, etc.
 
@@ -313,29 +313,29 @@ sub def_types_from_ARGV {
         # no_auto_abbrev => otherwise -c is expanded and not left alone
     $parser->configure( 'no_ignore_case', 'pass_through', 'no_auto_abbrev' );
     $parser->getoptions( 
-        'create-type=s' => sub { shift; push @typedef, ['c', shift] },
-        'append-type=s' => sub { shift; push @typedef, ['a', shift] },
+        'type-set=s' => sub { shift; push @typedef, ['c', shift] },
+        'type-add=s' => sub { shift; push @typedef, ['a', shift] },
     ) or App::Ack::die( 'See ack --help or ack --man for options.' );
 
     for my $td (@typedef) {
         my ($type, $ext) = split '=', $td->[1];
 
         if ( $td->[0] eq 'c' ) {
-            # create-type
+            # type-set
 
             # can't redefine types 'make', 'skipped', 'text' and 'binary'
-            App::Ack::die( "--create-type: Builtin type '$type' cannot be changed." )
+            App::Ack::die( "--type-set: Builtin type '$type' cannot be changed." )
                 if exists $mappings{$type} && ref $mappings{$type} ne 'ARRAY';
 
             delete_type($type) if exists $mappings{$type};
         } else {
-            # append-type
+            # type-add
 
             # can't append to types 'make', 'skipped', 'text' and 'binary'
-            App::Ack::die( "--append-type: Builtin type '$type' cannot be changed." )
+            App::Ack::die( "--type-add: Builtin type '$type' cannot be changed." )
                 if exists $mappings{$type} && ref $mappings{$type} ne 'ARRAY';
 
-            App::Ack::warn( "--append-type: Type '$type' does not exist, creating with '$ext' ..." )
+            App::Ack::warn( "--type-add: Type '$type' does not exist, creating with '$ext' ..." )
                 unless exists $mappings{$type};
         }
 
@@ -635,10 +635,10 @@ File inclusion/exclusion:
   --type=noperl         Exclude Perl files.
                         See "ack --help type" for supported filetypes.
 
-  --append-type TYPE=.EXTENSION[,.EXT2[,...]]
+  --type-add TYPE=.EXTENSION[,.EXT2[,...]]
                         Files with the given EXTENSION(s) are recognized as
                         being of (the existing) type TYPE
-  --create-type TYPE=.EXTENSION[,.EXT2[,...]]
+  --type-set TYPE=.EXTENSION[,.EXT2[,...]]
                         Files with the given EXTENSION(s) are recognized as
                         being of type TYPE. This replaces an existing
                         definition for type TYPE. 

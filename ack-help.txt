@@ -68,10 +68,10 @@ File inclusion/exclusion:
   --type=noperl         Exclude Perl files.
                         See "ack --help type" for supported filetypes.
 
-  --append-type TYPE=.EXTENSION[,.EXT2[,...]]
+  --type-add TYPE=.EXTENSION[,.EXT2[,...]]
                         Files with the given EXTENSION(s) are recognized as
                         being of (the existing) type TYPE
-  --create-type TYPE=.EXTENSION[,.EXT2[,...]]
+  --type-set TYPE=.EXTENSION[,.EXT2[,...]]
                         Files with the given EXTENSION(s) are recognized as
                         being of type TYPE. This replaces an existing
                         definition for type TYPE. 

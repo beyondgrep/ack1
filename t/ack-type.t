@@ -63,6 +63,7 @@ my $perl = [qw(
     t/ack-u.t
     t/ack-v.t
     t/ack-w.t
+    t/code.t
     t/context.t
     t/etc/shebang.pl.xxx
     t/filetypes.t

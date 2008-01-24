@@ -208,6 +208,11 @@ recognizes. If you don't want that, use the I<-u> option.
 Operate on all files, regardless of type (but still skip directories
 like F<blib>, F<CVS>, etc.)
 
+=item B<--append-type I<TYPE>=I<.EXTENSION>[,I<.EXT2>[,...]]>
+
+Files with the given EXTENSION(s) are recognized as being of (the
+existing) type TYPE. See also L</"Defining your own types">.
+
 =item B<-A I<NUM>>, B<--after-context=I<NUM>>
 
 Print I<NUM> lines of trailing context after matching lines.
@@ -232,6 +237,12 @@ B<-l>, some line counts may be zeroes.
 B<--color> highlights the matching text.  B<--nocolor> supresses
 the color.  This is on by default unless the output is redirected,
 or running under Windows.
+
+=item B<--create-type I<TYPE>=I<.EXTENSION>[,I<.EXT2>[,...]]>
+
+Files with the given EXTENSION(s) are recognized as being of type
+TYPE. This replaces an existing definition for type TYPE.  See also
+L</"Defining your own types">. 
 
 =item B<-f>
 
@@ -404,6 +415,55 @@ might look like this:
 
 F<ack> looks in your home directory for the F<.ackrc>.  You can
 specify another location with the F<ACKRC> variable, below.
+
+=head1 Defining your own types
+
+ack allows you to define your own types in addition to the predefined
+types. This is done with command line options that are best put into
+an F<.ackrc> file - then you do not have to define your types over and
+over again. In the following examples the options will always be shown
+on one command line so that they can be easily copy & pasted.
+
+I<ack --perl foo> searches for foo in all perl files. I<ack --help=types>
+tells you, that perl files are files ending
+in .pl, .pm, .pod or .t. So what if you would like to include .xs
+files as well when searching for --perl files? I<ack --append-type perl=.xs --perl foo>
+does this for you. B<--append-type> appends
+additional extensions to an existing type.
+
+If you want to define a new type, or completely redefine an existing
+type, then use B<--create-type>. I<ack --create-type
+eiffel=.e,.eiffel> defines the type I<eiffel> to include files with
+the extensions .e or .eiffel. So to search for all eiffel files
+containing the word Bertrand use I<ack --create-type eiffel=.e,.eiffel --eiffel Bertrand>.
+As usual, you can also write B<--type=eiffel>
+instead of B<--eiffel>. Negation also works, so B<--noeiffel> excludes
+all eiffel files from a search. Redefining also works: I<ack --create-type cc=.c,.h>
+and I<.xs> files no longer belong to the type I<cc>.
+
+In order to see all currently defined types, use I<--help types>, e.g.
+I<ack --create-type backup=.bak --append-type perl=.perl --help types>
+
+Restrictions:
+
+=over 4
+
+=item
+
+The types 'skipped', 'make', 'binary' and 'text' are considered "builtin" and
+cannot be altered.
+
+=item
+
+The shebang line recognition of the types 'perl', 'ruby', 'php', 'python',
+'shell' and 'xml' cannot be redefined by I<--create-type>, it is always
+active. However, the shebang line is only examined for files where the
+extension is not recognised. Therefore it is possible to say
+I<ack --create-type perl=.perl --create-type foo=.pl,.pm,.pod,.t --perl --nofoo> and
+only find your shiny new I<.perl> files (and all files with unrecognized extensiond
+and perl on the shebang line).
+
+=back
 
 =head1 ENVIRONMENT VARIABLES
 
@@ -907,7 +967,7 @@ sub get_command_line_options {
         'version'   => sub { print_version_statement(); exit 1; },
         'help|?:s'  => sub { shift; show_help(@_); exit; },
         'help-types'=> sub { show_help_types(); exit; },
-        'man'       => sub {require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit; },
+        'man'       => sub { require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit; },
 
         'type=s'    => sub {
             # Whatever --type=xxx they specify, set it manually in the hash
@@ -924,17 +984,24 @@ sub get_command_line_options {
         }, # type sub
     };
 
-    for my $i ( filetypes_supported() ) {
-        $getopt_specs->{ "$i!" } = \$type_wanted{ $i };
-    }
-
     # Stick any default switches at the beginning, so they can be overridden
     # by the command line switches.
     unshift @ARGV, split( ' ', $ENV{ACK_OPTIONS} ) if defined $ENV{ACK_OPTIONS};
 
-    Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
-    Getopt::Long::GetOptions( %{$getopt_specs} ) or
-        App::Ack::die( 'See ack --help or ack --man for options.' );
+    # first pass through options, looking for type definitions
+    def_types_from_ARGV();
+
+    for my $i ( filetypes_supported() ) {
+        $getopt_specs->{ "$i!" } = \$type_wanted{ $i };
+    }
+
+
+    {
+        my $parser = Getopt::Long::Parser->new();
+        $parser->configure( 'bundling', 'no_ignore_case', );
+        $parser->getoptions( %{$getopt_specs} ) or
+            App::Ack::die( 'See ack --help or ack --man for options.' );
+    }
 
     my %defaults = (
         all            => 0,
@@ -998,6 +1065,70 @@ sub get_command_line_options {
     }
 
     return %opt;
+}
+
+
+sub def_types_from_ARGV {
+    my @typedef;
+
+    my $parser = Getopt::Long::Parser->new();
+        # pass_through   => leave unrecognized command line arguments alone
+        # no_auto_abbrev => otherwise -c is expanded and not left alone
+    $parser->configure( 'no_ignore_case', 'pass_through', 'no_auto_abbrev' );
+    $parser->getoptions( 
+        'create-type=s' => sub { shift; push @typedef, ['c', shift] },
+        'append-type=s' => sub { shift; push @typedef, ['a', shift] },
+    ) or App::Ack::die( 'See ack --help or ack --man for options.' );
+
+    for my $td (@typedef) {
+        my ($type, $ext) = split '=', $td->[1];
+
+        if ( $td->[0] eq 'c' ) {
+            # create-type
+
+            # can't redefine types 'make', 'skipped', 'text' and 'binary'
+            App::Ack::die( "--create-type: Builtin type '$type' cannot be changed." )
+                if exists $mappings{$type} && ref $mappings{$type} ne 'ARRAY';
+
+            delete_type($type) if exists $mappings{$type};
+        } else {
+            # append-type
+
+            # can't append to types 'make', 'skipped', 'text' and 'binary'
+            App::Ack::die( "--append-type: Builtin type '$type' cannot be changed." )
+                if exists $mappings{$type} && ref $mappings{$type} ne 'ARRAY';
+
+            App::Ack::warn( "--append-type: Type '$type' does not exist, creating with '$ext' ..." )
+                unless exists $mappings{$type};
+        }
+
+        my @exts = map { s/^\.//; $_ } split ',', $ext; # %types stores extensions without leading '.'
+
+        if ( !exists $mappings{$type} || ref($mappings{$type}) eq 'ARRAY' ) {
+            push @{$mappings{$type}}, @exts;
+            for my $e ( @exts ) {
+                push @{$types{$e}}, $type;
+            }
+        } else {
+            App::Ack::die( "Cannot append to type '$type'." );
+        }
+    }
+
+    return;
+}
+
+
+sub delete_type {
+    my $type = shift;
+
+    App::Ack::die( "Internal error: Cannot delete builtin type '$type'." )
+        unless ref $mappings{$type} eq 'ARRAY';
+
+    delete $mappings{$type};
+    delete $type_wanted{$type};
+    for my $ext ( keys %types ) {
+        $types{$ext} = [ grep { $_ ne $type } @{$types{$ext}} ];
+    }
 }
 
 
@@ -1204,6 +1335,15 @@ File inclusion/exclusion:
   --noperl              Exclude Perl files.
   --type=noperl         Exclude Perl files.
                         See "ack --help type" for supported filetypes.
+
+  --append-type TYPE=.EXTENSION[,.EXT2[,...]]
+                        Files with the given EXTENSION(s) are recognized as
+                        being of (the existing) type TYPE
+  --create-type TYPE=.EXTENSION[,.EXT2[,...]]
+                        Files with the given EXTENSION(s) are recognized as
+                        being of type TYPE. This replaces an existing
+                        definition for type TYPE. 
+
   --[no]follow          Follow symlinks.  Default is off.
 
   Directories ignored by default:

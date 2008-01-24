@@ -2,6 +2,10 @@ Changelog for ack
 
 NEXT
     [THINGS THAT HAVE CHANGED]
+    Finally ack allows you to define your own types! See options
+    --create-type and --append-type. There are some restrictions
+    left, but it should suffice for most things.
+
     ack now always searches files given on the command line, even
     if they are of the wrong type or not recognized or normally
     skipped.

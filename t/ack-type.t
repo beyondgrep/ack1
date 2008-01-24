@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 20;
+use Test::More tests => 36;
 
 use lib 't';
 use Util qw( sets_match );
@@ -25,6 +25,19 @@ my $ruby = [qw(
 my $fortran = [qw(
     t/swamp/pipe-stress-freaks.F
     t/swamp/crystallography-weenies.f
+)];
+
+my $foo = [qw(
+    t/swamp/file.foo
+)];
+
+my $bar = [qw(
+    t/swamp/file.bar
+)];
+
+my $xml = [qw(
+    t/etc/buttonhook.rss.xxx
+    t/etc/buttonhook.xml.xxx
 )];
 
 my $perl = [qw(
@@ -76,6 +89,9 @@ my $perl = [qw(
 
 my $perl_ruby = [ @{$perl}, @{$ruby} ];
 my $cc_hh = [ @{$cc}, @{$hh} ];
+my $foo_bar = [ @{$foo}, @{$bar} ];
+my $foo_xml = [ @{$foo}, @{$xml} ];
+my $foo_bar_xml = [ @{$foo}, @{$bar}, @{$xml} ];
 
 check_with( '--perl', $perl );
 check_with( '--perl --noruby', $perl );
@@ -102,6 +118,31 @@ check_with( '--cc --nohh', $cc );
 
 check_with( '--fortran', $fortran );
 
+# check --create-type
+check_with( '--create-type foo-type=.foo --foo-type', $foo );
+check_with( '--create-type foo-type=.foo --type=foo-type', $foo );
+check_with( '--create-type foo-type=.foo,.bar --foo-type', $foo_bar );
+check_with( '--create-type foo-type=.foo --create-type bar-type=.bar --foo-type --bar-type', $foo_bar );
+
+# check --append-type
+check_with( '--append-type xml=.foo --xml', $foo_xml );
+check_with( '--append-type xml=.foo,.bar --xml', $foo_bar_xml );
+
+# check that --create-type redefines
+check_with( '--create-type cc=.foo --cc', $foo );
+
+# check that builtin types cannot be changed
+for my $builtin ( qw/make skipped text binary/ ) {
+    check_error( "--create-type $builtin=.foo",
+        "ack-standalone: --create-type: Builtin type '$builtin' cannot be changed." );
+    check_error( "--append-type $builtin=.foo",
+        "ack-standalone: --append-type: Builtin type '$builtin' cannot be changed." );
+}
+
+# check that there is a warning for creating new types with --append_type
+check_warning( "--append-type foo=.foo --foo",
+        "Type 'foo' does not exist, creating with '.foo'" );
+
 sub check_with {
     my $options = shift;
     my $expected = shift;
@@ -112,4 +153,26 @@ sub check_with {
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
     return sets_match( \@results, \@expected, "File lists match via $options" );
+}
+
+sub check_warning {
+    my $options = shift;
+    my $expected = shift;
+
+    my $redirect_stderr = '2>&1'; # Redirect STDERR to capture error message
+    my @results = run_ack( '-f', $options, $redirect_stderr );
+
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    return ok( grep( /$expected/, @results ) , "Located warning message: $expected" );
+}
+
+sub check_error {
+    my $options = shift;
+    my $expected = shift;
+
+    my $redirect_stderr = '2>&1'; # Redirect STDERR to capture error message
+    my @results = run_ack( '-f', $options, $redirect_stderr );
+
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    return is( "@results", $expected, "Correct error message: $expected" );
 }

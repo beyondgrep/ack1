@@ -196,7 +196,7 @@ sub get_command_line_options {
         'version'   => sub { print_version_statement(); exit 1; },
         'help|?:s'  => sub { shift; show_help(@_); exit; },
         'help-types'=> sub { show_help_types(); exit; },
-        'man'       => sub {require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit; },
+        'man'       => sub { require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit; },
 
         'type=s'    => sub {
             # Whatever --type=xxx they specify, set it manually in the hash
@@ -213,17 +213,24 @@ sub get_command_line_options {
         }, # type sub
     };
 
-    for my $i ( filetypes_supported() ) {
-        $getopt_specs->{ "$i!" } = \$type_wanted{ $i };
-    }
-
     # Stick any default switches at the beginning, so they can be overridden
     # by the command line switches.
     unshift @ARGV, split( ' ', $ENV{ACK_OPTIONS} ) if defined $ENV{ACK_OPTIONS};
 
-    Getopt::Long::Configure( 'bundling', 'no_ignore_case' );
-    Getopt::Long::GetOptions( %{$getopt_specs} ) or
-        App::Ack::die( 'See ack --help or ack --man for options.' );
+    # first pass through options, looking for type definitions
+    def_types_from_ARGV();
+
+    for my $i ( filetypes_supported() ) {
+        $getopt_specs->{ "$i!" } = \$type_wanted{ $i };
+    }
+
+
+    {
+        my $parser = Getopt::Long::Parser->new();
+        $parser->configure( 'bundling', 'no_ignore_case', );
+        $parser->getoptions( %{$getopt_specs} ) or
+            App::Ack::die( 'See ack --help or ack --man for options.' );
+    }
 
     my %defaults = (
         all            => 0,
@@ -287,6 +294,84 @@ sub get_command_line_options {
     }
 
     return %opt;
+}
+
+=head2 def_types_from_ARGV
+
+Go through the command line arguments and look for
+I<--create-type foo=.foo,.bar> and I<--append-type xml=.rdf>.
+Remove them from @ARGV and add them to the supported filetypes,
+i.e. into %mappings, etc.
+
+=cut
+
+sub def_types_from_ARGV {
+    my @typedef;
+
+    my $parser = Getopt::Long::Parser->new();
+        # pass_through   => leave unrecognized command line arguments alone
+        # no_auto_abbrev => otherwise -c is expanded and not left alone
+    $parser->configure( 'no_ignore_case', 'pass_through', 'no_auto_abbrev' );
+    $parser->getoptions( 
+        'create-type=s' => sub { shift; push @typedef, ['c', shift] },
+        'append-type=s' => sub { shift; push @typedef, ['a', shift] },
+    ) or App::Ack::die( 'See ack --help or ack --man for options.' );
+
+    for my $td (@typedef) {
+        my ($type, $ext) = split '=', $td->[1];
+
+        if ( $td->[0] eq 'c' ) {
+            # create-type
+
+            # can't redefine types 'make', 'skipped', 'text' and 'binary'
+            App::Ack::die( "--create-type: Builtin type '$type' cannot be changed." )
+                if exists $mappings{$type} && ref $mappings{$type} ne 'ARRAY';
+
+            delete_type($type) if exists $mappings{$type};
+        } else {
+            # append-type
+
+            # can't append to types 'make', 'skipped', 'text' and 'binary'
+            App::Ack::die( "--append-type: Builtin type '$type' cannot be changed." )
+                if exists $mappings{$type} && ref $mappings{$type} ne 'ARRAY';
+
+            App::Ack::warn( "--append-type: Type '$type' does not exist, creating with '$ext' ..." )
+                unless exists $mappings{$type};
+        }
+
+        my @exts = map { s/^\.//; $_ } split ',', $ext; # %types stores extensions without leading '.'
+
+        if ( !exists $mappings{$type} || ref($mappings{$type}) eq 'ARRAY' ) {
+            push @{$mappings{$type}}, @exts;
+            for my $e ( @exts ) {
+                push @{$types{$e}}, $type;
+            }
+        } else {
+            App::Ack::die( "Cannot append to type '$type'." );
+        }
+    }
+
+    return;
+}
+
+=head2 delete_type
+
+Removes a type from the internal structures containing type
+information: %mappings, %types and %type_wanted.
+
+=cut
+
+sub delete_type {
+    my $type = shift;
+
+    App::Ack::die( "Internal error: Cannot delete builtin type '$type'." )
+        unless ref $mappings{$type} eq 'ARRAY';
+
+    delete $mappings{$type};
+    delete $type_wanted{$type};
+    for my $ext ( keys %types ) {
+        $types{$ext} = [ grep { $_ ne $type } @{$types{$ext}} ];
+    }
 }
 
 =head2 skipdir_filter
@@ -549,6 +634,15 @@ File inclusion/exclusion:
   --noperl              Exclude Perl files.
   --type=noperl         Exclude Perl files.
                         See "ack --help type" for supported filetypes.
+
+  --append-type TYPE=.EXTENSION[,.EXT2[,...]]
+                        Files with the given EXTENSION(s) are recognized as
+                        being of (the existing) type TYPE
+  --create-type TYPE=.EXTENSION[,.EXT2[,...]]
+                        Files with the given EXTENSION(s) are recognized as
+                        being of type TYPE. This replaces an existing
+                        definition for type TYPE. 
+
   --[no]follow          Follow symlinks.  Default is off.
 
   Directories ignored by default:

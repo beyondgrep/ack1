@@ -58,6 +58,8 @@ ACK_F_TEXT: {
         t/swamp/crystallography-weenies.f
         t/swamp/c-header.h
         t/swamp/c-source.c
+        t/swamp/file.foo
+        t/swamp/file.bar
         t/swamp/html.htm
         t/swamp/html.html
         t/swamp/javascript.js

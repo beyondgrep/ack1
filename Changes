@@ -10,6 +10,9 @@ NEXT
     if they are of the wrong type or not recognized or normally
     skipped.
 
+    .bak files are now automatically skipped.  I don't know how I
+    missed this before.
+
     [FIXES]
     Added a test for the Perl 5.10 regex bug fixed in 1.76.
 

@@ -70,7 +70,6 @@ BEGIN {
         haskell     => [qw( hs lhs )],
         hh          => [qw( h )],
         html        => [qw( htm html shtml xhtml )],
-        skipped     => q{Files, but not directories, normally skipped by ack (default: off)},
         lisp        => [qw( lisp )],
         java        => [qw( java properties )],
         js          => [qw( js )],
@@ -88,6 +87,7 @@ BEGIN {
         ruby        => [qw( rb rhtml rjs rxml )],
         scheme      => [qw( scm )],
         shell       => [qw( sh bash csh ksh zsh )],
+        skipped     => q{Files, but not directories, normally skipped by ack (default: off)},
         sql         => [qw( sql ctl )],
         tcl         => [qw( tcl )],
         tex         => [qw( tex cls sty )],
@@ -470,6 +470,7 @@ sub is_searchable {
     my $filename = shift;
 
     # If these are updated, update the --help message
+    return if $filename =~ /\.bak$/;
     return if $filename =~ /~$/;
     return if $filename =~ m{$path_sep_regex?(?:#.+#|core\.\d+|[._].*\.swp)$}o;
 

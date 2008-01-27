@@ -33,6 +33,7 @@ ACK_F_TEXT: {
         t/ack-v.t
         t/ack-w.t
         t/code.t
+        t/command-line-files.t
         t/context.t
         t/etc/buttonhook.html.xxx
         t/etc/buttonhook.noxml.xxx

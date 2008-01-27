@@ -28,6 +28,7 @@ t/ack-u.t
 t/ack-v.t
 t/ack-w.t
 t/code.t
+t/command-line-files.t
 t/context.t
 t/filetypes.t
 t/file-permission.t

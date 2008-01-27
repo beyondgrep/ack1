@@ -89,6 +89,12 @@ my $perl = [qw(
     t/Util.pm
 )];
 
+my $skipped = [
+    't/etc/core.2112',
+    't/swamp/#emacs-workfile.pl#',
+    't/swamp/options.pl.bak',
+];
+
 my $perl_ruby = [ @{$perl}, @{$ruby} ];
 my $cc_hh = [ @{$cc}, @{$hh} ];
 my $foo_bar = [ @{$foo}, @{$bar} ];
@@ -119,6 +125,8 @@ check_with( '--hh', $hh );
 check_with( '--cc --nohh', $cc );
 
 check_with( '--fortran', $fortran );
+
+check_with( '--skipped', $skipped );
 
 # check --type-set
 check_with( '--type-set foo-type=.foo --foo-type', $foo );
@@ -152,6 +160,7 @@ sub check_with {
     my @expected = sort @{$expected};
 
     my @results = run_ack( '-f', $options );
+    @results = grep { !/~$/ } @results; # Don't see my vim backup files
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
     return sets_match( \@results, \@expected, "File lists match via $options" );

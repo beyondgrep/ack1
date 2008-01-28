@@ -1,8 +1,11 @@
 Changelog for ack
 
-NEXT
+1.77_02     Mon Jan 28 16:19:30 CST 2008
     [ENHANCEMENTS]
     Added .lsp for --lisp, .st for --smalltalk.
+
+    Added testing for spurious output in the test suite.
+
 
 1.77_01     Sun Jan 27 20:52:27 CST 2008
     [CHANGED FUNCTIONALITY]

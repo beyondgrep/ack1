@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
@@ -33,4 +33,18 @@ EOF
     my @results = run_ack( @args, @files );
 
     lists_match( \@results, \@expected, q{Two hits for specifying the file} );
+}
+
+FILE_NOT_THERE: {
+    local $TODO = q{We haven't written anything to capture stdout yet};
+
+    my @expected = split( /\n/, <<'EOF' );
+ack-standalone: non-existent-file.txt: No such file or directory
+EOF
+
+    my @files = qw( non-existent-file.txt );
+    my @args = qw( foo );
+    my @results = run_ack( @args, @files );
+
+    lists_match( \@results, \@expected, q{Error if there's no file} );
 }

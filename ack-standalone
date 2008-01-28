@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.76';
+our $VERSION   = '1.77_01';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.
@@ -797,7 +797,7 @@ use strict;
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.76';
+    $VERSION = '1.77_01';
     $COPYRIGHT = 'Copyright 2005-2008 Andy Lester, all rights reserved.';
 }
 

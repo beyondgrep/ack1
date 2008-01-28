@@ -31,8 +31,13 @@ DASH_L	t/ack-c.t	/^DASH_L: {$/;"	l
 DASH_L	t/ack-v.t	/^DASH_L: {$/;"	l
 DASH_LC	t/ack-c.t	/^DASH_LC: {$/;"	l
 DASH_V	t/ack-1.t	/^DASH_V: {$/;"	l
+ERROR_WITH_UNREADABLE_FILE	t/file-permission.t	/^ERROR_WITH_UNREADABLE_FILE: {$/;"	l
+ERROR_WITH_UNREADABLE_FILE_COUNT	t/file-permission.t	/^ERROR_WITH_UNREADABLE_FILE_COUNT: {$/;"	l
 Example	Ack.pm	/^Example: ack -i select$/;"	l
 FAIL_MATCHING_VIA_CONTENT	t/filetypes.t	/^FAIL_MATCHING_VIA_CONTENT: {$/;"	l
+FILE_NOT_THERE	t/command-line-files.t	/^FILE_NOT_THERE: {$/;"	l
+FILE_ON_COMMAND_LINE_IS_ALWAYS_SEARCHED	t/ack-g.t	/^FILE_ON_COMMAND_LINE_IS_ALWAYS_SEARCHED: {$/;"	l
+FILE_ON_COMMAND_LINE_IS_ALWAYS_SEARCHED_EVEN_WITH_WRONG_TYPE	t/ack-g.t	/^FILE_ON_COMMAND_LINE_IS_ALWAYS_SEARCHED_EVEN_WITH_WRONG_TYPE: {$/;"	l
 FIND_PACKAGES	t/standalone.t	/^FIND_PACKAGES: {$/;"	l
 FRONT_ANCHOR	t/ack-g.t	/^FRONT_ANCHOR: {$/;"	l
 F_PRINT0	t/ack-print0.t	/^F_PRINT0: {$/;"	l
@@ -43,6 +48,7 @@ G_PRINT0	t/ack-print0.t	/^G_PRINT0: {$/;"	l
 HANDLE_ZEROES	t/zero.t	/^HANDLE_ZEROES: {$/;"	l
 HIGHLIGHTING	t/ack-passthru.t	/^HIGHLIGHTING: {$/;"	l
 HIGHLIGHTING	t/context.t	/^HIGHLIGHTING: {$/;"	l
+JUST_THE_DIR	t/command-line-files.t	/^JUST_THE_DIR: {$/;"	l
 LINE_1	t/ack-line.t	/^LINE_1: {$/;"	l
 LINE_1_AND_5	t/ack-line.t	/^LINE_1_AND_5: {$/;"	l
 LINE_1_AND_5_AND_NON_EXISTENT	t/ack-line.t	/^LINE_1_AND_5_AND_NON_EXISTENT: {$/;"	l
@@ -78,6 +84,7 @@ SINGLE_TEXT_MATCH	t/ack-1.t	/^SINGLE_TEXT_MATCH: {$/;"	l
 SKIP	t/ack-color.t	/^    SKIP: {$/;"	l
 SKIP	t/ack-passthru.t	/^    SKIP: {$/;"	l
 SKIP	t/context.t	/^    SKIP: {$/;"	l
+SPECIFYING_A_BAK_FILE	t/command-line-files.t	/^SPECIFYING_A_BAK_FILE: {$/;"	l
 Searching	Ack.pm	/^Searching:$/;"	l
 TEXT	Ack.pm	/^use constant TEXT => 'text';$/;"	c
 TRAILING_METACHAR_BACKSLASH_W	t/ack-w.t	/^TRAILING_METACHAR_BACKSLASH_W: {$/;"	l
@@ -97,10 +104,14 @@ _my_program	Ack.pm	/^sub _my_program {$/;"	s
 _thpppt	Ack.pm	/^sub _thpppt {$/;"	s
 bugtracker	Makefile.PL	/^    bugtracker: http:\/\/code.google.com\/p\/ack\/issues\/list$/;"	l
 build_regex	Ack.pm	/^sub build_regex {$/;"	s
+check_error	t/ack-type.t	/^sub check_error {$/;"	s
 check_u	t/ack-u.t	/^sub check_u {$/;"	s
+check_warning	t/ack-type.t	/^sub check_warning {$/;"	s
 check_with	t/ack-type.t	/^sub check_with {$/;"	s
 close_file	Ack.pm	/^sub close_file {$/;"	s
 critic	Makefile.PL	/^critic:$/;"	l
+def_types_from_ARGV	Ack.pm	/^sub def_types_from_ARGV {$/;"	s
+delete_type	Ack.pm	/^sub delete_type {$/;"	s
 die	Ack.pm	/^sub die { ## no critic (ProhibitBuiltinHomonyms)$/;"	s
 dproflb	Makefile.PL	/^dproflb: all$/;"	l
 fastprof	Makefile.PL	/^fastprof: all$/;"	l

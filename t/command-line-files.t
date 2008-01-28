@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
@@ -44,15 +44,20 @@ EOF
 }
 
 FILE_NOT_THERE: {
-    local $TODO = q{We haven't written anything to capture stdout yet};
+    my $file = File::Next::reslash( 't/swamp/perl.pod' );
 
-    my @expected = split( /\n/, <<'EOF' );
+    my @expected_stderr = split( /\n/, <<'EOF' );
 ack-standalone: non-existent-file.txt: No such file or directory
 EOF
 
-    my @files = qw( non-existent-file.txt );
-    my @args = qw( foo );
-    my @results = run_ack( @args, @files );
+    my @expected_stdout = split( /\n/, <<"EOF" );
+${file}:3:=head2 There's important stuff in here!
+EOF
 
-    lists_match( \@results, \@expected, q{Error if there's no file} );
+    my @files = ( 'non-existent-file.txt', $file );
+    my @args = qw( head2 );
+    my ($stdout, $stderr) = run_ack_with_stderr( @args, @files );
+
+    lists_match( $stderr, \@expected_stderr, q{Error if there's no file} );
+    lists_match( $stdout, \@expected_stdout, 'Find the one file that has a hit' );
 }

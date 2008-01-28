@@ -144,6 +144,7 @@ profiler	Makefile.PL	/^profiler: all$/;"	l
 read_ackrc	Ack.pm	/^sub read_ackrc {$/;"	s
 resources	Makefile.PL	/^resources:$/;"	l
 run_ack	t/Util.pm	/^sub run_ack {$/;"	s
+run_ack_with_stderr	t/Util.pm	/^sub run_ack_with_stderr {$/;"	s
 search	Ack.pm	/^sub search {$/;"	s
 search_and_list	Ack.pm	/^sub search_and_list {$/;"	s
 sets_match	t/Util.pm	/^sub sets_match {$/;"	s

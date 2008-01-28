@@ -8,31 +8,39 @@ delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
 use Util;
+use File::Next ();
+
+my @files = qw(
+    t/swamp/options.pl
+    t/swamp/options.pl.bak
+);
+
+$_ = File::Next::reslash($_) for @files;
 
 JUST_THE_DIR: {
-    my @expected = split( /\n/, <<'EOF' );
-t/swamp/options.pl:19:notawordhere
+    my @expected = split( /\n/, <<"EOF" );
+$files[0]:19:notawordhere
 EOF
 
     my @files = qw( t/swamp );
     my @args = qw( notaword );
     my @results = run_ack( @args, @files );
 
-    lists_match( \@results, \@expected, q{One hit for specifying a dir} );
+    sets_match( \@results, \@expected, q{One hit for specifying a dir} );
 }
 
 
 SPECIFYING_A_BAK_FILE: {
-    my @expected = split( /\n/, <<'EOF' );
-t/swamp/options.pl:19:notawordhere
-t/swamp/options.pl.bak:19:notawordhere
+    my @expected = split( /\n/, <<"EOF" );
+$files[0]:19:notawordhere
+$files[1]:19:notawordhere
 EOF
 
     my @files = qw( t/swamp/options.pl t/swamp/options.pl.bak );
     my @args = qw( notaword );
     my @results = run_ack( @args, @files );
 
-    lists_match( \@results, \@expected, q{Two hits for specifying the file} );
+    sets_match( \@results, \@expected, q{Two hits for specifying the file} );
 }
 
 FILE_NOT_THERE: {

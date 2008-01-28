@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 37;
+use Test::More tests => 74;
 
 use lib 't';
 use Util qw( sets_match );

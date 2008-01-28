@@ -19,11 +19,10 @@ sub slurp {
 sub run_ack {
     my @args = @_;
 
-    my $cmd = "$^X -T ./ack-standalone @args";
-    my @results = `$cmd`;
-    chomp @results;
+    my ($stdout,$stderr) = run_ack_with_stderr( @args );
+    is( scalar @{$stderr}, 0, 'Should have no output to stderr' );
 
-    return @results;
+    return @{$stdout};
 }
 
 sub run_ack_with_stderr {

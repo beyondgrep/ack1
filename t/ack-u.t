@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 6;
+use Test::More tests => 12;
 
 use lib 't';
 use Util qw/run_ack/;

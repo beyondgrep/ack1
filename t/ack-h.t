@@ -3,8 +3,8 @@
 use strict;
 use warnings;
 
-use Test::More tests => 6;
-use File::Next 0.34; # For the reslash() function
+use Test::More tests => 12;
+use File::Next ();
 use lib 't';
 use Util;
 

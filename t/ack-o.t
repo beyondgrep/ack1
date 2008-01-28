@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 3;
+use Test::More tests => 6;
 use File::Next ();
 delete @ENV{qw( ACK_OPTIONS ACKRC )};
 

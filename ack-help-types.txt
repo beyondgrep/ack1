@@ -22,7 +22,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]java      .java .properties
     --[no]js        .js
     --[no]jsp       .jsp .jspx .jhtm .jhtml
-    --[no]lisp      .lisp
+    --[no]lisp      .lisp .lsp
     --[no]make      Makefiles
     --[no]mason     .mas .mhtml .mpl .mtxt
     --[no]objc      .m .h
@@ -37,6 +37,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]scheme    .scm
     --[no]shell     .sh .bash .csh .ksh .zsh
     --[no]skipped   Files, but not directories, normally skipped by ack (default: off)
+    --[no]smalltalk .st
     --[no]sql       .sql .ctl
     --[no]tcl       .tcl
     --[no]tex       .tex .cls .sty

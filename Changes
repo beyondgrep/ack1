@@ -1,5 +1,9 @@
 Changelog for ack
 
+NEXT
+    [ENHANCEMENTS]
+    Added .lsp for --lisp, .st for --smalltalk.
+
 1.77_01     Sun Jan 27 20:52:27 CST 2008
     [CHANGED FUNCTIONALITY]
     ack now always searches files given on the command line, even

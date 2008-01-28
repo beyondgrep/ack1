@@ -1,8 +1,36 @@
-#!perl -Tw
+#!perl -w
 
 use warnings;
 use strict;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
+delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
-pass( 'dummy' );
+use lib 't';
+use Util;
+
+JUST_THE_DIR: {
+    my @expected = split( /\n/, <<'EOF' );
+t/swamp/options.pl:19:notawordhere
+EOF
+
+    my @files = qw( t/swamp );
+    my @args = qw( notaword );
+    my @results = run_ack( @args, @files );
+
+    lists_match( \@results, \@expected, q{One hit for specifying a dir} );
+}
+
+
+SPECIFYING_A_BAK_FILE: {
+    my @expected = split( /\n/, <<'EOF' );
+t/swamp/options.pl:19:notawordhere
+t/swamp/options.pl.bak:19:notawordhere
+EOF
+
+    my @files = qw( t/swamp/options.pl t/swamp/options.pl.bak );
+    my @args = qw( notaword );
+    my @results = run_ack( @args, @files );
+
+    lists_match( \@results, \@expected, q{Two hits for specifying the file} );
+}

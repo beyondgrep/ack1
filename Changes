@@ -1,11 +1,7 @@
 Changelog for ack
 
-NEXT
-    [THINGS THAT HAVE CHANGED]
-    Finally ack allows you to define your own types! See options
-    --type-set and --type-add. There are some restrictions left,
-    but it should suffice for most things.
-
+1.77_01     Sun Jan 27 20:52:27 CST 2008
+    [CHANGED FUNCTIONALITY]
     ack now always searches files given on the command line, even
     if they are of the wrong type or not recognized or normally
     skipped.
@@ -37,6 +33,9 @@ NEXT
     Ack warns now when the files/directories given on the command
     line don't exist.
 
+    Finally ack allows you to define your own types! See options
+    --type-set and --type-add. There are some restrictions left,
+    but it should suffice for most things.
 
 1.76        Wed Dec 19 23:23:05 CST 2007
     [FIXES]

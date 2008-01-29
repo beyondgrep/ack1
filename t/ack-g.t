@@ -3,21 +3,23 @@
 use warnings;
 use strict;
 
-use Test::More tests => 16;
+use Test::More tests => 17;
 delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
 use Util;
 
 NO_STARTDIR: {
-    my @expected = ('ack-standalone: t/foo/non-existent: No such file or directory');
-    my $regex = 'Makefile';
+    my $regex = 'non';
 
     my @files = qw( t/foo/non-existent );
     my @args = ( '-g', $regex );
-    my @results = run_ack( @args, @files, '2>&1' ); # redirect STDERR
+    my ($stdout, $stderr) = run_ack_with_stderr( @args, @files );
 
-    sets_match( \@results, \@expected, "Looking for $regex in non-existent file" );
+    ok( @$stdout == 0, 'No STDOUT for non-existent file' );
+    ok( @$stderr == 1, 'One line of STDERR for non-existent file' );
+    like( $stderr->[0], qr/non-existent: No such file or directory/,
+        'Correct warning message for non-existent file' );
 }
 
 

@@ -1,4 +1,7 @@
 Changelog for ack
+[not released]
+    [FIXES]
+        Fixed some cross-platform issues in the test cases.
 
 1.77_02     Mon Jan 28 16:19:30 CST 2008
     [ENHANCEMENTS]

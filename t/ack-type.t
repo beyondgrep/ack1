@@ -143,15 +143,15 @@ check_with( '--type-set cc=.foo --cc', $foo );
 
 # check that builtin types cannot be changed
 for my $builtin ( qw/make skipped text binary/ ) {
-    check_error( "--type-set $builtin=.foo",
+    check_stderr( "--type-set $builtin=.foo",
         "ack-standalone: --type-set: Builtin type '$builtin' cannot be changed." );
-    check_error( "--type-add $builtin=.foo",
+    check_stderr( "--type-add $builtin=.foo",
         "ack-standalone: --type-add: Builtin type '$builtin' cannot be changed." );
 }
 
 # check that there is a warning for creating new types with --append_type
-check_warning( "--type-add foo=.foo --foo",
-        "Type 'foo' does not exist, creating with '.foo'" );
+check_stderr( "--type-add foo=.foo --foo",
+        "ack-standalone: --type-add: Type 'foo' does not exist, creating with '.foo' ..." );
 
 sub check_with {
     my $options = shift;
@@ -166,24 +166,13 @@ sub check_with {
     return sets_match( \@results, \@expected, "File lists match via $options" );
 }
 
-sub check_warning {
+sub check_stderr {
     my $options = shift;
     my $expected = shift;
 
-    my $redirect_stderr = '2>&1'; # Redirect STDERR to capture error message
-    my @results = run_ack( '-f', $options, $redirect_stderr );
+    my ($stdout, $stderr) = run_ack_with_stderr( '-f', $options );
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    return ok( grep( /$expected/, @results ) , "Located warning message: $expected" );
-}
-
-sub check_error {
-    my $options = shift;
-    my $expected = shift;
-
-    my $redirect_stderr = '2>&1'; # Redirect STDERR to capture error message
-    my @results = run_ack( '-f', $options, $redirect_stderr );
-
-    local $Test::Builder::Level = $Test::Builder::Level + 1;
-    return is( "@results", $expected, "Correct error message: $expected" );
+    is( $stderr->[0], $expected, "Located stderr message: $expected" );
+    ok( @$stderr == 1, "Only one line of stderr for message: $expected" );
 }

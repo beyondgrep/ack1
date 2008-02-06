@@ -20,6 +20,8 @@ sub run_ack {
     my @args = @_;
 
     my ($stdout,$stderr) = run_ack_with_stderr( @args );
+
+    local $TODO; # this test should always run without $TODO set
     is( scalar @{$stderr}, 0, 'Should have no output to stderr' );
 
     return @{$stdout};

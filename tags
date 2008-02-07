@@ -31,8 +31,6 @@ DASH_L	t/ack-c.t	/^DASH_L: {$/;"	l
 DASH_L	t/ack-v.t	/^DASH_L: {$/;"	l
 DASH_LC	t/ack-c.t	/^DASH_LC: {$/;"	l
 DASH_V	t/ack-1.t	/^DASH_V: {$/;"	l
-ERROR_WITH_UNREADABLE_FILE	t/file-permission.t	/^ERROR_WITH_UNREADABLE_FILE: {$/;"	l
-ERROR_WITH_UNREADABLE_FILE_COUNT	t/file-permission.t	/^ERROR_WITH_UNREADABLE_FILE_COUNT: {$/;"	l
 Example	Ack.pm	/^Example: ack -i select$/;"	l
 FAIL_MATCHING_VIA_CONTENT	t/filetypes.t	/^FAIL_MATCHING_VIA_CONTENT: {$/;"	l
 FILE_NOT_THERE	t/command-line-files.t	/^FILE_NOT_THERE: {$/;"	l
@@ -104,10 +102,10 @@ _my_program	Ack.pm	/^sub _my_program {$/;"	s
 _thpppt	Ack.pm	/^sub _thpppt {$/;"	s
 bugtracker	Makefile.PL	/^    bugtracker: http:\/\/code.google.com\/p\/ack\/issues\/list$/;"	l
 build_regex	Ack.pm	/^sub build_regex {$/;"	s
-check_error	t/ack-type.t	/^sub check_error {$/;"	s
+check_stderr	t/ack-type.t	/^sub check_stderr {$/;"	s
 check_u	t/ack-u.t	/^sub check_u {$/;"	s
-check_warning	t/ack-type.t	/^sub check_warning {$/;"	s
 check_with	t/ack-type.t	/^sub check_with {$/;"	s
+check_with	t/file-permission.t	/^sub check_with {$/;"	s
 close_file	Ack.pm	/^sub close_file {$/;"	s
 critic	Makefile.PL	/^critic:$/;"	l
 def_types_from_ARGV	Ack.pm	/^sub def_types_from_ARGV {$/;"	s

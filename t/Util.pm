@@ -19,12 +19,23 @@ sub slurp {
 sub run_ack {
     my @args = @_;
 
-    my ($stdout,$stderr) = run_ack_with_stderr( @args );
+    my @results;
 
-    local $TODO; # this test should always run without $TODO set
-    is( scalar @{$stderr}, 0, 'Should have no output to stderr' );
+    if ( $^O =~ /Win32/ ) {
+        my $cmd = "$^X -T ./ack-standalone @args";
+        my @results = `$cmd`;
+        pass( q{We can't check that there was no output to stderr on Win32, so it's a freebie.} );
+    }
+    else {
+        my ($stdout,$stderr) = run_ack_with_stderr( @args );
 
-    return @{$stdout};
+        is( scalar @{$stderr}, 0, 'Should have no output to stderr' );
+        @results = @{$stdout};
+    }
+
+    chomp @results;
+
+    return @results;
 }
 
 sub run_ack_with_stderr {

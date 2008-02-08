@@ -142,16 +142,23 @@ check_with( '--type-add xml=.foo,.bar --xml', $foo_bar_xml );
 check_with( '--type-set cc=.foo --cc', $foo );
 
 # check that builtin types cannot be changed
-for my $builtin ( qw/make skipped text binary/ ) {
-    check_stderr( "--type-set $builtin=.foo",
-        "ack-standalone: --type-set: Builtin type '$builtin' cannot be changed." );
-    check_stderr( "--type-add $builtin=.foo",
-        "ack-standalone: --type-add: Builtin type '$builtin' cannot be changed." );
+SKIP: {
+    my @builtins = qw( make skipped text binary );
+    my $ntests = @builtins + 1;
+
+    skip q{Can't check stderr under Windows}, $ntests * 4 if is_win32;
+    for my $builtin ( @builtins ) {
+        check_stderr( "--type-set $builtin=.foo",
+            "ack-standalone: --type-set: Builtin type '$builtin' cannot be changed." );
+        check_stderr( "--type-add $builtin=.foo",
+            "ack-standalone: --type-add: Builtin type '$builtin' cannot be changed." );
+    }
+
+    # check that there is a warning for creating new types with --append_type
+    check_stderr( "--type-add foo=.foo --foo",
+            "ack-standalone: --type-add: Type 'foo' does not exist, creating with '.foo' ..." );
 }
 
-# check that there is a warning for creating new types with --append_type
-check_stderr( "--type-add foo=.foo --foo",
-        "ack-standalone: --type-add: Type 'foo' does not exist, creating with '.foo' ..." );
 
 sub check_with {
     my $options = shift;
@@ -174,5 +181,5 @@ sub check_stderr {
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
     is( $stderr->[0], $expected, "Located stderr message: $expected" );
-    ok( @$stderr == 1, "Only one line of stderr for message: $expected" );
+    is( @{$stderr}, 1, "Only one line of stderr for message: $expected" );
 }

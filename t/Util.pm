@@ -5,6 +5,10 @@ use IPC::Open3 qw( open3 );
 use Symbol qw(gensym);
 use IO::File ();
 
+sub build_command_line {
+    return "$^X -T ./ack-standalone @_";
+}
+
 sub slurp {
     my $iter = shift;
 
@@ -22,8 +26,8 @@ sub run_ack {
     my @results;
 
     if ( $^O =~ /Win32/ ) {
-        my $cmd = "$^X -T ./ack-standalone @args";
-        my @results = `$cmd`;
+        my $cmd = build_command_line( @args );
+        @results = `$cmd`;
         pass( q{We can't check that there was no output to stderr on Win32, so it's a freebie.} );
     }
     else {
@@ -44,7 +48,7 @@ sub run_ack_with_stderr {
     my @stdout;
     my @stderr;
 
-    my $cmd = "$^X -T ./ack-standalone @args";
+    my $cmd = build_command_line( @args );
     local *CATCHERR = IO::File->new_tmpfile;
     my $pid = open3( gensym, \*CATCHOUT, '>&CATCHERR', $cmd );
     while( <CATCHOUT> ) {
@@ -65,7 +69,8 @@ sub pipe_into_ack {
     my $input = shift;
     my @args = @_;
 
-    my $cmd = "$^X -pe1 $input | $^X -T ./ack-standalone @args";
+    my $cmd = build_command_line( @args );
+    $cmd = "$^X -pe1 $input | $cmd";
     my @results = `$cmd`;
     chomp @results;
 

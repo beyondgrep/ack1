@@ -9,15 +9,16 @@ delete @ENV{qw( ACK_OPTIONS ACKRC )};
 use lib 't';
 use Util;
 
-NO_STARTDIR: {
+SKIP: { # NO_STARTDIR
+    skip q{Can't be tested under Win32}, 3 if is_win32();
     my $regex = 'non';
 
     my @files = qw( t/foo/non-existent );
     my @args = ( '-g', $regex );
     my ($stdout, $stderr) = run_ack_with_stderr( @args, @files );
 
-    ok( @$stdout == 0, 'No STDOUT for non-existent file' );
-    ok( @$stderr == 1, 'One line of STDERR for non-existent file' );
+    is( scalar @{$stdout}, 0, 'No STDOUT for non-existent file' );
+    is( scalar @{$stderr}, 1, 'One line of STDERR for non-existent file' );
     like( $stderr->[0], qr/non-existent: No such file or directory/,
         'Correct warning message for non-existent file' );
 }

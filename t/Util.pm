@@ -5,6 +5,10 @@ use IPC::Open3 qw( open3 );
 use Symbol qw(gensym);
 use IO::File ();
 
+sub is_win32 {
+    return $^O =~ /Win32/;
+}
+
 sub build_command_line {
     return "$^X -T ./ack-standalone @_";
 }

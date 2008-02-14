@@ -49,6 +49,8 @@ sub run_ack {
 sub run_ack_with_stderr {
     my @args = @_;
 
+    die 'You cannot use run_ack_with_stderr on Win32' if is_win32;
+
     my @stdout;
     my @stderr;
 

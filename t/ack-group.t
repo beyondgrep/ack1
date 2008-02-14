@@ -3,64 +3,55 @@
 use strict;
 use warnings;
 
-use Test::More tests => 12;
+use Test::More tests => 4;
 use File::Next ();
 use lib 't';
 use Util;
 
-NO_SWITCHES_ONE_FILE: {
-    my @expected = split( /\n/, <<'EOF' );
-use strict;
-EOF
+my $freedom = File::Next::reslash( 't/text/freedom-of-choice.txt' );
+my $bobbie  = File::Next::reslash( 't/text/me-and-bobbie-mcgee.txt' );
 
-    my @files = qw( t/swamp/options.pl );
-    my @args = qw( strict );
-    my @results = run_ack( @args, @files );
-
-    lists_match( \@results, \@expected, 'Looking for strict in one file' );
-}
-
-
-NO_SWITCHES_MULTIPLE_FILES: {
-    my $target_file = File::Next::reslash( 't/swamp/options.pl' );
+NO_GROUPING: {
     my @expected = split( /\n/, <<"EOF" );
-$target_file:2:use strict;
+$freedom:2:Nobody ever said life was free
+$freedom:4:But use your freedom of choice
+$freedom:6:I'll say it again in the land of the free
+$freedom:7:Use your freedom of choice
+$freedom:8:Your freedom of choice
+$freedom:28:I'll say it again in the land of the free
+$freedom:29:Use your freedom of choice
+$bobbie:12:    Nothin' don't mean nothin' if it ain't free
+$bobbie:27:    Nothin' don't mean nothin' if it ain't free
 EOF
 
-    my @files = qw( t/swamp/options.pl t/swamp/pipe-stress-freaks.F );
-    my @args = qw( strict );
+    my @files = sort glob( 't/text/*.txt' );
+    my @args = qw( -a --nogroup --nocolor free );
     my @results = run_ack( @args, @files );
 
-    lists_match( \@results, \@expected, 'Looking for strict in multiple files' );
+    lists_match( \@results, \@expected, 'No grouping' );
 }
 
 
-WITH_SWITCHES_ONE_FILE: {
-    my $target_file = File::Next::reslash( 't/swamp/options.pl' );
-    for my $opt ( qw( -H --with-filename ) ) {
-        my @expected = split( /\n/, <<"EOF" );
-$target_file:2:use strict;
+STANDARD_GROUPING: {
+    my @expected = split( /\n/, <<"EOF" );
+$freedom
+2:Nobody ever said life was free
+4:But use your freedom of choice
+6:I'll say it again in the land of the free
+7:Use your freedom of choice
+8:Your freedom of choice
+28:I'll say it again in the land of the free
+29:Use your freedom of choice
+
+$bobbie
+12:    Nothin' don't mean nothin' if it ain't free
+27:    Nothin' don't mean nothin' if it ain't free
 EOF
 
-        my @files = qw( t/swamp/options.pl );
-        my @args = ( $opt, qw( strict ) );
-        my @results = run_ack( @args, @files );
+    my @files = sort glob( 't/text/*.txt' );
+    my @args = qw( -a --group --nocolor free );
+    my @results = run_ack( @args, @files );
 
-        lists_match( \@results, \@expected, "Looking for strict in one file with $opt" );
-    }
+    lists_match( \@results, \@expected, 'Standard grouping' );
 }
 
-
-WITH_SWITCHES_MULTIPLE_FILES: {
-    for my $opt ( qw( -h --no-filename ) ) {
-        my @expected = split( /\n/, <<"EOF" );
-use strict;
-EOF
-
-        my @files = qw( t/swamp/options.pl t/swamp/crystallography-weenies.f );
-        my @args = ( $opt, qw( strict ) );
-        my @results = run_ack( @args, @files );
-
-        lists_match( \@results, \@expected, "Looking for strict in multiple files with $opt" );
-    }
-}

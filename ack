@@ -13,9 +13,11 @@ use App::Ack ();
 
 MAIN: {
     # read_ackrc unless we have to ignore all environment settings
-    if ( grep /^--noenv$/, @ARGV ) {
+    my @envy = grep { $_ eq '--' || $_ eq '--noenv' } @ARGV;
+    if ( ( @envy == 1 ) && ( $envy[0] eq '--noenv' ) ) {
         delete @ENV{qw( ACK_OPTIONS ACKRC ACK_COLOR_MATCH ACK_COLOR_FILENAME )};
-    } else {
+    }
+    else {
         unshift( @ARGV, App::Ack::read_ackrc() );
     }
 

@@ -1,6 +1,11 @@
 Changelog for ack
 [not released]
     [FIXES]
+    Removed spurious new line after last match in --group
+    output.
+
+    Fixed typos in docu concerning context matching.
+
     Fixed some cross-platform issues in the test cases.
 
     Fixed test in run_ack for stderr output. This should

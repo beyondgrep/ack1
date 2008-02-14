@@ -157,7 +157,6 @@ GROUPING_SINGLE_FILE: {
 $target_file
 1:#!/usr/bin/ruby
 EOF
-    push @expected, ''; # and an empty line
 
     my $regex = 'ruby';
     my @args = ( '--ruby', '--group', '-C', $regex );
@@ -195,7 +194,6 @@ $target_file[2]
 20-It doesn't matter if it's real or not
 21:'cause some things are better left without a doubt
 EOF
-    push @expected, ''; # and an empty line
 
     my $regex = 'left';
     my @files = qw( t/text/ );

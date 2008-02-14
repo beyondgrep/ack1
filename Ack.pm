@@ -958,6 +958,12 @@ sub search {
         } # not a match
 
         ++$nmatches;
+
+        # print an empty line as a divider before first line in each file (not before the first file)
+        if ( !$any_output && $opt->{show_filename} && $opt->{group} && defined( $context_overall_output_count ) ) {
+            print "\n";
+        }
+
         shift @lines if $has_lines;
 
         if ( $could_be_binary ) {
@@ -984,10 +990,6 @@ sub search {
 
         last if $max && ( $nmatches >= $max ) && !$after;
     } # while
-
-    if ( $nmatches && $opt->{show_filename} && $opt->{group} ) {
-        print "\n";
-    }
 
     return $nmatches;
 }   # search()
@@ -1025,7 +1027,7 @@ sub print_match_or_context {
     for ( @_ ) {
         if ( $keep_context && !$output_func ) {
             if ( ( $last_output_line != $line_no - 1 ) &&
-                ( $any_output || ( !$group && $context_overall_output_count++ > 0 ) ) ) {
+                ( $any_output || ( !$group && defined( $context_overall_output_count ) ) ) ) {
                 print "--\n";
             }
             # to ensure separators between different files when --nogroup
@@ -1053,6 +1055,7 @@ sub print_match_or_context {
             print;
         }
         $any_output = 1;
+        ++$context_overall_output_count;
         ++$line_no;
     }
 

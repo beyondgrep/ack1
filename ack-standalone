@@ -212,11 +212,11 @@ like F<blib>, F<CVS>, etc.)
 
 Print I<NUM> lines of trailing context after matching lines.
 
-=item B<-B I<NUM>>, B<--after-context=I<NUM>>
+=item B<-B I<NUM>>, B<--before-context=I<NUM>>
 
 Print I<NUM> lines of leading context before matching lines.
 
-=item B<-C [I<NUM>]>, B<--after-context[=I<NUM>]>
+=item B<-C [I<NUM>]>, B<--context[=I<NUM>]>
 
 Print I<NUM> lines (default 2) of context around matching lines.
 

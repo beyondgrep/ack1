@@ -1,0 +1,50 @@
+#!perl
+
+use warnings;
+use strict;
+
+use Test::More tests => 6;
+delete @ENV{qw( ACK_OPTIONS ACKRC )};
+
+use lib 't';
+use Util;
+
+SINGLE_TEXT_MATCH: {
+    my @expected = (
+        'And I said: "My name is Sue! How do you do! Now you gonna die!"',
+    );
+
+    my @files = qw( t/text );
+    local $ENV{ACK_OPTIONS} = '-1'; # set the parameter via the options
+    my @args = qw( Sue! -h --text );
+    my @results = run_ack( @args, @files );
+
+    sets_match( \@results, \@expected, 'Looking for first instance of Sue!' );
+}
+
+SINGLE_TEXT_MATCH_ENV: {
+    my @expected = (
+        'And I said: "My name is Sue! How do you do! Now you gonna die!"',
+    );
+
+    my @files = qw( t/text );
+    local $ENV{ACK_OPTIONS} = '-1';         # set the parameter via the options
+    my @args = qw( Sue! -h --text --env );  # and specifying --env does not change the result
+    my @results = run_ack( @args, @files );
+
+    sets_match( \@results, \@expected, 'Looking for first instance of Sue! with --env' );
+}
+
+SINGLE_TEXT_MATCH_NOENV: {
+    my @expected = split( /\n/, <<'EOF' );
+And I said: "My name is Sue! How do you do! Now you gonna die!"
+Bill or George! Anything but Sue! I still hate that name!
+EOF
+
+    my @files = qw( t/text );
+    local $ENV{ACK_OPTIONS} = '-1';          # set the parameter via the options
+    my @args = qw( Sue! -h --text --noenv ); # but disable environment processing
+    my @results = run_ack( @args, @files );
+
+    sets_match( \@results, \@expected, 'Looking for Sue! with --noenv' );
+}

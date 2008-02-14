@@ -1,10 +1,15 @@
 Changelog for ack
 [not released]
+    [ENHANCEMENTS]
+    Added option --[no]env to ignore all environment settings
+    including .ackrc.
+
     [FIXES]
     Removed spurious new line after last match in --group
     output.
 
-    Fixed typos in docu concerning context matching.
+    Fixed typos in docu concerning context matching and
+    removed option --rc from docu (not implemented).
 
     Fixed some cross-platform issues in the test cases.
 

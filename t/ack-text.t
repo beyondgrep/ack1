@@ -21,6 +21,7 @@ ACK_F_TEXT: {
         t/ack-binary.t
         t/ack-c.t
         t/ack-color.t
+        t/ack-env.t
         t/ack-g.t
         t/ack-group.t
         t/ack-h.t

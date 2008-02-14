@@ -171,9 +171,10 @@ sub get_command_line_options {
         c                       => \$opt{count},
         'color!'                => \$opt{color},
         count                   => \$opt{count},
+        'env!'                  => sub { }, # ignore this option, it is handled beforehand 
         f                       => \$opt{f},
-        'g=s'                   => \$opt{g},
         'follow!'               => \$opt{follow},
+        'g=s'                   => \$opt{g},
         'group!'                => \$opt{group},
         'h|no-filename'         => \$opt{h},
         'H|with-filename'       => \$opt{H},
@@ -574,7 +575,9 @@ If [FILES] is specified, then only those files/directories are checked.
 ack may also search STDIN, but only if no FILES are specified, or if
 one of FILES is "-".
 
-Default switches may be specified in ACK_OPTIONS environment variable.
+Default switches may be specified in ACK_OPTIONS environment variable or
+an .ackrc file. If you want no dependency on the environment, turn it
+off with --noenv.
 
 Example: ack -i select
 

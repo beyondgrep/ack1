@@ -12,7 +12,13 @@ use File::Next 0.40;
 use App::Ack ();
 
 MAIN: {
-    unshift( @ARGV, App::Ack::read_ackrc() );
+    # read_ackrc unless we have to ignore all environment settings
+    if ( grep /^--noenv$/, @ARGV ) {
+        delete @ENV{qw( ACK_OPTIONS ACKRC ACK_COLOR_MATCH ACK_COLOR_FILENAME )};
+    } else {
+        unshift( @ARGV, App::Ack::read_ackrc() );
+    }
+
     App::Ack::load_colors();
 
     if ( $App::Ack::VERSION ne $main::VERSION ) {
@@ -235,6 +241,12 @@ B<--color> highlights the matching text.  B<--nocolor> supresses
 the color.  This is on by default unless the output is redirected,
 or running under Windows.
 
+=item B<--env>, B<--noenv>
+
+B<--noenv> disables all environment processing. No F<.ackrc> is read
+and all environment variables are ignored. By default, F<ack> considers
+F<.ackrc> and settings in the environment.
+
 =item B<-f>
 
 Only print the files that would be searched, without actually doing
@@ -419,6 +431,9 @@ might look like this:
 F<ack> looks in your home directory for the F<.ackrc>.  You can
 specify another location with the F<ACKRC> variable, below.
 
+If B<--noenv> is specified on the command line, the F<.ackrc> file
+is ignored.
+
 =head1 Defining your own types
 
 ack allows you to define your own types in addition to the predefined
@@ -504,6 +519,9 @@ See B<ACK_COLOR_FILENAME> for the color specifications.
 
 =back
 
+Note: The above environment variables are ignored if B<--noenv> is
+specified on the command line.
+
 =head1 ACK & OTHER TOOLS
 
 =head2 Vim integration
@@ -539,8 +557,6 @@ ack users.
 
 There is a list of enhancements I want to make to F<ack> in the ack
 issues list at Google Code: L<http://code.google.com/p/ack/issues/list>
-Yes, we want to be able to specify our own filetypes, so you can
-say .snork files are recognized as Java, or whatever.
 
 Patches are always welcome, but patches with tests get the most
 attention.

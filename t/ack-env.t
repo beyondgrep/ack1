@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 6;
+use Test::More tests => 8;
 delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
@@ -44,6 +44,16 @@ EOF
     my @files = qw( t/text );
     local $ENV{ACK_OPTIONS} = '-1';          # set the parameter via the options
     my @args = qw( Sue! -h --text --noenv ); # but disable environment processing
+    my @results = run_ack( @args, @files );
+
+    sets_match( \@results, \@expected, 'Looking for Sue! with --noenv' );
+}
+
+SEARCH_FOR_DASH_DASH_NOENV: {
+    my @expected = ' magic string --noenv';
+    my @files = qw( t/text );
+    local $ENV{ACK_OPTIONS} = '-h --cc';          # set the parameter via the options
+    my @args = qw( -- --noenv t/swamp ); # but disable environment processing
     my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Looking for Sue! with --noenv' );

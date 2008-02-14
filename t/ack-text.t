@@ -79,6 +79,7 @@ ACK_F_TEXT: {
         t/text/4th-of-july.txt
         t/text/boy-named-sue.txt
         t/text/freedom-of-choice.txt
+        t/text/me-and-bobbie-mcgee.txt
         t/text/science-of-myth.txt
         t/text/shut-up-be-happy.txt
         t/Util.pm

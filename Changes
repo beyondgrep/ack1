@@ -8,13 +8,13 @@ Changelog for ack
     Removed spurious new line after last match in --group
     output.
 
-    Fixed typos in docu concerning context matching and
-    removed option --rc from docu (not implemented).
+    Fixed typos in docu concerning context matching and removed
+    option --rc from docs, since it was never implemented.
 
     Fixed some cross-platform issues in the test cases.
 
-    Fixed test in run_ack for stderr output. This should
-    no longer report unexpected succeeds for TODO tests.
+    Fixed test in run_ack for stderr output. This should no longer
+    report unexpected succeeds for TODO tests.
 
 
 1.77_02     Mon Jan 28 16:19:30 CST 2008

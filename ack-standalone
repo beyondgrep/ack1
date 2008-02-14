@@ -10,26 +10,31 @@ our $VERSION   = '1.77_02';
 
 
 MAIN: {
-    # read_ackrc unless we have to ignore all environment settings
-    my @envy = grep { $_ eq '--' || $_ eq '--noenv' } @ARGV;
-    if ( ( @envy == 1 ) && ( $envy[0] eq '--noenv' ) ) {
-        delete @ENV{qw( ACK_OPTIONS ACKRC ACK_COLOR_MATCH ACK_COLOR_FILENAME )};
-    }
-    else {
-        unshift( @ARGV, App::Ack::read_ackrc() );
-    }
-
-    App::Ack::load_colors();
-
     if ( $App::Ack::VERSION ne $main::VERSION ) {
         App::Ack::die( "Program/library version mismatch\n\t$0 is $main::VERSION\n\t$INC{'App/Ack.pm'} is $App::Ack::VERSION" );
     }
+
+    # Do preliminary arg checking;
+    my $env_ok = 1;
+    for ( @ARGV ) {
+        last if ( $_ eq '--' );
+
+        # Priorities! Get the --thpppt checking out of the way.
+        /^--th[pt]+t+$/ && App::Ack::_thpppt($_);
+
+        # See if we want to ignore the environment. (Don't tell Al Gore.)
+        if ( /^--noenv$/ ) {
+            delete @ENV{qw( ACK_OPTIONS ACKRC ACK_COLOR_MATCH ACK_COLOR_FILENAME ACK_SWITCHES )};
+            $env_ok = 0;
+        }
+    }
+    unshift( @ARGV, App::Ack::read_ackrc() ) if $env_ok;
+    App::Ack::load_colors();
+
     if ( exists $ENV{ACK_SWITCHES} ) {
         App::Ack::warn( 'ACK_SWITCHES is no longer supported.  Use ACK_OPTIONS.' );
     }
 
-    # Priorities! Get the --thpppt checking out of the way.
-    /^--th[pt]+t+$/ && App::Ack::_thpppt($_) for @ARGV;
     if ( !@ARGV ) {
         App::Ack::show_help();
         exit 1;

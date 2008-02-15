@@ -5,6 +5,9 @@ Changelog for ack
     including .ackrc.
 
     [FIXES]
+    Fixed bug with -v not finding all files correctly (introduced
+    with the performance optimizations in ack 1.75)
+
     Removed spurious new line after last match in --group
     output.
 

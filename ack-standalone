@@ -1533,6 +1533,8 @@ sub needs_line_scan {
     my $regex = shift;
     my $opt = shift;
 
+    return 1 if $opt->{v};
+
     my $size = -s $fh;
 
     if ( $size > 100_000 ) {

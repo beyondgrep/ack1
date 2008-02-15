@@ -3,13 +3,23 @@
 use warnings;
 use strict;
 
-use Test::More tests => 4;
+use Test::More tests => 6;
 use File::Next ();
 
 delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
 use Util;
+
+NORMAL_CASE: {
+    my @expected = ( 'Well, my daddy left home when I was three' );
+
+    my @files = qw( t/text/boy-named-sue.txt );
+    my @args = qw( -v are -a -h -m1 );
+    my @results = run_ack( @args, @files );
+
+    sets_match( \@results, \@expected, 'First line of a file that does not contain "are".' );
+}
 
 DASH_L: {
     my @expected = qw(

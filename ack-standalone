@@ -51,7 +51,7 @@ sub main {
             $opt{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );
         }
         $opt{show_filename} = 0;
-        $opt{regex} = App::Ack::build_regex( shift @ARGV, \%opt );
+        $opt{regex} = App::Ack::build_regex( defined $opt{regex} ? $opt{regex} : shift @ARGV, \%opt );
         if ( my $nargs = @ARGV ) {
             my $s = $nargs == 1 ? '' : 's';
             App::Ack::warn( "Ignoring $nargs argument$s on the command-line while acting as a filter." );
@@ -63,7 +63,7 @@ sub main {
     my $file_matching = $opt{f} || $opt{g} || $opt{lines};
     if ( !$file_matching ) {
         @ARGV or App::Ack::die( 'No regular expression found.' );
-        $opt{regex} = App::Ack::build_regex( shift @ARGV, \%opt );
+        $opt{regex} = App::Ack::build_regex( defined $opt{regex} ? $opt{regex} : shift @ARGV, \%opt );
     }
 
     my @what;
@@ -316,6 +316,16 @@ order given on the command line.
 =item B<-l>, B<--files-with-matches>
 
 Only print the filenames of matching files, instead of the matching text.
+
+=item B<--match I<REGEX>>
+
+Specify the I<REGEX> explicitly. This is helpful if you don't want to put the
+regex as your first argument, e.g. when executing multiple searches over the
+same set of files.
+
+    # search for foo and bar in given files
+    ack file1 t/file* --match foo
+    ack file1 t/file* --match bar
 
 =item B<-m=I<NUM>>, B<--max-count=I<NUM>>
 
@@ -990,6 +1000,7 @@ sub get_command_line_options {
         'l|files-with-matches'  => \$opt{l},
         'L|files-without-match' => sub { $opt{l} = $opt{v} = 1 },
         'm|max-count=i'         => \$opt{m},
+        'match=s'               => \$opt{regex},
         n                       => \$opt{n},
         o                       => sub { $opt{output} = '$&' },
         'output=s'              => \$opt{output},
@@ -1325,6 +1336,7 @@ Searching:
   -v, --invert-match    Invert match: select non-matching lines
   -w, --word-regexp     Force PATTERN to match only whole words
   -Q, --literal         Quote all metacharacters; expr is literal
+  --match REGEX         Specify REGEX explicitly.
 
 Search output:
   --line=NUM            Only print line(s) NUM of each file

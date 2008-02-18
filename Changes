@@ -7,6 +7,8 @@ Changelog for ack
     Added a --[no]ignore-dir option, to include/exclude additional
     directories. Many thanks for this patch go to Matthew Wickline!
 
+    Added option --match REGEX to specify a regex explicitly.
+
     [FIXES]
     Fixed bug with -v not finding all files correctly (introduced
     with the performance optimizations in ack 1.75)

@@ -183,6 +183,7 @@ sub get_command_line_options {
         'l|files-with-matches'  => \$opt{l},
         'L|files-without-match' => sub { $opt{l} = $opt{v} = 1 },
         'm|max-count=i'         => \$opt{m},
+        'match=s'               => \$opt{regex},
         n                       => \$opt{n},
         o                       => sub { $opt{output} = '$&' },
         'output=s'              => \$opt{output},
@@ -588,6 +589,7 @@ Searching:
   -v, --invert-match    Invert match: select non-matching lines
   -w, --word-regexp     Force PATTERN to match only whole words
   -Q, --literal         Quote all metacharacters; expr is literal
+  --match REGEX         Specify REGEX explicitly.
 
 Search output:
   --line=NUM            Only print line(s) NUM of each file

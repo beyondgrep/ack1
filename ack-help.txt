@@ -16,6 +16,7 @@ Searching:
   -v, --invert-match    Invert match: select non-matching lines
   -w, --word-regexp     Force PATTERN to match only whole words
   -Q, --literal         Quote all metacharacters; expr is literal
+  --match REGEX         Specify REGEX explicitly.
 
 Search output:
   --line=NUM            Only print line(s) NUM of each file

@@ -27,6 +27,7 @@ ACK_F_TEXT: {
         t/ack-h.t
         t/ack-ignore-dir.t
         t/ack-line.t
+        t/ack-match.t
         t/ack-o.t
         t/ack-passthru.t
         t/ack-print0.t

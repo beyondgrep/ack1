@@ -53,7 +53,7 @@ sub main {
             $opt{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );
         }
         $opt{show_filename} = 0;
-        $opt{regex} = App::Ack::build_regex( shift @ARGV, \%opt );
+        $opt{regex} = App::Ack::build_regex( defined $opt{regex} ? $opt{regex} : shift @ARGV, \%opt );
         if ( my $nargs = @ARGV ) {
             my $s = $nargs == 1 ? '' : 's';
             App::Ack::warn( "Ignoring $nargs argument$s on the command-line while acting as a filter." );
@@ -65,7 +65,7 @@ sub main {
     my $file_matching = $opt{f} || $opt{g} || $opt{lines};
     if ( !$file_matching ) {
         @ARGV or App::Ack::die( 'No regular expression found.' );
-        $opt{regex} = App::Ack::build_regex( shift @ARGV, \%opt );
+        $opt{regex} = App::Ack::build_regex( defined $opt{regex} ? $opt{regex} : shift @ARGV, \%opt );
     }
 
     my @what;
@@ -318,6 +318,16 @@ order given on the command line.
 =item B<-l>, B<--files-with-matches>
 
 Only print the filenames of matching files, instead of the matching text.
+
+=item B<--match I<REGEX>>
+
+Specify the I<REGEX> explicitly. This is helpful if you don't want to put the
+regex as your first argument, e.g. when executing multiple searches over the
+same set of files.
+
+    # search for foo and bar in given files
+    ack file1 t/file* --match foo
+    ack file1 t/file* --match bar
 
 =item B<-m=I<NUM>>, B<--max-count=I<NUM>>
 

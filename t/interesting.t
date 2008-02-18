@@ -22,7 +22,7 @@ PERL_FILES: {
     my $iter =
         File::Next::files( {
             file_filter => $is_perl,
-            descend_filter => \&App::Ack::skipdir_filter,
+            descend_filter => \&App::Ack::ignoredir_filter,
         }, 't/swamp' );
 
     my @files = slurp( $iter );
@@ -46,7 +46,7 @@ PERL_FILES_GLOBBED: {
     my $iter =
         File::Next::files( {
             file_filter => $is_perl,
-            descend_filter => \&App::Ack::skipdir_filter,
+            descend_filter => \&App::Ack::ignoredir_filter,
         }, @starters );
 
     my @files = slurp( $iter );
@@ -67,7 +67,7 @@ PARROT_FILES_DESCEND: {
     my $iter =
         File::Next::files( {
             file_filter => $is_parrot,
-            descend_filter => \&App::Ack::skipdir_filter,
+            descend_filter => \&App::Ack::ignoredir_filter,
         }, 't' );
 
     my @files = slurp( $iter );
@@ -117,7 +117,7 @@ BINARY_FILES: {
     my $iter =
         File::Next::files( {
             file_filter => $is_binary,
-            descend_filter => \&App::Ack::skipdir_filter,
+            descend_filter => \&App::Ack::ignoredir_filter,
         }, 't/swamp' );
 
     my @files = slurp( $iter );

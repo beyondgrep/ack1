@@ -4,6 +4,9 @@ Changelog for ack
     Added option --[no]env to ignore all environment settings
     including .ackrc.
 
+    Added a --[no]ignore-dir option, to include/exclude additional
+    directories. Many thanks for this patch go to Matthew Wickline!
+
     [FIXES]
     Fixed bug with -v not finding all files correctly (introduced
     with the performance optimizations in ack 1.75)

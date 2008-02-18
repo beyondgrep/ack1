@@ -25,6 +25,7 @@ ACK_F_TEXT: {
         t/ack-g.t
         t/ack-group.t
         t/ack-h.t
+        t/ack-ignore-dir.t
         t/ack-line.t
         t/ack-o.t
         t/ack-passthru.t
@@ -64,6 +65,15 @@ ACK_F_TEXT: {
         t/swamp/c-source.c
         t/swamp/file.foo
         t/swamp/file.bar
+        t/swamp/groceries/fruit
+        t/swamp/groceries/junk
+        t/swamp/groceries/meat
+        t/swamp/groceries/another_subdir/fruit
+        t/swamp/groceries/another_subdir/junk
+        t/swamp/groceries/another_subdir/meat
+        t/swamp/groceries/subdir/fruit
+        t/swamp/groceries/subdir/junk
+        t/swamp/groceries/subdir/meat
         t/swamp/html.htm
         t/swamp/html.html
         t/swamp/javascript.js

@@ -194,6 +194,8 @@ sub get_command_line_options {
         'v|invert-match'        => \$opt{v},
         'w|word-regexp'         => \$opt{w},
 
+        'ignore-dir=s'   => sub { shift; my $dir = shift; $ignore_dirs{$dir} = '--ignore-dir' },
+        'noignore-dir=s' => sub { shift; my $dir = shift; delete $ignore_dirs{$dir} },
 
         'version'   => sub { print_version_statement(); exit 1; },
         'help|?:s'  => sub { shift; show_help(@_); exit; },
@@ -376,15 +378,15 @@ sub delete_type {
     }
 }
 
-=head2 skipdir_filter
+=head2 ignoredir_filter
 
 Standard filter to pass as a L<File::Next> descend_filter.  It
 returns true if the directory is any of the ones we know we want
-to skip.
+to ignore.
 
 =cut
 
-sub skipdir_filter {
+sub ignoredir_filter {
     return !exists $ignore_dirs{$_};
 }
 
@@ -396,7 +398,7 @@ F<foo.pod> could be "perl" or "parrot".
 The filetype will be C<undef> if we can't determine it.  This could
 be if the file doesn't exist, or it can't be read.
 
-It will be 'skipped' if it's something that ack should always ignore,
+It will be 'skipped' if it's something that ack should avoid searching,
 even under -a.
 
 =cut
@@ -458,7 +460,7 @@ sub filetypes {
 =head2 is_searchable( $filename )
 
 Returns true if the filename is one that we can search, and false
-if it's one that we should ignore like a coredump or a backup file.
+if it's one that we should skip like a coredump or a backup file.
 
 Recognized files:
   /~$/            - Unix backup files
@@ -631,8 +633,11 @@ File finding:
   --sort-files          Sort the found files lexically.
 
 File inclusion/exclusion:
-  -a, --all-types       All file types searched; directories still skipped
+  -a, --all-types       All file types searched;
+                        Ignores CVS, .svn and other ignored directories
   -u, --unrestricted    All files and directories searched
+  --ignore-dir=name     Treat directory like CVS, .svn, etc.
+  --noignore-dir=name   Allow ack to search an otherwise-ignored directory
   -n                    No descending into subdirectories
   --perl                Include only Perl files.
   --type=perl           Include only Perl files.

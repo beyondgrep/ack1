@@ -36,7 +36,7 @@ HANDLE_ZEROES: {
     my $iter =
         File::Next::files( {
             file_filter => sub { return is_filetype( $File::Next::name, 'perl' ) }, ## no critic
-            descend_filter => \&App::Ack::skipdir_filter,
+            descend_filter => \&App::Ack::ignoredir_filter,
         }, '.' );
 
     my @files = slurp( $iter );

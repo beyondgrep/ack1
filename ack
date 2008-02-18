@@ -100,7 +100,7 @@ sub main {
                                     ? sub {0}
                                     : $opt{u}
                                         ? sub {1}
-                                        : \&App::Ack::skipdir_filter,
+                                        : \&App::Ack::ignoredir_filter,
             error_handler   => sub { my $msg = shift; App::Ack::warn( $msg ) },
             sort_files      => $opt{sort_files},
             follow_symlinks => $opt{follow},
@@ -201,7 +201,9 @@ given on the command line, no matter what type.
 I<ack> descends through the directory tree of the starting directories
 specified.  However, it will ignore the shadow directories used by
 many version control systems, and the build directories used by the
-Perl MakeMaker system.
+Perl MakeMaker system.  You may add or remove a directory from this
+list with the B<--[no]ignore-dir> option. The option may be repeated
+to add/remove multiple directories from the ignore list.
 
 For a complete list of directories that do not get searched, run
 F<ack --help>.
@@ -297,6 +299,14 @@ Print a short help statement.
 =item B<-i>, B<--ignore-case>
 
 Ignore case in the search strings.
+
+=item B<--[no]ignore-dir=DIRNAME>
+
+Ignore directory (as CVS, .svn, etc are ignored). May be used multiple times
+to ignore multiple directories. For example, mason users may wish to include
+B<--ignore-dir=data>. The B<--noignore-dir> option allows users to search
+directories which would normally be ignored (perhaps to research the contents
+of F<.svn/props> directories).
 
 =item B<--line=I<NUM>>
 
@@ -398,7 +408,8 @@ L</"Defining your own types">.
 =item B<-u, --unrestricted>
 
 All files and directories (including blib/, core.*, ...) are searched,
-nothing is skipped.
+nothing is skipped. When both B<-u> and B<--ignore-dir> are used, the
+B<--ignore-dir> option has no effect.
 
 =item B<-v>, B<--invert-match>
 
@@ -605,6 +616,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Matthew Wickline, 
 David Dyck,
 Jason Porritt,
 Jjgod Jiang,

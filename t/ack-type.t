@@ -56,6 +56,7 @@ my $perl = [qw(
     t/ack-g.t
     t/ack-group.t
     t/ack-h.t
+    t/ack-ignore-dir.t
     t/ack-line.t
     t/ack-o.t
     t/ack-print0.t

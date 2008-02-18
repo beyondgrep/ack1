@@ -61,8 +61,11 @@ File finding:
   --sort-files          Sort the found files lexically.
 
 File inclusion/exclusion:
-  -a, --all-types       All file types searched; directories still skipped
+  -a, --all-types       All file types searched;
+                        Ignores CVS, .svn and other ignored directories
   -u, --unrestricted    All files and directories searched
+  --ignore-dir=name     Treat directory like CVS, .svn, etc.
+  --noignore-dir=name   Allow ack to search an otherwise-ignored directory
   -n                    No descending into subdirectories
   --perl                Include only Perl files.
   --type=perl           Include only Perl files.

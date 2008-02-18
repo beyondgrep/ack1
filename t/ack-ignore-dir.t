@@ -36,7 +36,7 @@ sub settup_assertion_that_these_options_will_ignore_those_directories {
     @expected = grep { ! m{/(?:$filter)/} } @files_mentioning_apples;
 
     @results = run_ack( @$options, '--noenv', '-la', 'apple', 't/swamp' );
-    @results = grep { ! m{/.svn/} } @results; # ignore .svn directories
+    @results = grep { ! m{\Q/.svn/} } @results; # ignore .svn directories
 }
 
 FILES_HAVE_BEEN_SET_UP_AS_EXPECTED: {

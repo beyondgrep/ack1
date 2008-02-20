@@ -1,5 +1,6 @@
 Changelog for ack
-[not released]
+
+1.77_03     Wed Feb 20 11:16:43 CST 2008
     [CHANGED FUNCTIONALITY]
     ack -i -g=regex no longer treats the regex as case-insensitive.
     This was changed for added consistency. Now -i, -w, -v and -Q
@@ -25,9 +26,10 @@ Changelog for ack
 
     Removed spurious new line after last match in --group output.
 
-    Fixed typos in docu concerning context matching and removed
+    Fixed typos in docs concerning context matching and removed
     option --rc from docs, since it was never implemented.
 
+    [INTERNALS]
     Fixed some cross-platform issues in the test cases.
 
     Fixed test in run_ack for stderr output. This should no longer

@@ -37,7 +37,8 @@ sub run_ack {
     else {
         my ($stdout,$stderr) = run_ack_with_stderr( @args );
 
-        is( scalar @{$stderr}, 0, 'Should have no output to stderr' );
+        is( scalar @{$stderr}, 0, 'Should have no output to stderr' )
+            or diag( join( "\n", "STDERR:", @{$stderr} ) );
         @results = @{$stdout};
     }
 

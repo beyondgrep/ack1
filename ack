@@ -62,7 +62,7 @@ sub main {
         exit 0;
     }
 
-    my $file_matching = $opt{f} || $opt{g} || $opt{lines};
+    my $file_matching = $opt{f} || $opt{lines};
     if ( !$file_matching ) {
         @ARGV or App::Ack::die( 'No regular expression found.' );
         $opt{regex} = App::Ack::build_regex( defined $opt{regex} ? $opt{regex} : shift @ARGV, \%opt );
@@ -87,15 +87,16 @@ sub main {
     # Starting points are always search, no matter what
     my $is_starting_point = sub { return grep { $_ eq $_[0] } @what };
 
+    my $file_filter = $opt{u}   && defined $opt{G} ? sub { $File::Next::name =~ /$opt{G}/o }
+                    : $opt{all} && defined $opt{G} ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$opt{G}/o && App::Ack::is_searchable( $File::Next::name ) ) }
+                    : $opt{u}                      ? sub {1}
+                    : $opt{all}                    ? sub { $is_starting_point->( $File::Next::name ) || App::Ack::is_searchable( $File::Next::name ) }
+                    : defined $opt{G}              ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$opt{G}/o && App::Ack::is_interesting( @_ ) ) }
+                    :                                sub { $is_starting_point->( $File::Next::name ) || App::Ack::is_interesting( @_ ) }
+                    ;
     my $iter =
         File::Next::files( {
-            file_filter     => $opt{u}
-                                    ? sub {1}
-                                    : $opt{all}
-                                        ? sub { return    $is_starting_point->( $File::Next::name )
-                                                       || App::Ack::is_searchable( $File::Next::name ) }
-                                        : sub { return    $is_starting_point->( $File::Next::name )
-                                                       || App::Ack::is_interesting( @_ ) },
+            file_filter     => $file_filter,
             descend_filter  => $opt{n}
                                     ? sub {0}
                                     : $opt{u}
@@ -107,7 +108,7 @@ sub main {
         }, @what );
 
     App::Ack::filetype_setup();
-    if ( $opt{f} || $opt{g} ) {
+    if ( $opt{f} ) {
         App::Ack::print_files( $iter, \%opt );
     }
     elsif ( $opt{l} || $opt{count} ) {
@@ -193,8 +194,9 @@ including:
 
 =back
 
-There is one exception, however, I<ack> always searches the files
-given on the command line, no matter what type.
+However, I<ack> always searches the files given on the command line,
+no matter what type. Furthermore, by specifying the B<-u> option all
+files will be searched.
 
 =head1 DIRECTORY SELECTION
 
@@ -213,8 +215,8 @@ F<ack --help>.
 I<ack> trumps I<grep> as an everyday tool 99% of the time, but don't
 throw I<grep> away, because there are times you'll still need it.
 
-I<ack> searches by default only through files of types that it
-recognizes. If you don't want that, use the I<-u> option.
+E.g., searching through huge files looking for regexes that can be
+expressed with I<grep> syntax should be quicker with I<grep>.
 
 =head1 OPTIONS
 
@@ -269,11 +271,20 @@ or directories were specified on the command line.
 
 This is off by default.
 
-=item B<-g=I<REGEX>>
+=item B<-G I<REGEX>>
 
-Same as B<-f>, but only print files that match I<REGEX>.  The entire
+Only paths matching I<REGEX> are included in the search.  The entire
 path and filename are matched against I<REGEX>, and I<REGEX> is a
 Perl regular expression, not a shell glob.
+
+The options B<-i>, B<-w>, B<-v>, and B<-Q> do not apply to this I<REGEX>.
+
+=item B<-g I<REGEX>>
+
+Print files where the relative path + filename matches I<REGEX>. This option is
+a convenience shortcut for B<-f> B<-G I<REGEX>>.
+
+The options B<-i>, B<-w>, B<-v>, and B<-Q> do not apply to this I<REGEX>.
 
 =item B<--group>, B<--nogroup>
 
@@ -299,6 +310,9 @@ Print a short help statement.
 =item B<-i>, B<--ignore-case>
 
 Ignore case in the search strings.
+
+This applies only to the PATTERN, not to the regexes given for the B<-g>
+and B<-G> options.
 
 =item B<--[no]ignore-dir=DIRNAME>
 
@@ -371,7 +385,10 @@ helpful when dealing with filenames that contain whitespace, e.g.
 
 =item B<-Q>, B<--literal>
 
-Quote all metacharacters.  PATTERN is treated as a literal.
+Quote all metacharacters in PATTERN, it is treated as a literal.
+
+This applies only to the PATTERN, not to the regexes given for the B<-g>
+and B<-G> options.
 
 =item B<--rc=file>
 
@@ -425,6 +442,9 @@ B<--ignore-dir> option has no effect.
 
 Invert match: select non-matching lines
 
+This applies only to the PATTERN, not to the regexes given for the B<-g>
+and B<-G> options.
+
 =item B<--version>
 
 Display version and copyright information.
@@ -433,6 +453,9 @@ Display version and copyright information.
 
 Force PATTERN to match only whole words.  The PATTERN is wrapped with
 C<\b> metacharacters.
+
+This applies only to the PATTERN, not to the regexes given for the B<-g>
+and B<-G> options.
 
 =item B<-1>
 
@@ -506,7 +529,7 @@ The shebang line recognition of the types 'perl', 'ruby', 'php', 'python',
 active. However, the shebang line is only examined for files where the
 extension is not recognised. Therefore it is possible to say
 I<ack --type-set perl=.perl --type-set foo=.pl,.pm,.pod,.t --perl --nofoo> and
-only find your shiny new I<.perl> files (and all files with unrecognized extensiond
+only find your shiny new I<.perl> files (and all files with unrecognized extension
 and perl on the shebang line).
 
 =back

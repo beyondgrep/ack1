@@ -174,7 +174,8 @@ sub get_command_line_options {
         'env!'                  => sub { }, # ignore this option, it is handled beforehand 
         f                       => \$opt{f},
         'follow!'               => \$opt{follow},
-        'g=s'                   => \$opt{g},
+        'g=s'                   => sub { shift; $opt{G} = shift; $opt{f} = 1 },
+        'G=s'                   => \$opt{G},
         'group!'                => \$opt{group},
         'h|no-filename'         => \$opt{h},
         'H|with-filename'       => \$opt{H},
@@ -585,11 +586,10 @@ off with --noenv.
 Example: ack -i select
 
 Searching:
-  -i, --ignore-case     Ignore case distinctions
+  -i, --ignore-case     Ignore case distinctions in PATTERN
   -v, --invert-match    Invert match: select non-matching lines
   -w, --word-regexp     Force PATTERN to match only whole words
-  -Q, --literal         Quote all metacharacters; expr is literal
-  --match REGEX         Specify REGEX explicitly.
+  -Q, --literal         Quote all metacharacters; PATTERN is literal
 
 Search output:
   --line=NUM            Only print line(s) NUM of each file
@@ -602,6 +602,7 @@ Search output:
   --passthru            Print all lines, whether matching or not
   --output=expr         Output the evaluation of expr for each line
                         (turns off text highlighting)
+  --match PATTERN       Specify PATTERN explicitly.
   -m, --max-count=NUM   Stop searching in each file after NUM matches
   -1                    Stop searching after one match of any kind
   -H, --with-filename   Print the filename for each match
@@ -631,16 +632,17 @@ Search output:
 File finding:
   -f                    Only print the files found, without searching.
                         The PATTERN must not be specified.
-  -g=REGEX              Same as -f, but only print files matching REGEX.
+  -g REGEX              Same as -f, but only print files matching REGEX.
   --sort-files          Sort the found files lexically.
 
 File inclusion/exclusion:
   -a, --all-types       All file types searched;
                         Ignores CVS, .svn and other ignored directories
   -u, --unrestricted    All files and directories searched
-  --ignore-dir=name     Treat directory like CVS, .svn, etc.
-  --noignore-dir=name   Allow ack to search an otherwise-ignored directory
+  --[no]ignore-dir=name Add/Remove directory from the list of ignored dirs
   -n                    No descending into subdirectories
+  -G REGEX              Only search files that match REGEX
+
   --perl                Include only Perl files.
   --type=perl           Include only Perl files.
   --noperl              Exclude Perl files.
@@ -1153,17 +1155,11 @@ sub print_files {
     my $iter = shift;
     my $opt = shift;
 
-    my $regex;
-    if ( $opt->{g} ) {
-        $regex = $opt->{i} ? qr/$opt->{g}/i : qr/$opt->{g}/;
-    }
     my $ors = $opt->{print0} ? "\0" : "\n";
 
     while ( defined ( my $file = $iter->() ) ) {
-        if ( (not defined $regex) || ($file =~ m/$regex/o) ) {
-            print $file, $ors;
-            last if $opt->{1};
-        }
+        print $file, $ors;
+        last if $opt->{1};
     }
 
     return;

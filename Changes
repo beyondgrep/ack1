@@ -1,6 +1,16 @@
 Changelog for ack
 [not released]
+    [CHANGED FUNCTIONALITY]
+    ack -i -g=regex no longer treats the regex as case-insensitive.
+    This was changed for added consistency. Now -i, -w, -v and -Q
+    only apply to normal ack PATTERN while -g and -G are not
+    affected by these regex modifiers at all.
+
     [ENHANCEMENTS]
+    Added option -G REGEX to search only files whose path+filename
+    matches REGEX. Thanks go to Michael Hendricks for providing
+    a patch!
+
     Added option --[no]env to ignore all environment settings
     including .ackrc.
 

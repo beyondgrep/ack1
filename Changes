@@ -3,13 +3,13 @@ Changelog for ack
     [CHANGED FUNCTIONALITY]
     ack -i -g=regex no longer treats the regex as case-insensitive.
     This was changed for added consistency. Now -i, -w, -v and -Q
-    only apply to normal ack PATTERN while -g and -G are not
-    affected by these regex modifiers at all.
+    only apply to normal ack PATTERN while -g and -G are not affected
+    by these regex modifiers at all.
 
     [ENHANCEMENTS]
     Added option -G REGEX to search only files whose path+filename
-    matches REGEX. Thanks go to Michael Hendricks for providing
-    a patch!
+    matches REGEX. Thanks go to Michael Hendricks for providing a
+    patch!
 
     Added option --[no]env to ignore all environment settings
     including .ackrc.
@@ -23,8 +23,7 @@ Changelog for ack
     Fixed bug with -v not finding all files correctly (introduced
     with the performance optimizations in ack 1.75)
 
-    Removed spurious new line after last match in --group
-    output.
+    Removed spurious new line after last match in --group output.
 
     Fixed typos in docu concerning context matching and removed
     option --rc from docs, since it was never implemented.

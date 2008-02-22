@@ -1,6 +1,12 @@
 Changelog for ack
 
 NEXT
+    [INTERNALS]
+    Fixed test count in case of skipped tests for ack-types.t.
+
+    Fixed test in run_ack for stderr output, again. This should no
+    longer report unexpected succeeds for TODO tests - and now really
+    work.
 
 
 1.77_03     Wed Feb 20 11:16:43 CST 2008

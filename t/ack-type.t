@@ -148,9 +148,10 @@ check_with( '--type-set cc=.foo --cc', $foo );
 # check that builtin types cannot be changed
 SKIP: {
     my @builtins = qw( make skipped text binary );
-    my $ntests = @builtins + 1;
+    my $ncalls = @builtins * 2 + 1;
+    my $ntests = 2 * $ncalls; # each check_stderr() does 2 tests
 
-    skip q{Can't check stderr under Windows}, $ntests * 4 if is_win32;
+    skip q{Can't check stderr under Windows}, $ntests if is_win32;
     for my $builtin ( @builtins ) {
         check_stderr( "--type-set $builtin=.foo",
             "ack-standalone: --type-set: Builtin type '$builtin' cannot be changed." );

@@ -29,7 +29,7 @@ sub run_ack {
 
     my @results;
 
-    if ( $^O =~ /Win32/ ) {
+    if ( is_win32 ) {
         my $cmd = build_command_line( @args );
         @results = `$cmd`;
         pass( q{We can't check that there was no output to stderr on Win32, so it's a freebie.} );

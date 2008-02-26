@@ -1,7 +1,7 @@
 Changelog for ack
 
 NEXT
-    [INTERNALS]
+    [INTERNALS TESTING]
     Fixed test count in case of skipped tests for ack-types.t.
 
     Fixed test in run_ack for stderr output, again. This should no
@@ -10,6 +10,9 @@ NEXT
 
     Changed method of capturing stderr in tests, should now work on
     Windows. Thanks, Christopher J. Madsen!
+
+    Changed quoting of command line arguments and adjusted tests to
+    it. Thanks also for the idea this, Christopher J. Madsen!
 
 
 1.77_03     Wed Feb 20 11:16:43 CST 2008

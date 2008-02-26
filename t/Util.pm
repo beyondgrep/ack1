@@ -11,8 +11,19 @@ sub is_win32 {
 
 # capture-stderr is executing ack-standalone and storing the stderr output in
 # $catcherr_file in a portable way.
+#
+# The quoting of command line arguments depends on the OS
 sub build_command_line {
-    return "$^X -T ./capture-stderr $catcherr_file ./ack-standalone @_";
+    my @args = @_;
+
+    if ( is_win32() ) {
+        for ( @args ) { s/"/""/g;   $_ = qq("$_"); }
+    }
+    else {
+        @args = map { quotemeta $_ } @args;
+    }
+
+    return "$^X -T ./capture-stderr $catcherr_file ./ack-standalone @args";
 }
 
 sub slurp {

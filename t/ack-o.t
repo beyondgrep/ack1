@@ -12,7 +12,7 @@ use Util;
 
 NO_O: {
     my @files = qw( t/text/boy-named-sue.txt );
-    my @args = qw( "the\\s+\\S+" --text );
+    my @args = qw( the\\s+\\S+ --text );
     my @expected = split( /\n/, <<'EOF' );
         But the meanest thing that he ever did
         But I made me a vow to the moon and stars
@@ -36,7 +36,7 @@ EOF
 
 WITH_O: {
     my @files = qw( t/text/boy-named-sue.txt );
-    my @args = qw( "the\\s+\\S+" --text -o );
+    my @args = qw( the\\s+\\S+ --text -o );
     my @expected = split( /\n/, <<'EOF' );
         the meanest
         the moon
@@ -65,9 +65,7 @@ EOF
 # give a output function and find match in multiple files (so print filenames, just like grep -o)
 WITH_OUTPUT: {
     my @files = qw( t/text/ );
-    my @args = ($^O eq 'MSWin32')
-        ? qw( --output="x$1x" -a "question(\\S+)" )
-        : qw( --output='x$1x' -a "question(\\S+)" );
+    my @args = qw/ --output=x$1x -a question(\\S+) /;
 
     my @target_file = (
         File::Next::reslash( 't/text/science-of-myth.txt' ),

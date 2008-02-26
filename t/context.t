@@ -63,7 +63,7 @@ Well, I grew up quick and I grew up mean,
     -- "A Boy Named Sue", Johnny Cash
 EOF
 
-    my $regex = q/"[nN]amed Sue"/;
+    my $regex = '[nN]amed Sue';
 
     my @files = qw( t/text/boy-named-sue.txt );
     my @args = ( '--text', '-A2', $regex );
@@ -221,7 +221,7 @@ ACK_G: {
 # ack -o disables context
 WITH_O: {
     my @files = qw( t/text/boy-named-sue.txt );
-    my @args = qw( "the\\s+\\S+" --text -o -C2 );
+    my @args = qw( the\\s+\\S+ --text -o -C2 );
     my @expected = split( /\n/, <<'EOF' );
         the meanest
         the moon

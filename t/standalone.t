@@ -13,7 +13,7 @@ my $ack = 'ack-standalone';
 
 ok( -e $ack, 'exists' );
 ok( -r $ack, 'readable' );
-if ( $^O eq 'MSWin32' ) {
+if ( is_win32() ) {
     pass( 'Skipping -x test for Windows' );
 }
 else {

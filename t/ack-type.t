@@ -147,12 +147,11 @@ check_with( '--type-add xml=.foo,.bar --xml', $foo_bar_xml );
 check_with( '--type-set cc=.foo --cc', $foo );
 
 # check that builtin types cannot be changed
-SKIP: {
+BUILTIN: {
     my @builtins = qw( make skipped text binary );
     my $ncalls = @builtins * 2 + 1;
     my $ntests = 2 * $ncalls; # each check_stderr() does 2 tests
 
-    skip q{Can't check stderr under Windows}, $ntests if is_win32;
     for my $builtin ( @builtins ) {
         check_stderr( "--type-set $builtin=.foo",
             "ack-standalone: --type-set: Builtin type '$builtin' cannot be changed." );
@@ -167,23 +166,23 @@ SKIP: {
 
 
 sub check_with {
-    my $options = shift;
+    my @options = split ' ', shift;
     my $expected = shift;
 
     my @expected = sort @{$expected};
 
-    my @results = run_ack( '-f', $options );
+    my @results = run_ack( '-f', @options );
     @results = grep { !/~$/ } @results; # Don't see my vim backup files
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    return sets_match( \@results, \@expected, "File lists match via $options" );
+    return sets_match( \@results, \@expected, "File lists match via @options" );
 }
 
 sub check_stderr {
-    my $options = shift;
+    my @options = split ' ', shift;
     my $expected = shift;
 
-    my ($stdout, $stderr) = run_ack_with_stderr( '-f', $options );
+    my ($stdout, $stderr) = run_ack_with_stderr( '-f', @options );
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
     is( $stderr->[0], $expected, "Located stderr message: $expected" );

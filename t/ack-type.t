@@ -43,6 +43,7 @@ my $xml = [qw(
 my $perl = [qw(
     ack
     ack-standalone
+    capture-stderr
     Ack.pm
     Makefile.PL
     squash

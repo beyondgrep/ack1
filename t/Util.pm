@@ -1,16 +1,18 @@
 
 use File::Next ();
 use App::Ack ();
-use IPC::Open3 qw( open3 );
-use Symbol qw(gensym);
-use IO::File ();
+
+# capture stderr output into this file
+my $catcherr_file = 'stderr.log';
 
 sub is_win32 {
     return $^O =~ /Win32/;
 }
 
+# capture-stderr is executing ack-standalone and storing the stderr output in
+# $catcherr_file in a portable way.
 sub build_command_line {
-    return "$^X -T ./ack-standalone @_";
+    return "$^X -T ./capture-stderr $catcherr_file ./ack-standalone @_";
 }
 
 sub slurp {
@@ -27,54 +29,38 @@ sub slurp {
 sub run_ack {
     my @args = @_;
 
-    my @results;
+    my ($stdout, $stderr) = run_ack_with_stderr( @args );
 
-    if ( is_win32 ) {
-        my $cmd = build_command_line( @args );
-        @results = `$cmd`;
-        pass( q{We can't check that there was no output to stderr on Win32, so it's a freebie.} );
+    if ( $TODO ) {
+        fail( q{Automatically fail stderr check for TODO tests.} );
     }
     else {
-        my ($stdout,$stderr) = run_ack_with_stderr( @args );
-
-        if ( $TODO ) {
-            fail( q{Automatically fail stderr check for TODO tests.} );
-        }
-        else {
-            is( scalar @{$stderr}, 0, 'Should have no output to stderr' )
-                or diag( join( "\n", "STDERR:", @{$stderr} ) );
-        }
-        @results = @{$stdout};
+        is( scalar @{$stderr}, 0, 'Should have no output to stderr' )
+            or diag( join( "\n", "STDERR:", @{$stderr} ) );
     }
 
-    chomp @results;
-
-    return @results;
+    return @{$stdout};
 }
 
 sub run_ack_with_stderr {
     my @args = @_;
 
-    die 'You cannot use run_ack_with_stderr on Win32' if is_win32;
-
     my @stdout;
     my @stderr;
 
     my $cmd = build_command_line( @args );
-    local *CATCHERR = IO::File->new_tmpfile;
-    my $pid = open3( gensym, \*CATCHOUT, '>&CATCHERR', $cmd );
-    while( <CATCHOUT> ) {
-        push( @stdout, $_ );
-    }
-    waitpid($pid, 0);
-    seek CATCHERR, 0, 0;
+    @stdout = `$cmd`;
+
+    open( CATCHERR, '<', $catcherr_file );
     while( <CATCHERR> ) {
         push( @stderr, $_ );
     }
+    close CATCHERR;
+    unlink $catcherr_file;
 
     chomp @stdout;
     chomp @stderr;
-    return ( \@stdout, \@stderr );
+    return ( \@stdout, \@stderr ); 
 }
 
 sub pipe_into_ack {
@@ -85,6 +71,8 @@ sub pipe_into_ack {
     $cmd = "$^X -pe1 $input | $cmd";
     my @results = `$cmd`;
     chomp @results;
+
+    unlink $catcherr_file;
 
     return @results;
 }

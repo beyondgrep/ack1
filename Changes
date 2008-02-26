@@ -8,6 +8,9 @@ NEXT
     longer report unexpected succeeds for TODO tests - and now really
     work.
 
+    Changed method of capturing stderr in tests, should now work on
+    Windows. Thanks, Christopher J. Madsen!
+
 
 1.77_03     Wed Feb 20 11:16:43 CST 2008
     [CHANGED FUNCTIONALITY]

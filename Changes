@@ -14,6 +14,9 @@ NEXT
     Changed quoting of command line arguments and adjusted tests to
     it. Thanks also for the idea this, Christopher J. Madsen!
 
+    And more stuff spotted by Christopher: ack-standalone is no longer
+    set to readonly on Windows.
+
 
 1.77_03     Wed Feb 20 11:16:43 CST 2008
     [CHANGED FUNCTIONALITY]

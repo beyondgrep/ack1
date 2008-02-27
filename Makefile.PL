@@ -102,7 +102,7 @@ smallprof: all
 
 $(STANDALONE) : $(ACK) $(APP_ACK_PM) squash Makefile
 	$(PERL) squash ack File::Next $(APP_ACK_PM) > $(STANDALONE)
-	$(CHMOD) +x $(STANDALONE)
+	$(CHMOD) 0755 $(STANDALONE)
 	$(PERL_T) -c $(STANDALONE)
 
 $(ACK_HELP) : $(STANDALONE)

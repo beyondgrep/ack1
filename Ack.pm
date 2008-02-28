@@ -1182,4 +1182,40 @@ sub filetype_setup {
     return;
 }
 
+=head2 get_iterator
+
+Return the File::Next file iterator
+
+=cut
+sub get_iterator {
+    my $what = shift;
+    my $opt = shift;
+
+    # Starting points are always search, no matter what
+    my $is_starting_point = sub { return grep { $_ eq $_[0] } @$what };
+
+    my $file_filter = $opt->{u}   && defined $opt->{G} ? sub { $File::Next::name =~ /$opt->{G}/o }
+                    : $opt->{all} && defined $opt->{G} ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$opt->{G}/o && App::Ack::is_searchable( $File::Next::name ) ) }
+                    : $opt->{u}                        ? sub {1}
+                    : $opt->{all}                      ? sub { $is_starting_point->( $File::Next::name ) || App::Ack::is_searchable( $File::Next::name ) }
+                    : defined $opt->{G}                ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$opt->{G}/o && App::Ack::is_interesting( @_ ) ) }
+                    :                                    sub { $is_starting_point->( $File::Next::name ) || App::Ack::is_interesting( @_ ) }
+                    ;
+    my $iter =
+        File::Next::files( {
+            file_filter     => $file_filter,
+            descend_filter  => $opt->{n}
+                                    ? sub {0}
+                                    : $opt->{u}
+                                        ? sub {1}
+                                        : \&App::Ack::ignoredir_filter,
+            error_handler   => sub { my $msg = shift; App::Ack::warn( $msg ) },
+            sort_files      => $opt->{sort_files},
+            follow_symlinks => $opt->{follow},
+        }, @$what );
+    return $iter;
+}
+
+
+
 1; # End of App::Ack

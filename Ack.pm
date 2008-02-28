@@ -1165,6 +1165,12 @@ sub print_files {
     return;
 }
 
+=head2 print_files_with_matches( $iter, $opt )
+
+Prints the name of the files where a match was found.
+
+=cut
+
 sub print_files_with_matches {
     my $iter = shift;
     my $opt = shift;
@@ -1203,6 +1209,7 @@ sub filetype_setup {
 Return the File::Next file iterator
 
 =cut
+
 sub get_iterator {
     my $what = shift;
     my $opt = shift;

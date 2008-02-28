@@ -85,7 +85,7 @@ sub main {
         App::Ack::warn("$start_point: No such file or directory") unless -e $start_point;
     }
 
-    my $iter = App::Ack::get_iterator(\@what, \%opt);
+    my $iter = App::Ack::get_iterator( \@what, \%opt );
 
     App::Ack::filetype_setup();
     if ( $opt{f} ) {

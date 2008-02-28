@@ -92,14 +92,7 @@ sub main {
         App::Ack::print_files( $iter, \%opt );
     }
     elsif ( $opt{l} || $opt{count} ) {
-        my $nmatches = 0;
-        while ( defined ( my $filename = $iter->() ) ) {
-            my ($fh) = App::Ack::open_file( $filename );
-            next unless defined $fh; # error while opening file
-            $nmatches += App::Ack::search_and_list( $fh, $filename, \%opt );
-            App::Ack::close_file( $fh, $filename );
-            last if $nmatches && $opt{1};
-        }
+        App::Ack::print_files_with_matches( $iter, \%opt );
     }
     else {
         $opt{show_filename} = 0 if $opt{h};

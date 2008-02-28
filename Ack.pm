@@ -1165,6 +1165,22 @@ sub print_files {
     return;
 }
 
+sub print_files_with_matches {
+    my $iter = shift;
+    my $opt = shift;
+
+    my $nmatches = 0;
+    while ( defined ( my $filename = $iter->() ) ) {
+        my ($fh) = App::Ack::open_file( $filename );
+        next unless defined $fh; # error while opening file
+        $nmatches += App::Ack::search_and_list( $fh, $filename, $opt );
+        App::Ack::close_file( $fh, $filename );
+        last if $nmatches && $opt->{1};
+    }
+
+    return;
+}
+
 =head2 filetype_setup()
 
 Minor housekeeping before we go matching files.

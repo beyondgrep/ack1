@@ -49,16 +49,7 @@ sub main {
     my %opt = App::Ack::get_command_line_options();
     if ( !-t STDIN && !eof(STDIN) ) {
         # We're going into filter mode
-        for ( qw( f g l ) ) {
-            $opt{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );
-        }
-        $opt{show_filename} = 0;
-        $opt{regex} = App::Ack::build_regex( defined $opt{regex} ? $opt{regex} : shift @ARGV, \%opt );
-        if ( my $nargs = @ARGV ) {
-            my $s = $nargs == 1 ? '' : 's';
-            App::Ack::warn( "Ignoring $nargs argument$s on the command-line while acting as a filter." );
-        }
-        App::Ack::search( \*STDIN, 0, '-', \%opt );
+        filter_mode( \%opt );
         exit 0;
     }
 
@@ -98,6 +89,23 @@ sub main {
         App::Ack::print_matches( $iter, \%opt );
     }
     exit 0;
+}
+
+sub filter_mode {
+    my $opt = shift;
+
+    for ( qw( f g l ) ) {
+        $opt->{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );
+    }
+    $opt->{show_filename} = 0;
+    $opt->{regex} = App::Ack::build_regex( defined $opt->{regex} ? $opt->{regex} : shift @ARGV, $opt );
+    if ( my $nargs = @ARGV ) {
+        my $s = $nargs == 1 ? '' : 's';
+        App::Ack::warn( "Ignoring $nargs argument$s on the command-line while acting as a filter." );
+    }
+    App::Ack::search( \*STDIN, 0, '-', $opt );
+
+    return;
 }
 
 =head1 NAME

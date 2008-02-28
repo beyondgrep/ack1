@@ -1187,6 +1187,42 @@ sub print_files_with_matches {
     return;
 }
 
+=head2 print_matches( $iter, $opt )
+
+Print matching lines.
+
+=cut
+
+sub print_matches {
+    my $iter = shift;
+    my $opt = shift;    
+
+    $opt->{show_filename} = 0 if $opt->{h};
+    $opt->{show_filename} = 1 if $opt->{H};
+
+    my $nmatches = 0;
+    while ( defined ( my $filename = $iter->() ) ) {
+        my ($fh,$could_be_binary) = App::Ack::open_file( $filename );
+        next unless defined $fh; # error while opening file
+        my $needs_line_scan;
+        if ( $opt->{regex} && !$opt->{passthru} ) {
+            $needs_line_scan = App::Ack::needs_line_scan( $fh, $opt->{regex}, $opt );
+            if ( $needs_line_scan ) {
+                seek( $fh, 0, 0 );
+            }
+        }
+        else {
+            $needs_line_scan = 1;
+        }
+        if ( $needs_line_scan ) {
+            $nmatches += App::Ack::search( $fh, $could_be_binary, $filename, $opt );
+        }
+        App::Ack::close_file( $fh, $filename );
+        last if $nmatches && $opt->{1};
+    }
+    return;
+}
+
 =head2 filetype_setup()
 
 Minor housekeeping before we go matching files.

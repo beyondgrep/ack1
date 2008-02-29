@@ -8,7 +8,6 @@ our $VERSION   = '1.77_03';
 
 # These are all our globals.
 
-use File::Next 0.40;
 use App::Ack ();
 
 MAIN: {

@@ -61,7 +61,7 @@ sub main {
     my $what = App::Ack::get_starting_points( \@ARGV, \%opt );
     my $iter = App::Ack::get_iterator( $what, \%opt );
 
-    # check that all regexes do compile fine 
+    # check that all regexes do compile fine
     App::Ack::check_regex( $_ ) for @opt{ qw/regex G/ };
 
     App::Ack::filetype_setup();
@@ -326,7 +326,7 @@ are output separated with a null byte instead of the usual newline. This is
 helpful when dealing with filenames that contain whitespace, e.g.
 
     # remove all files of type html
-    ack -f --html --print0 | xargs -0 rm -f 
+    ack -f --html --print0 | xargs -0 rm -f
 
 =item B<-Q>, B<--literal>
 
@@ -375,7 +375,7 @@ existing) type TYPE. See also L</"Defining your own types">.
 
 Files with the given EXTENSION(s) are recognized as being of type
 TYPE. This replaces an existing definition for type TYPE.  See also
-L</"Defining your own types">. 
+L</"Defining your own types">.
 
 =item B<-u, --unrestricted>
 

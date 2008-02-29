@@ -60,7 +60,7 @@ sub main {
     my $what = App::Ack::get_starting_points( \@ARGV, \%opt );
     my $iter = App::Ack::get_iterator( $what, \%opt );
 
-    # check that all regexes do compile fine 
+    # check that all regexes do compile fine
     App::Ack::check_regex( $_ ) for @opt{ qw/regex G/ };
 
     App::Ack::filetype_setup();
@@ -325,7 +325,7 @@ are output separated with a null byte instead of the usual newline. This is
 helpful when dealing with filenames that contain whitespace, e.g.
 
     # remove all files of type html
-    ack -f --html --print0 | xargs -0 rm -f 
+    ack -f --html --print0 | xargs -0 rm -f
 
 =item B<-Q>, B<--literal>
 
@@ -374,7 +374,7 @@ existing) type TYPE. See also L</"Defining your own types">.
 
 Files with the given EXTENSION(s) are recognized as being of type
 TYPE. This replaces an existing definition for type TYPE.  See also
-L</"Defining your own types">. 
+L</"Defining your own types">.
 
 =item B<-u, --unrestricted>
 
@@ -959,7 +959,7 @@ sub get_command_line_options {
         c                       => \$opt{count},
         'color!'                => \$opt{color},
         count                   => \$opt{count},
-        'env!'                  => sub { }, # ignore this option, it is handled beforehand 
+        'env!'                  => sub { }, # ignore this option, it is handled beforehand
         f                       => \$opt{f},
         'follow!'               => \$opt{follow},
         'g=s'                   => sub { shift; $opt{G} = shift; $opt{f} = 1 },
@@ -1098,7 +1098,7 @@ sub def_types_from_ARGV {
         # pass_through   => leave unrecognized command line arguments alone
         # no_auto_abbrev => otherwise -c is expanded and not left alone
     $parser->configure( 'no_ignore_case', 'pass_through', 'no_auto_abbrev' );
-    $parser->getoptions( 
+    $parser->getoptions(
         'type-set=s' => sub { shift; push @typedef, ['c', shift] },
         'type-add=s' => sub { shift; push @typedef, ['a', shift] },
     ) or App::Ack::die( 'See ack --help or ack --man for options.' );
@@ -1251,7 +1251,7 @@ sub check_regex {
         (my $error = $@) =~ s/ at \S+ line \d+.*//;
         chomp($error);
         App::Ack::die( "Invalid regex '$regex':\n  $error" );
-    } 
+    }
 
     return;
 }
@@ -1390,7 +1390,7 @@ File inclusion/exclusion:
   --type-set TYPE=.EXTENSION[,.EXT2[,...]]
                         Files with the given EXTENSION(s) are recognized as
                         being of type TYPE. This replaces an existing
-                        definition for type TYPE. 
+                        definition for type TYPE.
 
   --[no]follow          Follow symlinks.  Default is off.
 
@@ -1839,7 +1839,7 @@ sub print_files_with_matches {
 
 sub print_matches {
     my $iter = shift;
-    my $opt = shift;    
+    my $opt = shift;
 
     $opt->{show_filename} = 0 if $opt->{h};
     $opt->{show_filename} = 1 if $opt->{H};

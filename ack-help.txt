@@ -81,7 +81,7 @@ File inclusion/exclusion:
   --type-set TYPE=.EXTENSION[,.EXT2[,...]]
                         Files with the given EXTENSION(s) are recognized as
                         being of type TYPE. This replaces an existing
-                        definition for type TYPE. 
+                        definition for type TYPE.
 
   --[no]follow          Follow symlinks.  Default is off.
 

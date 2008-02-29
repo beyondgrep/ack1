@@ -173,7 +173,7 @@ sub get_command_line_options {
         c                       => \$opt{count},
         'color!'                => \$opt{color},
         count                   => \$opt{count},
-        'env!'                  => sub { }, # ignore this option, it is handled beforehand 
+        'env!'                  => sub { }, # ignore this option, it is handled beforehand
         f                       => \$opt{f},
         'follow!'               => \$opt{follow},
         'g=s'                   => sub { shift; $opt{G} = shift; $opt{f} = 1 },
@@ -320,7 +320,7 @@ sub def_types_from_ARGV {
         # pass_through   => leave unrecognized command line arguments alone
         # no_auto_abbrev => otherwise -c is expanded and not left alone
     $parser->configure( 'no_ignore_case', 'pass_through', 'no_auto_abbrev' );
-    $parser->getoptions( 
+    $parser->getoptions(
         'type-set=s' => sub { shift; push @typedef, ['c', shift] },
         'type-add=s' => sub { shift; push @typedef, ['a', shift] },
     ) or App::Ack::die( 'See ack --help or ack --man for options.' );
@@ -523,7 +523,7 @@ sub check_regex {
         (my $error = $@) =~ s/ at \S+ line \d+.*//;
         chomp($error);
         App::Ack::die( "Invalid regex '$regex':\n  $error" );
-    } 
+    }
 
     return;
 }
@@ -682,7 +682,7 @@ File inclusion/exclusion:
   --type-set TYPE=.EXTENSION[,.EXT2[,...]]
                         Files with the given EXTENSION(s) are recognized as
                         being of type TYPE. This replaces an existing
-                        definition for type TYPE. 
+                        definition for type TYPE.
 
   --[no]follow          Follow symlinks.  Default is off.
 
@@ -783,7 +783,7 @@ sub print_version_statement {
     return;
 }
 
-=head2 get_copyright 
+=head2 get_copyright
 
 Return the copyright for ack.
 
@@ -1222,7 +1222,7 @@ Print matching lines.
 
 sub print_matches {
     my $iter = shift;
-    my $opt = shift;    
+    my $opt = shift;
 
     $opt->{show_filename} = 0 if $opt->{h};
     $opt->{show_filename} = 1 if $opt->{H};

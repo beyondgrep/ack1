@@ -48,7 +48,7 @@ F_PRINT0: {
     my @args = qw( -f --text --print0 );
     my @results = run_ack( @args, @files );
 
-    # checking for exact files is fragile, so just see whether we have \0 in output 
+    # checking for exact files is fragile, so just see whether we have \0 in output
     ok( @results == 1, 'Only one line of output with -f and --print0' );
     ok( ( grep { /\0/ } @results ), ' ... and null bytes in output' );
 }
@@ -59,7 +59,7 @@ L_PRINT0: {
     my @args = ( '-l', '--text', '--print0', $regex );
     my @results = run_ack( @args, @files );
 
-    # checking for exact files is fragile, so just see whether we have \0 in output 
+    # checking for exact files is fragile, so just see whether we have \0 in output
     ok( @results == 1, 'Only one line of output with -l and --print0' );
     ok( ( grep { /\0/ } @results ), ' ... and null bytes in output' );
 }
@@ -70,7 +70,7 @@ COUNT_PRINT0: {
     my @args = ( '--count', '--text', '--print0', $regex );
     my @results = run_ack( @args, @files );
 
-    # checking for exact files is fragile, so just see whether we have \0 in output 
+    # checking for exact files is fragile, so just see whether we have \0 in output
     ok( @results == 1, 'Only one line of output with --count and --print0' );
     ok( ( grep { /\0/ } @results ), ' ... and null bytes in output' );
     ok( ( grep { /:\d+/ } @results ), ' ... and ":\d+" in output, so the counting also works' );

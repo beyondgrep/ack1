@@ -71,7 +71,7 @@ sub run_ack_with_stderr {
 
     chomp @stdout;
     chomp @stderr;
-    return ( \@stdout, \@stderr ); 
+    return ( \@stdout, \@stderr );
 }
 
 sub pipe_into_ack {

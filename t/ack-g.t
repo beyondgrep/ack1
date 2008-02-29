@@ -230,7 +230,7 @@ UNRESTRICTED_AND_DASH_G_INTERACTION: {
     my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, "Looking for $content_regex in unrestricted files matching $file_regex" );
-} 
+}
 
 QUOTEMETA_FILE_NOT: {
     # -Q does nothing for -g regex

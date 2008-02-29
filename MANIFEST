@@ -37,6 +37,7 @@ t/command-line-files.t
 t/context.t
 t/filetypes.t
 t/file-permission.t
+t/illegal-regex.t
 t/interesting.t
 t/longopts.t
 t/module.t

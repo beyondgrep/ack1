@@ -61,6 +61,9 @@ sub main {
     my $what = App::Ack::get_starting_points( \@ARGV, \%opt );
     my $iter = App::Ack::get_iterator( $what, \%opt );
 
+    # check that all regexes do compile fine 
+    App::Ack::check_regex( $_ ) for @opt{ qw/regex G/ };
+
     App::Ack::filetype_setup();
     if ( $opt{f} ) {
         App::Ack::print_files( $iter, \%opt );

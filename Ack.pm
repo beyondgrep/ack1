@@ -143,10 +143,10 @@ sub read_ackrc {
     }
     for my $filename ( @files ) {
         if ( defined $filename && -e $filename ) {
-            open( my $fh, '<', $filename ) or die "$filename: $!\n";
+            open( my $fh, '<', $filename ) or App::Ack::die( "$filename: $!\n" );
             my @lines = grep { /./ && !/^\s*#/ } <$fh>;
             chomp @lines;
-            close $fh or die "$filename: $!\n";
+            close $fh or App::Ack::die( "$filename: $!\n" );
 
             return @lines;
         }
@@ -503,6 +503,31 @@ sub build_regex {
 
     return $str;
 }
+
+=head2 check_regex( $regex_str )
+
+Checks that the $regex_str can be compiled into a perl regular expression.
+Dies with the error message if this is not the case.
+
+No return value.
+
+=cut
+
+sub check_regex {
+    my $regex = shift;
+
+    return unless defined $regex;
+
+    eval { qr/$regex/ };
+    if ($@) {
+        (my $error = $@) =~ s/ at \S+ line \d+.*//;
+        chomp($error);
+        App::Ack::die( "Invalid regex '$regex':\n  $error" );
+    } 
+
+    return;
+}
+
 
 
 =head2 warn( @_ )

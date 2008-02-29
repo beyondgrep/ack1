@@ -1,6 +1,10 @@
 Changelog for ack
 
 NEXT
+    [ENHANCEMENTS]
+    Ack gives a better error message when running with an illegal
+    regex.
+
     [INTERNALS TESTING]
     Fixed test count in case of skipped tests for ack-types.t.
 

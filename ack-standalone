@@ -60,6 +60,9 @@ sub main {
     my $what = App::Ack::get_starting_points( \@ARGV, \%opt );
     my $iter = App::Ack::get_iterator( $what, \%opt );
 
+    # check that all regexes do compile fine 
+    App::Ack::check_regex( $_ ) for @opt{ qw/regex G/ };
+
     App::Ack::filetype_setup();
     if ( $opt{f} ) {
         App::Ack::print_files( $iter, \%opt );
@@ -931,10 +934,10 @@ sub read_ackrc {
     }
     for my $filename ( @files ) {
         if ( defined $filename && -e $filename ) {
-            open( my $fh, '<', $filename ) or die "$filename: $!\n";
+            open( my $fh, '<', $filename ) or App::Ack::die( "$filename: $!\n" );
             my @lines = grep { /./ && !/^\s*#/ } <$fh>;
             chomp @lines;
-            close $fh or die "$filename: $!\n";
+            close $fh or App::Ack::die( "$filename: $!\n" );
 
             return @lines;
         }
@@ -1236,6 +1239,23 @@ sub build_regex {
 
     return $str;
 }
+
+
+sub check_regex {
+    my $regex = shift;
+
+    return unless defined $regex;
+
+    eval { qr/$regex/ };
+    if ($@) {
+        (my $error = $@) =~ s/ at \S+ line \d+.*//;
+        chomp($error);
+        App::Ack::die( "Invalid regex '$regex':\n  $error" );
+    } 
+
+    return;
+}
+
 
 
 

@@ -41,12 +41,6 @@ my $xml = [qw(
 )];
 
 my $perl = [qw(
-    ack
-    ack-standalone
-    capture-stderr
-    Ack.pm
-    Makefile.PL
-    squash
     t/00-load.t
     t/ack-1.t
     t/ack-a.t
@@ -172,7 +166,7 @@ sub check_with {
 
     my @expected = sort @{$expected};
 
-    my @results = run_ack( '-f', @options );
+    my @results = run_ack( 't', '-f', @options );
     @results = grep { !/~$/ } @results; # Don't see my vim backup files
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;

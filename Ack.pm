@@ -1037,6 +1037,12 @@ sub search {
 }   # search()
 
 
+sub _print_first_filename { print $_[0], "\n"; }
+sub _print_separator      { print "--\n"; }
+sub _print                { print "$_[0]"; }
+sub _print_filename       { print $_[0], $_[1]; }
+sub _print_line_no        { print $_[0], $_[1]; }
+
 =head2 print_match_or_context( $opt, $is_match, $starting_line_no, @lines )
 
 Prints out a matching line or a line of context around a match.
@@ -1059,7 +1065,7 @@ sub print_match_or_context {
                     ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} )
                     : $filename;
             if ( $group && !$any_output ) {
-                print $display_filename, "\n";
+                _print_first_filename($display_filename);
             }
         }
     }
@@ -1070,7 +1076,7 @@ sub print_match_or_context {
         if ( $keep_context && !$output_func ) {
             if ( ( $last_output_line != $line_no - 1 ) &&
                 ( $any_output || ( !$group && defined( $context_overall_output_count ) ) ) ) {
-                print "--\n";
+                _print_separator();
             }
             # to ensure separators between different files when --nogroup
 
@@ -1078,8 +1084,8 @@ sub print_match_or_context {
         }
 
         if ( $show_filename ) {
-            print $display_filename, $sep if not $group;
-            print $line_no, $sep;
+            _print_filename($display_filename, $sep) if not $group;
+            _print_line_no($line_no, $sep);
         }
 
         if ( $output_func ) {
@@ -1094,7 +1100,7 @@ sub print_match_or_context {
                     s/([\r\n]*)$/\e[0m\e[K$1/;
                 }
             }
-            print;
+            _print($_);
         }
         $any_output = 1;
         ++$context_overall_output_count;

@@ -59,24 +59,8 @@ sub main {
         $opt{regex} = App::Ack::build_regex( defined $opt{regex} ? $opt{regex} : shift @ARGV, \%opt );
     }
 
-    my @what;
-    if ( @ARGV ) {
-        @what = $App::Ack::is_windows ? <@ARGV> : @ARGV;
-
-        # Show filenames unless we've specified one single file
-        $opt{show_filename} = (@what > 1) || (!-f $what[0]);
-    }
-    else {
-        @what = '.'; # Assume current directory
-        $opt{show_filename} = 1;
-    }
-
-    # Barf if the starting points don't exist
-    for my $start_point (@what) {
-        App::Ack::warn("$start_point: No such file or directory") unless -e $start_point;
-    }
-
-    my $iter = App::Ack::get_iterator( \@what, \%opt );
+    my $what = App::Ack::get_starting_points( \@ARGV, \%opt );
+    my $iter = App::Ack::get_iterator( $what, \%opt );
 
     App::Ack::filetype_setup();
     if ( $opt{f} ) {

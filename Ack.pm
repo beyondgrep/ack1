@@ -1240,6 +1240,38 @@ sub filetype_setup {
     return;
 }
 
+
+=head2 get_starting_points( \@ARGV, \%opt )
+
+Returns reference to list of starting directories and files.
+
+=cut
+
+sub get_starting_points {
+    my $argv = shift;
+    my $opt = shift;
+
+    my @what;
+
+    if ( @$argv ) {
+        @what = $App::Ack::is_windows ? <@$argv> : @$argv;
+
+        # Show filenames unless we've specified one single file
+        $opt->{show_filename} = (@what > 1) || (!-f $what[0]);
+    }
+    else {
+        @what = '.'; # Assume current directory
+        $opt->{show_filename} = 1;
+    }
+
+    # Barf if the starting points don't exist
+    for my $start_point (@what) {
+        App::Ack::warn("$start_point: No such file or directory") unless -e $start_point;
+    }
+    return \@what;
+}
+
+
 =head2 get_iterator
 
 Return the File::Next file iterator

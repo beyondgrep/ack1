@@ -223,7 +223,7 @@ UNRESTRICTED_AND_DASH_G_INTERACTION: {
         't/swamp/options.pl.bak',
     );
     my $content_regex = 'file';
-    my $file_regex = 'swamp[\\/][^\\/]+\.pl';
+    my $file_regex = 'swamp[\\\\/][^\\\\/]+\.pl';
 
     my @files = qw( t/swamp );
     my @args = ( '-u', '-G', $file_regex, $content_regex, '-l' );

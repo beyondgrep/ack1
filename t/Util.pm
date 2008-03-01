@@ -17,7 +17,7 @@ sub build_command_line {
     my @args = @_;
 
     if ( is_win32() ) {
-        for ( @args ) { s/"/""/g;   $_ = qq("$_"); }
+        for ( @args ) { s/"/\\"/g; $_ = qq("$_"); }
     }
     else {
         @args = map { quotemeta $_ } @args;

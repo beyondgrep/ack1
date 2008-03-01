@@ -21,6 +21,9 @@ NEXT
     And more stuff spotted by Christopher: ack-standalone is no longer
     set to readonly on Windows.
 
+    More test fixes on Windows provided by Christopher J. Madsen and
+    Jan Dubois.
+
 
 1.77_03     Wed Feb 20 11:16:43 CST 2008
     [CHANGED FUNCTIONALITY]

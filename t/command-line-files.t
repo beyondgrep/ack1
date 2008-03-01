@@ -43,8 +43,7 @@ EOF
     sets_match( \@results, \@expected, q{Two hits for specifying the file} );
 }
 
-SKIP: { # FILE_NOT_THERE
-    skip q{Can't be tested under Win32}, 2 if is_win32();
+FILE_NOT_THERE: {
     my $file = File::Next::reslash( 't/swamp/perl.pod' );
 
     my @expected_stderr = split( /\n/, <<'EOF' );

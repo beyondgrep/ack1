@@ -594,6 +594,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Jan Dubois,
 Christopher J. Madsen,
 Matthew Wickline,
 David Dyck,

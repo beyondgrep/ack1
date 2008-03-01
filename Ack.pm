@@ -1300,6 +1300,7 @@ sub get_starting_points {
     # Barf if the starting points don't exist
     for my $start_point (@what) {
         App::Ack::warn("$start_point: No such file or directory") unless -e $start_point;
+        $start_point =~ s,/,\\,g if $App::Ack::is_windows;
     }
     return \@what;
 }

@@ -27,13 +27,19 @@ DASH_CAPITAL_L	t/ack-c.t	/^DASH_CAPITAL_L: {$/;"	l
 DASH_F	t/ack-1.t	/^DASH_F: {$/;"	l
 DASH_F	t/zero.t	/^DASH_F: {$/;"	l
 DASH_G	t/ack-1.t	/^DASH_G: {$/;"	l
+DASH_IGNORE_DIR	t/ack-ignore-dir.t	/^DASH_IGNORE_DIR: {$/;"	l
+DASH_IGNORE_DIR_MULTIPLE_TIMES	t/ack-ignore-dir.t	/^DASH_IGNORE_DIR_MULTIPLE_TIMES: {$/;"	l
+DASH_IGNORE_DIR_WITH_DASH_NOIGNORE_DIR	t/ack-ignore-dir.t	/^DASH_IGNORE_DIR_WITH_DASH_NOIGNORE_DIR: {$/;"	l
 DASH_L	t/ack-c.t	/^DASH_L: {$/;"	l
 DASH_L	t/ack-v.t	/^DASH_L: {$/;"	l
 DASH_LC	t/ack-c.t	/^DASH_LC: {$/;"	l
+DASH_NOIGNORE_DIR	t/ack-ignore-dir.t	/^DASH_NOIGNORE_DIR: {$/;"	l
+DASH_NOIGNORE_DIR_MULTIPLE_TIMES	t/ack-ignore-dir.t	/^DASH_NOIGNORE_DIR_MULTIPLE_TIMES: {$/;"	l
+DASH_U_BEATS_THE_PANTS_OFF_IGNORE_DIR_ANY_DAY_OF_THE_WEEK	t/ack-ignore-dir.t	/^DASH_U_BEATS_THE_PANTS_OFF_IGNORE_DIR_ANY_DAY_OF_THE_WEEK: {$/;"	l
 DASH_V	t/ack-1.t	/^DASH_V: {$/;"	l
 Example	Ack.pm	/^Example: ack -i select$/;"	l
 FAIL_MATCHING_VIA_CONTENT	t/filetypes.t	/^FAIL_MATCHING_VIA_CONTENT: {$/;"	l
-FILE_NOT_THERE	t/command-line-files.t	/^FILE_NOT_THERE: {$/;"	l
+FILES_HAVE_BEEN_SET_UP_AS_EXPECTED	t/ack-ignore-dir.t	/^FILES_HAVE_BEEN_SET_UP_AS_EXPECTED: {$/;"	l
 FILE_ON_COMMAND_LINE_IS_ALWAYS_SEARCHED	t/ack-g.t	/^FILE_ON_COMMAND_LINE_IS_ALWAYS_SEARCHED: {$/;"	l
 FILE_ON_COMMAND_LINE_IS_ALWAYS_SEARCHED_EVEN_WITH_WRONG_TYPE	t/ack-g.t	/^FILE_ON_COMMAND_LINE_IS_ALWAYS_SEARCHED_EVEN_WITH_WRONG_TYPE: {$/;"	l
 FIND_PACKAGES	t/standalone.t	/^FIND_PACKAGES: {$/;"	l
@@ -47,6 +53,7 @@ HANDLE_ZEROES	t/zero.t	/^HANDLE_ZEROES: {$/;"	l
 HIGHLIGHTING	t/ack-passthru.t	/^HIGHLIGHTING: {$/;"	l
 HIGHLIGHTING	t/context.t	/^HIGHLIGHTING: {$/;"	l
 JUST_THE_DIR	t/command-line-files.t	/^JUST_THE_DIR: {$/;"	l
+LAST_ONE_LISTED_WINS	t/ack-ignore-dir.t	/^LAST_ONE_LISTED_WINS: {$/;"	l
 LINE_1	t/ack-line.t	/^LINE_1: {$/;"	l
 LINE_1_AND_5	t/ack-line.t	/^LINE_1_AND_5: {$/;"	l
 LINE_1_AND_5_AND_NON_EXISTENT	t/ack-line.t	/^LINE_1_AND_5_AND_NON_EXISTENT: {$/;"	l
@@ -65,10 +72,11 @@ MY	Makefile.PL	/^sub MY::top_targets {$/;"	s
 MailingList	Makefile.PL	/^    MailingList: http:\/\/groups.google.com\/group\/ack-users$/;"	l
 Miscellaneous	Ack.pm	/^Miscellaneous:$/;"	l
 NORMAL	t/ack-passthru.t	/^NORMAL: {$/;"	l
+NORMAL_CASE	t/ack-v.t	/^NORMAL_CASE: {$/;"	l
 NORMAL_COLOR	t/ack-color.t	/^NORMAL_COLOR: {$/;"	l
+NO_GROUPING	t/ack-group.t	/^NO_GROUPING: {$/;"	l
 NO_METACHARCTERS	t/ack-g.t	/^NO_METACHARCTERS: {$/;"	l
 NO_O	t/ack-o.t	/^NO_O: {$/;"	l
-NO_STARTDIR	t/ack-g.t	/^NO_STARTDIR: {$/;"	l
 NO_SWITCHES_MULTIPLE_FILES	t/ack-h.t	/^NO_SWITCHES_MULTIPLE_FILES: {$/;"	l
 NO_SWITCHES_ONE_FILE	t/ack-h.t	/^NO_SWITCHES_ONE_FILE: {$/;"	l
 PARROT_FILES_DESCEND	t/interesting.t	/^PARROT_FILES_DESCEND: {$/;"	l
@@ -78,11 +86,18 @@ PERL_FILES	t/interesting.t	/^PERL_FILES: {$/;"	l
 PERL_FILES_BY_NAME	t/interesting.t	/^PERL_FILES_BY_NAME: {$/;"	l
 PERL_FILES_GLOBBED	t/interesting.t	/^PERL_FILES_GLOBBED: {$/;"	l
 Repository	Makefile.PL	/^    Repository: http:\/\/code.google.com\/p\/ack\/source$/;"	l
+SEARCH_FOR_DASH_DASH_NOENV	t/ack-env.t	/^SEARCH_FOR_DASH_DASH_NOENV: {$/;"	l
 SINGLE_TEXT_MATCH	t/ack-1.t	/^SINGLE_TEXT_MATCH: {$/;"	l
-SKIP	t/ack-color.t	/^    SKIP: {$/;"	l
+SINGLE_TEXT_MATCH	t/ack-env.t	/^SINGLE_TEXT_MATCH: {$/;"	l
+SINGLE_TEXT_MATCH_ENV	t/ack-env.t	/^SINGLE_TEXT_MATCH_ENV: {$/;"	l
+SINGLE_TEXT_MATCH_NOENV	t/ack-env.t	/^SINGLE_TEXT_MATCH_NOENV: {$/;"	l
+SKIP	t/ack-g.t	/^SKIP: { # NO_STARTDIR$/;"	l
 SKIP	t/ack-passthru.t	/^    SKIP: {$/;"	l
+SKIP	t/ack-type.t	/^SKIP: {$/;"	l
+SKIP	t/command-line-files.t	/^SKIP: { # FILE_NOT_THERE$/;"	l
 SKIP	t/context.t	/^    SKIP: {$/;"	l
 SPECIFYING_A_BAK_FILE	t/command-line-files.t	/^SPECIFYING_A_BAK_FILE: {$/;"	l
+STANDARD_GROUPING	t/ack-group.t	/^STANDARD_GROUPING: {$/;"	l
 Searching	Ack.pm	/^Searching:$/;"	l
 TEXT	Ack.pm	/^use constant TEXT => 'text';$/;"	c
 TRAILING_METACHAR_BACKSLASH_W	t/ack-w.t	/^TRAILING_METACHAR_BACKSLASH_W: {$/;"	l
@@ -101,6 +116,7 @@ _listify	Ack.pm	/^sub _listify {$/;"	s
 _my_program	Ack.pm	/^sub _my_program {$/;"	s
 _thpppt	Ack.pm	/^sub _thpppt {$/;"	s
 bugtracker	Makefile.PL	/^    bugtracker: http:\/\/code.google.com\/p\/ack\/issues\/list$/;"	l
+build_command_line	t/Util.pm	/^sub build_command_line {$/;"	s
 build_regex	Ack.pm	/^sub build_regex {$/;"	s
 check_stderr	t/ack-type.t	/^sub check_stderr {$/;"	s
 check_u	t/ack-u.t	/^sub check_u {$/;"	s
@@ -125,6 +141,7 @@ ignoredir_filter	Ack.pm	/^sub ignoredir_filter {$/;"	s
 is_filetype	t/Util.pm	/^sub is_filetype {$/;"	s
 is_interesting	Ack.pm	/^sub is_interesting {$/;"	s
 is_searchable	Ack.pm	/^sub is_searchable {$/;"	s
+is_win32	t/Util.pm	/^sub is_win32 {$/;"	s
 license	Makefile.PL	/^    license: http:\/\/dev.perl.org\/licenses\/$/;"	l
 lists_match	t/Util.pm	/^sub lists_match {$/;"	s
 load_colors	Ack.pm	/^sub load_colors {$/;"	s
@@ -146,11 +163,13 @@ run_ack	t/Util.pm	/^sub run_ack {$/;"	s
 run_ack_with_stderr	t/Util.pm	/^sub run_ack_with_stderr {$/;"	s
 search	Ack.pm	/^sub search {$/;"	s
 search_and_list	Ack.pm	/^sub search_and_list {$/;"	s
+set_up_assertion_that_these_options_will_ignore_those_directories	t/ack-ignore-dir.t	/^sub set_up_assertion_that_these_options_will_ignore_those_directories {$/;"	s
 sets_match	t/Util.pm	/^sub sets_match {$/;"	s
 show_help	Ack.pm	/^sub show_help {$/;"	s
 show_help_types	Ack.pm	/^sub show_help_types {$/;"	s
 slurp	t/Util.pm	/^sub slurp {$/;"	s
 smallprof	Makefile.PL	/^smallprof: all$/;"	l
 tags	Makefile.PL	/^tags:$/;"	l
+test_match	t/ack-match.t	/^sub test_match {$/;"	s
 timed	Makefile.PL	/^timed: all$/;"	l
 warn	Ack.pm	/^sub warn { ## no critic (ProhibitBuiltinHomonyms)$/;"	s

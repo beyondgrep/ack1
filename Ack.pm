@@ -111,9 +111,9 @@ BEGIN {
     }
 
     $path_sep_regex = quotemeta( File::Spec->catfile( '', '' ) );
-    $is_cygwin = ($^O eq 'cygwin');
-    $is_windows = ($^O =~ /MSWin32/);
-    $to_screen = -t *STDOUT;
+    $is_cygwin      = ($^O eq 'cygwin');
+    $is_windows     = ($^O =~ /MSWin32/);
+    $to_screen      = -t *STDOUT;
 }
 
 =head1 SYNOPSIS
@@ -330,20 +330,21 @@ sub def_types_from_ARGV {
 
         if ( $td->[0] eq 'c' ) {
             # type-set
+            if ( exists $mappings{$type} ) {
+                # can't redefine types 'make', 'skipped', 'text' and 'binary'
+                App::Ack::die( qq{--type-set: Builtin type "$type" cannot be changed.} )
+                    if ref $mappings{$type} ne 'ARRAY';
 
-            # can't redefine types 'make', 'skipped', 'text' and 'binary'
-            App::Ack::die( "--type-set: Builtin type '$type' cannot be changed." )
-                if exists $mappings{$type} && ref $mappings{$type} ne 'ARRAY';
-
-            delete_type($type) if exists $mappings{$type};
+                delete_type($type);
+            }
         } else {
             # type-add
 
             # can't append to types 'make', 'skipped', 'text' and 'binary'
-            App::Ack::die( "--type-add: Builtin type '$type' cannot be changed." )
+            App::Ack::die( qq{--type-add: Builtin type "$type" cannot be changed.} )
                 if exists $mappings{$type} && ref $mappings{$type} ne 'ARRAY';
 
-            App::Ack::warn( "--type-add: Type '$type' does not exist, creating with '$ext' ..." )
+            App::Ack::warn( qq{--type-add: Type "$type" does not exist, creating with "$ext" ...} )
                 unless exists $mappings{$type};
         }
 
@@ -355,7 +356,7 @@ sub def_types_from_ARGV {
                 push @{$types{$e}}, $type;
             }
         } else {
-            App::Ack::die( "Cannot append to type '$type'." );
+            App::Ack::die( qq{Cannot append to type "$type".} );
         }
     }
 

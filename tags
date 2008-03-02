@@ -10,12 +10,14 @@ ACK_F_TEXT	t/ack-text.t	/^ACK_F_TEXT: {$/;"	l
 ACK_F_XML	t/ack-text.t	/^ACK_F_XML: {$/;"	l
 ACK_G	t/context.t	/^ACK_G: {$/;"	l
 AFTER	t/context.t	/^AFTER: {$/;"	l
+ALL_AND_DASH_G_INTERACTION	t/ack-g.t	/^ALL_AND_DASH_G_INTERACTION: {$/;"	l
 ANCHORED	t/multiline.t	/^ANCHORED: {$/;"	l
 App::Ack	Ack.pm	/^package App::Ack;$/;"	p
 BACK_ANCHOR	t/ack-g.t	/^BACK_ANCHOR: {$/;"	l
 BEFORE	t/context.t	/^BEFORE: {$/;"	l
 BEFORE_WITH_LINE_NO	t/context.t	/^BEFORE_WITH_LINE_NO: {$/;"	l
 BINARY_FILES	t/interesting.t	/^BINARY_FILES: {$/;"	l
+BUILTIN	t/ack-type.t	/^BUILTIN: {$/;"	l
 CASE_INSENSITIVE	t/ack-g.t	/^CASE_INSENSITIVE: {$/;"	l
 CONTEXT_DEFAULT	t/context.t	/^CONTEXT_DEFAULT: {$/;"	l
 CONTEXT_MAX_COUNT	t/context.t	/^CONTEXT_MAX_COUNT: {$/;"	l
@@ -40,6 +42,7 @@ DASH_V	t/ack-1.t	/^DASH_V: {$/;"	l
 Example	Ack.pm	/^Example: ack -i select$/;"	l
 FAIL_MATCHING_VIA_CONTENT	t/filetypes.t	/^FAIL_MATCHING_VIA_CONTENT: {$/;"	l
 FILES_HAVE_BEEN_SET_UP_AS_EXPECTED	t/ack-ignore-dir.t	/^FILES_HAVE_BEEN_SET_UP_AS_EXPECTED: {$/;"	l
+FILE_NOT_THERE	t/command-line-files.t	/^FILE_NOT_THERE: {$/;"	l
 FILE_ON_COMMAND_LINE_IS_ALWAYS_SEARCHED	t/ack-g.t	/^FILE_ON_COMMAND_LINE_IS_ALWAYS_SEARCHED: {$/;"	l
 FILE_ON_COMMAND_LINE_IS_ALWAYS_SEARCHED_EVEN_WITH_WRONG_TYPE	t/ack-g.t	/^FILE_ON_COMMAND_LINE_IS_ALWAYS_SEARCHED_EVEN_WITH_WRONG_TYPE: {$/;"	l
 FIND_PACKAGES	t/standalone.t	/^FIND_PACKAGES: {$/;"	l
@@ -52,6 +55,9 @@ G_PRINT0	t/ack-print0.t	/^G_PRINT0: {$/;"	l
 HANDLE_ZEROES	t/zero.t	/^HANDLE_ZEROES: {$/;"	l
 HIGHLIGHTING	t/ack-passthru.t	/^HIGHLIGHTING: {$/;"	l
 HIGHLIGHTING	t/context.t	/^HIGHLIGHTING: {$/;"	l
+INVERT_MATCH_CONTENT	t/ack-g.t	/^INVERT_MATCH_CONTENT: {$/;"	l
+INVERT_MATCH_CONTENT_SWAPPED	t/ack-g.t	/^INVERT_MATCH_CONTENT_SWAPPED: {$/;"	l
+INVERT_MATCH_FILE_NOT	t/ack-g.t	/^INVERT_MATCH_FILE_NOT: {$/;"	l
 JUST_THE_DIR	t/command-line-files.t	/^JUST_THE_DIR: {$/;"	l
 LAST_ONE_LISTED_WINS	t/ack-ignore-dir.t	/^LAST_ONE_LISTED_WINS: {$/;"	l
 LINE_1	t/ack-line.t	/^LINE_1: {$/;"	l
@@ -74,27 +80,34 @@ Miscellaneous	Ack.pm	/^Miscellaneous:$/;"	l
 NORMAL	t/ack-passthru.t	/^NORMAL: {$/;"	l
 NORMAL_CASE	t/ack-v.t	/^NORMAL_CASE: {$/;"	l
 NORMAL_COLOR	t/ack-color.t	/^NORMAL_COLOR: {$/;"	l
+NOT_CASE_INSENSITIVE	t/ack-g.t	/^NOT_CASE_INSENSITIVE: {$/;"	l
 NO_GROUPING	t/ack-group.t	/^NO_GROUPING: {$/;"	l
 NO_METACHARCTERS	t/ack-g.t	/^NO_METACHARCTERS: {$/;"	l
 NO_O	t/ack-o.t	/^NO_O: {$/;"	l
+NO_STARTDIR	t/ack-g.t	/^NO_STARTDIR: {$/;"	l
 NO_SWITCHES_MULTIPLE_FILES	t/ack-h.t	/^NO_SWITCHES_MULTIPLE_FILES: {$/;"	l
 NO_SWITCHES_ONE_FILE	t/ack-h.t	/^NO_SWITCHES_ONE_FILE: {$/;"	l
+ONLY_MAKEFILES	t/ack-g.t	/^ONLY_MAKEFILES: {$/;"	l
 PARROT_FILES_DESCEND	t/interesting.t	/^PARROT_FILES_DESCEND: {$/;"	l
 PARROT_FILES_NODESCEND	t/interesting.t	/^PARROT_FILES_NODESCEND: {$/;"	l
 PARROT_FILES_NODESCEND_EMPTY	t/interesting.t	/^PARROT_FILES_NODESCEND_EMPTY: {$/;"	l
 PERL_FILES	t/interesting.t	/^PERL_FILES: {$/;"	l
 PERL_FILES_BY_NAME	t/interesting.t	/^PERL_FILES_BY_NAME: {$/;"	l
 PERL_FILES_GLOBBED	t/interesting.t	/^PERL_FILES_GLOBBED: {$/;"	l
+PERL_TEST_CASE_INSENSITIVE_CONTENT	t/ack-g.t	/^PERL_TEST_CASE_INSENSITIVE_CONTENT: {$/;"	l
+PERL_TEST_CASE_INSENSITIVE_CONTENT_SWAPPED	t/ack-g.t	/^PERL_TEST_CASE_INSENSITIVE_CONTENT_SWAPPED: {$/;"	l
+PERL_TEST_CASE_INSENSITIVE_FILE_AND_CONTENT_NOT	t/ack-g.t	/^PERL_TEST_CASE_INSENSITIVE_FILE_AND_CONTENT_NOT: {$/;"	l
+PERL_TEST_CASE_INSENSITIVE_FILE_NOT	t/ack-g.t	/^PERL_TEST_CASE_INSENSITIVE_FILE_NOT: {$/;"	l
+QUOTEMETA_CONTENT	t/ack-g.t	/^QUOTEMETA_CONTENT: {$/;"	l
+QUOTEMETA_CONTENT_SWAPPED	t/ack-g.t	/^QUOTEMETA_CONTENT_SWAPPED: {$/;"	l
+QUOTEMETA_FILE_NOT	t/ack-g.t	/^QUOTEMETA_FILE_NOT: {$/;"	l
 Repository	Makefile.PL	/^    Repository: http:\/\/code.google.com\/p\/ack\/source$/;"	l
 SEARCH_FOR_DASH_DASH_NOENV	t/ack-env.t	/^SEARCH_FOR_DASH_DASH_NOENV: {$/;"	l
 SINGLE_TEXT_MATCH	t/ack-1.t	/^SINGLE_TEXT_MATCH: {$/;"	l
 SINGLE_TEXT_MATCH	t/ack-env.t	/^SINGLE_TEXT_MATCH: {$/;"	l
 SINGLE_TEXT_MATCH_ENV	t/ack-env.t	/^SINGLE_TEXT_MATCH_ENV: {$/;"	l
 SINGLE_TEXT_MATCH_NOENV	t/ack-env.t	/^SINGLE_TEXT_MATCH_NOENV: {$/;"	l
-SKIP	t/ack-g.t	/^SKIP: { # NO_STARTDIR$/;"	l
 SKIP	t/ack-passthru.t	/^    SKIP: {$/;"	l
-SKIP	t/ack-type.t	/^SKIP: {$/;"	l
-SKIP	t/command-line-files.t	/^SKIP: { # FILE_NOT_THERE$/;"	l
 SKIP	t/context.t	/^    SKIP: {$/;"	l
 SPECIFYING_A_BAK_FILE	t/command-line-files.t	/^SPECIFYING_A_BAK_FILE: {$/;"	l
 STANDARD_GROUPING	t/ack-group.t	/^STANDARD_GROUPING: {$/;"	l
@@ -104,20 +117,28 @@ TRAILING_METACHAR_BACKSLASH_W	t/ack-w.t	/^TRAILING_METACHAR_BACKSLASH_W: {$/;"	l
 TRAILING_METACHAR_DOT	t/ack-w.t	/^TRAILING_METACHAR_DOT: {$/;"	l
 TRAILING_PUNC	t/ack-w.t	/^TRAILING_PUNC: {$/;"	l
 UNANCHORED	t/multiline.t	/^UNANCHORED: {$/;"	l
+UNRESTRICTED_AND_DASH_G_INTERACTION	t/ack-g.t	/^UNRESTRICTED_AND_DASH_G_INTERACTION: {$/;"	l
 Usage	Ack.pm	/^Usage: ack [OPTION]... PATTERN [FILES]$/;"	l
 WITH_O	t/ack-o.t	/^WITH_O: {$/;"	l
 WITH_O	t/context.t	/^WITH_O: {$/;"	l
 WITH_OUTPUT	t/ack-o.t	/^WITH_OUTPUT: {$/;"	l
 WITH_SWITCHES_MULTIPLE_FILES	t/ack-h.t	/^WITH_SWITCHES_MULTIPLE_FILES: {$/;"	l
 WITH_SWITCHES_ONE_FILE	t/ack-h.t	/^WITH_SWITCHES_ONE_FILE: {$/;"	l
+WORDS_FILE_NOT	t/ack-g.t	/^WORDS_FILE_NOT: {$/;"	l
 _get_thpppt	Ack.pm	/^sub _get_thpppt {$/;"	s
 _key	Ack.pm	/^sub _key {$/;"	s
 _listify	Ack.pm	/^sub _listify {$/;"	s
 _my_program	Ack.pm	/^sub _my_program {$/;"	s
+_print	Ack.pm	/^sub _print                { print "$_[0]"; }$/;"	s
+_print_filename	Ack.pm	/^sub _print_filename       { print $_[0], $_[1]; }$/;"	s
+_print_first_filename	Ack.pm	/^sub _print_first_filename { print $_[0], "\\n"; }$/;"	s
+_print_line_no	Ack.pm	/^sub _print_line_no        { print $_[0], $_[1]; }$/;"	s
+_print_separator	Ack.pm	/^sub _print_separator      { print "--\\n"; }$/;"	s
 _thpppt	Ack.pm	/^sub _thpppt {$/;"	s
 bugtracker	Makefile.PL	/^    bugtracker: http:\/\/code.google.com\/p\/ack\/issues\/list$/;"	l
 build_command_line	t/Util.pm	/^sub build_command_line {$/;"	s
 build_regex	Ack.pm	/^sub build_regex {$/;"	s
+check_regex	Ack.pm	/^sub check_regex {$/;"	s
 check_stderr	t/ack-type.t	/^sub check_stderr {$/;"	s
 check_u	t/ack-u.t	/^sub check_u {$/;"	s
 check_with	t/ack-type.t	/^sub check_with {$/;"	s
@@ -133,8 +154,11 @@ filetype_setup	Ack.pm	/^sub filetype_setup {$/;"	s
 filetypes	Ack.pm	/^sub filetypes {$/;"	s
 filetypes_supported	Ack.pm	/^sub filetypes_supported {$/;"	s
 filetypes_supported_set	Ack.pm	/^sub filetypes_supported_set {$/;"	s
+filter_mode	ack	/^sub filter_mode {$/;"	s
 get_command_line_options	Ack.pm	/^sub get_command_line_options {$/;"	s
 get_copyright	Ack.pm	/^sub get_copyright {$/;"	s
+get_iterator	Ack.pm	/^sub get_iterator {$/;"	s
+get_starting_points	Ack.pm	/^sub get_starting_points {$/;"	s
 get_version_statement	Ack.pm	/^sub get_version_statement {$/;"	s
 homepage	Makefile.PL	/^    homepage: http:\/\/petdance.com\/ack\/$/;"	l
 ignoredir_filter	Ack.pm	/^sub ignoredir_filter {$/;"	s
@@ -152,7 +176,9 @@ open_file	Ack.pm	/^sub open_file {$/;"	s
 option_in_usage	t/longopts.t	/^sub option_in_usage {$/;"	s
 pipe_into_ack	t/Util.pm	/^sub pipe_into_ack {$/;"	s
 print_files	Ack.pm	/^sub print_files {$/;"	s
+print_files_with_matches	Ack.pm	/^sub print_files_with_matches {$/;"	s
 print_match_or_context	Ack.pm	/^sub print_match_or_context {$/;"	s
+print_matches	Ack.pm	/^sub print_matches {$/;"	s
 print_version_statement	Ack.pm	/^sub print_version_statement {$/;"	s
 prof	Makefile.PL	/^prof: all$/;"	l
 profile	Makefile.PL	/^profile: all$/;"	l
@@ -170,6 +196,7 @@ show_help_types	Ack.pm	/^sub show_help_types {$/;"	s
 slurp	t/Util.pm	/^sub slurp {$/;"	s
 smallprof	Makefile.PL	/^smallprof: all$/;"	l
 tags	Makefile.PL	/^tags:$/;"	l
+test_ack_with	t/illegal-regex.t	/^sub test_ack_with {$/;"	s
 test_match	t/ack-match.t	/^sub test_match {$/;"	s
 timed	Makefile.PL	/^timed: all$/;"	l
 warn	Ack.pm	/^sub warn { ## no critic (ProhibitBuiltinHomonyms)$/;"	s

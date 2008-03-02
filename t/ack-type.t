@@ -149,14 +149,14 @@ BUILTIN: {
 
     for my $builtin ( @builtins ) {
         check_stderr( "--type-set $builtin=.foo",
-            "ack-standalone: --type-set: Builtin type '$builtin' cannot be changed." );
+            qq{ack-standalone: --type-set: Builtin type "$builtin" cannot be changed.} );
         check_stderr( "--type-add $builtin=.foo",
-            "ack-standalone: --type-add: Builtin type '$builtin' cannot be changed." );
+            qq{ack-standalone: --type-add: Builtin type "$builtin" cannot be changed.} );
     }
 
     # check that there is a warning for creating new types with --append_type
     check_stderr( "--type-add foo=.foo --foo",
-            "ack-standalone: --type-add: Type 'foo' does not exist, creating with '.foo' ..." );
+        qq{ack-standalone: --type-add: Type "foo" does not exist, creating with ".foo" ...} );
 }
 
 

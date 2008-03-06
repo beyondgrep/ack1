@@ -25,10 +25,15 @@ $bobbie:27:    Nothin' don't mean nothin' if it ain't free
 EOF
 
     my @files = sort glob( 't/text/*.txt' );
-    my @args = qw( -a --nogroup --nocolor free );
-    my @results = run_ack( @args, @files );
 
-    lists_match( \@results, \@expected, 'No grouping' );
+    my @arg_sets = (
+        [qw( -a --nogroup --nocolor free )],
+    );
+    for my $set ( @arg_sets ) {
+        my @results = run_ack( @{$set}, @files );
+
+        lists_match( \@results, \@expected, 'No grouping' );
+    }
 }
 
 
@@ -49,9 +54,12 @@ $bobbie
 EOF
 
     my @files = sort glob( 't/text/*.txt' );
-    my @args = qw( -a --group --nocolor free );
-    my @results = run_ack( @args, @files );
-
-    lists_match( \@results, \@expected, 'Standard grouping' );
+    my @arg_sets = (
+        [qw( -a --group --nocolor free )],
+    );
+    for my $set ( @arg_sets ) {
+        my @results = run_ack( @{$set}, @files );
+        lists_match( \@results, \@expected, 'Standard grouping' );
+    }
 }
 

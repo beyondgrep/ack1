@@ -985,7 +985,7 @@ sub get_command_line_options {
         'v|invert-match'        => \$opt{v},
         'w|word-regexp'         => \$opt{w},
 
-        'ignore-dirs=s'         => sub { shift; my $dir = shift; $ignore_dirs{$dir} = '--ignore-dir' },
+        'ignore-dirs=s'         => sub { shift; my $dir = shift; $ignore_dirs{$dir} = '--ignore-dirs' },
         'noignore-dirs=s'       => sub { shift; my $dir = shift; delete $ignore_dirs{$dir} },
 
         'version'   => sub { print_version_statement(); exit 1; },

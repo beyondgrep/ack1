@@ -233,12 +233,10 @@ sub get_command_line_options {
     }
 
 
-    {
-        my $parser = Getopt::Long::Parser->new();
-        $parser->configure( 'bundling', 'no_ignore_case', );
-        $parser->getoptions( %{$getopt_specs} ) or
-            App::Ack::die( 'See ack --help or ack --man for options.' );
-    }
+    my $parser = Getopt::Long::Parser->new();
+    $parser->configure( 'bundling', 'no_ignore_case', );
+    $parser->getoptions( %{$getopt_specs} ) or
+        App::Ack::die( 'See ack --help or ack --man for options.' );
 
     my %defaults = (
         all            => 0,
@@ -337,7 +335,8 @@ sub def_types_from_ARGV {
 
                 delete_type($type);
             }
-        } else {
+        }
+        else {
             # type-add
 
             # can't append to types 'make', 'skipped', 'text' and 'binary'
@@ -355,7 +354,8 @@ sub def_types_from_ARGV {
             for my $e ( @exts ) {
                 push @{$types{$e}}, $type;
             }
-        } else {
+        }
+        else {
             App::Ack::die( qq{Cannot append to type "$type".} );
         }
     }
@@ -373,7 +373,7 @@ information: %mappings, %types and %type_wanted.
 sub delete_type {
     my $type = shift;
 
-    App::Ack::die( "Internal error: Cannot delete builtin type '$type'." )
+    App::Ack::die( qq{Internal error: Cannot delete builtin type "$type".} )
         unless ref $mappings{$type} eq 'ARRAY';
 
     delete $mappings{$type};

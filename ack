@@ -24,7 +24,7 @@ MAIN: {
         /^--th[pt]+t+$/ && App::Ack::_thpppt($_);
 
         # See if we want to ignore the environment. (Don't tell Al Gore.)
-        if ( /^--noenv$/ ) {
+        if ( $_ eq '--noenv' ) {
             delete @ENV{qw( ACK_OPTIONS ACKRC ACK_COLOR_MATCH ACK_COLOR_FILENAME ACK_SWITCHES )};
             $env_ok = 0;
         }

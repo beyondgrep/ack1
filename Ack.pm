@@ -1287,8 +1287,8 @@ sub get_starting_points {
 
     my @what;
 
-    if ( @$argv ) {
-        @what = $App::Ack::is_windows ? <@$argv> : @$argv;
+    if ( @{$argv} ) {
+        @what = $App::Ack::is_windows ? <@{$argv}> : @{$argv};
 
         # Show filenames unless we've specified one single file
         $opt->{show_filename} = (@what > 1) || (!-f $what[0]);
@@ -1301,7 +1301,7 @@ sub get_starting_points {
     # Barf if the starting points don't exist
     for my $start_point (@what) {
         App::Ack::warn("$start_point: No such file or directory") unless -e $start_point;
-        $start_point =~ s,/,\\,g if $App::Ack::is_windows;
+        $start_point =~ s{/}{\\}g if $App::Ack::is_windows;
     }
     return \@what;
 }

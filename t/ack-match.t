@@ -32,5 +32,5 @@ sub test_match {
     my @results_normal = run_ack( @args, $regex, @files );
     my @results_match  = run_ack( @args, @files, '--match', $regex );
 
-    sets_match( \@results_normal, \@results_match, "Same output for regex '$regex'." );
+    return sets_match( \@results_normal, \@results_match, "Same output for regex '$regex'." );
 }

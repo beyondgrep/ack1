@@ -60,6 +60,7 @@ BEGIN {
     );
 
     %mappings = (
+        actionscript => [qw( as mxml )],
         asm         => [qw( s )],
         binary      => q{Binary files, as defined by Perl's -B op (default: off)},
         cc          => [qw( c h xs )],

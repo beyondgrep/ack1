@@ -31,7 +31,6 @@ EOF
     );
     for my $set ( @arg_sets ) {
         my @results = run_ack( @{$set}, @files );
-
         lists_match( \@results, \@expected, 'No grouping' );
     }
 }

@@ -5,6 +5,9 @@ NEXT
     Ack gives a better error message when running with an illegal
     regex.
 
+    Added Actionscript support.  Thanks, Yuichi Tateno.
+
+
     [INTERNALS TESTING]
     Fixed test count in case of skipped tests for ack-types.t.
 

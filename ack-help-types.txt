@@ -7,6 +7,7 @@ format.  For example, both --type=perl and --perl work.
 Note that some extensions may appear in multiple types.  For example,
 .pod files are both Perl and Parrot.
 
+    --[no]actionscr .as .mxml
     --[no]asm       .s
     --[no]binary    Binary files, as defined by Perl's -B op (default: off)
     --[no]cc        .c .h .xs

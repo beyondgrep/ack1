@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 22;
+use Test::More tests => 24;
 
 use File::Spec;
 use lib 't';
@@ -55,6 +55,14 @@ FILES_HAVE_BEEN_SET_UP_AS_EXPECTED: {
 DASH_IGNORE_DIR: {
     set_up_assertion_that_these_options_will_ignore_those_directories(
         [ '--ignore-dir=subdir',  ],
+        [ @std_ignore, 'subdir',  ],
+    );
+    sets_match( \@results, \@expected, $test_description );
+}
+
+DASH_IGNORE_DIR_WITH_SLASH: {
+    set_up_assertion_that_these_options_will_ignore_those_directories(
+        [ '--ignore-dir=subdir/',  ],
         [ @std_ignore, 'subdir',  ],
     );
     sets_match( \@results, \@expected, $test_description );

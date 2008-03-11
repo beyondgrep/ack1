@@ -1,6 +1,13 @@
 Changelog for ack
 
 NEXT
+    [FIXES]
+    --[no]ignore-dir option now works also with trailing slash
+    in the directory name.
+
+    A match on the last line of a file where the newline is
+    missing gets the newline added by ack for free!
+
     [ENHANCEMENTS]
     Ack gives a better error message when running with an illegal
     regex.

@@ -41,41 +41,7 @@ my $xml = [qw(
 )];
 
 my $perl = [qw(
-    t/00-load.t
-    t/ack-1.t
-    t/ack-a.t
-    t/ack-binary.t
-    t/ack-c.t
-    t/ack-color.t
-    t/ack-env.t
-    t/ack-g.t
-    t/ack-group.t
-    t/ack-h.t
-    t/ack-ignore-dir.t
-    t/ack-line.t
-    t/ack-match.t
-    t/ack-o.t
-    t/ack-print0.t
-    t/ack-passthru.t
-    t/ack-text.t
-    t/ack-type.t
-    t/ack-u.t
-    t/ack-v.t
-    t/ack-w.t
-    t/code.t
-    t/command-line-files.t
-    t/context.t
     t/etc/shebang.pl.xxx
-    t/filetypes.t
-    t/file-permission.t
-    t/illegal-regex.t
-    t/interesting.t
-    t/longopts.t
-    t/module.t
-    t/multiline.t
-    t/pod-coverage.t
-    t/pod.t
-    t/standalone.t
     t/swamp/0
     t/swamp/Makefile.PL
     t/swamp/options.pl
@@ -85,8 +51,6 @@ my $perl = [qw(
     t/swamp/perl.pl
     t/swamp/perl.pm
     t/swamp/perl.pod
-    t/zero.t
-    t/Util.pm
 )];
 
 my $skipped = [
@@ -166,7 +130,7 @@ sub check_with {
 
     my @expected = sort @{$expected};
 
-    my @results = run_ack( 't', '-f', @options );
+    my @results = run_ack( 't/swamp/', 't/etc/', '-f', @options );
     @results = grep { !/~$/ } @results; # Don't see my vim backup files
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;

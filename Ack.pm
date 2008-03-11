@@ -199,8 +199,8 @@ sub get_command_line_options {
         'v|invert-match'        => \$opt{v},
         'w|word-regexp'         => \$opt{w},
 
-        'ignore-dirs=s'         => sub { shift; my $dir = shift; $ignore_dirs{$dir} = '--ignore-dirs' },
-        'noignore-dirs=s'       => sub { shift; my $dir = shift; delete $ignore_dirs{$dir} },
+        'ignore-dirs=s'         => sub { shift; my $dir = remove_path_sep( shift ); $ignore_dirs{$dir} = '--ignore-dirs' },
+        'noignore-dirs=s'       => sub { shift; my $dir = remove_path_sep( shift ); delete $ignore_dirs{$dir} },
 
         'version'   => sub { print_version_statement(); exit 1; },
         'help|?:s'  => sub { shift; show_help(@_); exit; },
@@ -394,6 +394,19 @@ to ignore.
 
 sub ignoredir_filter {
     return !exists $ignore_dirs{$_};
+}
+
+=head2 remove_path_sep( $path )
+
+This functions removes a trailing path separator, if there is one, from its argument
+
+=cut
+
+sub remove_path_sep {
+    my $path = shift;
+    $path =~ s/$path_sep_regex$//;
+
+    return $path;
 }
 
 =head2 filetypes( $filename )
@@ -1092,17 +1105,20 @@ sub print_match_or_context {
 
         if ( $output_func ) {
             while ( /$regex/go ) {
-                print $output_func->(), "\n";
+                _print( $output_func->() . "\n" );
             }
         }
         else {
-            if ( $color && $is_match && $regex ) {
-                if ( s/$regex/Term::ANSIColor::colored( substr($_, $-[0], $+[0] - $-[0]), $ENV{ACK_COLOR_MATCH} )/eg ) {
-                    # At the end of the line reset the color and keep existing line ending
-                    s/([\r\n]*)$/\e[0m\e[K$1/;
-                }
+            if ( $color && $is_match && $regex &&
+                 s/$regex/Term::ANSIColor::colored( substr($_, $-[0], $+[0] - $-[0]), $ENV{ACK_COLOR_MATCH} )/eg ) {
+                # At the end of the line reset the color and remove newline
+                s/[\r\n]*\z/\e[0m\e[K/;
             }
-            _print($_);
+            else {
+                # remove any kind of newline at the end of the line
+                s/[\r\n]*\z//;
+            }
+            _print($_ . "\n");
         }
         $any_output = 1;
         ++$context_overall_output_count;

@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 17;
+use Test::More tests => 20;
 use Data::Dumper qw(Dumper);
 delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
@@ -58,6 +58,7 @@ our @warns;
 
 }
 
+my $iter1;
 {
     @result = ();
     my %opts = (
@@ -68,6 +69,7 @@ our @warns;
     my $what = App::Ack::get_starting_points( [$dir], \%opts );
     is_deeply $what, [$dir], 'get_starting_points';
     my $iter = App::Ack::get_iterator( $what, \%opts );
+    $iter1 = $iter;
     is ref $iter, 'CODE';
     App::Ack::filetype_setup();
     App::Ack::print_matches( $iter, \%opts );
@@ -90,6 +92,7 @@ our @warns;
                     ]
                 ] or diag Dumper \@result;
 
+    is_deeply \@warns, [], 'no warning';
 }
 
 
@@ -103,11 +106,12 @@ our @warns;
     my $what = App::Ack::get_starting_points( [$dir, 't/etc'], \%opts );
     is_deeply $what, [$dir, 't/etc'], 'get_starting_points';
     my $iter = App::Ack::get_iterator( $what, \%opts );
+    isnt $iter, $iter1, 'different iterators';
     is ref $iter, 'CODE';
     App::Ack::filetype_setup();
     App::Ack::print_matches( $iter, \%opts );
     TODO: {
-        local $TODO = 'need to reset some internal buffer';
+        local $TODO = 'need to remove /o from the $regex';
     is_deeply \@result,
         [
            [
@@ -168,6 +172,7 @@ our @warns;
            ]
          ];
     }
+    is_deeply \@warns, [], 'no warning';
 }
 
 {

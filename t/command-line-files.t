@@ -24,9 +24,8 @@ EOF
 
     my @files = qw( t/swamp );
     my @args = qw( notaword );
-    my @results = run_ack( @args, @files );
 
-    sets_match( \@results, \@expected, q{One hit for specifying a dir} );
+    ack_sets_match( [ @args, @files ], \@expected, q{One hit for specifying a dir} );
 }
 
 
@@ -38,9 +37,8 @@ EOF
 
     my @files = qw( t/swamp/options.pl t/swamp/options.pl.bak );
     my @args = qw( notaword );
-    my @results = run_ack( @args, @files );
 
-    sets_match( \@results, \@expected, q{Two hits for specifying the file} );
+    ack_sets_match( [ @args, @files ], \@expected, q{Two hits for specifying the file} );
 }
 
 FILE_NOT_THERE: {

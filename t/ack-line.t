@@ -16,9 +16,8 @@ LINE_1: {
 
     my @files = qw( t/text/boy-named-sue.txt );
     my @args = qw( --lines=1 --text );
-    my @results = run_ack( @args, @files );
 
-    sets_match( \@results, \@expected, 'Looking for line 1' );
+    ack_sets_match( [ @args, @files ], \@expected, 'Looking for line 1' );
 }
 
 LINE_1_AND_5: {
@@ -29,9 +28,8 @@ LINE_1_AND_5: {
 
     my @files = qw( t/text/boy-named-sue.txt );
     my @args = qw( --lines=1 --lines=5 --text );
-    my @results = run_ack( @args, @files );
 
-    sets_match( \@results, \@expected, 'Looking for lines 1 and 5' );
+    ack_sets_match( [ @args, @files ], \@expected, 'Looking for lines 1 and 5' );
 }
 
 LINE_1_COMMA_5: {
@@ -42,9 +40,8 @@ LINE_1_COMMA_5: {
 
     my @files = qw( t/text/boy-named-sue.txt );
     my @args = ( '--lines=1,5', '--text' );
-    my @results = run_ack( @args, @files );
 
-    sets_match( \@results, \@expected, 'Looking for lines 1, 5' );
+    ack_sets_match( [ @args, @files ], \@expected, 'Looking for lines 1, 5' );
 }
 
 LINE_1_TO_5: {
@@ -58,9 +55,8 @@ EOF
 
     my @files = qw( t/text/boy-named-sue.txt );
     my @args = qw( --lines=1-5 --text );
-    my @results = run_ack( @args, @files );
 
-    sets_match( \@results, \@expected, 'Looking for lines 1 to 5' );
+    ack_sets_match( [ @args, @files ], \@expected, 'Looking for lines 1 to 5' );
 }
 
 LINE_1_TO_5_CONTEXT: {
@@ -74,9 +70,8 @@ EOF
 
     my @files = qw( t/text/boy-named-sue.txt );
     my @args = qw( --lines=3 -C --text );
-    my @results = run_ack( @args, @files );
 
-    lists_match( \@results, \@expected, 'Looking for line 3 with two lines of context' );
+    ack_lists_match( [ @files, @args ], \@expected, 'Looking for line 3 with two lines of context' );
 }
 
 LINE_1_AND_5_AND_NON_EXISTENT: {
@@ -87,9 +82,8 @@ LINE_1_AND_5_AND_NON_EXISTENT: {
 
     my @files = qw( t/text/boy-named-sue.txt );
     my @args = ( '--lines=1,5,1000', '--text' );
-    my @results = run_ack( @args, @files );
 
-    sets_match( \@results, \@expected, 'Looking for non existent line' );
+    ack_sets_match( [ @args, @files ], \@expected, 'Looking for non existent line' );
 }
 
 LINE_AND_PASSTHRU: {
@@ -103,9 +97,8 @@ EOF
 
     my @files = qw( t/swamp/perl.pod );
     my @args = qw( --lines=2 --passthru );
-    my @results = run_ack( @args, @files );
 
-    lists_match( \@results, \@expected, 'Checking --passthru behaviour with --line' );
+    ack_lists_match( [ @args, @files ], \@expected, 'Checking --passthru behaviour with --line' );
 }
 
 
@@ -121,9 +114,8 @@ EOF
 
     my @files = qw( t/swamp/ );
     my @args = qw( --cc --lines=1 );
-    my @results = run_ack( @args, @files );
 
-    sets_match( \@results, \@expected, 'Looking for first line in multiple files' );
+    ack_sets_match( [ @args, @files ], \@expected, 'Looking for first line in multiple files' );
 }
 
 
@@ -146,7 +138,6 @@ EOF
 
     my @files = qw( t/swamp/ );
     my @args = qw( --cc --lines=1 --after=3 --sort );
-    my @results = run_ack( @args, @files );
 
-    lists_match( \@results, \@expected, 'Looking for first line in multiple files' );
+    ack_lists_match( [ @args, @files ], \@expected, 'Looking for first line in multiple files' );
 }

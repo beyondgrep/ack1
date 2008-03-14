@@ -180,7 +180,7 @@ sub get_command_line_options {
         'follow!'               => \$opt{follow},
         'g=s'                   => sub { shift; $opt{G} = shift; $opt{f} = 1 },
         'G=s'                   => \$opt{G},
-        'group!'                => sub { $opt{heading} = $opt{break} = 0 },
+        'group!'                => sub { shift; $opt{heading} = $opt{break} = shift },
         'heading!'              => \$opt{heading},
         'h|no-filename'         => \$opt{h},
         'H|with-filename'       => \$opt{H},

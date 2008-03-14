@@ -1,6 +1,6 @@
 Changelog for ack
 
-NEXT
+1.77_04     Fri Mar 14 00:23:46 CDT 2008
     [FIXES]
     --[no]ignore-dir option now works also with trailing slash
     in the directory name.

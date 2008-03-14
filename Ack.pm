@@ -167,10 +167,11 @@ sub get_command_line_options {
 
     my $getopt_specs = {
         1                       => sub { $opt{1} = $opt{m} = 1 },
-        'a|all-types'           => \$opt{all},
         'A|after-context=i'     => \$opt{after_context},
         'B|before-context=i'    => \$opt{before_context},
         'C|context:i'           => sub { shift; my $val = shift; $opt{before_context} = $opt{after_context} = ($val || 2) },
+        'a|all-types'           => \$opt{all},
+        'break!'                => \$opt{break},
         c                       => \$opt{count},
         'color!'                => \$opt{color},
         count                   => \$opt{count},
@@ -179,7 +180,8 @@ sub get_command_line_options {
         'follow!'               => \$opt{follow},
         'g=s'                   => sub { shift; $opt{G} = shift; $opt{f} = 1 },
         'G=s'                   => \$opt{G},
-        'group!'                => \$opt{group},
+        'group!'                => sub { $opt{heading} = $opt{break} = 0 },
+        'heading!'              => \$opt{heading},
         'h|no-filename'         => \$opt{h},
         'H|with-filename'       => \$opt{H},
         'i|ignore-case'         => \$opt{i},
@@ -243,7 +245,8 @@ sub get_command_line_options {
         all            => 0,
         color          => $to_screen && !$App::Ack::is_windows,
         follow         => 0,
-        group          => $to_screen,
+        break          => $to_screen,
+        heading        => $to_screen,
         before_context => 0,
         after_context  => 0,
     );
@@ -1017,7 +1020,7 @@ sub search {
         ++$nmatches;
 
         # print an empty line as a divider before first line in each file (not before the first file)
-        if ( !$any_output && $opt->{show_filename} && $opt->{group} && defined( $context_overall_output_count ) ) {
+        if ( !$any_output && $opt->{show_filename} && $opt->{break} && defined( $context_overall_output_count ) ) {
             print "\n";
         }
 
@@ -1070,7 +1073,7 @@ sub print_match_or_context {
     my $line_no  = shift;
 
     my $color = $opt->{color};
-    my $group = $opt->{group};
+    my $heading = $opt->{heading};
     my $show_filename = $opt->{show_filename};
 
     if ( $show_filename ) {
@@ -1079,7 +1082,7 @@ sub print_match_or_context {
                 $color
                     ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} )
                     : $filename;
-            if ( $group && !$any_output ) {
+            if ( $heading && !$any_output ) {
                 _print_first_filename($display_filename);
             }
         }
@@ -1090,16 +1093,16 @@ sub print_match_or_context {
     for ( @_ ) {
         if ( $keep_context && !$output_func ) {
             if ( ( $last_output_line != $line_no - 1 ) &&
-                ( $any_output || ( !$group && defined( $context_overall_output_count ) ) ) ) {
+                ( $any_output || ( !$heading && defined( $context_overall_output_count ) ) ) ) {
                 _print_separator();
             }
-            # to ensure separators between different files when --nogroup
+            # to ensure separators between different files when --noheading
 
             $last_output_line = $line_no;
         }
 
         if ( $show_filename ) {
-            _print_filename($display_filename, $sep) if not $group;
+            _print_filename($display_filename, $sep) if not $heading;
             _print_line_no($line_no, $sep);
         }
 

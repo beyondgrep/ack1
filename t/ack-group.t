@@ -28,6 +28,7 @@ EOF
 
     my @arg_sets = (
         [qw( -a --nogroup --nocolor free )],
+        [qw( -a --nobreak --noheading --nocolor free )],
     );
     for my $set ( @arg_sets ) {
         my @results = run_ack( @{$set}, @files );
@@ -55,10 +56,10 @@ EOF
     my @files = sort glob( 't/text/*.txt' );
     my @arg_sets = (
         [qw( -a --group --nocolor free )],
+        [qw( -a --heading --break --nocolor free )],
     );
     for my $set ( @arg_sets ) {
         my @results = run_ack( @{$set}, @files );
         lists_match( \@results, \@expected, 'Standard grouping' );
     }
 }
-

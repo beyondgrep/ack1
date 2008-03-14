@@ -9,6 +9,9 @@ NEXT
     missing gets the newline added by ack for free!
 
     [ENHANCEMENTS]
+    Added --break and --heading options.  --group is the same as
+    --break --heading.
+
     Ack gives a better error message when running with an illegal
     regex.
 

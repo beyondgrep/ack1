@@ -1445,6 +1445,10 @@ Note that some extensions may appear in multiple types.  For example,
 END_OF_HELP
 
     my @types = filetypes_supported();
+    my $maxlen = 0;
+    for ( @types ) {
+        $maxlen = length if $maxlen < length;
+    }
     for my $type ( sort @types ) {
         next if $type =~ /^-/; # Stuff to not show
         my $ext_list = $mappings{$type};
@@ -1452,7 +1456,7 @@ END_OF_HELP
         if ( ref $ext_list ) {
             $ext_list = join( ' ', map { ".$_" } @{$ext_list} );
         }
-        printf( "    --[no]%-9.9s %s\n", $type, $ext_list );
+        printf( "    --[no]%-*.*s %s\n", $maxlen, $maxlen, $type, $ext_list );
     }
 
     return;
@@ -1961,7 +1965,5 @@ sub get_iterator {
         }, @$what );
     return $iter;
 }
-
-
 
 1; # End of App::Ack

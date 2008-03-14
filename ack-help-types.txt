@@ -7,44 +7,44 @@ format.  For example, both --type=perl and --perl work.
 Note that some extensions may appear in multiple types.  For example,
 .pod files are both Perl and Parrot.
 
-    --[no]actionscr .as .mxml
-    --[no]asm       .s
-    --[no]binary    Binary files, as defined by Perl's -B op (default: off)
-    --[no]cc        .c .h .xs
-    --[no]cpp       .cpp .cc .m .hpp .hh .h
-    --[no]csharp    .cs
-    --[no]css       .css
-    --[no]elisp     .el
-    --[no]erlang    .erl
-    --[no]fortran   .f .f77 .f90 .f95 .f03 .for .ftn .fpp
-    --[no]haskell   .hs .lhs
-    --[no]hh        .h
-    --[no]html      .htm .html .shtml .xhtml
-    --[no]java      .java .properties
-    --[no]js        .js
-    --[no]jsp       .jsp .jspx .jhtm .jhtml
-    --[no]lisp      .lisp .lsp
-    --[no]make      Makefiles
-    --[no]mason     .mas .mhtml .mpl .mtxt
-    --[no]objc      .m .h
-    --[no]objcpp    .mm .h
-    --[no]ocaml     .ml .mli
-    --[no]parrot    .pir .pasm .pmc .ops .pod .pg .tg
-    --[no]perl      .pl .pm .pod .t
-    --[no]php       .php .phpt .php3 .php4 .php5
-    --[no]plone     .pt .cpt .metadata .cpy .py
-    --[no]python    .py
-    --[no]ruby      .rb .rhtml .rjs .rxml
-    --[no]scheme    .scm
-    --[no]shell     .sh .bash .csh .ksh .zsh
-    --[no]skipped   Files, but not directories, normally skipped by ack (default: off)
-    --[no]smalltalk .st
-    --[no]sql       .sql .ctl
-    --[no]tcl       .tcl
-    --[no]tex       .tex .cls .sty
-    --[no]text      Text files, as defined by Perl's -T op (default: off)
-    --[no]tt        .tt .tt2 .ttml
-    --[no]vb        .bas .cls .frm .ctl .vb .resx
-    --[no]vim       .vim
-    --[no]xml       .xml .dtd .xslt .ent
-    --[no]yaml      .yaml .yml
+    --[no]actionscript .as .mxml
+    --[no]asm          .s
+    --[no]binary       Binary files, as defined by Perl's -B op (default: off)
+    --[no]cc           .c .h .xs
+    --[no]cpp          .cpp .cc .m .hpp .hh .h
+    --[no]csharp       .cs
+    --[no]css          .css
+    --[no]elisp        .el
+    --[no]erlang       .erl
+    --[no]fortran      .f .f77 .f90 .f95 .f03 .for .ftn .fpp
+    --[no]haskell      .hs .lhs
+    --[no]hh           .h
+    --[no]html         .htm .html .shtml .xhtml
+    --[no]java         .java .properties
+    --[no]js           .js
+    --[no]jsp          .jsp .jspx .jhtm .jhtml
+    --[no]lisp         .lisp .lsp
+    --[no]make         Makefiles
+    --[no]mason        .mas .mhtml .mpl .mtxt
+    --[no]objc         .m .h
+    --[no]objcpp       .mm .h
+    --[no]ocaml        .ml .mli
+    --[no]parrot       .pir .pasm .pmc .ops .pod .pg .tg
+    --[no]perl         .pl .pm .pod .t
+    --[no]php          .php .phpt .php3 .php4 .php5
+    --[no]plone        .pt .cpt .metadata .cpy .py
+    --[no]python       .py
+    --[no]ruby         .rb .rhtml .rjs .rxml
+    --[no]scheme       .scm
+    --[no]shell        .sh .bash .csh .ksh .zsh
+    --[no]skipped      Files, but not directories, normally skipped by ack (default: off)
+    --[no]smalltalk    .st
+    --[no]sql          .sql .ctl
+    --[no]tcl          .tcl
+    --[no]tex          .tex .cls .sty
+    --[no]text         Text files, as defined by Perl's -T op (default: off)
+    --[no]tt           .tt .tt2 .ttml
+    --[no]vb           .bas .cls .frm .ctl .vb .resx
+    --[no]vim          .vim
+    --[no]xml          .xml .dtd .xslt .ent
+    --[no]yaml         .yaml .yml

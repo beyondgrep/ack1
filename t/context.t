@@ -213,9 +213,8 @@ ACK_G: {
 
     my @files = qw( t/ );
     my @args = ( '-C2', '-g', $regex );
-    my @results = run_ack( @args, @files );
 
-    sets_match( \@results, \@expected, "Looking for $regex - no change with -g" );
+    ack_sets_match( [ @files, @args ], \@expected, "Looking for $regex - no change with -g" );
 }
 
 # ack -o disables context

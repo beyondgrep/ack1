@@ -110,6 +110,19 @@ sub lists_match {
     }
 }
 
+sub ack_lists_match {
+    my $args     = shift;
+    my $expected = shift;
+    my $message  = shift;
+    my @args     = @{$args};
+
+    my @results = run_ack( @args );
+    my $ok = lists_match( \@results, $expected, $message );
+    $ok or diag( join( ' ', '$ ack', @args ) );
+
+    return $ok;
+}
+
 # Use this one if you don't care about order of the lines
 sub sets_match {
     my @actual = @{+shift};

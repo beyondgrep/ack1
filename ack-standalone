@@ -1358,14 +1358,6 @@ Search output:
   -h, --no-filename     Suppress the prefixing filename on output
   -c, --count           Show number of lines matching per file
 
-  --group               Group matches by file name.
-                        (default: on when used interactively)
-  --nogroup             One result per line, including filename, like grep
-                        (default: on when the output is redirected)
-
-  --[no]color           Highlight the matching text (default: on unless
-                        output is redirected, or on Windows)
-
   -A NUM, --after-context=NUM
                         Print NUM lines of trailing context after matching
                         lines.
@@ -1377,6 +1369,16 @@ Search output:
 
   --print0              Print null byte as separator between filenames,
                         only works with -f, -g, -l, -L or -c.
+
+File presentation:
+  --[no]heading         Print a filename heading above each file's results.
+                        (default: on when used interactively)
+  --[no]break           Print a break between results from different files.
+                        (default: on when used interactively)
+  --group               Same as --heading --break
+  --nogroup             Same as --noheading --nobreak
+  --[no]color           Highlight the matching text (default: on unless
+                        output is redirected, or on Windows)
 
 File finding:
   -f                    Only print the files found, without searching.

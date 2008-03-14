@@ -100,7 +100,7 @@ BEGIN {
         vb          => [qw( bas cls frm ctl vb resx )],
         vim         => [qw( vim )],
         yaml        => [qw( yaml yml )],
-        xml         => [qw( xml dtd xslt )],
+        xml         => [qw( xml dtd xslt ent )],
     );
 
     while ( my ($type,$exts) = each %mappings ) {

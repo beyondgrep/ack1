@@ -46,5 +46,5 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]tt        .tt .tt2 .ttml
     --[no]vb        .bas .cls .frm .ctl .vb .resx
     --[no]vim       .vim
-    --[no]xml       .xml .dtd .xslt
+    --[no]xml       .xml .dtd .xslt .ent
     --[no]yaml      .yaml .yml

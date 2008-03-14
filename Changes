@@ -1,5 +1,10 @@
 Changelog for ack
 
+NEXT
+    [ENHANCEMENTS]
+    Added CFMX support.  Thanks, Will Coleda.
+
+
 1.77_04     Fri Mar 14 00:23:46 CDT 2008
     [FIXES]
     --[no]ignore-dir option now works also with trailing slash

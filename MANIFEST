@@ -97,6 +97,7 @@ t/swamp/file.bar
 t/swamp/file.foo
 t/swamp/html.htm
 t/swamp/html.html
+t/swamp/incomplete-last-line.txt
 t/swamp/javascript.js
 t/swamp/moose-andy.jpg
 t/swamp/options.pl

@@ -25,7 +25,7 @@ EOF
     my @files = qw( t/text/boy-named-sue.txt );
     my @args = ( '--text', '-B1', $regex );
 
-    ack_lists_match( [ @files, @args ], "Looking for $regex - before" );
+    ack_lists_match( [ @args, @files ], \@expected, "Looking for $regex - before" );
 }
 
 BEFORE_WITH_LINE_NO: {

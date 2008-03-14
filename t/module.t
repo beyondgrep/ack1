@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 10;
+use Test::More tests => 17;
 use Data::Dumper qw(Dumper);
 delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
@@ -46,6 +46,7 @@ BEGIN {
 }
 
 our @result;
+our @warns;
 {
     no warnings 'redefine';
     sub App::Ack::_print_first_filename { push @::result,  ['first_filename', @_]; }
@@ -53,6 +54,8 @@ our @result;
     sub App::Ack::_print                { push @::result,  ['print',          @_]; }
     sub App::Ack::_print_filename       { push @::result,  ['filename',       @_]; }
     sub App::Ack::_print_line_no        { push @::result,  ['line_no',        @_]; }
+    sub App::Ack::warn                  { push @::warns,   $_[0];                   } ## no critic (ProhibitBuiltinHomonyms)
+
 }
 
 {
@@ -63,7 +66,9 @@ our @result;
     );
     my $dir = 't/text';
     my $what = App::Ack::get_starting_points( [$dir], \%opts );
+    is_deeply $what, [$dir], 'get_starting_points';
     my $iter = App::Ack::get_iterator( $what, \%opts );
+    is ref $iter, 'CODE';
     App::Ack::filetype_setup();
     App::Ack::print_matches( $iter, \%opts );
     #diag Dumper \@result;
@@ -87,4 +92,96 @@ our @result;
 
 }
 
+
+{
+    @result = ();
+    my %opts = (
+        regex => 'matter',
+        all   => 1,
+    );
+    my $dir = 't/text';
+    my $what = App::Ack::get_starting_points( [$dir, 't/etc'], \%opts );
+    is_deeply $what, [$dir, 't/etc'], 'get_starting_points';
+    my $iter = App::Ack::get_iterator( $what, \%opts );
+    is ref $iter, 'CODE';
+    App::Ack::filetype_setup();
+    App::Ack::print_matches( $iter, \%opts );
+    TODO: {
+        local $TODO = 'need to reset some internal buffer';
+    is_deeply \@result,
+        [
+           [
+             'filename',
+             't/text/science-of-myth.txt',
+             ':'
+           ],
+           [
+             'line_no',
+             '4',
+             ':'
+           ],
+           [
+             'print',
+             "That spiritual matters are enslaved to history\n"
+           ],
+           [
+             'filename',
+             't/text/science-of-myth.txt',
+             ':'
+           ],
+           [
+             'line_no',
+             '10',
+             ':'
+           ],
+           [
+             'print',
+             "Somehow no matter what the world keeps turning\n"
+           ],
+           [
+             'filename',
+             't/text/science-of-myth.txt',
+             ':'
+           ],
+           [
+             'line_no',
+             '20',
+             ':'
+           ],
+           [
+             'print',
+             "It doesn't matter if it's real or not\n"
+           ],
+           [
+             'filename',
+             't/text/science-of-myth.txt',
+             ':'
+           ],
+           [
+             'line_no',
+             '23',
+             ':'
+           ],
+           [
+             'print',
+             "Somehow no matter what the world keeps turning\n"
+           ]
+         ];
+    }
+}
+
+{
+    @result = ();
+    my %opts = (
+        regex => 'matter',
+        all   => 1,
+    );
+    my $dir = 't/text';
+    my $what = App::Ack::get_starting_points( [$dir, 't/nosuchdir'], \%opts );
+    TODO: {
+        local $TODO = 'remove the non-existing directory from the starting_points';
+        is_deeply $what, [$dir], 'get_starting_points';
+    }
+    is_deeply \@warns, [ 't/nosuchdir: No such file or directory' ], "warning";
+}
 

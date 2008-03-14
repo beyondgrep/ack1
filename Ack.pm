@@ -717,6 +717,7 @@ File inclusion/exclusion:
     /core\\.\\d+\$/   - core dumps
 
 Miscellaneous:
+  --noenv               Ignore environment variables and ~/.ackrc
   --help                This help
   --man                 Man page
   --version             Display version & copyright

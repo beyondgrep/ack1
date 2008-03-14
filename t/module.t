@@ -3,7 +3,8 @@
 use warnings;
 use strict;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
+use Data::Dumper qw(Dumper);
 delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
@@ -43,4 +44,47 @@ BEGIN {
     my $iter = App::Ack::get_iterator( $what, \%opt );
     isa_ok $iter, 'CODE', 'get_iterator returs CODE';
 }
+
+our @result;
+{
+    no warnings 'redefine';
+    sub App::Ack::_print_first_filename { push @::result,  ['first_filename', @_]; }
+    sub App::Ack::_print_separator      { push @::result,  ['separator',      @_]; }
+    sub App::Ack::_print                { push @::result,  ['print',          @_]; }
+    sub App::Ack::_print_filename       { push @::result,  ['filename',       @_]; }
+    sub App::Ack::_print_line_no        { push @::result,  ['line_no',        @_]; }
+}
+
+{
+    @result = ();
+    my %opts = (
+        regex => 'Shooter',
+        all   => 1,
+    );
+    my $dir = 't/text';
+    my $what = App::Ack::get_starting_points( [$dir], \%opts );
+    my $iter = App::Ack::get_iterator( $what, \%opts );
+    App::Ack::filetype_setup();
+    App::Ack::print_matches( $iter, \%opts );
+    #diag Dumper \@result;
+    is_deeply \@result, 
+                [
+                    [
+                        'filename',
+                        't/text/4th-of-july.txt',
+                        ':'
+                    ],
+                    [
+                        'line_no',
+                        '37',
+                        ':'
+                    ],
+                    [
+                        'print',
+                        qq(    -- "4th of July", Shooter Jennings\n)
+                    ]
+                ] or diag Dumper \@result;
+
+}
+
 

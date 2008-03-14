@@ -1060,7 +1060,9 @@ sub search {
     return $nmatches;
 }   # search()
 
-
+# _print subs added in order to make it easy for a third party
+# module (such as App::Wack) to redefine the display methods
+# and show the results in a different way.
 sub _print_first_filename { print $_[0], "\n"; }
 sub _print_separator      { print "--\n"; }
 sub _print                { print "$_[0]"; }

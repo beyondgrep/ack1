@@ -1429,7 +1429,7 @@ Miscellaneous:
 END_OF_HELP
 
     return;
-}
+ }
 
 
 
@@ -1913,6 +1913,46 @@ sub filetype_setup {
 }
 
 
+EXPAND_FILENAMES_SCOPE: {
+    my $filter;
+
+    sub expand_filenames {
+        my $argv = shift;
+
+        my $attr;
+        my @files;
+
+        foreach my $pattern ( @{$argv} ) {
+            my @results = bsd_glob( $pattern );
+
+            if (@results == 0) {
+                @results = $pattern; # Glob didn't match, pass it thru unchanged
+            }
+            elsif ( (@results > 1) or ($results[0] ne $pattern) ) {
+                if (not defined $filter) {
+                    eval 'require Win32::File;';
+                    if ($@) {
+                        $filter = 0;
+                    }
+                    else {
+                        $filter = Win32::File::HIDDEN()|Win32::File::SYSTEM();
+                    }
+                } # end unless we've tried to load Win32::File
+                if ( $filter ) {
+                    # Filter out hidden and system files:
+                    @results = grep { not(Win32::File::GetAttributes($_, $attr) and $attr & $filter) } @results;
+                    App::Ack::warn( "$pattern: Matched only hidden files" ) unless @results;
+                } # end if we can filter by file attributes
+            } # end elsif this pattern got expanded
+
+            push @files, @results;
+        } # end foreach pattern
+
+        return \@files;
+    } # end expand_filenames
+} # EXPAND_FILENAMES_SCOPE
+
+
 
 sub get_starting_points {
     my $argv = shift;
@@ -1921,7 +1961,7 @@ sub get_starting_points {
     my @what;
 
     if ( @{$argv} ) {
-        @what = $App::Ack::is_windows ? <@{$argv}> : @{$argv};
+        @what = @{ $App::Ack::is_windows ? expand_filenames($argv) : $argv };
 
         # Show filenames unless we've specified one single file
         $opt->{show_filename} = (@what > 1) || (!-f $what[0]);

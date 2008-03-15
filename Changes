@@ -4,6 +4,10 @@ NEXT
     [ENHANCEMENTS]
     Added CFMX support.  Thanks, Will Coleda.
 
+    [FIXES]
+    Fighting the never-ending battle for Windows compatibility.
+    Thanks to Jan Dubois and Christoper J. Madsen.
+
 
 1.77_04     Fri Mar 14 00:23:46 CDT 2008
     [FIXES]

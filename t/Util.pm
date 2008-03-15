@@ -17,7 +17,11 @@ sub build_command_line {
     my @args = @_;
 
     if ( is_win32() ) {
-        for ( @args ) { s/"/\\"/g; $_ = qq("$_"); }
+        for ( @args ) {
+            s/(\\+)$/$1$1/;     # Double all trailing backslashes
+            s/"/\\"/g;          # Backslash all quotes
+            $_ = qq("$_");
+        }
     }
     else {
         @args = map { quotemeta $_ } @args;

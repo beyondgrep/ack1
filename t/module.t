@@ -13,36 +13,37 @@ BEGIN {
     use_ok( 'App::Ack' );
 }
 
+my $dir_sep = $^O eq "MSWin32" ? '\\' : '/';
 {
     my $copyright = App::Ack::get_copyright();
-    like $copyright, qr{Copyright \d+-\d+ Andy Lester}, 'Copyright';
+    like( $copyright, qr{Copyright \d+-\d+ Andy Lester}, 'Copyright' );
 }
 
 {
     my $version = App::Ack::get_version_statement('Copyright');
-    like $version, qr{This program is free software; you can redistribute it and/or modify it}, 'free software';
-    like $version, qr{Copyright}, 'Copyright';
+    like( $version, qr{This program is free software; you can redistribute it and/or modify it}, 'free software' );
+    like( $version, qr{Copyright}, 'Copyright' );
 }
 
 {
     my @filetypes = App::Ack::filetypes_supported();
-    ok scalar(grep {$_ eq 'parrot'} @filetypes), 'parrot is supported filetype';
-    cmp_ok scalar @filetypes, '>=', 39, 'At least 39 filetypes are supported';
+    ok( scalar(grep {$_ eq 'parrot'} @filetypes), 'parrot is supported filetype' );
+    cmp_ok( scalar @filetypes, '>=', 39, 'At least 39 filetypes are supported' );
 }
 
 {
     my $thppt = App::Ack::_get_thpppt();
-    is length $thppt, 29, 'Bill the Cat';
+    is( length $thppt, 29, 'Bill the Cat' );
 }
 
 {
     my $dir = 't/etc';
     my %opt;
     my $what = App::Ack::get_starting_points( [$dir], \%opt );
-    is_deeply $what, [$dir], 'get_starting_points';
+    is_deeply( $what, ["t${dir_sep}etc"], 'get_starting_points' );
 
     my $iter = App::Ack::get_iterator( $what, \%opt );
-    isa_ok $iter, 'CODE', 'get_iterator returs CODE';
+    isa_ok( $iter, 'CODE', 'get_iterator returs CODE' );
 }
 
 our @result;
@@ -67,32 +68,31 @@ my $iter1;
     );
     my $dir = 't/text';
     my $what = App::Ack::get_starting_points( [$dir], \%opts );
-    is_deeply $what, [$dir], 'get_starting_points';
+    is_deeply( $what, ["t${dir_sep}text"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
     $iter1 = $iter;
-    is ref $iter, 'CODE';
+    is( ref $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_matches( $iter, \%opts );
-    #diag Dumper \@result;
-    is_deeply \@result, 
-                [
-                    [
-                        'filename',
-                        't/text/4th-of-july.txt',
-                        ':'
-                    ],
-                    [
-                        'line_no',
-                        '37',
-                        ':'
-                    ],
-                    [
-                        'print',
-                        qq(    -- "4th of July", Shooter Jennings\n)
-                    ]
-                ] or diag Dumper \@result;
+    my $wanted = [
+        [
+        'filename',
+        "t${dir_sep}text${dir_sep}4th-of-july.txt",
+        ':'
+            ],
+        [
+            'line_no',
+        '37',
+        ':'
+            ],
+        [
+            'print',
+        qq(    -- "4th of July", Shooter Jennings\n)
+            ],
+        ];
+    is_deeply( \@result, $wanted ) or diag Dumper \@result;
 
-    is_deeply \@warns, [], 'no warning';
+    is_deeply( \@warns, [], 'no warning' );
 }
 
 
@@ -104,7 +104,7 @@ my $iter1;
     );
     my $dir = 't/text';
     my $what = App::Ack::get_starting_points( [$dir, 't/etc'], \%opts );
-    is_deeply $what, [$dir, 't/etc'], 'get_starting_points';
+    is_deeply $what, ["t${dir_sep}text", "t${dir_sep}etc"], 'get_starting_points';
     my $iter = App::Ack::get_iterator( $what, \%opts );
     isnt $iter, $iter1, 'different iterators';
     is ref $iter, 'CODE';
@@ -116,7 +116,7 @@ my $iter1;
         [
            [
              'filename',
-             't/text/science-of-myth.txt',
+             "t${dir_sep}text${dir_sep}science-of-myth.txt",
              ':'
            ],
            [
@@ -130,7 +130,7 @@ my $iter1;
            ],
            [
              'filename',
-             't/text/science-of-myth.txt',
+             "t${dir_sep}text${dir_sep}science-of-myth.txt",
              ':'
            ],
            [
@@ -144,7 +144,7 @@ my $iter1;
            ],
            [
              'filename',
-             't/text/science-of-myth.txt',
+             "t${dir_sep}text${dir_sep}science-of-myth.txt",
              ':'
            ],
            [
@@ -158,7 +158,7 @@ my $iter1;
            ],
            [
              'filename',
-             't/text/science-of-myth.txt',
+             "t${dir_sep}text${dir_sep}science-of-myth.txt",
              ':'
            ],
            [
@@ -187,6 +187,7 @@ my $iter1;
         local $TODO = 'remove the non-existing directory from the starting_points';
         is_deeply $what, [$dir], 'get_starting_points';
     }
+    # XXX should the error be 't\nosuchdir: No such file or directory' on Windows?
     is_deeply \@warns, [ 't/nosuchdir: No such file or directory' ], "warning";
 }
 

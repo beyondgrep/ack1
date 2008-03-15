@@ -4,6 +4,8 @@ NEXT
     [ENHANCEMENTS]
     Added CFMX support.  Thanks, Will Coleda.
 
+    Added more extensions for --asm and --tcl.  Thanks, Jan Dubois.
+
     [FIXES]
     Fighting the never-ending battle for Windows compatibility.
     Thanks to Jan Dubois and Christoper J. Madsen.

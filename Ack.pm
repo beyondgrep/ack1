@@ -61,7 +61,7 @@ BEGIN {
 
     %mappings = (
         actionscript => [qw( as mxml )],
-        asm         => [qw( s )],
+        asm         => [qw( asm s )],
         binary      => q{Binary files, as defined by Perl's -B op (default: off)},
         cc          => [qw( c h xs )],
         cfmx        => [qw( cfc cfm cfml )],
@@ -94,7 +94,7 @@ BEGIN {
         skipped     => q{Files, but not directories, normally skipped by ack (default: off)},
         smalltalk   => [qw( st )],
         sql         => [qw( sql ctl )],
-        tcl         => [qw( tcl )],
+        tcl         => [qw( tcl itcl itk )],
         tex         => [qw( tex cls sty )],
         text        => q{Text files, as defined by Perl's -T op (default: off)},
         tt          => [qw( tt tt2 ttml )],

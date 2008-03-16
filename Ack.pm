@@ -304,7 +304,7 @@ sub get_command_line_options {
         }
     }
 
-    return %opt;
+    return \%opt;
 }
 
 =head2 def_types_from_ARGV

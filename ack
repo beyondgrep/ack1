@@ -45,34 +45,34 @@ MAIN: {
 }
 
 sub main {
-    my %opt = App::Ack::get_command_line_options();
+    my $opt = App::Ack::get_command_line_options();
     if ( !-t STDIN && !eof(STDIN) ) {
         # We're going into filter mode
-        filter_mode( \%opt );
+        filter_mode( $opt );
         exit 0;
     }
 
-    my $file_matching = $opt{f} || $opt{lines};
+    my $file_matching = $opt->{f} || $opt->{lines};
     if ( !$file_matching ) {
         @ARGV or App::Ack::die( 'No regular expression found.' );
-        $opt{regex} = App::Ack::build_regex( defined $opt{regex} ? $opt{regex} : shift @ARGV, \%opt );
+        $opt->{regex} = App::Ack::build_regex( defined $opt->{regex} ? $opt->{regex} : shift @ARGV, $opt );
     }
 
-    my $what = App::Ack::get_starting_points( \@ARGV, \%opt );
-    my $iter = App::Ack::get_iterator( $what, \%opt );
+    my $what = App::Ack::get_starting_points( \@ARGV, $opt );
+    my $iter = App::Ack::get_iterator( $what, $opt );
 
     # check that all regexes do compile fine
-    App::Ack::check_regex( $_ ) for @opt{ qw/regex G/ };
+    App::Ack::check_regex( $_ ) for ( $opt->{regex}, $opt->{G} );
 
     App::Ack::filetype_setup();
-    if ( $opt{f} ) {
-        App::Ack::print_files( $iter, \%opt );
+    if ( $opt->{f} ) {
+        App::Ack::print_files( $iter, $opt );
     }
-    elsif ( $opt{l} || $opt{count} ) {
-        App::Ack::print_files_with_matches( $iter, \%opt );
+    elsif ( $opt->{l} || $opt->{count} ) {
+        App::Ack::print_files_with_matches( $iter, $opt );
     }
     else {
-        App::Ack::print_matches( $iter, \%opt );
+        App::Ack::print_matches( $iter, $opt );
     }
     exit 0;
 }

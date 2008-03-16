@@ -23,6 +23,8 @@ functions = open opendir read readline readdir close closedir
 [-RegularExpressions::RequireExtendedFormatting]
 [-RegularExpressions::RequireLineBoundaryMatching]
 
+[-Subroutines::RequireArgUnpacking]
+
 [-ValuesAndExpressions::ProhibitNoisyQuotes]
 [-ValuesAndExpressions::ProhibitEmptyQuotes]
 

@@ -1393,15 +1393,16 @@ sub get_iterator {
     my $opt = shift;
 
     # Starting points are always search, no matter what
-    my $is_starting_point = sub { return grep { $_ eq $_[0] } @$what };
+    my $is_starting_point = sub { return grep { $_ eq $_[0] } @{$what} };
 
-    my $file_filter = $opt->{u}   && defined $opt->{G} ? sub { $File::Next::name =~ /$opt->{G}/o }
-                    : $opt->{all} && defined $opt->{G} ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$opt->{G}/o && App::Ack::is_searchable( $File::Next::name ) ) }
-                    : $opt->{u}                        ? sub {1}
-                    : $opt->{all}                      ? sub { $is_starting_point->( $File::Next::name ) || App::Ack::is_searchable( $File::Next::name ) }
-                    : defined $opt->{G}                ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$opt->{G}/o && App::Ack::is_interesting( @_ ) ) }
-                    :                                    sub { $is_starting_point->( $File::Next::name ) || App::Ack::is_interesting( @_ ) }
-                    ;
+    my $file_filter
+        = $opt->{u}   && defined $opt->{G} ? sub { $File::Next::name =~ /$opt->{G}/o }
+        : $opt->{all} && defined $opt->{G} ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$opt->{G}/o && App::Ack::is_searchable( $File::Next::name ) ) }
+        : $opt->{u}                        ? sub {1}
+        : $opt->{all}                      ? sub { $is_starting_point->( $File::Next::name ) || App::Ack::is_searchable( $File::Next::name ) }
+        : defined $opt->{G}                ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$opt->{G}/o && App::Ack::is_interesting( @_ ) ) }
+        :                                    sub { $is_starting_point->( $File::Next::name ) || App::Ack::is_interesting( @_ ) }
+        ;
     my $iter =
         File::Next::files( {
             file_filter     => $file_filter,

@@ -12,11 +12,18 @@ ACK_G	t/context.t	/^ACK_G: {$/;"	l
 AFTER	t/context.t	/^AFTER: {$/;"	l
 ALL_AND_DASH_G_INTERACTION	t/ack-g.t	/^ALL_AND_DASH_G_INTERACTION: {$/;"	l
 ANCHORED	t/multiline.t	/^ANCHORED: {$/;"	l
+App	t/module.t	/^    sub App::Ack::_print                { push @::result,  ['print',          @_]; }$/;"	s
+App	t/module.t	/^    sub App::Ack::_print_filename       { push @::result,  ['filename',       @_]; }$/;"	s
+App	t/module.t	/^    sub App::Ack::_print_first_filename { push @::result,  ['first_filename', @_]; }$/;"	s
+App	t/module.t	/^    sub App::Ack::_print_line_no        { push @::result,  ['line_no',        @_]; }$/;"	s
+App	t/module.t	/^    sub App::Ack::_print_separator      { push @::result,  ['separator',      @_]; }$/;"	s
+App	t/module.t	/^    sub App::Ack::warn                  { push @::warns,   $_[0];                   } ## no critic (ProhibitBuiltinHomonyms)$/;"	s
 App::Ack	Ack.pm	/^package App::Ack;$/;"	p
 BACK_ANCHOR	t/ack-g.t	/^BACK_ANCHOR: {$/;"	l
 BEFORE	t/context.t	/^BEFORE: {$/;"	l
 BEFORE_WITH_LINE_NO	t/context.t	/^BEFORE_WITH_LINE_NO: {$/;"	l
 BINARY_FILES	t/interesting.t	/^BINARY_FILES: {$/;"	l
+BREAK_NO_HEADING	t/ack-group.t	/^BREAK_NO_HEADING: {$/;"	l
 BUILTIN	t/ack-type.t	/^BUILTIN: {$/;"	l
 CASE_INSENSITIVE	t/ack-g.t	/^CASE_INSENSITIVE: {$/;"	l
 CONTEXT_DEFAULT	t/context.t	/^CONTEXT_DEFAULT: {$/;"	l
@@ -32,6 +39,7 @@ DASH_G	t/ack-1.t	/^DASH_G: {$/;"	l
 DASH_IGNORE_DIR	t/ack-ignore-dir.t	/^DASH_IGNORE_DIR: {$/;"	l
 DASH_IGNORE_DIR_MULTIPLE_TIMES	t/ack-ignore-dir.t	/^DASH_IGNORE_DIR_MULTIPLE_TIMES: {$/;"	l
 DASH_IGNORE_DIR_WITH_DASH_NOIGNORE_DIR	t/ack-ignore-dir.t	/^DASH_IGNORE_DIR_WITH_DASH_NOIGNORE_DIR: {$/;"	l
+DASH_IGNORE_DIR_WITH_SLASH	t/ack-ignore-dir.t	/^DASH_IGNORE_DIR_WITH_SLASH: {$/;"	l
 DASH_L	t/ack-c.t	/^DASH_L: {$/;"	l
 DASH_L	t/ack-v.t	/^DASH_L: {$/;"	l
 DASH_LC	t/ack-c.t	/^DASH_LC: {$/;"	l
@@ -39,6 +47,7 @@ DASH_NOIGNORE_DIR	t/ack-ignore-dir.t	/^DASH_NOIGNORE_DIR: {$/;"	l
 DASH_NOIGNORE_DIR_MULTIPLE_TIMES	t/ack-ignore-dir.t	/^DASH_NOIGNORE_DIR_MULTIPLE_TIMES: {$/;"	l
 DASH_U_BEATS_THE_PANTS_OFF_IGNORE_DIR_ANY_DAY_OF_THE_WEEK	t/ack-ignore-dir.t	/^DASH_U_BEATS_THE_PANTS_OFF_IGNORE_DIR_ANY_DAY_OF_THE_WEEK: {$/;"	l
 DASH_V	t/ack-1.t	/^DASH_V: {$/;"	l
+EXPAND_FILENAMES_SCOPE	Ack.pm	/^EXPAND_FILENAMES_SCOPE: {$/;"	l
 Example	Ack.pm	/^Example: ack -i select$/;"	l
 FAIL_MATCHING_VIA_CONTENT	t/filetypes.t	/^FAIL_MATCHING_VIA_CONTENT: {$/;"	l
 FILES_HAVE_BEEN_SET_UP_AS_EXPECTED	t/ack-ignore-dir.t	/^FILES_HAVE_BEEN_SET_UP_AS_EXPECTED: {$/;"	l
@@ -53,8 +62,10 @@ GROUPING_SINGLE_FILE	t/context.t	/^GROUPING_SINGLE_FILE: {$/;"	l
 G_NO_PRINT0	t/ack-print0.t	/^G_NO_PRINT0: {$/;"	l
 G_PRINT0	t/ack-print0.t	/^G_PRINT0: {$/;"	l
 HANDLE_ZEROES	t/zero.t	/^HANDLE_ZEROES: {$/;"	l
+HEADING_NO_BREAK	t/ack-group.t	/^HEADING_NO_BREAK: {$/;"	l
 HIGHLIGHTING	t/ack-passthru.t	/^HIGHLIGHTING: {$/;"	l
 HIGHLIGHTING	t/context.t	/^HIGHLIGHTING: {$/;"	l
+INCOMPLETE_LaST_LINE	t/incomplete-last-line.t	/^INCOMPLETE_LaST_LINE: {$/;"	l
 INVERT_MATCH_CONTENT	t/ack-g.t	/^INVERT_MATCH_CONTENT: {$/;"	l
 INVERT_MATCH_CONTENT_SWAPPED	t/ack-g.t	/^INVERT_MATCH_CONTENT_SWAPPED: {$/;"	l
 INVERT_MATCH_FILE_NOT	t/ack-g.t	/^INVERT_MATCH_FILE_NOT: {$/;"	l
@@ -113,6 +124,7 @@ SPECIFYING_A_BAK_FILE	t/command-line-files.t	/^SPECIFYING_A_BAK_FILE: {$/;"	l
 STANDARD_GROUPING	t/ack-group.t	/^STANDARD_GROUPING: {$/;"	l
 Searching	Ack.pm	/^Searching:$/;"	l
 TEXT	Ack.pm	/^use constant TEXT => 'text';$/;"	c
+TODO	t/module.t	/^    TODO: {$/;"	l
 TRAILING_METACHAR_BACKSLASH_W	t/ack-w.t	/^TRAILING_METACHAR_BACKSLASH_W: {$/;"	l
 TRAILING_METACHAR_DOT	t/ack-w.t	/^TRAILING_METACHAR_DOT: {$/;"	l
 TRAILING_PUNC	t/ack-w.t	/^TRAILING_PUNC: {$/;"	l
@@ -135,6 +147,8 @@ _print_first_filename	Ack.pm	/^sub _print_first_filename { print $_[0], "\\n"; }
 _print_line_no	Ack.pm	/^sub _print_line_no        { print $_[0], $_[1]; }$/;"	s
 _print_separator	Ack.pm	/^sub _print_separator      { print "--\\n"; }$/;"	s
 _thpppt	Ack.pm	/^sub _thpppt {$/;"	s
+ack_lists_match	t/Util.pm	/^sub ack_lists_match {$/;"	s
+ack_sets_match	t/Util.pm	/^sub ack_sets_match {$/;"	s
 bugtracker	Makefile.PL	/^    bugtracker: http:\/\/code.google.com\/p\/ack\/issues\/list$/;"	l
 build_command_line	t/Util.pm	/^sub build_command_line {$/;"	s
 build_regex	Ack.pm	/^sub build_regex {$/;"	s
@@ -149,6 +163,7 @@ def_types_from_ARGV	Ack.pm	/^sub def_types_from_ARGV {$/;"	s
 delete_type	Ack.pm	/^sub delete_type {$/;"	s
 die	Ack.pm	/^sub die { ## no critic (ProhibitBuiltinHomonyms)$/;"	s
 dproflb	Makefile.PL	/^dproflb: all$/;"	l
+expand_filenames	Ack.pm	/^    sub expand_filenames {$/;"	s
 fastprof	Makefile.PL	/^fastprof: all$/;"	l
 filetype_setup	Ack.pm	/^sub filetype_setup {$/;"	s
 filetypes	Ack.pm	/^sub filetypes {$/;"	s
@@ -172,6 +187,7 @@ load_colors	Ack.pm	/^sub load_colors {$/;"	s
 main	Makefile.PL	/^package main;$/;"	p
 main	ack	/^sub main {$/;"	s
 needs_line_scan	Ack.pm	/^sub needs_line_scan {$/;"	s
+nytprof	Makefile.PL	/^nytprof: all$/;"	l
 open_file	Ack.pm	/^sub open_file {$/;"	s
 option_in_usage	t/longopts.t	/^sub option_in_usage {$/;"	s
 pipe_into_ack	t/Util.pm	/^sub pipe_into_ack {$/;"	s
@@ -184,6 +200,7 @@ prof	Makefile.PL	/^prof: all$/;"	l
 profile	Makefile.PL	/^profile: all$/;"	l
 profiler	Makefile.PL	/^profiler: all$/;"	l
 read_ackrc	Ack.pm	/^sub read_ackrc {$/;"	s
+remove_path_sep	Ack.pm	/^sub remove_path_sep {$/;"	s
 resources	Makefile.PL	/^resources:$/;"	l
 run_ack	t/Util.pm	/^sub run_ack {$/;"	s
 run_ack_with_stderr	t/Util.pm	/^sub run_ack_with_stderr {$/;"	s

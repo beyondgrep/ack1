@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 use Test::More tests => 20;
-use Data::Dumper qw(Dumper);
+use Data::Dumper;
 delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
@@ -13,7 +13,7 @@ BEGIN {
     use_ok( 'App::Ack' );
 }
 
-my $dir_sep = $^O eq "MSWin32" ? '\\' : '/';
+my $dir_sep = $^O eq 'MSWin32' ? '\\' : '/';
 {
     my $copyright = App::Ack::get_copyright();
     like( $copyright, qr{Copyright \d+-\d+ Andy Lester}, 'Copyright' );

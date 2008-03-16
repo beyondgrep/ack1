@@ -951,8 +951,8 @@ Main search method
 
     my $keep_context;
 
-    my $last_output_line; # number of the last line that has been output
-    my $any_output;       # has there been any output for the current file yet
+    my $last_output_line;             # number of the last line that has been output
+    my $any_output;                   # has there been any output for the current file yet
     my $context_overall_output_count; # has there been any output at all
 
 sub search {
@@ -997,7 +997,7 @@ sub search {
         # XXX Optimize away the case when there are no more @lines to find.
         if ( $has_lines
                ? $. != $lines[0]  # $lines[0] should be a scalar
-               : $v ? /$regex/o : !/$regex/o ) {
+               : $v ? m/$regex/o : !m/$regex/o ) {
             if ( $passthru ) {
                 print;
                 next;

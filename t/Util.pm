@@ -63,6 +63,10 @@ sub run_ack_with_stderr {
     my @stdout;
     my @stderr;
 
+    if ( !grep { $_ =~ /^--(no)?env$/ } @args ) {
+        unshift( @args, '--noenv' );
+    }
+
     my $cmd = build_command_line( @args );
     @stdout = `$cmd`;
 

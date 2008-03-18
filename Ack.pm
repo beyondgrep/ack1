@@ -27,7 +27,7 @@ our %type_wanted;
 our %mappings;
 our %ignore_dirs;
 
-our $path_sep_regex;
+our $dir_sep_regex;
 our $is_cygwin;
 our $is_windows;
 our $to_screen;
@@ -62,6 +62,7 @@ BEGIN {
     %mappings = (
         actionscript => [qw( as mxml )],
         asm         => [qw( asm s )],
+        batch       => [qw( bat cmd )],
         binary      => q{Binary files, as defined by Perl's -B op (default: off)},
         cc          => [qw( c h xs )],
         cfmx        => [qw( cfc cfm cfml )],
@@ -112,7 +113,7 @@ BEGIN {
         }
     }
 
-    $path_sep_regex = quotemeta( File::Spec->catfile( '', '' ) );
+    $dir_sep_regex  = quotemeta( File::Spec->catfile( '', '' ) );
     $is_cygwin      = ($^O eq 'cygwin');
     $is_windows     = ($^O =~ /MSWin32/);
     $to_screen      = -t *STDOUT;
@@ -408,7 +409,7 @@ This functions removes a trailing path separator, if there is one, from its argu
 
 sub remove_path_sep {
     my $path = shift;
-    $path =~ s/$path_sep_regex$//;
+    $path =~ s/$dir_sep_regex$//;
 
     return $path;
 }
@@ -433,10 +434,10 @@ sub filetypes {
 
     return 'skipped' unless is_searchable( $filename );
 
-    return ('make',TEXT) if $filename =~ m{$path_sep_regex?Makefile$}io;
+    return ('make',TEXT) if $filename =~ m{$dir_sep_regex?Makefile$}io;
 
     # If there's an extension, look it up
-    if ( $filename =~ m{\.([^\.$path_sep_regex]+)$}o ) {
+    if ( $filename =~ m{\.([^\.$dir_sep_regex]+)$}o ) {
         my $ref = $types{lc $1};
         return (@{$ref},TEXT) if $ref;
     }
@@ -499,7 +500,7 @@ sub is_searchable {
     # If these are updated, update the --help message
     return if $filename =~ /\.bak$/;
     return if $filename =~ /~$/;
-    return if $filename =~ m{$path_sep_regex?(?:#.+#|core\.\d+|[._].*\.swp)$}o;
+    return if $filename =~ m{$dir_sep_regex?(?:#.+#|core\.\d+|[._].*\.swp)$}o;
 
     return 1;
 }

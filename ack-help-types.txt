@@ -9,6 +9,7 @@ Note that some extensions may appear in multiple types.  For example,
 
     --[no]actionscript .as .mxml
     --[no]asm          .asm .s
+    --[no]batch        .bat .cmd
     --[no]binary       Binary files, as defined by Perl's -B op (default: off)
     --[no]cc           .c .h .xs
     --[no]cfmx         .cfc .cfm .cfml

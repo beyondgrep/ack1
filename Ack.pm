@@ -1193,7 +1193,7 @@ sub search_and_list {
     }
     else {
         while (<$fh>) {
-            if ( /$regex/o ) {
+            if ( /$regex/ ) {
                 ++$nmatches;
                 last unless $count;
             }

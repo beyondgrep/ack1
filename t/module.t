@@ -350,8 +350,5 @@ my $iter1;
              "\n"
            ]
          ];
-    TODO: {
-        local $TODO = 'remove /o from regex in else block in search_and_list';
     is_deeply \@result, $expected;
-    }
 }

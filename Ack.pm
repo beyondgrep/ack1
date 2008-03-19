@@ -1071,6 +1071,24 @@ sub _print_separator      { print "--\n"; }
 sub _print                { print "$_[0]"; }
 sub _print_filename       { print $_[0], $_[1]; }
 sub _print_line_no        { print $_[0], $_[1]; }
+sub _print_count {
+    my $filename = shift;
+    my $nmatches = shift;
+    my $ors = shift;
+    my $count = shift;
+
+    print $filename;
+    print ':', $nmatches if $count;
+    print $ors;
+}
+
+sub _print_count0 {
+    my $filename = shift;
+    my $ors = shift;
+
+    print "$filename:0", $ors;
+}
+
 
 =head2 print_match_or_context( $opt, $is_match, $starting_line_no, @lines )
 
@@ -1183,12 +1201,10 @@ sub search_and_list {
     }
 
     if ( $nmatches ) {
-        print $filename;
-        print ':', $nmatches if $count;
-        print $ors;
+        _print_count($filename, $nmatches, $ors, $count);
     }
     elsif ( $count && !$opt->{l} ) {
-        print "$filename:0", $ors;
+        _print_count0($filename, $ors);
     }
 
     return $nmatches ? 1 : 0;

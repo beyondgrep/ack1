@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 26;
+use Test::More tests => 32;
 use Data::Dumper;
 delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
@@ -350,5 +350,132 @@ my $iter1;
              "\n"
            ]
          ];
+    is_deeply \@result, $expected;
+}
+
+
+{
+    @result = ();
+    my %opts = (
+        regex => 'Shooter',
+        all   => 1,
+        count => 1,
+        v     => 1,
+    );
+    my $dir = 't/text';
+    my $what = App::Ack::get_starting_points( [$dir], \%opts );
+    is_deeply( $what, ["t${dir_sep}text"], 'get_starting_points' );
+    my $iter = App::Ack::get_iterator( $what, \%opts );
+    is( ref $iter, 'CODE' );
+    App::Ack::filetype_setup();
+    App::Ack::print_files_with_matches( $iter, \%opts );
+    my $expected = [
+           [
+             'count',
+             "t${dir_sep}text${dir_sep}4th-of-july.txt",
+             36,
+             "\n",
+             1
+           ],
+           [
+             'count',
+             "t${dir_sep}text${dir_sep}boy-named-sue.txt",
+             72,
+             "\n",
+             1,
+           ],
+           [
+             'count',
+             "t${dir_sep}text${dir_sep}shut-up-be-happy.txt",
+             26,
+             "\n",
+             1
+           ],
+           [
+             'count',
+             "t${dir_sep}text${dir_sep}science-of-myth.txt",
+             26,
+             "\n",
+             1
+           ],
+           [
+             'count',
+             "t${dir_sep}text${dir_sep}freedom-of-choice.txt",
+             50,
+             "\n",
+             1
+           ],
+           [
+             'count',
+             "t${dir_sep}text${dir_sep}me-and-bobbie-mcgee.txt",
+             32,
+             "\n",
+             1
+           ]
+         ];
+
+    is_deeply \@result, $expected;
+}
+
+{
+    @result = ();
+    my %opts = (
+        regex => 'matter',
+        all   => 1,
+        count => 1,
+        v     => 1,
+    );
+    my $dir = 't/text';
+    my $what = App::Ack::get_starting_points( [$dir], \%opts );
+    is_deeply( $what, ["t${dir_sep}text"], 'get_starting_points' );
+    my $iter = App::Ack::get_iterator( $what, \%opts );
+    is( ref $iter, 'CODE' );
+    App::Ack::filetype_setup();
+    App::Ack::print_files_with_matches( $iter, \%opts );
+    my $expected = [
+           [
+             'count',
+             "t${dir_sep}text${dir_sep}4th-of-july.txt",
+             37,
+             "\n",
+             1
+           ],
+           [
+             'count',
+             "t${dir_sep}text${dir_sep}boy-named-sue.txt",
+             72,
+             "\n",
+             1,
+           ],
+           [
+             'count',
+             "t${dir_sep}text${dir_sep}shut-up-be-happy.txt",
+             26,
+             "\n",
+             1
+           ],
+           [
+             'count',
+             "t${dir_sep}text${dir_sep}science-of-myth.txt",
+             22,
+             "\n",
+             1
+           ],
+           [
+             'count',
+             "t${dir_sep}text${dir_sep}freedom-of-choice.txt",
+             50,
+             "\n",
+             1
+           ],
+           [
+             'count',
+             "t${dir_sep}text${dir_sep}me-and-bobbie-mcgee.txt",
+             32,
+             "\n",
+             1
+           ]
+         ];
+
     is_deeply \@result, $expected;
 }

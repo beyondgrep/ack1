@@ -1183,7 +1183,7 @@ sub search_and_list {
 
     if ( $opt->{v} ) {
         while (<$fh>) {
-            if ( /$regex/o ) {
+            if ( /$regex/ ) {
                 return 0 unless $count;
             }
             else {

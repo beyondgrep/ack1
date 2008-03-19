@@ -110,8 +110,6 @@ my $iter1;
     is ref $iter, 'CODE';
     App::Ack::filetype_setup();
     App::Ack::print_matches( $iter, \%opts );
-    TODO: {
-        local $TODO = 'need to remove /o from the $regex';
     is_deeply \@result,
         [
            [
@@ -171,7 +169,6 @@ my $iter1;
              "Somehow no matter what the world keeps turning\n"
            ]
          ];
-    }
     is_deeply \@warns, [], 'no warning';
 }
 

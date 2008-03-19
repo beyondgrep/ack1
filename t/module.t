@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 20;
+use Test::More tests => 26;
 use Data::Dumper;
 delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
@@ -55,6 +55,8 @@ our @warns;
     sub App::Ack::_print                { push @::result,  ['print',          @_]; }
     sub App::Ack::_print_filename       { push @::result,  ['filename',       @_]; }
     sub App::Ack::_print_line_no        { push @::result,  ['line_no',        @_]; }
+    sub App::Ack::_print_count          { push @::result,  ['count',          @_]; }
+    sub App::Ack::_print_count0         { push @::result,  ['count0',         @_]; }
     sub App::Ack::warn                  { push @::warns,   $_[0];                   } ## no critic (ProhibitBuiltinHomonyms)
 
 }
@@ -188,3 +190,168 @@ my $iter1;
     is_deeply \@warns, [ 't/nosuchdir: No such file or directory' ], "warning";
 }
 
+{
+    @result = ();
+    my %opts = (
+        regex => 'Shooter',
+        all   => 1,
+        count => 1,
+    );
+    my $dir = 't/text';
+    my $what = App::Ack::get_starting_points( [$dir], \%opts );
+    is_deeply( $what, ["t${dir_sep}text"], 'get_starting_points' );
+    my $iter = App::Ack::get_iterator( $what, \%opts );
+    is( ref $iter, 'CODE' );
+    App::Ack::filetype_setup();
+    App::Ack::print_files_with_matches( $iter, \%opts );
+    my $expected = [
+           [
+             'count',
+             "t${dir_sep}text${dir_sep}4th-of-july.txt",
+             1,
+             "\n",
+             1
+           ],
+           [
+             'count0',
+             "t${dir_sep}text${dir_sep}boy-named-sue.txt",
+             "\n"
+           ],
+           [
+             'count0',
+             "t${dir_sep}text${dir_sep}shut-up-be-happy.txt",
+             "\n"
+           ],
+           [
+             'count0',
+             "t${dir_sep}text${dir_sep}science-of-myth.txt",
+             "\n"
+           ],
+           [
+             'count0',
+             "t${dir_sep}text${dir_sep}freedom-of-choice.txt",
+             "\n"
+           ],
+           [
+             'count0',
+             "t${dir_sep}text${dir_sep}me-and-bobbie-mcgee.txt",
+             "\n"
+           ]
+         ];
+
+    is_deeply \@result, $expected;
+}
+
+{
+    @result = ();
+    my %opts = (
+        regex => 'matter',
+        all   => 1,
+        count => 1,
+    );
+    my $dir = 't/text';
+    my $what = App::Ack::get_starting_points( [$dir, 't/etc'], \%opts );
+    is_deeply $what, ["t${dir_sep}text", "t${dir_sep}etc"], 'get_starting_points';
+    my $iter = App::Ack::get_iterator( $what, \%opts );
+    is ref $iter, 'CODE';
+    App::Ack::filetype_setup();
+    App::Ack::print_files_with_matches( $iter, \%opts );
+    my $expected = [
+           [
+             'count0',
+             "t${dir_sep}text${dir_sep}4th-of-july.txt",
+             "\n",
+           ],
+           [
+             'count0',
+             "t${dir_sep}text${dir_sep}boy-named-sue.txt",
+             "\n"
+           ],
+           [
+             'count0',
+             "t${dir_sep}text${dir_sep}shut-up-be-happy.txt",
+             "\n"
+           ],
+           [
+             'count',
+             "t${dir_sep}text${dir_sep}science-of-myth.txt",
+             4,
+             "\n",
+             1
+           ],
+           [
+             'count0',
+             "t${dir_sep}text${dir_sep}freedom-of-choice.txt",
+             "\n"
+           ],
+           [
+             'count0',
+             "t${dir_sep}text${dir_sep}me-and-bobbie-mcgee.txt",
+             "\n"
+           ],
+           [
+             'count0',
+             "t${dir_sep}etc${dir_sep}shebang.rb.xxx",
+             "\n"
+           ],
+           [
+             'count0',
+             "t${dir_sep}etc${dir_sep}buttonhook.xml.xxx",
+             "\n"
+           ],
+           [
+             'count0',
+             "t${dir_sep}etc${dir_sep}shebang.php.xxx",
+             "\n"
+           ],
+           [
+             'count0',
+             "t${dir_sep}etc${dir_sep}shebang.foobar.xxx",
+             "\n"
+           ],
+           [
+             'count0',
+             "t${dir_sep}etc${dir_sep}shebang.py.xxx",
+             "\n"
+           ],
+           [
+             'count0',
+             "t${dir_sep}etc${dir_sep}buttonhook.html.xxx",
+             "\n"
+           ],
+           [
+             'count0',
+             "t${dir_sep}etc${dir_sep}shebang.sh.xxx",
+             "\n"
+           ],
+           [
+             'count0',
+             "t${dir_sep}etc${dir_sep}shebang.pl.xxx",
+             "\n"
+           ],
+           [
+             'count0',
+             "t${dir_sep}etc${dir_sep}buttonhook.rss.xxx",
+             "\n"
+           ],
+           [
+             'count0',
+             "t${dir_sep}etc${dir_sep}shebang.empty.xxx",
+             "\n"
+           ],
+           [
+             'count0',
+             "t${dir_sep}etc${dir_sep}buttonhook.rfc.xxx",
+             "\n"
+           ],
+           [
+             'count0',
+             "t${dir_sep}etc${dir_sep}buttonhook.noxml.xxx",
+             "\n"
+           ]
+         ];
+    TODO: {
+        local $TODO = 'remove /o from regex in else block in search_and_list';
+    is_deeply \@result, $expected;
+    }
+}

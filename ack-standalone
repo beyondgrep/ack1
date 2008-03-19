@@ -1032,7 +1032,7 @@ sub get_command_line_options {
 
     my %defaults = (
         all            => 0,
-        color          => $to_screen && !$App::Ack::is_windows,
+        color          => $to_screen && !$is_windows,
         follow         => 0,
         break          => $to_screen,
         heading        => $to_screen,
@@ -1217,7 +1217,7 @@ sub filetypes {
         return;
     }
     my $header = <$fh>;
-    App::Ack::close_file( $fh, $filename ) or return;
+    close_file( $fh, $filename ) or return;
 
     if ( $header =~ /^#!/ ) {
         return ($1,TEXT)       if $header =~ /\b(ruby|p(?:erl|hp|ython))\b/;
@@ -1860,10 +1860,10 @@ sub print_files_with_matches {
 
     my $nmatches = 0;
     while ( defined ( my $filename = $iter->() ) ) {
-        my ($fh) = App::Ack::open_file( $filename );
+        my ($fh) = open_file( $filename );
         next unless defined $fh; # error while opening file
-        $nmatches += App::Ack::search_and_list( $fh, $filename, $opt );
-        App::Ack::close_file( $fh, $filename );
+        $nmatches += search_and_list( $fh, $filename, $opt );
+        close_file( $fh, $filename );
         last if $nmatches && $opt->{1};
     }
 
@@ -1880,11 +1880,11 @@ sub print_matches {
 
     my $nmatches = 0;
     while ( defined ( my $filename = $iter->() ) ) {
-        my ($fh,$could_be_binary) = App::Ack::open_file( $filename );
+        my ($fh,$could_be_binary) = open_file( $filename );
         next unless defined $fh; # error while opening file
         my $needs_line_scan;
         if ( $opt->{regex} && !$opt->{passthru} ) {
-            $needs_line_scan = App::Ack::needs_line_scan( $fh, $opt->{regex}, $opt );
+            $needs_line_scan = needs_line_scan( $fh, $opt->{regex}, $opt );
             if ( $needs_line_scan ) {
                 seek( $fh, 0, 0 );
             }
@@ -1893,9 +1893,9 @@ sub print_matches {
             $needs_line_scan = 1;
         }
         if ( $needs_line_scan ) {
-            $nmatches += App::Ack::search( $fh, $could_be_binary, $filename, $opt );
+            $nmatches += search( $fh, $could_be_binary, $filename, $opt );
         }
-        App::Ack::close_file( $fh, $filename );
+        close_file( $fh, $filename );
         last if $nmatches && $opt->{1};
     }
     return;
@@ -1903,11 +1903,11 @@ sub print_matches {
 
 
 sub filetype_setup {
-    my $filetypes_supported_set = App::Ack::filetypes_supported_set();
+    my $filetypes_supported_set = filetypes_supported_set();
     # If anyone says --no-whatever, we assume all other types must be on.
     if ( !$filetypes_supported_set ) {
-        for my $i ( keys %App::Ack::type_wanted ) {
-            $App::Ack::type_wanted{$i} = 1 unless ( defined( $App::Ack::type_wanted{$i} ) || $i eq 'binary' || $i eq 'text' || $i eq 'skipped' );
+        for my $i ( keys %type_wanted ) {
+            $type_wanted{$i} = 1 unless ( defined( $type_wanted{$i} ) || $i eq 'binary' || $i eq 'text' || $i eq 'skipped' );
         }
     }
     return;
@@ -1962,7 +1962,7 @@ sub get_starting_points {
     my @what;
 
     if ( @{$argv} ) {
-        @what = @{ $App::Ack::is_windows ? expand_filenames($argv) : $argv };
+        @what = @{ $is_windows ? expand_filenames($argv) : $argv };
 
         # Show filenames unless we've specified one single file
         $opt->{show_filename} = (@what > 1) || (!-f $what[0]);
@@ -1975,7 +1975,7 @@ sub get_starting_points {
     # Barf if the starting points don't exist
     for my $start_point (@what) {
         App::Ack::warn("$start_point: No such file or directory") unless -e $start_point;
-        $start_point =~ s{/}{\\}g if $App::Ack::is_windows;
+        $start_point =~ s{/}{\\}g if $is_windows;
     }
     return \@what;
 }
@@ -1991,11 +1991,11 @@ sub get_iterator {
 
     my $file_filter
         = $opt->{u}   && defined $opt->{G} ? sub { $File::Next::name =~ /$opt->{G}/o }
-        : $opt->{all} && defined $opt->{G} ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$opt->{G}/o && App::Ack::is_searchable( $File::Next::name ) ) }
+        : $opt->{all} && defined $opt->{G} ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$opt->{G}/o && is_searchable( $File::Next::name ) ) }
         : $opt->{u}                        ? sub {1}
-        : $opt->{all}                      ? sub { $is_starting_point->( $File::Next::name ) || App::Ack::is_searchable( $File::Next::name ) }
-        : defined $opt->{G}                ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$opt->{G}/o && App::Ack::is_interesting( @_ ) ) }
-        :                                    sub { $is_starting_point->( $File::Next::name ) || App::Ack::is_interesting( @_ ) }
+        : $opt->{all}                      ? sub { $is_starting_point->( $File::Next::name ) || is_searchable( $File::Next::name ) }
+        : defined $opt->{G}                ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$opt->{G}/o && is_interesting( @_ ) ) }
+        :                                    sub { $is_starting_point->( $File::Next::name ) || is_interesting( @_ ) }
         ;
     my $iter =
         File::Next::files( {
@@ -2004,7 +2004,7 @@ sub get_iterator {
                                     ? sub {0}
                                     : $opt->{u}
                                         ? sub {1}
-                                        : \&App::Ack::ignoredir_filter,
+                                        : \&ignoredir_filter,
             error_handler   => sub { my $msg = shift; App::Ack::warn( $msg ) },
             sort_files      => $opt->{sort_files},
             follow_symlinks => $opt->{follow},

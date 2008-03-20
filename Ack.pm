@@ -1000,7 +1000,7 @@ sub search {
                ? $. != $lines[0]  # $lines[0] should be a scalar
                : $v ? m/$regex/ : !m/$regex/ ) {
             if ( $passthru ) {
-                print;
+                _print($_);
                 next;
             }
 
@@ -1030,7 +1030,7 @@ sub search {
 
         # print an empty line as a divider before first line in each file (not before the first file)
         if ( !$any_output && $opt->{show_filename} && $opt->{break} && defined( $context_overall_output_count ) ) {
-            print "\n";
+            _print_blank_line();
         }
 
         shift @lines if $has_lines;
@@ -1067,6 +1067,7 @@ sub search {
 # module (such as App::Wack) to redefine the display methods
 # and show the results in a different way.
 sub _print_first_filename { print $_[0], "\n"; }
+sub _print_blank_line     { print "\n"; }
 sub _print_separator      { print "--\n"; }
 sub _print                { print "$_[0]"; }
 sub _print_filename       { print $_[0], $_[1]; }

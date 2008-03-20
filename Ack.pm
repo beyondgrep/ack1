@@ -994,19 +994,20 @@ sub search {
     my $before_starts_at_line;
     my $after = 0; # number of lines still to print after a match
 
-    while (<$fh>) {
+    my $line;
+    while ($line = <$fh>) {
         # XXX Optimize away the case when there are no more @lines to find.
         if ( $has_lines
                ? $. != $lines[0]  # $lines[0] should be a scalar
-               : $v ? m/$regex/ : !m/$regex/ ) {
+               : $v ? $line =~ m/$regex/ : $line !~ m/$regex/ ) {
             if ( $passthru ) {
-                _print($_);
+                _print($line);
                 next;
             }
 
             if ( $keep_context ) {
                 if ( $after ) {
-                    print_match_or_context( $opt, 0, $., $_ );
+                    print_match_or_context( $opt, 0, $., $line );
                     $after--;
                 }
                 elsif ( $before_context ) {
@@ -1019,7 +1020,7 @@ sub search {
                     else {
                         $before_starts_at_line = $.;
                     }
-                    push @before, $_;
+                    push @before, $line;
                 }
                 last if $max && ( $nmatches >= $max ) && !$after;
             }
@@ -1055,7 +1056,7 @@ sub search {
                 $after = $after_context;
             }
         }
-        print_match_or_context( $opt, 1, $., $_ );
+        print_match_or_context( $opt, 1, $., $line );
 
         last if $max && ( $nmatches >= $max ) && !$after;
     } # while

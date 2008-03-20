@@ -13,6 +13,8 @@ AFTER	t/context.t	/^AFTER: {$/;"	l
 ALL_AND_DASH_G_INTERACTION	t/ack-g.t	/^ALL_AND_DASH_G_INTERACTION: {$/;"	l
 ANCHORED	t/multiline.t	/^ANCHORED: {$/;"	l
 App	t/module.t	/^    sub App::Ack::_print                { push @::result,  ['print',          @_]; }$/;"	s
+App	t/module.t	/^    sub App::Ack::_print_count          { push @::result,  ['count',          @_]; }$/;"	s
+App	t/module.t	/^    sub App::Ack::_print_count0         { push @::result,  ['count0',         @_]; }$/;"	s
 App	t/module.t	/^    sub App::Ack::_print_filename       { push @::result,  ['filename',       @_]; }$/;"	s
 App	t/module.t	/^    sub App::Ack::_print_first_filename { push @::result,  ['first_filename', @_]; }$/;"	s
 App	t/module.t	/^    sub App::Ack::_print_line_no        { push @::result,  ['line_no',        @_]; }$/;"	s
@@ -115,7 +117,6 @@ QUOTEMETA_FILE_NOT	t/ack-g.t	/^QUOTEMETA_FILE_NOT: {$/;"	l
 Repository	Makefile.PL	/^    Repository: http:\/\/code.google.com\/p\/ack\/source$/;"	l
 SEARCH_FOR_DASH_DASH_NOENV	t/ack-env.t	/^SEARCH_FOR_DASH_DASH_NOENV: {$/;"	l
 SINGLE_TEXT_MATCH	t/ack-1.t	/^SINGLE_TEXT_MATCH: {$/;"	l
-SINGLE_TEXT_MATCH	t/ack-env.t	/^SINGLE_TEXT_MATCH: {$/;"	l
 SINGLE_TEXT_MATCH_ENV	t/ack-env.t	/^SINGLE_TEXT_MATCH_ENV: {$/;"	l
 SINGLE_TEXT_MATCH_NOENV	t/ack-env.t	/^SINGLE_TEXT_MATCH_NOENV: {$/;"	l
 SKIP	t/ack-passthru.t	/^    SKIP: {$/;"	l
@@ -142,6 +143,9 @@ _key	Ack.pm	/^sub _key {$/;"	s
 _listify	Ack.pm	/^sub _listify {$/;"	s
 _my_program	Ack.pm	/^sub _my_program {$/;"	s
 _print	Ack.pm	/^sub _print                { print "$_[0]"; }$/;"	s
+_print_blank_line	Ack.pm	/^sub _print_blank_line     { print "\\n"; }$/;"	s
+_print_count	Ack.pm	/^sub _print_count {$/;"	s
+_print_count0	Ack.pm	/^sub _print_count0 {$/;"	s
 _print_filename	Ack.pm	/^sub _print_filename       { print $_[0], $_[1]; }$/;"	s
 _print_first_filename	Ack.pm	/^sub _print_first_filename { print $_[0], "\\n"; }$/;"	s
 _print_line_no	Ack.pm	/^sub _print_line_no        { print $_[0], $_[1]; }$/;"	s

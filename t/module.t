@@ -3,11 +3,12 @@
 use warnings;
 use strict;
 
-use Test::More tests => 32;
+use Test::More tests => 37;
 use Data::Dumper;
 delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
+use Util;
 
 BEGIN {
     use_ok( 'App::Ack' );
@@ -64,6 +65,7 @@ our @warns;
 my $iter1;
 {
     @result = ();
+    @warns  = ();
     my %opts = (
         regex => 'Shooter',
         all   => 1,
@@ -76,7 +78,7 @@ my $iter1;
     is( ref $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_matches( $iter, \%opts );
-    my $wanted = [
+    my @expected = (
         [
         'filename',
         "t${dir_sep}text${dir_sep}4th-of-july.txt",
@@ -91,15 +93,16 @@ my $iter1;
             'print',
         qq(    -- "4th of July", Shooter Jennings\n)
             ],
-        ];
-    is_deeply( \@result, $wanted ) or diag Dumper \@result;
+        );
 
+    lists_match( \@result, \@expected ) or diag Dumper \@result;
     is_deeply( \@warns, [], 'no warning' );
 }
 
 
 {
     @result = ();
+    @warns  = ();
     my %opts = (
         regex => 'matter',
         all   => 1,
@@ -112,8 +115,8 @@ my $iter1;
     is ref $iter, 'CODE';
     App::Ack::filetype_setup();
     App::Ack::print_matches( $iter, \%opts );
-    is_deeply \@result,
-        [
+    my @expected = 
+        (
            [
              'filename',
              "t${dir_sep}text${dir_sep}science-of-myth.txt",
@@ -170,12 +173,21 @@ my $iter1;
              'print',
              "Somehow no matter what the world keeps turning\n"
            ]
-         ];
+         );
+
+    my @e = map {$_->[0]} @expected;
+    my @r = map {$_->[0]} @result;
+    lists_match(\@e, \@r);
+
+    @e = reorder(@expected);
+    @r = reorder(@result);
+    lists_match(\@e, \@r);
     is_deeply \@warns, [], 'no warning';
 }
 
 {
     @result = ();
+    @warns  = ();
     my %opts = (
         regex => 'matter',
         all   => 1,
@@ -192,6 +204,7 @@ my $iter1;
 
 {
     @result = ();
+    @warns  = ();
     my %opts = (
         regex => 'Shooter',
         all   => 1,
@@ -199,12 +212,12 @@ my $iter1;
     );
     my $dir = 't/text';
     my $what = App::Ack::get_starting_points( [$dir], \%opts );
-    is_deeply( $what, ["t${dir_sep}text"], 'get_starting_points' );
+    is_deeply $what, ["t${dir_sep}text"], 'get_starting_points' ;
     my $iter = App::Ack::get_iterator( $what, \%opts );
-    is( ref $iter, 'CODE' );
+    is ref $iter, 'CODE' ;
     App::Ack::filetype_setup();
     App::Ack::print_files_with_matches( $iter, \%opts );
-    my $expected = [
+    my @expected = ( 
            [
              'count',
              "t${dir_sep}text${dir_sep}4th-of-july.txt",
@@ -237,13 +250,18 @@ my $iter1;
              "t${dir_sep}text${dir_sep}me-and-bobbie-mcgee.txt",
              "\n"
            ]
-         ];
+         );
 
-    is_deeply \@result, $expected;
+    my @e = sort by_2nd @expected;
+    my @r = sort by_2nd @result;
+    lists_match(\@r, \@e);
+    is_deeply \@warns, [], 'no warning';
 }
+
 
 {
     @result = ();
+    @warns  = ();
     my %opts = (
         regex => 'matter',
         all   => 1,
@@ -256,7 +274,7 @@ my $iter1;
     is ref $iter, 'CODE';
     App::Ack::filetype_setup();
     App::Ack::print_files_with_matches( $iter, \%opts );
-    my $expected = [
+    my @expected = (
            [
              'count0',
              "t${dir_sep}text${dir_sep}4th-of-july.txt",
@@ -349,13 +367,19 @@ my $iter1;
              "t${dir_sep}etc${dir_sep}buttonhook.noxml.xxx",
              "\n"
            ]
-         ];
-    is_deeply \@result, $expected;
+         );
+
+    my @e = sort by_2nd @expected;
+    my @r = sort by_2nd @result;
+ 
+    lists_match(\@r, \@e);
+    is_deeply \@warns, [], 'no warning';
 }
 
 
 {
     @result = ();
+    @warns  = ();
     my %opts = (
         regex => 'Shooter',
         all   => 1,
@@ -364,12 +388,12 @@ my $iter1;
     );
     my $dir = 't/text';
     my $what = App::Ack::get_starting_points( [$dir], \%opts );
-    is_deeply( $what, ["t${dir_sep}text"], 'get_starting_points' );
+    is_deeply $what, ["t${dir_sep}text"], 'get_starting_points' ;
     my $iter = App::Ack::get_iterator( $what, \%opts );
     is( ref $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_files_with_matches( $iter, \%opts );
-    my $expected = [
+    my @expected = (
            [
              'count',
              "t${dir_sep}text${dir_sep}4th-of-july.txt",
@@ -412,13 +436,17 @@ my $iter1;
              "\n",
              1
            ]
-         ];
+         );
 
-    is_deeply \@result, $expected;
+    my @e = sort by_2nd @expected;
+    my @r = sort by_2nd @result;
+    lists_match(\@r, \@e);
+    is_deeply \@warns, [], 'no warning';
 }
 
 {
     @result = ();
+    @warns  = ();
     my %opts = (
         regex => 'matter',
         all   => 1,
@@ -427,12 +455,12 @@ my $iter1;
     );
     my $dir = 't/text';
     my $what = App::Ack::get_starting_points( [$dir], \%opts );
-    is_deeply( $what, ["t${dir_sep}text"], 'get_starting_points' );
+    is_deeply $what, ["t${dir_sep}text"], 'get_starting_points' ;
     my $iter = App::Ack::get_iterator( $what, \%opts );
     is( ref $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_files_with_matches( $iter, \%opts );
-    my $expected = [
+    my @expected = (
            [
              'count',
              "t${dir_sep}text${dir_sep}4th-of-july.txt",
@@ -475,7 +503,21 @@ my $iter1;
              "\n",
              1
            ]
-         ];
-
-    is_deeply \@result, $expected;
+         );
+    my @e = sort by_2nd @expected;
+    my @r = sort by_2nd @result;
+    lists_match(\@r, \@e);
+    is_deeply \@warns, [], 'no warning';
 }
+
+sub by_2nd { return $a->[1] cmp $b->[1]}
+
+# group them, sort them,  flatten them
+sub reorder {
+    my $n = 3;
+    my @grouped = map { [ @_[$_*$n .. $_*$n+$n-1] ] } (0 .. (@_-1)/$n);
+    my @sorted = sort { $a->[0][1] cmp $b->[0][1] or $a->[1][1] <=> $b->[1][1] } @grouped;
+    return map { @$_ } @sorted;
+}
+
+

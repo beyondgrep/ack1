@@ -938,6 +938,33 @@ sub needs_line_scan {
     return ( $buffer =~ /$regex/ );
 }
 
+# _print subs added in order to make it easy for a third party
+# module (such as App::Wack) to redefine the display methods
+# and show the results in a different way.
+sub _print_first_filename { print $_[0], "\n"; }
+sub _print_blank_line     { print "\n"; }
+sub _print_separator      { print "--\n"; }
+sub _print                { print "$_[0]"; }
+sub _print_filename       { print $_[0], $_[1]; }
+sub _print_line_no        { print $_[0], $_[1]; }
+sub _print_count {
+    my $filename = shift;
+    my $nmatches = shift;
+    my $ors = shift;
+    my $count = shift;
+
+    print $filename;
+    print ':', $nmatches if $count;
+    print $ors;
+}
+
+sub _print_count0 {
+    my $filename = shift;
+    my $ors = shift;
+
+    print "$filename:0", $ors;
+}
+
 
 =head2 search( $fh, $could_be_binary, $filename, \%opt )
 
@@ -1063,33 +1090,6 @@ sub search {
 
     return $nmatches;
 }   # search()
-
-# _print subs added in order to make it easy for a third party
-# module (such as App::Wack) to redefine the display methods
-# and show the results in a different way.
-sub _print_first_filename { print $_[0], "\n"; }
-sub _print_blank_line     { print "\n"; }
-sub _print_separator      { print "--\n"; }
-sub _print                { print "$_[0]"; }
-sub _print_filename       { print $_[0], $_[1]; }
-sub _print_line_no        { print $_[0], $_[1]; }
-sub _print_count {
-    my $filename = shift;
-    my $nmatches = shift;
-    my $ors = shift;
-    my $count = shift;
-
-    print $filename;
-    print ':', $nmatches if $count;
-    print $ors;
-}
-
-sub _print_count0 {
-    my $filename = shift;
-    my $ors = shift;
-
-    print "$filename:0", $ors;
-}
 
 
 =head2 print_match_or_context( $opt, $is_match, $starting_line_no, @lines )

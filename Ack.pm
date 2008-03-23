@@ -594,7 +594,7 @@ sub _get_thpppt {
 
 sub _thpppt {
     my $y = _get_thpppt();
-    print "$y ack $_[0]!\n";
+    App::Ack::print( "$y ack $_[0]!\n" );
     exit 0;
 }
 
@@ -618,7 +618,7 @@ sub show_help {
 
     my $ignore_dirs = _listify( sort { _key($a) cmp _key($b) } keys %ignore_dirs );
 
-    print <<"END_OF_HELP";
+    App::Ack::print( <<"END_OF_HELP" );
 Usage: ack [OPTION]... PATTERN [FILES]
 
 Search for PATTERN in each source file in the tree from cwd on down.
@@ -736,7 +736,7 @@ Display the filetypes help subpage.
 =cut
 
 sub show_help_types {
-    print <<'END_OF_HELP';
+    App::Ack::print( <<'END_OF_HELP' );
 Usage: ack [OPTION]... PATTERN [FILES]
 
 The following is the list of filetypes supported by ack.  You can
@@ -760,7 +760,7 @@ END_OF_HELP
         if ( ref $ext_list ) {
             $ext_list = join( ' ', map { ".$_" } @{$ext_list} );
         }
-        printf( "    --[no]%-*.*s %s\n", $maxlen, $maxlen, $type, $ext_list );
+        App::Ack::print( sprintf( "    --[no]%-*.*s %s\n", $maxlen, $maxlen, $type, $ext_list ) );
     }
 
     return;
@@ -805,7 +805,7 @@ Prints the version information for ack.
 =cut
 
 sub print_version_statement {
-    print get_version_statement();
+    App::Ack::print( get_version_statement() );
 
     return;
 }
@@ -938,31 +938,31 @@ sub needs_line_scan {
     return ( $buffer =~ /$regex/ );
 }
 
-# _print subs added in order to make it easy for a third party
+# print subs added in order to make it easy for a third party
 # module (such as App::Wack) to redefine the display methods
 # and show the results in a different way.
-sub _print_first_filename { print $_[0], "\n"; }
-sub _print_blank_line     { print "\n"; }
-sub _print_separator      { print "--\n"; }
-sub _print                { print "$_[0]"; }
-sub _print_filename       { print $_[0], $_[1]; }
-sub _print_line_no        { print $_[0], $_[1]; }
-sub _print_count {
+sub print                   { print @_ }
+sub print_first_filename    { App::Ack::print( $_[0], "\n" ) }
+sub print_blank_line        { App::Ack::print( "\n" ) }
+sub print_separator         { App::Ack::print( "--\n" ) }
+sub print_filename          { App::Ack::print( $_[0], $_[1] ) }
+sub print_line_no           { App::Ack::print( $_[0], $_[1] ) }
+sub print_count {
     my $filename = shift;
     my $nmatches = shift;
     my $ors = shift;
     my $count = shift;
 
-    print $filename;
-    print ':', $nmatches if $count;
-    print $ors;
+    App::Ack::print( $filename );
+    App::Ack::print( ':', $nmatches ) if $count;
+    App::Ack::print( $ors );
 }
 
-sub _print_count0 {
+sub print_count0 {
     my $filename = shift;
     my $ors = shift;
 
-    print "$filename:0", $ors;
+    App::Ack::print( $filename, ':0', $ors );
 }
 
 
@@ -1028,7 +1028,7 @@ sub search {
                ? $. != $lines[0]  # $lines[0] should be a scalar
                : $v ? $line =~ m/$regex/ : $line !~ m/$regex/ ) {
             if ( $passthru ) {
-                _print($line);
+                App::Ack::print( $line );
                 next;
             }
 
@@ -1058,14 +1058,14 @@ sub search {
 
         # print an empty line as a divider before first line in each file (not before the first file)
         if ( !$any_output && $opt->{show_filename} && $opt->{break} && defined( $context_overall_output_count ) ) {
-            _print_blank_line();
+            App::Ack::print_blank_line();
         }
 
         shift @lines if $has_lines;
 
         if ( $could_be_binary ) {
             if ( -B $filename ) {
-                print "Binary file $filename matches\n";
+                App::Ack::print( "Binary file $filename matches\n" );
                 last;
             }
             $could_be_binary = 0;
@@ -1114,7 +1114,7 @@ sub print_match_or_context {
                     ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} )
                     : $filename;
             if ( $heading && !$any_output ) {
-                _print_first_filename($display_filename);
+                App::Ack::print_first_filename($display_filename);
             }
         }
     }
@@ -1125,7 +1125,7 @@ sub print_match_or_context {
         if ( $keep_context && !$output_func ) {
             if ( ( $last_output_line != $line_no - 1 ) &&
                 ( $any_output || ( !$heading && defined( $context_overall_output_count ) ) ) ) {
-                _print_separator();
+                App::Ack::print_separator();
             }
             # to ensure separators between different files when --noheading
 
@@ -1133,13 +1133,13 @@ sub print_match_or_context {
         }
 
         if ( $show_filename ) {
-            _print_filename($display_filename, $sep) if not $heading;
-            _print_line_no($line_no, $sep);
+            App::Ack::print_filename($display_filename, $sep) if not $heading;
+            App::Ack::print_line_no($line_no, $sep);
         }
 
         if ( $output_func ) {
             while ( /$regex/go ) {
-                _print( $output_func->() . "\n" );
+                App::Ack::print( $output_func->() . "\n" );
             }
         }
         else {
@@ -1152,7 +1152,7 @@ sub print_match_or_context {
                 # remove any kind of newline at the end of the line
                 s/[\r\n]*\z//;
             }
-            _print($_ . "\n");
+            App::Ack::print($_ . "\n");
         }
         $any_output = 1;
         ++$context_overall_output_count;
@@ -1203,10 +1203,10 @@ sub search_and_list {
     }
 
     if ( $nmatches ) {
-        _print_count($filename, $nmatches, $ors, $count);
+        App::Ack::print_count($filename, $nmatches, $ors, $count);
     }
     elsif ( $count && !$opt->{l} ) {
-        _print_count0($filename, $ors);
+        App::Ack::print_count0($filename, $ors);
     }
 
     return $nmatches ? 1 : 0;
@@ -1241,7 +1241,7 @@ sub print_files {
     my $ors = $opt->{print0} ? "\0" : "\n";
 
     while ( defined ( my $file = $iter->() ) ) {
-        print $file, $ors;
+        App::Ack::print $file, $ors;
         last if $opt->{1};
     }
 

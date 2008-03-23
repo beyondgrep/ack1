@@ -15,29 +15,30 @@ BEGIN {
 }
 
 my $dir_sep = $^O eq 'MSWin32' ? '\\' : '/';
-{
+
+COPYRIGHT: {
     my $copyright = App::Ack::get_copyright();
     like( $copyright, qr{Copyright \d+-\d+ Andy Lester}, 'Copyright' );
 }
 
-{
+VERSION: {
     my $version = App::Ack::get_version_statement('Copyright');
     like( $version, qr{This program is free software; you can redistribute it and/or modify it}, 'free software' );
     like( $version, qr{Copyright}, 'Copyright' );
 }
 
-{
+FILETYPES: {
     my @filetypes = App::Ack::filetypes_supported();
     ok( scalar(grep {$_ eq 'parrot'} @filetypes), 'parrot is supported filetype' );
     cmp_ok( scalar @filetypes, '>=', 39, 'At least 39 filetypes are supported' );
 }
 
-{
+BILL_THE_CAT: {
     my $thppt = App::Ack::_get_thpppt();
     is( length $thppt, 29, 'Bill the Cat' );
 }
 
-{
+STARTING_POINTS: {
     my $dir = 't/etc';
     my %opt;
     my $what = App::Ack::get_starting_points( [$dir], \%opt );
@@ -51,14 +52,14 @@ our @result;
 our @warns;
 {
     no warnings 'redefine';
-    sub App::Ack::_print_first_filename { push @::result,  ['first_filename', @_]; }
-    sub App::Ack::_print_separator      { push @::result,  ['separator',      @_]; }
-    sub App::Ack::_print                { push @::result,  ['print',          @_]; }
-    sub App::Ack::_print_filename       { push @::result,  ['filename',       @_]; }
-    sub App::Ack::_print_line_no        { push @::result,  ['line_no',        @_]; }
-    sub App::Ack::_print_count          { push @::result,  ['count',          @_]; }
-    sub App::Ack::_print_count0         { push @::result,  ['count0',         @_]; }
-    sub App::Ack::warn                  { push @::warns,   $_[0];                   } ## no critic (ProhibitBuiltinHomonyms)
+    sub App::Ack::print_first_filename { push @::result,  ['first_filename', @_]; }
+    sub App::Ack::print_separator      { push @::result,  ['separator',      @_]; }
+    sub App::Ack::print                { push @::result,  ['print',          @_]; }
+    sub App::Ack::print_filename       { push @::result,  ['filename',       @_]; }
+    sub App::Ack::print_line_no        { push @::result,  ['line_no',        @_]; }
+    sub App::Ack::print_count          { push @::result,  ['count',          @_]; }
+    sub App::Ack::print_count0         { push @::result,  ['count0',         @_]; }
+    sub App::Ack::warn                 { push @::warns,   $_[0];                   } ## no critic (ProhibitBuiltinHomonyms)
 
 }
 

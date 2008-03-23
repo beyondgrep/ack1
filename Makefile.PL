@@ -13,6 +13,7 @@ my %parms = (
     VERSION_FROM        => 'Ack.pm',
     PM                  => { 'Ack.pm' => '$(INST_LIBDIR)/App/Ack.pm' },
     EXE_FILES           => [ 'ack' ],
+    LICENSE             => 'perl',
     PREREQ_PM => {
         'Test::Harness'     => 2.50, # Something reasonably newish
         'Term::ANSIColor'   => 0,

@@ -19,7 +19,7 @@ NORMAL_COLOR: {
     my @args = qw( called --color --text );
     my @results = run_ack( @args, @files );
 
-    ok( ( grep { /\e/ } @results ), 'normal match highlighted' );
+    ok( grep { /\e/ } @results, 'normal match highlighted' );
 }
 
 MATCH_WITH_BACKREF: {
@@ -29,5 +29,5 @@ MATCH_WITH_BACKREF: {
 
     is( @results, 1, 'backref pattern matches once' );
 
-    ok( grep( /\e/, @results ), 'match with backreference highlighted' );
+    ok( grep { /\e/ } @results, 'match with backreference highlighted' );
 }

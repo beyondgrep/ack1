@@ -2026,7 +2026,7 @@ sub get_iterator {
             error_handler   => sub { my $msg = shift; App::Ack::warn( $msg ) },
             sort_files      => $opt->{sort_files},
             follow_symlinks => $opt->{follow},
-        }, @$what );
+        }, @{$what} );
     return $iter;
 }
 

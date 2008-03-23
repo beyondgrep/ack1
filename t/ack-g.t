@@ -116,7 +116,7 @@ FILE_ON_COMMAND_LINE_IS_ALWAYS_SEARCHED: {
     my @args = ( '-g', $regex );
     my @results = run_ack( @args, @files );
 
-    sets_match( \@results, \@expected, "File on command line is always searched" );
+    sets_match( \@results, \@expected, 'File on command line is always searched' );
 }
 
 FILE_ON_COMMAND_LINE_IS_ALWAYS_SEARCHED_EVEN_WITH_WRONG_TYPE: {
@@ -129,7 +129,7 @@ FILE_ON_COMMAND_LINE_IS_ALWAYS_SEARCHED_EVEN_WITH_WRONG_TYPE: {
     my @args = ( '--html', '-g', $regex );
     my @results = run_ack( @args, @files );
 
-    sets_match( \@results, \@expected, "File on command line is always searched, even with wrong type." );
+    sets_match( \@results, \@expected, 'File on command line is always searched, even with wrong type.' );
 }
 
 ONLY_MAKEFILES: {

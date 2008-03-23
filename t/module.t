@@ -50,7 +50,7 @@ STARTING_POINTS: {
 
 our @result;
 our @warns;
-{
+HIDE_THE_WRAPPERS: {
     no warnings 'redefine';
     sub App::Ack::print_first_filename { push @::result,  ['first_filename', @_]; }
     sub App::Ack::print_separator      { push @::result,  ['separator',      @_]; }
@@ -112,12 +112,11 @@ my $iter1;
     my $what = App::Ack::get_starting_points( [$dir, 't/etc'], \%opts );
     is_deeply $what, ["t${dir_sep}text", "t${dir_sep}etc"], 'get_starting_points';
     my $iter = App::Ack::get_iterator( $what, \%opts );
-    isnt $iter, $iter1, 'different iterators';
-    is ref $iter, 'CODE';
+    isnt( $iter, $iter1, 'different iterators' );
+    is( ref $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_matches( $iter, \%opts );
-    my @expected = 
-        (
+    my @expected = (
            [
              'filename',
              "t${dir_sep}text${dir_sep}science-of-myth.txt",
@@ -174,7 +173,7 @@ my $iter1;
              'print',
              "Somehow no matter what the world keeps turning\n"
            ]
-         );
+        );
 
     my @e = map {$_->[0]} @expected;
     my @r = map {$_->[0]} @result;
@@ -218,7 +217,7 @@ my $iter1;
     is ref $iter, 'CODE' ;
     App::Ack::filetype_setup();
     App::Ack::print_files_with_matches( $iter, \%opts );
-    my @expected = ( 
+    my @expected = (
            [
              'count',
              "t${dir_sep}text${dir_sep}4th-of-july.txt",
@@ -250,7 +249,7 @@ my $iter1;
              'count0',
              "t${dir_sep}text${dir_sep}me-and-bobbie-mcgee.txt",
              "\n"
-           ]
+           ],
          );
 
     my @e = sort by_2nd @expected;
@@ -367,12 +366,12 @@ my $iter1;
              'count0',
              "t${dir_sep}etc${dir_sep}buttonhook.noxml.xxx",
              "\n"
-           ]
+           ],
          );
 
     my @e = sort by_2nd @expected;
     my @r = sort by_2nd @result;
- 
+
     lists_match(\@r, \@e);
     is_deeply \@warns, [], 'no warning';
 }
@@ -518,7 +517,7 @@ sub reorder {
     my $n = 3;
     my @grouped = map { [ @_[$_*$n .. $_*$n+$n-1] ] } (0 .. (@_-1)/$n);
     my @sorted = sort { $a->[0][1] cmp $b->[0][1] or $a->[1][1] <=> $b->[1][1] } @grouped;
-    return map { @$_ } @sorted;
+    return map { @{$_} } @sorted;
 }
 
 

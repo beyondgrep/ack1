@@ -31,12 +31,12 @@ my( @expected, @results, $test_description );
 
 sub set_up_assertion_that_these_options_will_ignore_those_directories {
     my( $options, $ignored_directories, $optional_test_description ) = @_;
-    $test_description = $optional_test_description || join( ' ', @$options );
+    $test_description = $optional_test_description || join( ' ', @{$options} );
 
-    my $filter = join( '|', @$ignored_directories );
+    my $filter = join( '|', @{$ignored_directories} );
     @expected = grep { ! m{/(?:$filter)/} } @files_mentioning_apples;
 
-    @results = run_ack( @$options, '--noenv', '-la', 'apple', 't/swamp' );
+    @results = run_ack( @{$options}, '--noenv', '-la', 'apple', 't/swamp' );
 
     # ignore everything in .svn directories
     my $svn_regex = quotemeta File::Spec->catfile( '', '.svn', '' ); # the respective filesystem equivalent of '/.svn/'

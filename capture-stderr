@@ -1,0 +1,13 @@
+#! /usr/bin/perl
+use strict;
+
+# Untaint our arguments (we're very trusting):
+my ($stderr)  = ((shift @ARGV) =~ /^(.+)$/s) or die 'No stderr';
+my ($program) = ((shift @ARGV) =~ /^(.+)$/s) or die 'No program';
+
+open(STDERR, '>', $stderr) or die "Can't redirect STDERR to $stderr: $!";
+
+$0 = $program;
+do $program;
+die $@ if $@;
+die "Couldn't run $program: $!"; # Ack doesn't return, it calls exit

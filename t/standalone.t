@@ -3,17 +3,18 @@
 use warnings;
 use strict;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
+
 use lib 't';
 use Util;
 
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
+prep_environment();
 
 my $ack = 'ack-standalone';
 
 ok( -e $ack, 'exists' );
 ok( -r $ack, 'readable' );
-if ( $^O eq 'MSWin32' ) {
+if ( is_win32() ) {
     pass( 'Skipping -x test for Windows' );
 }
 else {

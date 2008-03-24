@@ -3,13 +3,12 @@
 use warnings;
 use strict;
 
-use Test::More tests => 6;
-use File::Next 0.34; # For the reslash() function
+use Test::More tests => 12;
 
 use lib 't';
 use Util qw/run_ack/;
 
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
+prep_environment();
 
 check_u( '#emacs-workfile.pl#', 't/swamp/' ); # temp file
 check_u( 'core.2112', 't/etc/' );             # core file
@@ -33,4 +32,6 @@ sub check_u {
     # searching without -u
     ok(  scalar( grep { /$pattern/ } @results_with_u ), "$file found with -u in $dir" );
     ok( !scalar( grep { /$pattern/ } @results_without_u ), "$file not found without -u in $dir" );
+
+    return
 }

@@ -3,11 +3,12 @@
 use warnings;
 use strict;
 
-use Test::More tests => 5;
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
+use Test::More tests => 10;
 
 use lib 't';
 use Util;
+
+prep_environment();
 
 DASH_L: {
     my @expected = qw(
@@ -25,6 +26,7 @@ DASH_CAPITAL_L: {
     my @expected = qw(
         t/text/4th-of-july.txt
         t/text/boy-named-sue.txt
+        t/text/me-and-bobbie-mcgee.txt
         t/text/freedom-of-choice.txt
         t/text/shut-up-be-happy.txt
     );
@@ -44,6 +46,7 @@ DASH_C: {
         t/text/4th-of-july.txt:1
         t/text/boy-named-sue.txt:2
         t/text/freedom-of-choice.txt:0
+        t/text/me-and-bobbie-mcgee.txt:0
         t/text/science-of-myth.txt:0
         t/text/shut-up-be-happy.txt:0
     );

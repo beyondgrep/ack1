@@ -11,7 +11,11 @@ This tests whether L<ack(1)>'s command line options work as expected.
 
 use Test::More tests => 30;
 use File::Next 0.34; # For the reslash() function
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
+
+use lib 't';
+use Util;
+
+prep_environment();
 
 my $swamp = 't/swamp';
 my $ack   = './ack-standalone';
@@ -44,10 +48,13 @@ for ( qw( -i --ignore-case ) ) {
 }
 
 # Invert match
+#   this test was changed from using unlike to using like because
+#   old versions of Test::More::unlike (before 0.48_2) cannot
+#   work with multiline output (which ack produces in this case).
 for ( qw( -v --invert-match ) ) {
-    unlike
+    like
         qx{ $^X -T $ack $_ "use warnings" t/swamp/options.pl },
-        qr{use warnings},
+        qr{use strict;\n\n=head1 NAME}, # no 'use warnings' in between here
         qq{$_ works correctly};
     option_in_usage( $_ );
 }

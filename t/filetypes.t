@@ -4,7 +4,6 @@ use warnings;
 use strict;
 
 use Test::More tests => 29;
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
 use Util;
@@ -12,6 +11,8 @@ use Util;
 BEGIN {
     use_ok( 'App::Ack' );
 }
+
+prep_environment();
 
 sets_match( [App::Ack::filetypes( 'foo.pod' )], [qw( parrot perl text )], 'foo.pod can be multiple things' );
 sets_match( [App::Ack::filetypes( 'Bongo.pm' )], [qw( perl text )], 'Bongo.pm' );

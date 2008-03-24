@@ -1,9 +1,152 @@
 Changelog for ack
 
+NEXT
+    [ENHANCEMENTS]
+    ack can now feed its output to a pager.  It can be specified
+    with --pager on the command-line, or with the ACK_PAGER environment
+    variable.  The --pager differs from piping the output on the
+    command line, because ack doesn't turn off coloring and grouping
+    if its output goes through the --pager.
+
+    Added CFMX support.  Thanks, Will Coleda.
+
+    Added more extensions for --asm and --tcl. Added new
+    extension --batch for .bat and .cmd files. Thanks, Jan Dubois.
+
+    [FIXES]
+    Fighting the never-ending battle for Windows compatibility.
+    Thanks to Jan Dubois and Christoper J. Madsen.
+
+    [INTERNALS]
+    I removed t/pod-coverage.t, because I don't care about the
+    documentation.  The user-servicable parts are only for for
+    hardcore ack hacks.
+
+
+1.77_04     Fri Mar 14 00:23:46 CDT 2008
+    [FIXES]
+    --[no]ignore-dir option now works also with trailing slash
+    in the directory name.
+
+    A match on the last line of a file where the newline is
+    missing gets the newline added by ack for free!
+
+    [ENHANCEMENTS]
+    Added --break and --heading options.  --group is the same as
+    --break --heading.
+
+    Ack gives a better error message when running with an illegal
+    regex.
+
+    Added Actionscript support.  Thanks, Yuichi Tateno.
+
+    Added XML Entity file (.ent) support.  Thanks, Tim Jenness.
+
+
+    [INTERNALS TESTING]
+    Fixed test count in case of skipped tests for ack-types.t.
+
+    Fixed test in run_ack for stderr output, again. This should no
+    longer report unexpected succeeds for TODO tests - and now really
+    work.
+
+    Changed method of capturing stderr in tests, should now work on
+    Windows. Thanks, Christopher J. Madsen!
+
+    Changed quoting of command line arguments and adjusted tests to
+    it. Thanks also for the idea this, Christopher J. Madsen!
+
+    And more stuff spotted by Christopher: ack-standalone is no longer
+    set to readonly on Windows.
+
+    More test fixes on Windows provided by Christopher J. Madsen and
+    Jan Dubois.
+
+
+1.77_03     Wed Feb 20 11:16:43 CST 2008
+    [CHANGED FUNCTIONALITY]
+    ack -i -g=regex no longer treats the regex as case-insensitive.
+    This was changed for added consistency. Now -i, -w, -v and -Q
+    only apply to normal ack PATTERN while -g and -G are not affected
+    by these regex modifiers at all.
+
+    [ENHANCEMENTS]
+    Added option -G REGEX to search only files whose path+filename
+    matches REGEX. Thanks go to Michael Hendricks for providing a
+    patch!
+
+    Added option --[no]env to ignore all environment settings
+    including .ackrc.
+
+    Added a --[no]ignore-dir option, to include/exclude additional
+    directories. Many thanks for this patch go to Matthew Wickline!
+
+    Added option --match REGEX to specify a regex explicitly.
+
+    [FIXES]
+    Fixed bug with -v not finding all files correctly (introduced
+    with the performance optimizations in ack 1.75)
+
+    Removed spurious new line after last match in --group output.
+
+    Fixed typos in docs concerning context matching and removed
+    option --rc from docs, since it was never implemented.
+
+    [INTERNALS]
+    Fixed some cross-platform issues in the test cases.
+
+    Fixed test in run_ack for stderr output. This should no longer
+    report unexpected succeeds for TODO tests.
+
+
+1.77_02     Mon Jan 28 16:19:30 CST 2008
+    [ENHANCEMENTS]
+    Added .lsp for --lisp, .st for --smalltalk.
+
+    Added testing for spurious output in the test suite.
+
+
+1.77_01     Sun Jan 27 20:52:27 CST 2008
+    [CHANGED FUNCTIONALITY]
+    ack now always searches files given on the command line, even
+    if they are of the wrong type or not recognized or normally
+    skipped.
+
+    .bak files are now automatically skipped.  I don't know how I
+    missed this before.
+
+    [FIXES]
+    Added a test for the Perl 5.10 regex bug fixed in 1.76.
+
+    Made the regex for --thppptttt a little more robust.  It used
+    to have to end with a single "t", but now it's more flexible.
+
+    Changed year in copyright note to 2008.
+
+    Updated references in README (removed link to CPAN RT Queue).
+
+    Fixed a problem with files with non-native line-ending (DOS or
+    MacOS on Unix). Instead of the matching line an empty line was
+    output. This was reported by multiple people, thanks!
+
+    Rewrote a test to work around a bug in old versions of
+    Test::More (before 0.48_2).
+
+    Fixed ack failure when encountering unreadable files. Reported
+    by David Dyck, thank you!
+
+    [ENHANCEMENTS]
+    Ack warns now when the files/directories given on the command
+    line don't exist.
+
+    Finally ack allows you to define your own types! See options
+    --type-set and --type-add. There are some restrictions left,
+    but it should suffice for most things.
+
 1.76        Wed Dec 19 23:23:05 CST 2007
     [FIXES]
     Now runs correctly under Perl 5.10.  ack had been relying on a
-    mistaken behavior of Perl 5.8, and Perl 5.10 fixed it.
+    mistaken regex behavior of Perl 5.8, and Perl 5.10 fixed it.
 
     [ENHANCEMENTS]
     Add .xhtml to --html

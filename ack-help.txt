@@ -5,15 +5,17 @@ If [FILES] is specified, then only those files/directories are checked.
 ack may also search STDIN, but only if no FILES are specified, or if
 one of FILES is "-".
 
-Default switches may be specified in ACK_OPTIONS environment variable.
+Default switches may be specified in ACK_OPTIONS environment variable or
+an .ackrc file. If you want no dependency on the environment, turn it
+off with --noenv.
 
 Example: ack -i select
 
 Searching:
-  -i, --ignore-case     Ignore case distinctions
+  -i, --ignore-case     Ignore case distinctions in PATTERN
   -v, --invert-match    Invert match: select non-matching lines
   -w, --word-regexp     Force PATTERN to match only whole words
-  -Q, --literal         Quote all metacharacters; expr is literal
+  -Q, --literal         Quote all metacharacters; PATTERN is literal
 
 Search output:
   --line=NUM            Only print line(s) NUM of each file
@@ -26,19 +28,12 @@ Search output:
   --passthru            Print all lines, whether matching or not
   --output=expr         Output the evaluation of expr for each line
                         (turns off text highlighting)
+  --match PATTERN       Specify PATTERN explicitly.
   -m, --max-count=NUM   Stop searching in each file after NUM matches
   -1                    Stop searching after one match of any kind
   -H, --with-filename   Print the filename for each match
   -h, --no-filename     Suppress the prefixing filename on output
   -c, --count           Show number of lines matching per file
-
-  --group               Group matches by file name.
-                        (default: on when used interactively)
-  --nogroup             One result per line, including filename, like grep
-                        (default: on when the output is redirected)
-
-  --[no]color           Highlight the matching text (default: on unless
-                        output is redirected, or on Windows)
 
   -A NUM, --after-context=NUM
                         Print NUM lines of trailing context after matching
@@ -52,21 +47,44 @@ Search output:
   --print0              Print null byte as separator between filenames,
                         only works with -f, -g, -l, -L or -c.
 
+File presentation:
+  --[no]heading         Print a filename heading above each file's results.
+                        (default: on when used interactively)
+  --[no]break           Print a break between results from different files.
+                        (default: on when used interactively)
+  --group               Same as --heading --break
+  --nogroup             Same as --noheading --nobreak
+  --[no]color           Highlight the matching text (default: on unless
+                        output is redirected, or on Windows)
+
 File finding:
   -f                    Only print the files found, without searching.
                         The PATTERN must not be specified.
-  -g=REGEX              Same as -f, but only print files matching REGEX.
+  -g REGEX              Same as -f, but only print files matching REGEX.
   --sort-files          Sort the found files lexically.
 
 File inclusion/exclusion:
-  -a, --all-types       All file types searched; directories still skipped
+  -a, --all-types       All file types searched;
+                        Ignores CVS, .svn and other ignored directories
   -u, --unrestricted    All files and directories searched
+  --[no]ignore-dir=name Add/Remove directory from the list of ignored dirs
   -n                    No descending into subdirectories
+  -G REGEX              Only search files that match REGEX
+
   --perl                Include only Perl files.
   --type=perl           Include only Perl files.
   --noperl              Exclude Perl files.
   --type=noperl         Exclude Perl files.
                         See "ack --help type" for supported filetypes.
+
+  --type-add TYPE=.EXTENSION[,.EXT2[,...]]
+                        Files with the given EXTENSION(s) are recognized as
+                        being of (the existing) type TYPE
+  --type-set TYPE=.EXTENSION[,.EXT2[,...]]
+                        Files with the given EXTENSION(s) are recognized as
+                        being of type TYPE. This replaces an existing
+                        definition for type TYPE.
+
   --[no]follow          Follow symlinks.  Default is off.
 
   Directories ignored by default:
@@ -80,6 +98,7 @@ File inclusion/exclusion:
     /core\.\d+$/   - core dumps
 
 Miscellaneous:
+  --noenv               Ignore environment variables and ~/.ackrc
   --help                This help
   --man                 Man page
   --version             Display version & copyright

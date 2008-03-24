@@ -6,10 +6,10 @@ use strict;
 use Test::More tests => 3;
 use File::Next 0.22;
 
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
-
 use lib 't';
 use Util;
+
+prep_environment();
 
 BEGIN {
     use_ok( 'App::Ack' );
@@ -36,7 +36,7 @@ HANDLE_ZEROES: {
     my $iter =
         File::Next::files( {
             file_filter => sub { return is_filetype( $File::Next::name, 'perl' ) }, ## no critic
-            descend_filter => \&App::Ack::skipdir_filter,
+            descend_filter => \&App::Ack::ignoredir_filter,
         }, '.' );
 
     my @files = slurp( $iter );

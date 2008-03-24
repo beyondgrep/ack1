@@ -3,12 +3,13 @@
 use warnings;
 use strict;
 
-use Test::More tests => 12;
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
+use Test::More tests => 22;
+use File::Next 0.34; # for reslash function
 
 use lib 't';
 use Util;
-use File::Next 0.34; # for reslash function
+
+prep_environment();
 
 my $is_windows = ($^O =~ /MSWin32/); # check for highlighting
 
@@ -20,13 +21,12 @@ Well, my daddy left home when I was three
 But the meanest thing that he ever did
 Was before he left, he went and named me Sue.
 EOF
-    my $regex = 'left';
 
+    my $regex = 'left';
     my @files = qw( t/text/boy-named-sue.txt );
     my @args = ( '--text', '-B1', $regex );
-    my @results = run_ack( @args, @files );
 
-    lists_match( \@results, \@expected, "Looking for $regex - before" );
+    ack_lists_match( [ @args, @files ], \@expected, "Looking for $regex - before" );
 }
 
 BEFORE_WITH_LINE_NO: {
@@ -45,12 +45,10 @@ $target_file:46:I heard him laugh and then I heard him cuss,
 EOF
 
     my $regex = 'laugh';
-
     my @files = qw( t/text );
     my @args = ( '--text', '-B2', $regex );
-    my @results = run_ack( @args, @files );
 
-    lists_match( \@results, \@expected, "Looking for $regex - before with line numbers" );
+    ack_lists_match( [ @args, @files ], \@expected, "Looking for $regex - before with line numbers" );
 }
 
 # checks also end of file
@@ -63,13 +61,11 @@ Well, I grew up quick and I grew up mean,
     -- "A Boy Named Sue", Johnny Cash
 EOF
 
-    my $regex = q/"[nN]amed Sue"/;
-
+    my $regex = '[nN]amed Sue';
     my @files = qw( t/text/boy-named-sue.txt );
     my @args = ( '--text', '-A2', $regex );
-    my @results = run_ack( @args, @files );
 
-    lists_match( \@results, \@expected, "Looking for $regex - after" );
+    ack_lists_match( [ @args, @files ], \@expected, "Looking for $regex - after" );
 }
 
 # context defaults to 2
@@ -83,12 +79,10 @@ I tell ya, life ain't easy for a boy named Sue.
 EOF
 
     my $regex = 'giggle';
-
     my @files = qw( t/text/boy-named-sue.txt );
     my @args = ( '--text', '-C', $regex );
-    my @results = run_ack( @args, @files );
 
-    lists_match( \@results, \@expected, "Looking for $regex - context defaults to 2" );
+    ack_lists_match( [ @args, @files ], \@expected, "Looking for $regex - context defaults to 2" );
 }
 
 # -1 must not stop the ending context from displaying
@@ -102,12 +96,10 @@ I tell ya, life ain't easy for a boy named Sue.
 EOF
 
     my $regex = 'giggle';
-
     my @files = qw( t/text/boy-named-sue.txt );
     my @args = ( '--text', '-1', '-C', $regex );
-    my @results = run_ack( @args, @files );
 
-    lists_match( \@results, \@expected, "Looking for $regex with -1" );
+    ack_lists_match( [ @args, @files ], \@expected, "Looking for $regex with -1" );
 }
 
 # -m3 should work properly and show only 3 matches with correct context
@@ -132,9 +124,8 @@ EOF
 
     my @files = qw( t/text/boy-named-sue.txt );
     my @args = ( '--text', '-m3', '-C1', $regex );
-    my @results = run_ack( @args, @files );
 
-    lists_match( \@results, \@expected, "Looking for $regex with -m3" );
+    ack_lists_match( [ @args, @files ], \@expected, "Looking for $regex with -m3" );
 }
 
 # highlighting works with context
@@ -157,13 +148,11 @@ GROUPING_SINGLE_FILE: {
 $target_file
 1:#!/usr/bin/ruby
 EOF
-    push @expected, ''; # and an empty line
 
     my $regex = 'ruby';
     my @args = ( '--ruby', '--group', '-C', $regex );
-    my @results = run_ack( @args );
 
-    lists_match( \@results, \@expected, "Looking for $regex in ruby files with grouping" );
+    ack_lists_match( [ @args ], \@expected, "Looking for $regex in ruby files with grouping" );
 }
 
 
@@ -172,6 +161,7 @@ EOF
 GROUPING_MULTIPLE_FILES: {
     my @target_file = (
         File::Next::reslash( 't/text/boy-named-sue.txt' ),
+        File::Next::reslash( 't/text/me-and-bobbie-mcgee.txt' ),
         File::Next::reslash( 't/text/science-of-myth.txt' ),
     );
     my @expected = split( /\n/, <<"EOF" );
@@ -182,19 +172,24 @@ $target_file[0]
 6:Was before he left, he went and named me Sue.
 
 $target_file[1]
+10-
+11:    Freedom's just another word for nothing left to lose
+--
+25-
+26:    Freedom's just another word for nothing left to lose
+
+$target_file[2]
 18-Consider the case of the woman whose faith helped her make it through
 19:When she was raped and cut up, left for dead in her trunk, her beliefs held true
 20-It doesn't matter if it's real or not
 21:'cause some things are better left without a doubt
 EOF
-    push @expected, ''; # and an empty line
 
     my $regex = 'left';
     my @files = qw( t/text/ );
     my @args = ( '--text', '--group', '-B1', '--sort-files', $regex );
-    my @results = run_ack( @args, @files );
 
-    lists_match( \@results, \@expected, "Looking for $regex in multiple files with grouping" );
+    ack_lists_match( [ @args, @files ], \@expected, "Looking for $regex in multiple files with grouping" );
 }
 
 # context does nothing ack -g
@@ -207,15 +202,14 @@ ACK_G: {
 
     my @files = qw( t/ );
     my @args = ( '-C2', '-g', $regex );
-    my @results = run_ack( @args, @files );
 
-    sets_match( \@results, \@expected, "Looking for $regex - no change with -g" );
+    ack_sets_match( [ @files, @args ], \@expected, "Looking for $regex - no change with -g" );
 }
 
 # ack -o disables context
 WITH_O: {
     my @files = qw( t/text/boy-named-sue.txt );
-    my @args = qw( "the\\s+\\S+" --text -o -C2 );
+    my @args = qw( the\\s+\\S+ --text -o -C2 );
     my @expected = split( /\n/, <<'EOF' );
         the meanest
         the moon
@@ -235,7 +229,5 @@ WITH_O: {
 EOF
     s/^\s+// for @expected;
 
-    my @results = run_ack( @args, @files );
-
-    lists_match( \@results, \@expected, 'Context is disabled with -o' );
+    ack_lists_match( [ @args, @files ], \@expected, 'Context is disabled with -o' );
 }

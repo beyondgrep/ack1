@@ -1,6 +1,8 @@
 [-CodeLayout::ProhibitParensWithBuiltins]
 [CodeLayout::ProhibitHardTabs]
 allow_leading_tabs = 0
+[-CodeLayout::RequireTidyCode]
+# Never works for me.
 
 [-ControlStructures::ProhibitPostfixControls]
 
@@ -11,6 +13,8 @@ allow_leading_tabs = 0
 
 [-InputOutput::ProhibitInteractiveTest]
 [-InputOutput::ProhibitBacktickOperators]
+[-InputOutput::RequireCheckedSyscalls]
+functions = open opendir read readline readdir close closedir
 
 [-Miscellanea::RequireRcsKeywords]
 
@@ -19,10 +23,10 @@ allow_leading_tabs = 0
 [-RegularExpressions::RequireExtendedFormatting]
 [-RegularExpressions::RequireLineBoundaryMatching]
 
+[-Subroutines::RequireArgUnpacking]
+
 [-ValuesAndExpressions::ProhibitNoisyQuotes]
 [-ValuesAndExpressions::ProhibitEmptyQuotes]
 
-[Variables::ProhibitPackageVars]
-add_packages = Test::Builder App::Ack File::Next
-
+[-Variables::ProhibitPackageVars]
 [-Variables::ProhibitPunctuationVars]

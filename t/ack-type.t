@@ -3,13 +3,12 @@
 use warnings;
 use strict;
 
-use Test::More tests => 20;
-use File::Next 0.34; # For the reslash() function
+use Test::More tests => 74;
 
 use lib 't';
 use Util qw( sets_match );
 
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
+prep_environment();
 
 my $cc = [qw(
     t/swamp/c-source.c
@@ -28,38 +27,21 @@ my $fortran = [qw(
     t/swamp/crystallography-weenies.f
 )];
 
+my $foo = [qw(
+    t/swamp/file.foo
+)];
+
+my $bar = [qw(
+    t/swamp/file.bar
+)];
+
+my $xml = [qw(
+    t/etc/buttonhook.rss.xxx
+    t/etc/buttonhook.xml.xxx
+)];
+
 my $perl = [qw(
-    ack
-    ack-standalone
-    Ack.pm
-    Makefile.PL
-    squash
-    t/00-load.t
-    t/ack-1.t
-    t/ack-a.t
-    t/ack-binary.t
-    t/ack-c.t
-    t/ack-color.t
-    t/ack-g.t
-    t/ack-h.t
-    t/ack-line.t
-    t/ack-o.t
-    t/ack-print0.t
-    t/ack-passthru.t
-    t/ack-text.t
-    t/ack-type.t
-    t/ack-u.t
-    t/ack-v.t
-    t/ack-w.t
-    t/context.t
     t/etc/shebang.pl.xxx
-    t/filetypes.t
-    t/interesting.t
-    t/longopts.t
-    t/module.t
-    t/pod-coverage.t
-    t/pod.t
-    t/standalone.t
     t/swamp/0
     t/swamp/Makefile.PL
     t/swamp/options.pl
@@ -69,12 +51,19 @@ my $perl = [qw(
     t/swamp/perl.pl
     t/swamp/perl.pm
     t/swamp/perl.pod
-    t/zero.t
-    t/Util.pm
 )];
+
+my $skipped = [
+    't/etc/core.2112',
+    't/swamp/#emacs-workfile.pl#',
+    't/swamp/options.pl.bak',
+];
 
 my $perl_ruby = [ @{$perl}, @{$ruby} ];
 my $cc_hh = [ @{$cc}, @{$hh} ];
+my $foo_bar = [ @{$foo}, @{$bar} ];
+my $foo_xml = [ @{$foo}, @{$xml} ];
+my $foo_bar_xml = [ @{$foo}, @{$bar}, @{$xml} ];
 
 check_with( '--perl', $perl );
 check_with( '--perl --noruby', $perl );
@@ -101,14 +90,60 @@ check_with( '--cc --nohh', $cc );
 
 check_with( '--fortran', $fortran );
 
+check_with( '--skipped', $skipped );
+
+# check --type-set
+check_with( '--type-set foo-type=.foo --foo-type', $foo );
+check_with( '--type-set foo-type=.foo --type=foo-type', $foo );
+check_with( '--type-set foo-type=.foo,.bar --foo-type', $foo_bar );
+check_with( '--type-set foo-type=.foo --type-set bar-type=.bar --foo-type --bar-type', $foo_bar );
+
+# check --type-add
+check_with( '--type-add xml=.foo --xml', $foo_xml );
+check_with( '--type-add xml=.foo,.bar --xml', $foo_bar_xml );
+
+# check that --type-set redefines
+check_with( '--type-set cc=.foo --cc', $foo );
+
+# check that builtin types cannot be changed
+BUILTIN: {
+    my @builtins = qw( make skipped text binary );
+    my $ncalls = @builtins * 2 + 1;
+    my $ntests = 2 * $ncalls; # each check_stderr() does 2 tests
+
+    for my $builtin ( @builtins ) {
+        check_stderr( "--type-set $builtin=.foo",
+            qq{ack-standalone: --type-set: Builtin type "$builtin" cannot be changed.} );
+        check_stderr( "--type-add $builtin=.foo",
+            qq{ack-standalone: --type-add: Builtin type "$builtin" cannot be changed.} );
+    }
+
+    # check that there is a warning for creating new types with --append_type
+    check_stderr( "--type-add foo=.foo --foo",
+        qq{ack-standalone: --type-add: Type "foo" does not exist, creating with ".foo" ...} );
+}
+
+
 sub check_with {
-    my $options = shift;
+    my @options = split ' ', shift;
     my $expected = shift;
 
     my @expected = sort @{$expected};
 
-    my @results = run_ack( '-f', $options );
+    my @results = run_ack( 't/swamp/', 't/etc/', '-f', @options );
+    @results = grep { !/~$/ } @results; # Don't see my vim backup files
 
     local $Test::Builder::Level = $Test::Builder::Level + 1;
-    return sets_match( \@results, \@expected, "File lists match via $options" );
+    return sets_match( \@results, \@expected, "File lists match via @options" );
+}
+
+sub check_stderr {
+    my @options = split ' ', shift;
+    my $expected = shift;
+
+    my ($stdout, $stderr) = run_ack_with_stderr( '-f', @options );
+
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    is( $stderr->[0], $expected, "Located stderr message: $expected" );
+    is( @{$stderr}, 1, "Only one line of stderr for message: $expected" );
 }

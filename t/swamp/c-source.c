@@ -3,6 +3,12 @@
 
 #define YYBISON 1  /* Identify Bison output.  */
 
+/*
+ Contains the
+ magic string --noenv
+ which can be tricky to find.
+ */
+
 #define yyparse __gettextparse
 #define yylex __gettextlex
 #define yyerror __gettexterror

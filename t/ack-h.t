@@ -5,8 +5,11 @@ use warnings;
 
 use Test::More tests => 12;
 use File::Next ();
+
 use lib 't';
 use Util;
+
+prep_environment();
 
 NO_SWITCHES_ONE_FILE: {
     my @expected = split( /\n/, <<'EOF' );

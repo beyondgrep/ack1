@@ -4,13 +4,14 @@ use warnings;
 use strict;
 
 use Test::More;
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
 use Util;
 
 plan skip_all => q{Can't be checked under Win32} if is_win32;
 plan tests => 8;
+
+prep_environment();
 
 # change permissions of this file to unreadable
 my $old_mode;

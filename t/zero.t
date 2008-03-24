@@ -6,10 +6,10 @@ use strict;
 use Test::More tests => 3;
 use File::Next 0.22;
 
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
-
 use lib 't';
 use Util;
+
+prep_environment();
 
 BEGIN {
     use_ok( 'App::Ack' );

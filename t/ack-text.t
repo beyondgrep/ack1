@@ -7,11 +7,10 @@ use Test::More tests => 4;
 use App::Ack ();
 use File::Next ();
 
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
-
 use lib 't';
 use Util;
 
+prep_environment();
 
 ACK_F_TEXT: {
     my @expected = qw(

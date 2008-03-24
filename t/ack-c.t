@@ -4,10 +4,11 @@ use warnings;
 use strict;
 
 use Test::More tests => 10;
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
 use Util;
+
+prep_environment();
 
 DASH_L: {
     my @expected = qw(

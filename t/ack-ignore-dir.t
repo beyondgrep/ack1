@@ -4,10 +4,12 @@ use warnings;
 use strict;
 
 use Test::More tests => 24;
-
 use File::Spec;
+
 use lib 't';
 use Util;
+
+prep_environment();
 
 my @files_mentioning_apples = qw(
     t/swamp/groceries/fruit

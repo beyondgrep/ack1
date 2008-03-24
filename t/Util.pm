@@ -2,6 +2,10 @@
 use File::Next ();
 use App::Ack ();
 
+sub prep_environment {
+    delete @ENV{qw( ACK_OPTIONS ACKRC ACK_PAGER )};
+}
+
 # capture stderr output into this file
 my $catcherr_file = 'stderr.log';
 

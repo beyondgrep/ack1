@@ -8,7 +8,7 @@ use Test::More tests => 74;
 use lib 't';
 use Util qw( sets_match );
 
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
+prep_environment();
 
 my $cc = [qw(
     t/swamp/c-source.c

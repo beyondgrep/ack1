@@ -4,11 +4,12 @@ use warnings;
 use strict;
 
 use Test::More tests => 22;
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
+use File::Next 0.34; # for reslash function
 
 use lib 't';
 use Util;
-use File::Next 0.34; # for reslash function
+
+prep_environment();
 
 my $is_windows = ($^O =~ /MSWin32/); # check for highlighting
 

@@ -8,7 +8,7 @@ use Test::More tests => 12;
 use lib 't';
 use Util qw/run_ack/;
 
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
+prep_environment();
 
 check_u( '#emacs-workfile.pl#', 't/swamp/' ); # temp file
 check_u( 'core.2112', 't/etc/' );             # core file

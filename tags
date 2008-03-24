@@ -194,6 +194,7 @@ nytprof	Makefile.PL	/^nytprof: all$/;"	l
 open_file	Ack.pm	/^sub open_file {$/;"	s
 option_in_usage	t/longopts.t	/^sub option_in_usage {$/;"	s
 pipe_into_ack	t/Util.pm	/^sub pipe_into_ack {$/;"	s
+prep_environment	t/Util.pm	/^sub prep_environment {$/;"	s
 print	Ack.pm	/^sub print                   { print {$fh} @_ }$/;"	s
 print_blank_line	Ack.pm	/^sub print_blank_line        { App::Ack::print( "\\n" ) }$/;"	s
 print_count	Ack.pm	/^sub print_count {$/;"	s

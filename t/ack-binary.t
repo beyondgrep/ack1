@@ -3,8 +3,6 @@
 use warnings;
 use strict;
 
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
-
 use Test::More tests => 4;
 use App::Ack ();
 use File::Next ();
@@ -12,6 +10,7 @@ use File::Next ();
 use lib 't';
 use Util;
 
+prep_environment();
 
 ACK_F: {
     my @expected = qw(

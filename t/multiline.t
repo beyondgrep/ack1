@@ -7,6 +7,8 @@ use Test::More tests => 4;
 use lib 't';
 use Util;
 
+prep_environment();
+
 ANCHORED: {
     my @expected = split( /\n/, <<'EOF' );
 Science and religion are not mutually exclusive

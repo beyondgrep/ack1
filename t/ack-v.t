@@ -6,10 +6,10 @@ use strict;
 use Test::More tests => 6;
 use File::Next ();
 
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
-
 use lib 't';
 use Util;
+
+prep_environment();
 
 NORMAL_CASE: {
     my @expected = ( 'Well, my daddy left home when I was three' );

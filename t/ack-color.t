@@ -5,7 +5,6 @@ use strict;
 
 use Test::More;
 use File::Next ();
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
 use Util;
@@ -13,6 +12,7 @@ use Util;
 plan skip_all => 'Highlighting does not work on Windows' if is_win32();
 plan tests => 5;
 
+prep_environment();
 
 NORMAL_COLOR: {
     my @files = qw( t/text/boy-named-sue.txt );

@@ -4,10 +4,11 @@ use warnings;
 use strict;
 
 use Test::More tests => 47;
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
 use Util;
+
+prep_environment();
 
 NO_STARTDIR: {
     my $regex = 'non';

@@ -4,11 +4,12 @@ use warnings;
 use strict;
 
 use Test::More tests => 6;
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
 use Util;
 use File::Next ();
+
+prep_environment();
 
 my @files = qw(
     t/swamp/options.pl

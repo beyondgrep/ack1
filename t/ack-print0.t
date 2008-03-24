@@ -4,12 +4,12 @@ use warnings;
 use strict;
 
 use Test::More tests => 16;
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
+use File::Next 0.34; # For the reslash() function
 
 use lib 't';
 use Util;
 
-use File::Next 0.34; # For the reslash() function
+prep_environment();
 
 G_NO_PRINT0: {
     my @expected = qw(

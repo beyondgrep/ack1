@@ -4,10 +4,11 @@ use warnings;
 use strict;
 
 use Test::More;
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
 use Util;
+
+prep_environment();
 
 # test for behavior with illegal regexes
 my @tests = (

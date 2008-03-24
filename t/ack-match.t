@@ -7,6 +7,8 @@ use Test::More;
 use lib 't';
 use Util;
 
+prep_environment();
+
 my @files = qw( t/text );
 
 my @tests = (

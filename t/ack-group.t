@@ -5,8 +5,11 @@ use warnings;
 
 use Test::More tests => 12;
 use File::Next ();
+
 use lib 't';
 use Util;
+
+prep_environment();
 
 my $freedom = File::Next::reslash( 't/text/freedom-of-choice.txt' );
 my $bobbie  = File::Next::reslash( 't/text/me-and-bobbie-mcgee.txt' );

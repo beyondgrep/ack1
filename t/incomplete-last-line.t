@@ -4,10 +4,11 @@ use warnings;
 use strict;
 
 use Test::More tests => 2;
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
 use Util;
+
+prep_environment();
 
 # check that a match on the last line of a file without a proper
 # ending newline gets this newline append by ack

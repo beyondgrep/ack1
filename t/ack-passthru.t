@@ -5,10 +5,11 @@ use strict;
 
 use Test::More tests => 6;
 use File::Next ();
-delete @ENV{qw( ACK_OPTIONS ACKRC )};
 
 use lib 't';
 use Util;
+
+prep_environment();
 
 my @full_lyrics = <DATA>;
 chomp @full_lyrics;

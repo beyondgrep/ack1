@@ -199,8 +199,7 @@ my $iter1;
         local $TODO = 'remove the non-existing directory from the starting_points';
         is_deeply $what, [$dir], 'get_starting_points';
     }
-    # XXX should the error be 't\nosuchdir: No such file or directory' on Windows?
-    is_deeply \@warns, [ 't/nosuchdir: No such file or directory' ], "warning";
+    is_deeply( \@warns, [ "t${dir_sep}nosuchdir: No such file or directory" ], 'warning' );
 }
 
 {

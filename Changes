@@ -4,7 +4,9 @@ NEXT
     [ENHANCEMENTS]
     ack can now feed its output to a pager.  It can be specified
     with --pager on the command-line, or with the ACK_PAGER environment
-    variable.
+    variable.  The --pager differs from piping the output on the
+    command line, because ack doesn't turn off coloring and grouping
+    if its output goes through the --pager.
 
     Added CFMX support.  Thanks, Will Coleda.
 

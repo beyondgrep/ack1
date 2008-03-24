@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION   = '1.77_04';
+our $VERSION = '1.78';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.
@@ -312,6 +312,14 @@ highlighting)
 Output the evaluation of I<expr> for each line (turns off text
 highlighting)
 
+=item B<--pager=I<program>>
+
+Direct ack's output through I<program>.  This can also be specified
+via the C<ACK_PAGER> environment variable.
+
+Using --pager does not suppress grouping and coloring like piping
+output on the command-line does.
+
 =item B<--passthru>
 
 Prints all lines, whether or not they match the expression.  Highlighting
@@ -426,6 +434,12 @@ might look like this:
     # Always color, even if piping to a filter
     --color
 
+    # Use "less -r" as my pager
+    --pager=less -r
+
+Note that arguments with spaces in them do not need to be quoted,
+as they are not interpreted by the shell.
+
 F<ack> looks in your home directory for the F<.ackrc>.  You can
 specify another location with the F<ACKRC> variable, below.
 
@@ -519,6 +533,9 @@ See B<ACK_COLOR_FILENAME> for the color specifications.
 
 Specifies a pager program, such as C<more>, C<less> or C<most>, to which
 ack will send its output.
+
+Using C<ACK_PAGER> does not suppress grouping and coloring like
+piping output on the command-line does.
 
 =back
 
@@ -831,7 +848,7 @@ use strict;
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.77_04';
+    $VERSION = '1.78';
     $COPYRIGHT = 'Copyright 2005-2008 Andy Lester, all rights reserved.';
 }
 

@@ -18,7 +18,7 @@ Version 1.77_04
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.77_04';
+    $VERSION = '1.78';
     $COPYRIGHT = 'Copyright 2005-2008 Andy Lester, all rights reserved.';
 }
 

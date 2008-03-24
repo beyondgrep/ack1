@@ -1394,6 +1394,7 @@ sub get_starting_points {
 
     if ( @{$argv} ) {
         @what = @{ $is_windows ? expand_filenames($argv) : $argv };
+        $_ = File::Next::reslash( $_ ) for @what;
 
         # Show filenames unless we've specified one single file
         $opt->{show_filename} = (@what > 1) || (!-f $what[0]);
@@ -1403,10 +1404,8 @@ sub get_starting_points {
         $opt->{show_filename} = 1;
     }
 
-    # Barf if the starting points don't exist
     for my $start_point (@what) {
-        App::Ack::warn("$start_point: No such file or directory") unless -e $start_point;
-        $start_point =~ s{/}{\\}g if $is_windows;
+        App::Ack::warn( "$start_point: No such file or directory" ) unless -e $start_point;
     }
     return \@what;
 }

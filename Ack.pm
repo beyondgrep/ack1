@@ -1454,7 +1454,7 @@ sub set_up_pager {
     my $command = shift;
 
     my $pager;
-    if ( open( $pager, '|-', $command ) ) {
+    if ( not open( $pager, '|-', $command ) ) {
         App::Ack::die( qq{Unable to pipe to pager "$command": $!} );
     }
     $fh = $pager;

@@ -12,24 +12,26 @@ ACK_G	t/context.t	/^ACK_G: {$/;"	l
 AFTER	t/context.t	/^AFTER: {$/;"	l
 ALL_AND_DASH_G_INTERACTION	t/ack-g.t	/^ALL_AND_DASH_G_INTERACTION: {$/;"	l
 ANCHORED	t/multiline.t	/^ANCHORED: {$/;"	l
-App	t/module.t	/^    sub App::Ack::_print                { push @::result,  ['print',          @_]; }$/;"	s
-App	t/module.t	/^    sub App::Ack::_print_count          { push @::result,  ['count',          @_]; }$/;"	s
-App	t/module.t	/^    sub App::Ack::_print_count0         { push @::result,  ['count0',         @_]; }$/;"	s
-App	t/module.t	/^    sub App::Ack::_print_filename       { push @::result,  ['filename',       @_]; }$/;"	s
-App	t/module.t	/^    sub App::Ack::_print_first_filename { push @::result,  ['first_filename', @_]; }$/;"	s
-App	t/module.t	/^    sub App::Ack::_print_line_no        { push @::result,  ['line_no',        @_]; }$/;"	s
-App	t/module.t	/^    sub App::Ack::_print_separator      { push @::result,  ['separator',      @_]; }$/;"	s
-App	t/module.t	/^    sub App::Ack::warn                  { push @::warns,   $_[0];                   } ## no critic (ProhibitBuiltinHomonyms)$/;"	s
+App	t/module.t	/^    sub App::Ack::print                { push @::result,  ['print',          @_]; }$/;"	s
+App	t/module.t	/^    sub App::Ack::print_count          { push @::result,  ['count',          @_]; }$/;"	s
+App	t/module.t	/^    sub App::Ack::print_count0         { push @::result,  ['count0',         @_]; }$/;"	s
+App	t/module.t	/^    sub App::Ack::print_filename       { push @::result,  ['filename',       @_]; }$/;"	s
+App	t/module.t	/^    sub App::Ack::print_first_filename { push @::result,  ['first_filename', @_]; }$/;"	s
+App	t/module.t	/^    sub App::Ack::print_line_no        { push @::result,  ['line_no',        @_]; }$/;"	s
+App	t/module.t	/^    sub App::Ack::print_separator      { push @::result,  ['separator',      @_]; }$/;"	s
+App	t/module.t	/^    sub App::Ack::warn                 { push @::warns,   $_[0];                   } ## no critic (ProhibitBuiltinHomonyms)$/;"	s
 App::Ack	Ack.pm	/^package App::Ack;$/;"	p
 BACK_ANCHOR	t/ack-g.t	/^BACK_ANCHOR: {$/;"	l
 BEFORE	t/context.t	/^BEFORE: {$/;"	l
 BEFORE_WITH_LINE_NO	t/context.t	/^BEFORE_WITH_LINE_NO: {$/;"	l
+BILL_THE_CAT	t/module.t	/^BILL_THE_CAT: {$/;"	l
 BINARY_FILES	t/interesting.t	/^BINARY_FILES: {$/;"	l
 BREAK_NO_HEADING	t/ack-group.t	/^BREAK_NO_HEADING: {$/;"	l
 BUILTIN	t/ack-type.t	/^BUILTIN: {$/;"	l
 CASE_INSENSITIVE	t/ack-g.t	/^CASE_INSENSITIVE: {$/;"	l
 CONTEXT_DEFAULT	t/context.t	/^CONTEXT_DEFAULT: {$/;"	l
 CONTEXT_MAX_COUNT	t/context.t	/^CONTEXT_MAX_COUNT: {$/;"	l
+COPYRIGHT	t/module.t	/^COPYRIGHT: {$/;"	l
 COUNT_PRINT0	t/ack-print0.t	/^COUNT_PRINT0: {$/;"	l
 DASH_C	t/ack-c.t	/^DASH_C: {$/;"	l
 DASH_C	t/ack-passthru.t	/^DASH_C: {$/;"	l
@@ -53,6 +55,7 @@ EXPAND_FILENAMES_SCOPE	Ack.pm	/^EXPAND_FILENAMES_SCOPE: {$/;"	l
 Example	Ack.pm	/^Example: ack -i select$/;"	l
 FAIL_MATCHING_VIA_CONTENT	t/filetypes.t	/^FAIL_MATCHING_VIA_CONTENT: {$/;"	l
 FILES_HAVE_BEEN_SET_UP_AS_EXPECTED	t/ack-ignore-dir.t	/^FILES_HAVE_BEEN_SET_UP_AS_EXPECTED: {$/;"	l
+FILETYPES	t/module.t	/^FILETYPES: {$/;"	l
 FILE_NOT_THERE	t/command-line-files.t	/^FILE_NOT_THERE: {$/;"	l
 FILE_ON_COMMAND_LINE_IS_ALWAYS_SEARCHED	t/ack-g.t	/^FILE_ON_COMMAND_LINE_IS_ALWAYS_SEARCHED: {$/;"	l
 FILE_ON_COMMAND_LINE_IS_ALWAYS_SEARCHED_EVEN_WITH_WRONG_TYPE	t/ack-g.t	/^FILE_ON_COMMAND_LINE_IS_ALWAYS_SEARCHED_EVEN_WITH_WRONG_TYPE: {$/;"	l
@@ -65,6 +68,7 @@ G_NO_PRINT0	t/ack-print0.t	/^G_NO_PRINT0: {$/;"	l
 G_PRINT0	t/ack-print0.t	/^G_PRINT0: {$/;"	l
 HANDLE_ZEROES	t/zero.t	/^HANDLE_ZEROES: {$/;"	l
 HEADING_NO_BREAK	t/ack-group.t	/^HEADING_NO_BREAK: {$/;"	l
+HIDE_THE_WRAPPERS	t/module.t	/^HIDE_THE_WRAPPERS: {$/;"	l
 HIGHLIGHTING	t/ack-passthru.t	/^HIGHLIGHTING: {$/;"	l
 HIGHLIGHTING	t/context.t	/^HIGHLIGHTING: {$/;"	l
 INCOMPLETE_LaST_LINE	t/incomplete-last-line.t	/^INCOMPLETE_LaST_LINE: {$/;"	l
@@ -123,6 +127,7 @@ SKIP	t/ack-passthru.t	/^    SKIP: {$/;"	l
 SKIP	t/context.t	/^    SKIP: {$/;"	l
 SPECIFYING_A_BAK_FILE	t/command-line-files.t	/^SPECIFYING_A_BAK_FILE: {$/;"	l
 STANDARD_GROUPING	t/ack-group.t	/^STANDARD_GROUPING: {$/;"	l
+STARTING_POINTS	t/module.t	/^STARTING_POINTS: {$/;"	l
 Searching	Ack.pm	/^Searching:$/;"	l
 TEXT	Ack.pm	/^use constant TEXT => 'text';$/;"	c
 TODO	t/module.t	/^    TODO: {$/;"	l
@@ -132,6 +137,7 @@ TRAILING_PUNC	t/ack-w.t	/^TRAILING_PUNC: {$/;"	l
 UNANCHORED	t/multiline.t	/^UNANCHORED: {$/;"	l
 UNRESTRICTED_AND_DASH_G_INTERACTION	t/ack-g.t	/^UNRESTRICTED_AND_DASH_G_INTERACTION: {$/;"	l
 Usage	Ack.pm	/^Usage: ack [OPTION]... PATTERN [FILES]$/;"	l
+VERSION	t/module.t	/^VERSION: {$/;"	l
 WITH_O	t/ack-o.t	/^WITH_O: {$/;"	l
 WITH_O	t/context.t	/^WITH_O: {$/;"	l
 WITH_OUTPUT	t/ack-o.t	/^WITH_OUTPUT: {$/;"	l
@@ -142,20 +148,13 @@ _get_thpppt	Ack.pm	/^sub _get_thpppt {$/;"	s
 _key	Ack.pm	/^sub _key {$/;"	s
 _listify	Ack.pm	/^sub _listify {$/;"	s
 _my_program	Ack.pm	/^sub _my_program {$/;"	s
-_print	Ack.pm	/^sub _print                { print "$_[0]"; }$/;"	s
-_print_blank_line	Ack.pm	/^sub _print_blank_line     { print "\\n"; }$/;"	s
-_print_count	Ack.pm	/^sub _print_count {$/;"	s
-_print_count0	Ack.pm	/^sub _print_count0 {$/;"	s
-_print_filename	Ack.pm	/^sub _print_filename       { print $_[0], $_[1]; }$/;"	s
-_print_first_filename	Ack.pm	/^sub _print_first_filename { print $_[0], "\\n"; }$/;"	s
-_print_line_no	Ack.pm	/^sub _print_line_no        { print $_[0], $_[1]; }$/;"	s
-_print_separator	Ack.pm	/^sub _print_separator      { print "--\\n"; }$/;"	s
 _thpppt	Ack.pm	/^sub _thpppt {$/;"	s
 ack_lists_match	t/Util.pm	/^sub ack_lists_match {$/;"	s
 ack_sets_match	t/Util.pm	/^sub ack_sets_match {$/;"	s
 bugtracker	Makefile.PL	/^    bugtracker: http:\/\/code.google.com\/p\/ack\/issues\/list$/;"	l
 build_command_line	t/Util.pm	/^sub build_command_line {$/;"	s
 build_regex	Ack.pm	/^sub build_regex {$/;"	s
+by_2nd	t/module.t	/^sub by_2nd { return $a->[1] cmp $b->[1]}$/;"	s
 check_regex	Ack.pm	/^sub check_regex {$/;"	s
 check_stderr	t/ack-type.t	/^sub check_stderr {$/;"	s
 check_u	t/ack-u.t	/^sub check_u {$/;"	s
@@ -195,22 +194,32 @@ nytprof	Makefile.PL	/^nytprof: all$/;"	l
 open_file	Ack.pm	/^sub open_file {$/;"	s
 option_in_usage	t/longopts.t	/^sub option_in_usage {$/;"	s
 pipe_into_ack	t/Util.pm	/^sub pipe_into_ack {$/;"	s
+print	Ack.pm	/^sub print                   { print {$fh} @_ }$/;"	s
+print_blank_line	Ack.pm	/^sub print_blank_line        { App::Ack::print( "\\n" ) }$/;"	s
+print_count	Ack.pm	/^sub print_count {$/;"	s
+print_count0	Ack.pm	/^sub print_count0 {$/;"	s
+print_filename	Ack.pm	/^sub print_filename          { App::Ack::print( $_[0], $_[1] ) }$/;"	s
 print_files	Ack.pm	/^sub print_files {$/;"	s
 print_files_with_matches	Ack.pm	/^sub print_files_with_matches {$/;"	s
+print_first_filename	Ack.pm	/^sub print_first_filename    { App::Ack::print( $_[0], "\\n" ) }$/;"	s
+print_line_no	Ack.pm	/^sub print_line_no           { App::Ack::print( $_[0], $_[1] ) }$/;"	s
 print_match_or_context	Ack.pm	/^sub print_match_or_context {$/;"	s
 print_matches	Ack.pm	/^sub print_matches {$/;"	s
+print_separator	Ack.pm	/^sub print_separator         { App::Ack::print( "--\\n" ) }$/;"	s
 print_version_statement	Ack.pm	/^sub print_version_statement {$/;"	s
 prof	Makefile.PL	/^prof: all$/;"	l
 profile	Makefile.PL	/^profile: all$/;"	l
 profiler	Makefile.PL	/^profiler: all$/;"	l
 read_ackrc	Ack.pm	/^sub read_ackrc {$/;"	s
 remove_path_sep	Ack.pm	/^sub remove_path_sep {$/;"	s
+reorder	t/module.t	/^sub reorder {$/;"	s
 resources	Makefile.PL	/^resources:$/;"	l
 run_ack	t/Util.pm	/^sub run_ack {$/;"	s
 run_ack_with_stderr	t/Util.pm	/^sub run_ack_with_stderr {$/;"	s
 search	Ack.pm	/^sub search {$/;"	s
 search_and_list	Ack.pm	/^sub search_and_list {$/;"	s
 set_up_assertion_that_these_options_will_ignore_those_directories	t/ack-ignore-dir.t	/^sub set_up_assertion_that_these_options_will_ignore_those_directories {$/;"	s
+set_up_pager	Ack.pm	/^sub set_up_pager {$/;"	s
 sets_match	t/Util.pm	/^sub sets_match {$/;"	s
 show_help	Ack.pm	/^sub show_help {$/;"	s
 show_help_types	Ack.pm	/^sub show_help_types {$/;"	s

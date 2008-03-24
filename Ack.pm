@@ -22,6 +22,12 @@ BEGIN {
     $COPYRIGHT = 'Copyright 2005-2008 Andy Lester, all rights reserved.';
 }
 
+our $fh;
+BEGIN {
+    $fh = *STDOUT;
+}
+
+
 our %types;
 our %type_wanted;
 our %mappings;
@@ -195,6 +201,7 @@ sub get_command_line_options {
         n                       => \$opt{n},
         o                       => sub { $opt{output} = '$&' },
         'output=s'              => \$opt{output},
+        'pager!'                => \$opt{pager},
         'passthru'              => \$opt{passthru},
         'print0'                => \$opt{print0},
         'Q|literal'             => \$opt{Q},
@@ -941,7 +948,7 @@ sub needs_line_scan {
 # print subs added in order to make it easy for a third party
 # module (such as App::Wack) to redefine the display methods
 # and show the results in a different way.
-sub print                   { print @_ }
+sub print                   { print {$fh} @_ }
 sub print_first_filename    { App::Ack::print( $_[0], "\n" ) }
 sub print_blank_line        { App::Ack::print( "\n" ) }
 sub print_separator         { App::Ack::print( "--\n" ) }
@@ -1435,6 +1442,16 @@ sub get_iterator {
             follow_symlinks => $opt->{follow},
         }, @{$what} );
     return $iter;
+}
+
+=head2 set_up_pager( $command )
+
+=cut
+
+sub set_up_pager {
+    my $command = shift;
+    
+    #XXX FILL THIS IN
 }
 
 =head1 COPYRIGHT & LICENSE

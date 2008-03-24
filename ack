@@ -64,6 +64,8 @@ sub main {
     # check that all regexes do compile fine
     App::Ack::check_regex( $_ ) for ( $opt->{regex}, $opt->{G} );
 
+    App::Ack::set_up_pager( $opt->{pager} ) if $opt->{pager};
+
     App::Ack::filetype_setup();
     if ( $opt->{f} ) {
         App::Ack::print_files( $iter, $opt );

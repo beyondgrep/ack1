@@ -172,7 +172,9 @@ Gets command-line arguments and does the Ack-specific tweaking.
 =cut
 
 sub get_command_line_options {
-    my %opt;
+    my %opt = (
+        pager => $ENV{ACK_PAGER},
+    );
 
     my $getopt_specs = {
         1                       => sub { $opt{1} = $opt{m} = 1 },

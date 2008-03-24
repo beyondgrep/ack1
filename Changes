@@ -2,6 +2,10 @@ Changelog for ack
 
 NEXT
     [ENHANCEMENTS]
+    ack can now feed its output to a pager.  It can be specified
+    with --pager on the command-line, or with the ACK_PAGER environment
+    variable.
+
     Added CFMX support.  Thanks, Will Coleda.
 
     Added more extensions for --asm and --tcl. Added new

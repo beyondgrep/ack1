@@ -516,6 +516,11 @@ mode.  By default, it's "black on_yellow".
 
 See B<ACK_COLOR_FILENAME> for the color specifications.
 
+=item ACK_PAGER
+
+Specifies a pager program, such as C<more>, C<less> or C<most>, to which
+ack will send its output.
+
 =back
 
 Note: The above environment variables are ignored if B<--noenv> is

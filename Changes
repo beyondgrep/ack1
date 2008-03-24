@@ -25,8 +25,8 @@ NEXT
 
     [INTERNALS]
     I removed t/pod-coverage.t, because I don't care about the
-    documentation.  The user-servicable parts are only for for
-    hardcore ack hacks.
+    documentation.  The user-servicable parts are only for hardcore
+    ack hacks.
 
 
 1.77_04     Fri Mar 14 00:23:46 CDT 2008

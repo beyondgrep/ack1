@@ -64,7 +64,7 @@ sub main {
     # check that all regexes do compile fine
     App::Ack::check_regex( $_ ) for ( $opt->{regex}, $opt->{G} );
 
-    App::Ack::set_up_pager( $opt->{pager} ) if $opt->{pager};
+    App::Ack::set_up_pager( $opt->{pager} ) if defined $opt->{pager};
 
     App::Ack::filetype_setup();
     if ( $opt->{f} ) {
@@ -76,6 +76,7 @@ sub main {
     else {
         App::Ack::print_matches( $iter, $opt );
     }
+    close $App::Ack::fh;
     exit 0;
 }
 

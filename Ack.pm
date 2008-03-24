@@ -23,6 +23,7 @@ BEGIN {
 }
 
 our $fh;
+
 BEGIN {
     $fh = *STDOUT;
 }
@@ -201,7 +202,8 @@ sub get_command_line_options {
         n                       => \$opt{n},
         o                       => sub { $opt{output} = '$&' },
         'output=s'              => \$opt{output},
-        'pager!'                => \$opt{pager},
+        'pager=s'               => \$opt{pager},
+        'nopager'               => sub { $opt{pager} = undef },
         'passthru'              => \$opt{passthru},
         'print0'                => \$opt{print0},
         'Q|literal'             => \$opt{Q},
@@ -1450,8 +1452,12 @@ sub get_iterator {
 
 sub set_up_pager {
     my $command = shift;
-    
-    #XXX FILL THIS IN
+
+    my $pager;
+    if ( open( $pager, '|-', $command ) ) {
+        App::Ack::die( qq{Unable to pipe to pager "$command": $!} );
+    }
+    $fh = $pager;
 }
 
 =head1 COPYRIGHT & LICENSE

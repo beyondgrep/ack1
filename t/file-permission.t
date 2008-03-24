@@ -34,7 +34,7 @@ sub check_with {
     is( scalar @{$stdout}, 0, 'Search normal: no normal output' );
     is( scalar @{$stderr}, 1, 'Search normal: one line of stderr output' );
     # don't check for exact text of warning, the message text depends on LC_MESSAGES
-    like( $stderr->[0], qr(file-permission\.t:), 'Search normal: warning message ok' );
+    like( $stderr->[0], qr/file-permission\.t:/, 'Search normal: warning message ok' );
 }
 
 

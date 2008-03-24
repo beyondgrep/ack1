@@ -34,7 +34,7 @@ our %type_wanted;
 our %mappings;
 our %ignore_dirs;
 
-our $dir_sep_regex;
+our $dir_sep_chars;
 our $is_cygwin;
 our $is_windows;
 our $to_screen;
@@ -120,10 +120,10 @@ BEGIN {
         }
     }
 
-    $dir_sep_regex  = quotemeta( File::Spec->catfile( '', '' ) );
     $is_cygwin      = ($^O eq 'cygwin');
     $is_windows     = ($^O =~ /MSWin32/);
     $to_screen      = -t *STDOUT;
+    $dir_sep_chars  = $is_windows ? quotemeta( '\\/' ) : quotemeta( File::Spec->catfile( '', '' ) );
 }
 
 =head1 SYNOPSIS
@@ -214,8 +214,8 @@ sub get_command_line_options {
         'v|invert-match'        => \$opt{v},
         'w|word-regexp'         => \$opt{w},
 
-        'ignore-dirs=s'         => sub { shift; my $dir = remove_path_sep( shift ); $ignore_dirs{$dir} = '--ignore-dirs' },
-        'noignore-dirs=s'       => sub { shift; my $dir = remove_path_sep( shift ); delete $ignore_dirs{$dir} },
+        'ignore-dirs=s'         => sub { shift; my $dir = remove_dir_sep( shift ); $ignore_dirs{$dir} = '--ignore-dirs' },
+        'noignore-dirs=s'       => sub { shift; my $dir = remove_dir_sep( shift ); delete $ignore_dirs{$dir} },
 
         'version'   => sub { print_version_statement(); exit 1; },
         'help|?:s'  => sub { shift; show_help(@_); exit; },
@@ -412,15 +412,15 @@ sub ignoredir_filter {
     return !exists $ignore_dirs{$_};
 }
 
-=head2 remove_path_sep( $path )
+=head2 remove_dir_sep( $path )
 
 This functions removes a trailing path separator, if there is one, from its argument
 
 =cut
 
-sub remove_path_sep {
+sub remove_dir_sep {
     my $path = shift;
-    $path =~ s/$dir_sep_regex$//;
+    $path =~ s/[$dir_sep_chars]$//;
 
     return $path;
 }
@@ -445,10 +445,10 @@ sub filetypes {
 
     return 'skipped' unless is_searchable( $filename );
 
-    return ('make',TEXT) if $filename =~ m{$dir_sep_regex?Makefile$}io;
+    return ('make',TEXT) if $filename =~ m{[$dir_sep_chars]?Makefile$}io;
 
     # If there's an extension, look it up
-    if ( $filename =~ m{\.([^\.$dir_sep_regex]+)$}o ) {
+    if ( $filename =~ m{\.([^\.$dir_sep_chars]+)$}o ) {
         my $ref = $types{lc $1};
         return (@{$ref},TEXT) if $ref;
     }
@@ -511,7 +511,7 @@ sub is_searchable {
     # If these are updated, update the --help message
     return if $filename =~ /\.bak$/;
     return if $filename =~ /~$/;
-    return if $filename =~ m{$dir_sep_regex?(?:#.+#|core\.\d+|[._].*\.swp)$}o;
+    return if $filename =~ m{[$dir_sep_chars]?(?:#.+#|core\.\d+|[._].*\.swp)$}o;
 
     return 1;
 }

@@ -2,6 +2,10 @@ Changelog for ack
 
 NEXT
 
+    [FIXES]
+    More Windows compatibility path fixes.  Thanks, Jan Dubois.
+
+
 1.78        Mon Mar 24 00:32:36 CDT 2008
     [ENHANCEMENTS]
     ack can now feed its output to a pager.  It can be specified

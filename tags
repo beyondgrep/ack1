@@ -212,7 +212,7 @@ prof	Makefile.PL	/^prof: all$/;"	l
 profile	Makefile.PL	/^profile: all$/;"	l
 profiler	Makefile.PL	/^profiler: all$/;"	l
 read_ackrc	Ack.pm	/^sub read_ackrc {$/;"	s
-remove_path_sep	Ack.pm	/^sub remove_path_sep {$/;"	s
+remove_dir_sep	Ack.pm	/^sub remove_dir_sep {$/;"	s
 reorder	t/module.t	/^sub reorder {$/;"	s
 resources	Makefile.PL	/^resources:$/;"	l
 run_ack	t/Util.pm	/^sub run_ack {$/;"	s

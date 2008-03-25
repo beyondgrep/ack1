@@ -13,7 +13,6 @@ my %parms = (
     VERSION_FROM        => 'Ack.pm',
     PM                  => { 'Ack.pm' => '$(INST_LIBDIR)/App/Ack.pm' },
     EXE_FILES           => [ 'ack' ],
-    LICENSE             => 'perl',
     PREREQ_PM => {
         'Test::Harness'     => 2.50, # Something reasonably newish
         'Term::ANSIColor'   => 0,
@@ -25,6 +24,10 @@ my %parms = (
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'ack-1*' },
 );
+
+if ( $ExtUtils::MakeMaker::VERSION =~ /^\d\.\d\d$/ and $ExtUtils::MakeMaker::VERSION > 6.30 ) {
+    $parms{LICENSE} = 'perl';
+}
 
 if ( $ExtUtils::MakeMaker::VERSION eq '6.36' ) {
     $parms{EXTRA_META} = <<EOF;

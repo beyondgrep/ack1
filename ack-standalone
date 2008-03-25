@@ -1623,8 +1623,10 @@ sub needs_line_scan {
     my $rc = sysread( $fh, $buffer, $size );
     return 0 unless $rc && ( $rc == $size );
 
-    $regex = $opt->{i} ? qr/$regex/im : qr/$regex/m;
-    return ( $buffer =~ /$regex/ );
+    return
+        $opt->{i}
+            ? ( $buffer =~ /$regex/im )
+            : ( $buffer =~ /$regex/m );
 }
 
 # print subs added in order to make it easy for a third party

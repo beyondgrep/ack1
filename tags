@@ -165,6 +165,7 @@ critic	Makefile.PL	/^critic:$/;"	l
 def_types_from_ARGV	Ack.pm	/^sub def_types_from_ARGV {$/;"	s
 delete_type	Ack.pm	/^sub delete_type {$/;"	s
 die	Ack.pm	/^sub die { ## no critic (ProhibitBuiltinHomonyms)$/;"	s
+dprof	Makefile.PL	/^dprof: all$/;"	l
 dproflb	Makefile.PL	/^dproflb: all$/;"	l
 expand_filenames	Ack.pm	/^    sub expand_filenames {$/;"	s
 fastprof	Makefile.PL	/^fastprof: all$/;"	l
@@ -172,7 +173,6 @@ filetype_setup	Ack.pm	/^sub filetype_setup {$/;"	s
 filetypes	Ack.pm	/^sub filetypes {$/;"	s
 filetypes_supported	Ack.pm	/^sub filetypes_supported {$/;"	s
 filetypes_supported_set	Ack.pm	/^sub filetypes_supported_set {$/;"	s
-filter_mode	ack	/^sub filter_mode {$/;"	s
 get_command_line_options	Ack.pm	/^sub get_command_line_options {$/;"	s
 get_copyright	Ack.pm	/^sub get_copyright {$/;"	s
 get_iterator	Ack.pm	/^sub get_iterator {$/;"	s
@@ -208,7 +208,6 @@ print_match_or_context	Ack.pm	/^sub print_match_or_context {$/;"	s
 print_matches	Ack.pm	/^sub print_matches {$/;"	s
 print_separator	Ack.pm	/^sub print_separator         { App::Ack::print( "--\\n" ) }$/;"	s
 print_version_statement	Ack.pm	/^sub print_version_statement {$/;"	s
-prof	Makefile.PL	/^prof: all$/;"	l
 profile	Makefile.PL	/^profile: all$/;"	l
 profiler	Makefile.PL	/^profiler: all$/;"	l
 read_ackrc	Ack.pm	/^sub read_ackrc {$/;"	s

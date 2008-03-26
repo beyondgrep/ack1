@@ -549,6 +549,14 @@ step through the results in Vim:
 
   :grep Dumper perllib
 
+=head2 Emacs integration
+
+Phil Jackson put together an F<ack.el> extension that "provides a
+simple compilation mode ... has the ability to guess what files you
+want to search for based on the major-mode."
+
+L<http://www.shellarchive.co.uk/emacs.html>
+
 =cut
 
 =head1 AUTHOR
@@ -610,6 +618,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Phil Jackson,
 Michael Schwern,
 Jan Dubois,
 Christopher J. Madsen,

@@ -10,6 +10,11 @@ NEXT
 
         ack foo --pager=more > save.txt
 
+    so now ack will ignore the --pager and ACK_PAGER.
+
+    [DOCUMENTATION]
+    Pointed to Phil Jackson's Emacs extension.
+
 
 1.80        Wed Mar 26 10:07:53 CDT 2008
 

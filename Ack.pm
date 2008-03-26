@@ -1430,12 +1430,13 @@ sub get_iterator {
     # Starting points are always search, no matter what
     my $is_starting_point = sub { return grep { $_ eq $_[0] } @{$what} };
 
+    my $g_regex = defined $opt->{G} ? qr/$opt->{G}/ : undef;
     my $file_filter
-        = $opt->{u}   && defined $opt->{G} ? sub { $File::Next::name =~ /$opt->{G}/o }
-        : $opt->{all} && defined $opt->{G} ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$opt->{G}/o && is_searchable( $File::Next::name ) ) }
+        = $opt->{u}   && defined $opt->{G} ? sub { $File::Next::name =~ /$g_regex/ }
+        : $opt->{all} && defined $opt->{G} ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$g_regex/ && is_searchable( $File::Next::name ) ) }
         : $opt->{u}                        ? sub {1}
         : $opt->{all}                      ? sub { $is_starting_point->( $File::Next::name ) || is_searchable( $File::Next::name ) }
-        : defined $opt->{G}                ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$opt->{G}/o && is_interesting( @_ ) ) }
+        : defined $opt->{G}                ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$g_regex/ && is_interesting( @_ ) ) }
         :                                    sub { $is_starting_point->( $File::Next::name ) || is_interesting( @_ ) }
         ;
     my $iter =

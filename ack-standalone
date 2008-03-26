@@ -66,11 +66,11 @@ sub main {
         $opt->{regex} = App::Ack::build_regex( defined $opt->{regex} ? $opt->{regex} : shift @ARGV, $opt );
     }
 
-    my $what = App::Ack::get_starting_points( \@ARGV, $opt );
-    my $iter = App::Ack::get_iterator( $what, $opt );
-
     # check that all regexes do compile fine
     App::Ack::check_regex( $_ ) for ( $opt->{regex}, $opt->{G} );
+
+    my $what = App::Ack::get_starting_points( \@ARGV, $opt );
+    my $iter = App::Ack::get_iterator( $what, $opt );
     App::Ack::filetype_setup();
 
     App::Ack::set_up_pager( $opt->{pager} ) if defined $opt->{pager};
@@ -548,6 +548,14 @@ step through the results in Vim:
 
   :grep Dumper perllib
 
+=head2 Emacs integration
+
+Phil Jackson put together an F<ack.el> extension that "provides a
+simple compilation mode ... has the ability to guess what files you
+want to search for based on the major-mode."
+
+L<http://www.shellarchive.co.uk/emacs.html>
+
 =cut
 
 =head1 AUTHOR
@@ -609,6 +617,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Phil Jackson,
 Michael Schwern,
 Jan Dubois,
 Christopher J. Madsen,
@@ -2040,12 +2049,13 @@ sub get_iterator {
     # Starting points are always search, no matter what
     my $is_starting_point = sub { return grep { $_ eq $_[0] } @{$what} };
 
+    my $g_regex = defined $opt->{G} ? qr/$opt->{G}/ : undef;
     my $file_filter
-        = $opt->{u}   && defined $opt->{G} ? sub { $File::Next::name =~ /$opt->{G}/o }
-        : $opt->{all} && defined $opt->{G} ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$opt->{G}/o && is_searchable( $File::Next::name ) ) }
+        = $opt->{u}   && defined $opt->{G} ? sub { $File::Next::name =~ /$g_regex/ }
+        : $opt->{all} && defined $opt->{G} ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$g_regex/ && is_searchable( $File::Next::name ) ) }
         : $opt->{u}                        ? sub {1}
         : $opt->{all}                      ? sub { $is_starting_point->( $File::Next::name ) || is_searchable( $File::Next::name ) }
-        : defined $opt->{G}                ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$opt->{G}/o && is_interesting( @_ ) ) }
+        : defined $opt->{G}                ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$g_regex/ && is_interesting( @_ ) ) }
         :                                    sub { $is_starting_point->( $File::Next::name ) || is_interesting( @_ ) }
         ;
     my $iter =

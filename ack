@@ -67,11 +67,11 @@ sub main {
         $opt->{regex} = App::Ack::build_regex( defined $opt->{regex} ? $opt->{regex} : shift @ARGV, $opt );
     }
 
-    my $what = App::Ack::get_starting_points( \@ARGV, $opt );
-    my $iter = App::Ack::get_iterator( $what, $opt );
-
     # check that all regexes do compile fine
     App::Ack::check_regex( $_ ) for ( $opt->{regex}, $opt->{G} );
+
+    my $what = App::Ack::get_starting_points( \@ARGV, $opt );
+    my $iter = App::Ack::get_iterator( $what, $opt );
     App::Ack::filetype_setup();
 
     App::Ack::set_up_pager( $opt->{pager} ) if defined $opt->{pager};

@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 37;
+use Test::More tests => 53;
 use Data::Dumper;
 
 use lib 't';
@@ -510,6 +510,121 @@ my $iter1;
     is_deeply \@warns, [], 'no warning';
 }
 
+# fill_type_wanted need to be called in order to be able
+# to stop setting the all flag the same is done
+# in get_command_line_options when running ack from the command line
+{
+    @result = ();
+    @warns  = ();
+    my %opts = (
+        regex => 'to perl',
+    );
+    my $dir = 't/swamp';
+    my $what = App::Ack::get_starting_points( [$dir], \%opts );
+    fill_type_wanted();
+    is_deeply $what, ["t${dir_sep}swamp"], 'get_starting_points' ;
+    my $iter = App::Ack::get_iterator( $what, \%opts );
+    is( ref $iter, 'CODE' );
+    App::Ack::filetype_setup();
+    App::Ack::print_files_with_matches( $iter, \%opts );
+    my @expected = (
+           [
+             'count',
+             "t${dir_sep}swamp${dir_sep}Makefile",
+             1,
+             "\n",
+             undef
+           ]
+         );
+    lists_match(\@result, \@expected);
+    is_deeply \@warns, [], 'no warning';
+}
+
+{
+    @result = ();
+    @warns  = ();
+    my %opts = (
+        regex => 'to perl',
+    );
+    my $dir = 't/swamp';
+    my $what = App::Ack::get_starting_points( [$dir], \%opts );
+    fill_type_wanted();
+    is_deeply $what, ["t${dir_sep}swamp"], 'get_starting_points' ;
+    my $iter = App::Ack::get_iterator( $what, \%opts );
+    is( ref $iter, 'CODE' );
+    App::Ack::filetype_setup();
+    App::Ack::print_files_with_matches( $iter, \%opts );
+    my @expected = (
+           [
+             'count',
+             "t${dir_sep}swamp${dir_sep}Makefile",
+             1,
+             "\n",
+             undef
+           ]
+         );
+    lists_match(\@result, \@expected);
+    is_deeply \@warns, [], 'no warning';
+}
+
+{
+    @result = ();
+    @warns  = ();
+    my %opts = (
+        regex => 'to',
+    );
+    my $dir = 't/swamp';
+    my $what = App::Ack::get_starting_points( [$dir], \%opts );
+    fill_type_wanted();
+    $App::Ack::type_wanted{js} = 1;
+    is_deeply $what, ["t${dir_sep}swamp"], 'get_starting_points' ;
+    my $iter = App::Ack::get_iterator( $what, \%opts );
+    is( ref $iter, 'CODE' );
+    App::Ack::filetype_setup();
+    App::Ack::print_files_with_matches( $iter, \%opts );
+    my @expected = (
+           [
+             'count',
+             "t${dir_sep}swamp${dir_sep}javascript.js",
+             1,
+             "\n",
+             undef
+           ]
+         );
+    lists_match(\@result, \@expected);
+    is_deeply \@warns, [], 'no warning';
+}
+
+{
+    @result = ();
+    @warns  = ();
+    my %opts = (
+        regex => 'to',
+    );
+    my $dir = 't/swamp';
+    my $what = App::Ack::get_starting_points( [$dir], \%opts );
+    fill_type_wanted();
+    $App::Ack::type_wanted{cc} = 1;
+    is_deeply $what, ["t${dir_sep}swamp"], 'get_starting_points' ;
+    my $iter = App::Ack::get_iterator( $what, \%opts );
+    is( ref $iter, 'CODE' );
+    App::Ack::filetype_setup();
+    App::Ack::print_files_with_matches( $iter, \%opts );
+    my @expected = (
+           [
+             'count',
+             "t${dir_sep}swamp${dir_sep}c-source.c",
+             1,
+             "\n",
+             undef
+           ]
+
+         );
+    lists_match(\@result, \@expected);
+    is_deeply \@warns, [], 'no warning';
+}
+
+
 sub by_2nd { return $a->[1] cmp $b->[1]}
 
 # group them, sort them,  flatten them
@@ -518,6 +633,12 @@ sub reorder {
     my @grouped = map { [ @_[$_*$n .. $_*$n+$n-1] ] } (0 .. (@_-1)/$n);
     my @sorted = sort { $a->[0][1] cmp $b->[0][1] or $a->[1][1] <=> $b->[1][1] } @grouped;
     return map { @{$_} } @sorted;
+}
+
+sub fill_type_wanted {
+    for my $i ( App::Ack::filetypes_supported() ) {
+        $App::Ack::type_wanted{ $i } = undef;
+    }
 }
 
 

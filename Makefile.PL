@@ -29,7 +29,7 @@ if ( $ExtUtils::MakeMaker::VERSION =~ /^\d\.\d\d$/ and $ExtUtils::MakeMaker::VER
     $parms{LICENSE} = 'perl';
 }
 
-if ( $ExtUtils::MakeMaker::VERSION eq '6.36' ) {
+if ( $ExtUtils::MakeMaker::VERSION ge '6.36' ) {
     $parms{EXTRA_META} = <<EOF;
 resources:
     homepage: http://petdance.com/ack/

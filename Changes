@@ -1,9 +1,13 @@
 Changelog for ack
 
-NEXT
+1.80        Wed Mar 26 10:07:53 CDT 2008
 
     [FIXES]
+    --noenv now correctly ignores ACK_PAGER.
+
     More Windows compatibility path fixes.  Thanks, Jan Dubois.
+
+    Fixed an install problem with t/file-permission.t.
 
 
 1.78        Mon Mar 24 00:32:36 CDT 2008

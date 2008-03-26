@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION = '1.78_01';
+our $VERSION = '1.80';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.
@@ -24,7 +24,7 @@ MAIN: {
 
         # See if we want to ignore the environment. (Don't tell Al Gore.)
         if ( $_ eq '--noenv' ) {
-            delete @ENV{qw( ACK_OPTIONS ACKRC ACK_COLOR_MATCH ACK_COLOR_FILENAME ACK_SWITCHES )};
+            delete @ENV{qw( ACK_OPTIONS ACKRC ACK_COLOR_MATCH ACK_COLOR_FILENAME ACK_SWITCHES ACK_PAGER )};
             $env_ok = 0;
         }
     }
@@ -609,6 +609,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Michael Schwern,
 Jan Dubois,
 Christopher J. Madsen,
 Matthew Wickline,
@@ -839,7 +840,7 @@ use strict;
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.78_01';
+    $VERSION = '1.80';
     $COPYRIGHT = 'Copyright 2005-2008 Andy Lester, all rights reserved.';
 }
 

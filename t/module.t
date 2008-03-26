@@ -43,7 +43,7 @@ STARTING_POINTS: {
     my $dir = 't/etc';
     my %opt;
     my $what = App::Ack::get_starting_points( [$dir], \%opt );
-    is_deeply( $what, ["t${dir_sep}etc"], 'get_starting_points' );
+    lists_match( $what, ["t${dir_sep}etc"], 'get_starting_points' );
 
     my $iter = App::Ack::get_iterator( $what, \%opt );
     isa_ok( $iter, 'CODE', 'get_iterator returs CODE' );
@@ -74,7 +74,7 @@ my $iter1;
     );
     my $dir = 't/text';
     my $what = App::Ack::get_starting_points( [$dir], \%opts );
-    is_deeply( $what, ["t${dir_sep}text"], 'get_starting_points' );
+    lists_match( $what, ["t${dir_sep}text"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
     $iter1 = $iter;
     is( ref $iter, 'CODE' );
@@ -98,7 +98,7 @@ my $iter1;
         );
 
     lists_match( \@result, \@expected ) or diag Dumper \@result;
-    is_deeply( \@warns, [], 'no warning' );
+    lists_match( \@warns, [], 'no warning' );
 }
 
 
@@ -111,7 +111,7 @@ my $iter1;
     );
     my $dir = 't/text';
     my $what = App::Ack::get_starting_points( [$dir, 't/etc'], \%opts );
-    is_deeply $what, ["t${dir_sep}text", "t${dir_sep}etc"], 'get_starting_points';
+    lists_match( $what, ["t${dir_sep}text", "t${dir_sep}etc"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
     isnt( $iter, $iter1, 'different iterators' );
     is( ref $iter, 'CODE' );
@@ -178,12 +178,12 @@ my $iter1;
 
     my @e = map {$_->[0]} @expected;
     my @r = map {$_->[0]} @result;
-    lists_match(\@e, \@r);
+    lists_match( \@e, \@r );
 
     @e = reorder(@expected);
     @r = reorder(@result);
-    lists_match(\@e, \@r);
-    is_deeply \@warns, [], 'no warning';
+    lists_match( \@e, \@r );
+    lists_match( \@warns, [], 'no warning' );
 }
 
 {
@@ -197,9 +197,9 @@ my $iter1;
     my $what = App::Ack::get_starting_points( [$dir, 't/nosuchdir'], \%opts );
     TODO: {
         local $TODO = 'remove the non-existing directory from the starting_points';
-        is_deeply $what, [$dir], 'get_starting_points';
+        lists_match( $what, [$dir], 'get_starting_points' );
     }
-    is_deeply( \@warns, [ "t${dir_sep}nosuchdir: No such file or directory" ], 'warning' );
+    lists_match( \@warns, [ "t${dir_sep}nosuchdir: No such file or directory" ], 'warning' );
 }
 
 {
@@ -212,7 +212,7 @@ my $iter1;
     );
     my $dir = 't/text';
     my $what = App::Ack::get_starting_points( [$dir], \%opts );
-    is_deeply $what, ["t${dir_sep}text"], 'get_starting_points' ;
+    lists_match( $what, ["t${dir_sep}text"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
     is ref $iter, 'CODE' ;
     App::Ack::filetype_setup();
@@ -254,8 +254,8 @@ my $iter1;
 
     my @e = sort by_2nd @expected;
     my @r = sort by_2nd @result;
-    lists_match(\@r, \@e);
-    is_deeply \@warns, [], 'no warning';
+    lists_match( \@r, \@e );
+    lists_match( \@warns, [], 'no warning' );
 }
 
 
@@ -269,7 +269,7 @@ my $iter1;
     );
     my $dir = 't/text';
     my $what = App::Ack::get_starting_points( [$dir, 't/etc'], \%opts );
-    is_deeply $what, ["t${dir_sep}text", "t${dir_sep}etc"], 'get_starting_points';
+    lists_match( $what, ["t${dir_sep}text", "t${dir_sep}etc"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
     is ref $iter, 'CODE';
     App::Ack::filetype_setup();
@@ -372,8 +372,8 @@ my $iter1;
     my @e = sort by_2nd @expected;
     my @r = sort by_2nd @result;
 
-    lists_match(\@r, \@e);
-    is_deeply \@warns, [], 'no warning';
+    lists_match( \@r, \@e );
+    lists_match( \@warns, [], 'no warning' );
 }
 
 
@@ -388,7 +388,7 @@ my $iter1;
     );
     my $dir = 't/text';
     my $what = App::Ack::get_starting_points( [$dir], \%opts );
-    is_deeply $what, ["t${dir_sep}text"], 'get_starting_points' ;
+    lists_match( $what, ["t${dir_sep}text"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
     is( ref $iter, 'CODE' );
     App::Ack::filetype_setup();
@@ -440,8 +440,8 @@ my $iter1;
 
     my @e = sort by_2nd @expected;
     my @r = sort by_2nd @result;
-    lists_match(\@r, \@e);
-    is_deeply \@warns, [], 'no warning';
+    lists_match( \@r, \@e );
+    lists_match( \@warns, [], 'no warning' );
 }
 
 {
@@ -455,7 +455,7 @@ my $iter1;
     );
     my $dir = 't/text';
     my $what = App::Ack::get_starting_points( [$dir], \%opts );
-    is_deeply $what, ["t${dir_sep}text"], 'get_starting_points' ;
+    lists_match( $what, ["t${dir_sep}text"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
     is( ref $iter, 'CODE' );
     App::Ack::filetype_setup();
@@ -506,8 +506,8 @@ my $iter1;
          );
     my @e = sort by_2nd @expected;
     my @r = sort by_2nd @result;
-    lists_match(\@r, \@e);
-    is_deeply \@warns, [], 'no warning';
+    lists_match( \@r, \@e );
+    lists_match( \@warns, [], 'no warning' );
 }
 
 # fill_type_wanted need to be called in order to be able
@@ -522,7 +522,7 @@ my $iter1;
     my $dir = 't/swamp';
     my $what = App::Ack::get_starting_points( [$dir], \%opts );
     fill_type_wanted();
-    is_deeply $what, ["t${dir_sep}swamp"], 'get_starting_points' ;
+    lists_match( $what, ["t${dir_sep}swamp"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
     is( ref $iter, 'CODE' );
     App::Ack::filetype_setup();
@@ -536,8 +536,8 @@ my $iter1;
              undef
            ]
          );
-    lists_match(\@result, \@expected);
-    is_deeply \@warns, [], 'no warning';
+    lists_match( \@result, \@expected );
+    lists_match( \@warns, [], 'no warning' );
 }
 
 {
@@ -549,7 +549,7 @@ my $iter1;
     my $dir = 't/swamp';
     my $what = App::Ack::get_starting_points( [$dir], \%opts );
     fill_type_wanted();
-    is_deeply $what, ["t${dir_sep}swamp"], 'get_starting_points' ;
+    lists_match( $what, ["t${dir_sep}swamp"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
     is( ref $iter, 'CODE' );
     App::Ack::filetype_setup();
@@ -563,8 +563,8 @@ my $iter1;
              undef
            ]
          );
-    lists_match(\@result, \@expected);
-    is_deeply \@warns, [], 'no warning';
+    lists_match( \@result, \@expected );
+    lists_match( \@warns, [], 'no warning' );
 }
 
 {
@@ -577,7 +577,7 @@ my $iter1;
     my $what = App::Ack::get_starting_points( [$dir], \%opts );
     fill_type_wanted();
     $App::Ack::type_wanted{js} = 1;
-    is_deeply $what, ["t${dir_sep}swamp"], 'get_starting_points' ;
+    lists_match( $what, ["t${dir_sep}swamp"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
     is( ref $iter, 'CODE' );
     App::Ack::filetype_setup();
@@ -591,8 +591,8 @@ my $iter1;
              undef
            ]
          );
-    lists_match(\@result, \@expected);
-    is_deeply \@warns, [], 'no warning';
+    lists_match( \@result, \@expected );
+    lists_match( \@warns, [], 'no warning' );
 }
 
 {
@@ -605,7 +605,7 @@ my $iter1;
     my $what = App::Ack::get_starting_points( [$dir], \%opts );
     fill_type_wanted();
     $App::Ack::type_wanted{cc} = 1;
-    is_deeply $what, ["t${dir_sep}swamp"], 'get_starting_points' ;
+    lists_match( $what, ["t${dir_sep}swamp"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
     is( ref $iter, 'CODE' );
     App::Ack::filetype_setup();
@@ -620,8 +620,8 @@ my $iter1;
            ]
 
          );
-    lists_match(\@result, \@expected);
-    is_deeply \@warns, [], 'no warning';
+    lists_match( \@result, \@expected );
+    lists_match( \@warns, [], 'no warning' );
 }
 
 

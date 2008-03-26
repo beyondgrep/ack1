@@ -681,6 +681,7 @@ Search output:
 
 File presentation:
   --pager=COMMAND       Pipes all ack output through COMMAND.
+                        Ignored if output is redirected.
   --nopager             Do not send output through a pager.  Cancels any
                         setting in ~/.ackrc or ACK_PAGER.
   --[no]heading         Print a filename heading above each file's results.
@@ -1452,12 +1453,11 @@ sub get_iterator {
     return $iter;
 }
 
-=head2 set_up_pager( $command )
-
-=cut
 
 sub set_up_pager {
     my $command = shift;
+
+    return unless $to_screen;
 
     my $pager;
     if ( not open( $pager, '|-', $command ) ) {

@@ -5,6 +5,11 @@ NEXT
     [FIXES]
     Added --pager/--nopager to the --help text
 
+    Redirecting output makes ack not set up the pager.  The following
+    does not make sense:
+
+        ack foo --pager=more > save.txt
+
 
 1.80        Wed Mar 26 10:07:53 CDT 2008
 

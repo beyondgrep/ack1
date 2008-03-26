@@ -1,5 +1,11 @@
 Changelog for ack
 
+NEXT
+
+    [FIXES]
+    Added --pager/--nopager to the --help text
+
+
 1.80        Wed Mar 26 10:07:53 CDT 2008
 
     [FIXES]

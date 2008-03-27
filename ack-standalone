@@ -1,4 +1,8 @@
 #!/usr/bin/env perl
+#
+# This standalone version of ack is generated code.
+# Please DO NOT EDIT or send patches for it.
+#
 
 use warnings;
 use strict;

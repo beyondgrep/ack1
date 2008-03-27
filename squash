@@ -7,6 +7,14 @@ use strict;
 
 use File::Next;
 
+# make clear that ack-standalone is not supposed to be edited
+my $NO_EDIT_COMMENT = <<'EOCOMMENT';
+#
+# This standalone version of ack is generated code.
+# Please DO NOT EDIT or send patches for it.
+#
+EOCOMMENT
+
 my $code;
 for my $arg ( @ARGV ) {
     my $filename = $arg;
@@ -25,8 +33,10 @@ for my $arg ( @ARGV ) {
         # See if we're in module POD blocks
         my $skip = ($filename ne 'ack') && (/^=/ .. /^=cut/);
         if ( !$skip ) {
-            # Replace the shebang line
-            s{^#!.+}{#!/usr/bin/env perl};
+            # Replace the shebang line and append 'no edit' comment
+            if ( s{^#!.+}{#!/usr/bin/env perl} ) {
+                $_ .= $NO_EDIT_COMMENT;
+            }
 
             # Remove Perl::Critic comments.
             # I'd like to remove all comments, but this is a start

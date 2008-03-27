@@ -173,6 +173,7 @@ filetype_setup	Ack.pm	/^sub filetype_setup {$/;"	s
 filetypes	Ack.pm	/^sub filetypes {$/;"	s
 filetypes_supported	Ack.pm	/^sub filetypes_supported {$/;"	s
 filetypes_supported_set	Ack.pm	/^sub filetypes_supported_set {$/;"	s
+fill_type_wanted	t/module.t	/^sub fill_type_wanted {$/;"	s
 get_command_line_options	Ack.pm	/^sub get_command_line_options {$/;"	s
 get_copyright	Ack.pm	/^sub get_copyright {$/;"	s
 get_iterator	Ack.pm	/^sub get_iterator {$/;"	s

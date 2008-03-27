@@ -46,7 +46,7 @@ STARTING_POINTS: {
     lists_match( $what, ["t${dir_sep}etc"], 'get_starting_points' );
 
     my $iter = App::Ack::get_iterator( $what, \%opt );
-    isa_ok( $iter, 'CODE', 'get_iterator returs CODE' );
+    isa_ok( $iter, 'CODE', 'get_iterator returns CODE' );
 }
 
 our @result;
@@ -77,7 +77,7 @@ my $iter1;
     lists_match( $what, ["t${dir_sep}text"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
     $iter1 = $iter;
-    is( ref $iter, 'CODE' );
+    isa_ok( $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_matches( $iter, \%opts );
     my @expected = (
@@ -114,7 +114,7 @@ my $iter1;
     lists_match( $what, ["t${dir_sep}text", "t${dir_sep}etc"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
     isnt( $iter, $iter1, 'different iterators' );
-    is( ref $iter, 'CODE' );
+    isa_ok( $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_matches( $iter, \%opts );
     my @expected = (
@@ -173,7 +173,7 @@ my $iter1;
            [
              'print',
              "Somehow no matter what the world keeps turning\n"
-           ]
+           ],
         );
 
     my @e = map {$_->[0]} @expected;
@@ -214,7 +214,7 @@ my $iter1;
     my $what = App::Ack::get_starting_points( [$dir], \%opts );
     lists_match( $what, ["t${dir_sep}text"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
-    is ref $iter, 'CODE' ;
+    isa_ok( $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_files_with_matches( $iter, \%opts );
     my @expected = (
@@ -271,7 +271,7 @@ my $iter1;
     my $what = App::Ack::get_starting_points( [$dir, 't/etc'], \%opts );
     lists_match( $what, ["t${dir_sep}text", "t${dir_sep}etc"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
-    is ref $iter, 'CODE';
+    isa_ok( $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_files_with_matches( $iter, \%opts );
     my @expected = (
@@ -390,7 +390,7 @@ my $iter1;
     my $what = App::Ack::get_starting_points( [$dir], \%opts );
     lists_match( $what, ["t${dir_sep}text"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
-    is( ref $iter, 'CODE' );
+    isa_ok( $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_files_with_matches( $iter, \%opts );
     my @expected = (
@@ -457,7 +457,7 @@ my $iter1;
     my $what = App::Ack::get_starting_points( [$dir], \%opts );
     lists_match( $what, ["t${dir_sep}text"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
-    is( ref $iter, 'CODE' );
+    isa_ok( $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_files_with_matches( $iter, \%opts );
     my @expected = (
@@ -502,7 +502,7 @@ my $iter1;
              32,
              "\n",
              1
-           ]
+           ],
          );
     my @e = sort by_2nd @expected;
     my @r = sort by_2nd @result;
@@ -524,7 +524,7 @@ my $iter1;
     fill_type_wanted();
     lists_match( $what, ["t${dir_sep}swamp"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
-    is( ref $iter, 'CODE' );
+    isa_ok( $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_files_with_matches( $iter, \%opts );
     my @expected = (
@@ -551,7 +551,7 @@ my $iter1;
     fill_type_wanted();
     lists_match( $what, ["t${dir_sep}swamp"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
-    is( ref $iter, 'CODE' );
+    isa_ok( $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_files_with_matches( $iter, \%opts );
     my @expected = (
@@ -579,7 +579,7 @@ my $iter1;
     $App::Ack::type_wanted{js} = 1;
     lists_match( $what, ["t${dir_sep}swamp"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
-    is( ref $iter, 'CODE' );
+    isa_ok( $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_files_with_matches( $iter, \%opts );
     my @expected = (
@@ -607,7 +607,7 @@ my $iter1;
     $App::Ack::type_wanted{cc} = 1;
     lists_match( $what, ["t${dir_sep}swamp"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
-    is( ref $iter, 'CODE' );
+    isa_ok( $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_files_with_matches( $iter, \%opts );
     my @expected = (

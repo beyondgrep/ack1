@@ -43,6 +43,8 @@ sub set_up_assertion_that_these_options_will_ignore_those_directories {
     # ignore everything in .svn directories
     my $svn_regex = quotemeta File::Spec->catfile( '', '.svn', '' ); # the respective filesystem equivalent of '/.svn/'
     @results = grep { ! m/$svn_regex/ } @results;
+
+    return;
 }
 
 FILES_HAVE_BEEN_SET_UP_AS_EXPECTED: {

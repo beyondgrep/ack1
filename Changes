@@ -12,6 +12,9 @@ NEXT
 
     so now ack will ignore the --pager and ACK_PAGER.
 
+    [ENHANCEMENTS]
+    Added extensions for Ruby's new Rails format and tcsh.
+
     [DOCUMENTATION]
     Pointed to Phil Jackson's Emacs extension.
 

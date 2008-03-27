@@ -104,6 +104,7 @@ NO_O	t/ack-o.t	/^NO_O: {$/;"	l
 NO_STARTDIR	t/ack-g.t	/^NO_STARTDIR: {$/;"	l
 NO_SWITCHES_MULTIPLE_FILES	t/ack-h.t	/^NO_SWITCHES_MULTIPLE_FILES: {$/;"	l
 NO_SWITCHES_ONE_FILE	t/ack-h.t	/^NO_SWITCHES_ONE_FILE: {$/;"	l
+NTESTS	t/file-permission.t	/^use constant NTESTS => 10;$/;"	c
 ONLY_MAKEFILES	t/ack-g.t	/^ONLY_MAKEFILES: {$/;"	l
 PARROT_FILES_DESCEND	t/interesting.t	/^PARROT_FILES_DESCEND: {$/;"	l
 PARROT_FILES_NODESCEND	t/interesting.t	/^PARROT_FILES_NODESCEND: {$/;"	l
@@ -125,6 +126,7 @@ SINGLE_TEXT_MATCH_ENV	t/ack-env.t	/^SINGLE_TEXT_MATCH_ENV: {$/;"	l
 SINGLE_TEXT_MATCH_NOENV	t/ack-env.t	/^SINGLE_TEXT_MATCH_NOENV: {$/;"	l
 SKIP	t/ack-passthru.t	/^    SKIP: {$/;"	l
 SKIP	t/context.t	/^    SKIP: {$/;"	l
+SKIP	t/file-permission.t	/^SKIP: {$/;"	l
 SPECIFYING_A_BAK_FILE	t/command-line-files.t	/^SPECIFYING_A_BAK_FILE: {$/;"	l
 STANDARD_GROUPING	t/ack-group.t	/^STANDARD_GROUPING: {$/;"	l
 STARTING_POINTS	t/module.t	/^STARTING_POINTS: {$/;"	l

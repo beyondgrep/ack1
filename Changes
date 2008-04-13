@@ -16,7 +16,8 @@ NEXT
     Added extensions for Ruby's new Rails format and tcsh.
 
     [DOCUMENTATION]
-    Pointed to Phil Jackson's Emacs extension.
+    Pointed to Phil Jackson's Emacs extension and Pedro Melo's
+    TextMate extension.
 
 
 1.80        Wed Mar 26 10:07:53 CDT 2008

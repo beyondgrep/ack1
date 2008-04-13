@@ -7,7 +7,7 @@
 use warnings;
 use strict;
 
-our $VERSION = '1.80';
+our $VERSION = '1.82';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.
@@ -492,6 +492,9 @@ and perl on the shebang line).
 
 =head1 ENVIRONMENT VARIABLES
 
+For commonly-used ack options, environment variables can make life much easier.
+These variables are ignored if B<--noenv> is specified on the command line.
+
 =over 4
 
 =item ACKRC
@@ -534,9 +537,6 @@ piping output on the command-line does.
 
 =back
 
-Note: The above environment variables are ignored if B<--noenv> is
-specified on the command line.
-
 =head1 ACK & OTHER TOOLS
 
 =head2 Vim integration
@@ -570,6 +570,22 @@ you can find it here:
 L<http://www.simplicidade.org/notes/archives/2008/03/search_in_proje.html>"
 
 =cut
+
+=head1 DEBUGGING ACK PROBLEMS
+
+If ack gives you output you're not expecting, start with a few simple steps.
+
+=head2 Use B<--noenv>
+
+Your environment variables and F<.ackrc> may be doing things you're
+not expecting, or forgotten you specified.  Use B<--noenv> to ignore
+your environment and F<.ackrc>.
+
+=head2 Use B<-f> to see what files you're scanning
+
+The reason I created B<-f> in the first place was as a debugging
+tool.  If ack is not finding matches you think it should find, run
+F<ack -f> to see what files are being checked.
 
 =head1 AUTHOR
 
@@ -864,7 +880,7 @@ use strict;
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.80';
+    $VERSION = '1.82';
     $COPYRIGHT = 'Copyright 2005-2008 Andy Lester, all rights reserved.';
 }
 

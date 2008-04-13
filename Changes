@@ -1,6 +1,6 @@
 Changelog for ack
 
-NEXT
+1.82        Sun Apr 13 11:36:56 CDT 2008
 
     [FIXES]
     Added --pager/--nopager to the --help text
@@ -16,6 +16,8 @@ NEXT
     Added extensions for Ruby's new Rails format and tcsh.
 
     [DOCUMENTATION]
+    Added a new Debugging section to the docs.
+
     Pointed to Phil Jackson's Emacs extension and Pedro Melo's
     TextMate extension.
 

@@ -2,6 +2,7 @@ Ack.pm
 Changes
 MANIFEST
 Makefile.PL
+META.yml
 README
 ack
 ack-help.txt
@@ -39,6 +40,7 @@ t/filetypes.t
 t/file-permission.t
 t/illegal-regex.t
 t/interesting.t
+t/incomplete-last-line.t
 t/longopts.t
 t/module.t
 t/multiline.t

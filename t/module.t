@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 37;
+use Test::More tests => 53;
 use Data::Dumper;
 
 use lib 't';
@@ -43,10 +43,10 @@ STARTING_POINTS: {
     my $dir = 't/etc';
     my %opt;
     my $what = App::Ack::get_starting_points( [$dir], \%opt );
-    is_deeply( $what, ["t${dir_sep}etc"], 'get_starting_points' );
+    lists_match( $what, ["t${dir_sep}etc"], 'get_starting_points' );
 
     my $iter = App::Ack::get_iterator( $what, \%opt );
-    isa_ok( $iter, 'CODE', 'get_iterator returs CODE' );
+    isa_ok( $iter, 'CODE', 'get_iterator returns CODE' );
 }
 
 our @result;
@@ -74,10 +74,10 @@ my $iter1;
     );
     my $dir = 't/text';
     my $what = App::Ack::get_starting_points( [$dir], \%opts );
-    is_deeply( $what, ["t${dir_sep}text"], 'get_starting_points' );
+    lists_match( $what, ["t${dir_sep}text"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
     $iter1 = $iter;
-    is( ref $iter, 'CODE' );
+    isa_ok( $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_matches( $iter, \%opts );
     my @expected = (
@@ -98,7 +98,7 @@ my $iter1;
         );
 
     lists_match( \@result, \@expected ) or diag Dumper \@result;
-    is_deeply( \@warns, [], 'no warning' );
+    lists_match( \@warns, [], 'no warning' );
 }
 
 
@@ -111,10 +111,10 @@ my $iter1;
     );
     my $dir = 't/text';
     my $what = App::Ack::get_starting_points( [$dir, 't/etc'], \%opts );
-    is_deeply $what, ["t${dir_sep}text", "t${dir_sep}etc"], 'get_starting_points';
+    lists_match( $what, ["t${dir_sep}text", "t${dir_sep}etc"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
     isnt( $iter, $iter1, 'different iterators' );
-    is( ref $iter, 'CODE' );
+    isa_ok( $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_matches( $iter, \%opts );
     my @expected = (
@@ -173,17 +173,17 @@ my $iter1;
            [
              'print',
              "Somehow no matter what the world keeps turning\n"
-           ]
+           ],
         );
 
     my @e = map {$_->[0]} @expected;
     my @r = map {$_->[0]} @result;
-    lists_match(\@e, \@r);
+    lists_match( \@e, \@r );
 
     @e = reorder(@expected);
     @r = reorder(@result);
-    lists_match(\@e, \@r);
-    is_deeply \@warns, [], 'no warning';
+    lists_match( \@e, \@r );
+    lists_match( \@warns, [], 'no warning' );
 }
 
 {
@@ -197,10 +197,9 @@ my $iter1;
     my $what = App::Ack::get_starting_points( [$dir, 't/nosuchdir'], \%opts );
     TODO: {
         local $TODO = 'remove the non-existing directory from the starting_points';
-        is_deeply $what, [$dir], 'get_starting_points';
+        lists_match( $what, [$dir], 'get_starting_points' );
     }
-    # XXX should the error be 't\nosuchdir: No such file or directory' on Windows?
-    is_deeply \@warns, [ 't/nosuchdir: No such file or directory' ], "warning";
+    lists_match( \@warns, [ "t${dir_sep}nosuchdir: No such file or directory" ], 'warning' );
 }
 
 {
@@ -213,9 +212,9 @@ my $iter1;
     );
     my $dir = 't/text';
     my $what = App::Ack::get_starting_points( [$dir], \%opts );
-    is_deeply $what, ["t${dir_sep}text"], 'get_starting_points' ;
+    lists_match( $what, ["t${dir_sep}text"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
-    is ref $iter, 'CODE' ;
+    isa_ok( $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_files_with_matches( $iter, \%opts );
     my @expected = (
@@ -255,8 +254,8 @@ my $iter1;
 
     my @e = sort by_2nd @expected;
     my @r = sort by_2nd @result;
-    lists_match(\@r, \@e);
-    is_deeply \@warns, [], 'no warning';
+    lists_match( \@r, \@e );
+    lists_match( \@warns, [], 'no warning' );
 }
 
 
@@ -270,9 +269,9 @@ my $iter1;
     );
     my $dir = 't/text';
     my $what = App::Ack::get_starting_points( [$dir, 't/etc'], \%opts );
-    is_deeply $what, ["t${dir_sep}text", "t${dir_sep}etc"], 'get_starting_points';
+    lists_match( $what, ["t${dir_sep}text", "t${dir_sep}etc"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
-    is ref $iter, 'CODE';
+    isa_ok( $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_files_with_matches( $iter, \%opts );
     my @expected = (
@@ -373,8 +372,8 @@ my $iter1;
     my @e = sort by_2nd @expected;
     my @r = sort by_2nd @result;
 
-    lists_match(\@r, \@e);
-    is_deeply \@warns, [], 'no warning';
+    lists_match( \@r, \@e );
+    lists_match( \@warns, [], 'no warning' );
 }
 
 
@@ -389,9 +388,9 @@ my $iter1;
     );
     my $dir = 't/text';
     my $what = App::Ack::get_starting_points( [$dir], \%opts );
-    is_deeply $what, ["t${dir_sep}text"], 'get_starting_points' ;
+    lists_match( $what, ["t${dir_sep}text"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
-    is( ref $iter, 'CODE' );
+    isa_ok( $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_files_with_matches( $iter, \%opts );
     my @expected = (
@@ -441,8 +440,8 @@ my $iter1;
 
     my @e = sort by_2nd @expected;
     my @r = sort by_2nd @result;
-    lists_match(\@r, \@e);
-    is_deeply \@warns, [], 'no warning';
+    lists_match( \@r, \@e );
+    lists_match( \@warns, [], 'no warning' );
 }
 
 {
@@ -456,9 +455,9 @@ my $iter1;
     );
     my $dir = 't/text';
     my $what = App::Ack::get_starting_points( [$dir], \%opts );
-    is_deeply $what, ["t${dir_sep}text"], 'get_starting_points' ;
+    lists_match( $what, ["t${dir_sep}text"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
-    is( ref $iter, 'CODE' );
+    isa_ok( $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_files_with_matches( $iter, \%opts );
     my @expected = (
@@ -503,13 +502,128 @@ my $iter1;
              32,
              "\n",
              1
-           ]
+           ],
          );
     my @e = sort by_2nd @expected;
     my @r = sort by_2nd @result;
-    lists_match(\@r, \@e);
-    is_deeply \@warns, [], 'no warning';
+    lists_match( \@r, \@e );
+    lists_match( \@warns, [], 'no warning' );
 }
+
+# fill_type_wanted need to be called in order to be able
+# to stop setting the all flag the same is done
+# in get_command_line_options when running ack from the command line
+{
+    @result = ();
+    @warns  = ();
+    my %opts = (
+        regex => 'to perl',
+    );
+    my $dir = 't/swamp';
+    my $what = App::Ack::get_starting_points( [$dir], \%opts );
+    fill_type_wanted();
+    lists_match( $what, ["t${dir_sep}swamp"], 'get_starting_points' );
+    my $iter = App::Ack::get_iterator( $what, \%opts );
+    isa_ok( $iter, 'CODE' );
+    App::Ack::filetype_setup();
+    App::Ack::print_files_with_matches( $iter, \%opts );
+    my @expected = (
+           [
+             'count',
+             "t${dir_sep}swamp${dir_sep}Makefile",
+             1,
+             "\n",
+             undef
+           ]
+         );
+    lists_match( \@result, \@expected );
+    lists_match( \@warns, [], 'no warning' );
+}
+
+{
+    @result = ();
+    @warns  = ();
+    my %opts = (
+        regex => 'to perl',
+    );
+    my $dir = 't/swamp';
+    my $what = App::Ack::get_starting_points( [$dir], \%opts );
+    fill_type_wanted();
+    lists_match( $what, ["t${dir_sep}swamp"], 'get_starting_points' );
+    my $iter = App::Ack::get_iterator( $what, \%opts );
+    isa_ok( $iter, 'CODE' );
+    App::Ack::filetype_setup();
+    App::Ack::print_files_with_matches( $iter, \%opts );
+    my @expected = (
+           [
+             'count',
+             "t${dir_sep}swamp${dir_sep}Makefile",
+             1,
+             "\n",
+             undef
+           ]
+         );
+    lists_match( \@result, \@expected );
+    lists_match( \@warns, [], 'no warning' );
+}
+
+{
+    @result = ();
+    @warns  = ();
+    my %opts = (
+        regex => 'to',
+    );
+    my $dir = 't/swamp';
+    my $what = App::Ack::get_starting_points( [$dir], \%opts );
+    fill_type_wanted();
+    $App::Ack::type_wanted{js} = 1;
+    lists_match( $what, ["t${dir_sep}swamp"], 'get_starting_points' );
+    my $iter = App::Ack::get_iterator( $what, \%opts );
+    isa_ok( $iter, 'CODE' );
+    App::Ack::filetype_setup();
+    App::Ack::print_files_with_matches( $iter, \%opts );
+    my @expected = (
+           [
+             'count',
+             "t${dir_sep}swamp${dir_sep}javascript.js",
+             1,
+             "\n",
+             undef
+           ]
+         );
+    lists_match( \@result, \@expected );
+    lists_match( \@warns, [], 'no warning' );
+}
+
+{
+    @result = ();
+    @warns  = ();
+    my %opts = (
+        regex => 'to',
+    );
+    my $dir = 't/swamp';
+    my $what = App::Ack::get_starting_points( [$dir], \%opts );
+    fill_type_wanted();
+    $App::Ack::type_wanted{cc} = 1;
+    lists_match( $what, ["t${dir_sep}swamp"], 'get_starting_points' );
+    my $iter = App::Ack::get_iterator( $what, \%opts );
+    isa_ok( $iter, 'CODE' );
+    App::Ack::filetype_setup();
+    App::Ack::print_files_with_matches( $iter, \%opts );
+    my @expected = (
+           [
+             'count',
+             "t${dir_sep}swamp${dir_sep}c-source.c",
+             1,
+             "\n",
+             undef
+           ]
+
+         );
+    lists_match( \@result, \@expected );
+    lists_match( \@warns, [], 'no warning' );
+}
+
 
 sub by_2nd { return $a->[1] cmp $b->[1]}
 
@@ -519,6 +633,12 @@ sub reorder {
     my @grouped = map { [ @_[$_*$n .. $_*$n+$n-1] ] } (0 .. (@_-1)/$n);
     my @sorted = sort { $a->[0][1] cmp $b->[0][1] or $a->[1][1] <=> $b->[1][1] } @grouped;
     return map { @{$_} } @sorted;
+}
+
+sub fill_type_wanted {
+    for my $i ( App::Ack::filetypes_supported() ) {
+        $App::Ack::type_wanted{ $i } = undef;
+    }
 }
 
 

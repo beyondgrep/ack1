@@ -13,7 +13,6 @@ my %parms = (
     VERSION_FROM        => 'Ack.pm',
     PM                  => { 'Ack.pm' => '$(INST_LIBDIR)/App/Ack.pm' },
     EXE_FILES           => [ 'ack' ],
-    LICENSE             => 'perl',
     PREREQ_PM => {
         'Test::Harness'     => 2.50, # Something reasonably newish
         'Term::ANSIColor'   => 0,
@@ -26,7 +25,11 @@ my %parms = (
     clean               => { FILES => 'ack-1*' },
 );
 
-if ( $ExtUtils::MakeMaker::VERSION eq '6.36' ) {
+if ( $ExtUtils::MakeMaker::VERSION =~ /^\d\.\d\d$/ and $ExtUtils::MakeMaker::VERSION > 6.30 ) {
+    $parms{LICENSE} = 'perl';
+}
+
+if ( $ExtUtils::MakeMaker::VERSION ge '6.36' ) {
     $parms{EXTRA_META} = <<EOF;
 resources:
     homepage: http://petdance.com/ack/
@@ -72,12 +75,12 @@ tags:
 critic:
 	perlcritic -1 -q -profile perlcriticrc ack Ack.pm t/*.t
 
-PROF_ARGS = ack-standalone --color --group -w foo ~/parrot
+PROF_ARGS = ack-standalone --noenv --color --group -w foo ~/parrot
 
 timed: all
 	$(PERL) $(PROF_ARGS) >> /dev/null 2>&1
 
-prof: all
+dprof: all
 	$(PERL) -d:DProf $(PROF_ARGS) >> /dev/null 2>&1
 	dprofpp -R
 

@@ -11,14 +11,14 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.77_04
+Version 1.82
 
 =cut
 
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.78';
+    $VERSION = '1.82';
     $COPYRIGHT = 'Copyright 2005-2008 Andy Lester, all rights reserved.';
 }
 
@@ -34,7 +34,7 @@ our %type_wanted;
 our %mappings;
 our %ignore_dirs;
 
-our $dir_sep_regex;
+our $dir_sep_chars;
 our $is_cygwin;
 our $is_windows;
 our $to_screen;
@@ -73,7 +73,7 @@ BEGIN {
         binary      => q{Binary files, as defined by Perl's -B op (default: off)},
         cc          => [qw( c h xs )],
         cfmx        => [qw( cfc cfm cfml )],
-        cpp         => [qw( cpp cc m hpp hh h )],
+        cpp         => [qw( cpp cc cxx m hpp hh h hxx )],
         csharp      => [qw( cs )],
         css         => [qw( css )],
         elisp       => [qw( el )],
@@ -96,9 +96,9 @@ BEGIN {
         php         => [qw( php phpt php3 php4 php5 )],
         plone       => [qw( pt cpt metadata cpy py )],
         python      => [qw( py )],
-        ruby        => [qw( rb rhtml rjs rxml )],
+        ruby        => [qw( rb rhtml rjs rxml erb )],
         scheme      => [qw( scm )],
-        shell       => [qw( sh bash csh ksh zsh )],
+        shell       => [qw( sh bash csh tcsh ksh zsh )],
         skipped     => q{Files, but not directories, normally skipped by ack (default: off)},
         smalltalk   => [qw( st )],
         sql         => [qw( sql ctl )],
@@ -120,10 +120,10 @@ BEGIN {
         }
     }
 
-    $dir_sep_regex  = quotemeta( File::Spec->catfile( '', '' ) );
     $is_cygwin      = ($^O eq 'cygwin');
     $is_windows     = ($^O =~ /MSWin32/);
     $to_screen      = -t *STDOUT;
+    $dir_sep_chars  = $is_windows ? quotemeta( '\\/' ) : quotemeta( File::Spec->catfile( '', '' ) );
 }
 
 =head1 SYNOPSIS
@@ -214,8 +214,8 @@ sub get_command_line_options {
         'v|invert-match'        => \$opt{v},
         'w|word-regexp'         => \$opt{w},
 
-        'ignore-dirs=s'         => sub { shift; my $dir = remove_path_sep( shift ); $ignore_dirs{$dir} = '--ignore-dirs' },
-        'noignore-dirs=s'       => sub { shift; my $dir = remove_path_sep( shift ); delete $ignore_dirs{$dir} },
+        'ignore-dirs=s'         => sub { shift; my $dir = remove_dir_sep( shift ); $ignore_dirs{$dir} = '--ignore-dirs' },
+        'noignore-dirs=s'       => sub { shift; my $dir = remove_dir_sep( shift ); delete $ignore_dirs{$dir} },
 
         'version'   => sub { print_version_statement(); exit 1; },
         'help|?:s'  => sub { shift; show_help(@_); exit; },
@@ -412,15 +412,15 @@ sub ignoredir_filter {
     return !exists $ignore_dirs{$_};
 }
 
-=head2 remove_path_sep( $path )
+=head2 remove_dir_sep( $path )
 
 This functions removes a trailing path separator, if there is one, from its argument
 
 =cut
 
-sub remove_path_sep {
+sub remove_dir_sep {
     my $path = shift;
-    $path =~ s/$dir_sep_regex$//;
+    $path =~ s/[$dir_sep_chars]$//;
 
     return $path;
 }
@@ -445,10 +445,10 @@ sub filetypes {
 
     return 'skipped' unless is_searchable( $filename );
 
-    return ('make',TEXT) if $filename =~ m{$dir_sep_regex?Makefile$}io;
+    return ('make',TEXT) if $filename =~ m{[$dir_sep_chars]?Makefile$}io;
 
     # If there's an extension, look it up
-    if ( $filename =~ m{\.([^\.$dir_sep_regex]+)$}o ) {
+    if ( $filename =~ m{\.([^\.$dir_sep_chars]+)$}o ) {
         my $ref = $types{lc $1};
         return (@{$ref},TEXT) if $ref;
     }
@@ -511,7 +511,7 @@ sub is_searchable {
     # If these are updated, update the --help message
     return if $filename =~ /\.bak$/;
     return if $filename =~ /~$/;
-    return if $filename =~ m{$dir_sep_regex?(?:#.+#|core\.\d+|[._].*\.swp)$}o;
+    return if $filename =~ m{[$dir_sep_chars]?(?:#.+#|core\.\d+|[._].*\.swp)$}o;
 
     return 1;
 }
@@ -680,6 +680,10 @@ Search output:
                         only works with -f, -g, -l, -L or -c.
 
 File presentation:
+  --pager=COMMAND       Pipes all ack output through COMMAND.
+                        Ignored if output is redirected.
+  --nopager             Do not send output through a pager.  Cancels any
+                        setting in ~/.ackrc or ACK_PAGER.
   --[no]heading         Print a filename heading above each file's results.
                         (default: on when used interactively)
   --[no]break           Print a break between results from different files.
@@ -945,8 +949,10 @@ sub needs_line_scan {
     my $rc = sysread( $fh, $buffer, $size );
     return 0 unless $rc && ( $rc == $size );
 
-    $regex = $opt->{i} ? qr/$regex/im : qr/$regex/m;
-    return ( $buffer =~ /$regex/ );
+    return
+        $opt->{i}
+            ? ( $buffer =~ /$regex/im )
+            : ( $buffer =~ /$regex/m );
 }
 
 # print subs added in order to make it easy for a third party
@@ -1394,6 +1400,7 @@ sub get_starting_points {
 
     if ( @{$argv} ) {
         @what = @{ $is_windows ? expand_filenames($argv) : $argv };
+        $_ = File::Next::reslash( $_ ) for @what;
 
         # Show filenames unless we've specified one single file
         $opt->{show_filename} = (@what > 1) || (!-f $what[0]);
@@ -1403,10 +1410,8 @@ sub get_starting_points {
         $opt->{show_filename} = 1;
     }
 
-    # Barf if the starting points don't exist
     for my $start_point (@what) {
-        App::Ack::warn("$start_point: No such file or directory") unless -e $start_point;
-        $start_point =~ s{/}{\\}g if $is_windows;
+        App::Ack::warn( "$start_point: No such file or directory" ) unless -e $start_point;
     }
     return \@what;
 }
@@ -1425,12 +1430,13 @@ sub get_iterator {
     # Starting points are always search, no matter what
     my $is_starting_point = sub { return grep { $_ eq $_[0] } @{$what} };
 
+    my $g_regex = defined $opt->{G} ? qr/$opt->{G}/ : undef;
     my $file_filter
-        = $opt->{u}   && defined $opt->{G} ? sub { $File::Next::name =~ /$opt->{G}/o }
-        : $opt->{all} && defined $opt->{G} ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$opt->{G}/o && is_searchable( $File::Next::name ) ) }
+        = $opt->{u}   && defined $opt->{G} ? sub { $File::Next::name =~ /$g_regex/ }
+        : $opt->{all} && defined $opt->{G} ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$g_regex/ && is_searchable( $File::Next::name ) ) }
         : $opt->{u}                        ? sub {1}
         : $opt->{all}                      ? sub { $is_starting_point->( $File::Next::name ) || is_searchable( $File::Next::name ) }
-        : defined $opt->{G}                ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$opt->{G}/o && is_interesting( @_ ) ) }
+        : defined $opt->{G}                ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$g_regex/ && is_interesting( @_ ) ) }
         :                                    sub { $is_starting_point->( $File::Next::name ) || is_interesting( @_ ) }
         ;
     my $iter =
@@ -1448,12 +1454,11 @@ sub get_iterator {
     return $iter;
 }
 
-=head2 set_up_pager( $command )
-
-=cut
 
 sub set_up_pager {
     my $command = shift;
+
+    return unless $to_screen;
 
     my $pager;
     if ( not open( $pager, '|-', $command ) ) {

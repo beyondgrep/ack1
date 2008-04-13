@@ -20,7 +20,7 @@ my @tests = (
 plan tests => @tests * 4;
 
 for ( @tests ) {
-    test_ack_with( @$_ );
+    test_ack_with( @{$_} );
 }
 
 sub test_ack_with {

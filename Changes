@@ -1,6 +1,38 @@
 Changelog for ack
 
-NEXT
+1.82        Sun Apr 13 11:36:56 CDT 2008
+
+    [FIXES]
+    Added --pager/--nopager to the --help text
+
+    Redirecting output makes ack not set up the pager.  The following
+    does not make sense:
+
+        ack foo --pager=more > save.txt
+
+    so now ack will ignore the --pager and ACK_PAGER.
+
+    [ENHANCEMENTS]
+    Added extensions for Ruby's new Rails format and tcsh.
+
+    [DOCUMENTATION]
+    Added a new Debugging section to the docs.
+
+    Pointed to Phil Jackson's Emacs extension and Pedro Melo's
+    TextMate extension.
+
+
+1.80        Wed Mar 26 10:07:53 CDT 2008
+
+    [FIXES]
+    --noenv now correctly ignores ACK_PAGER.
+
+    More Windows compatibility path fixes.  Thanks, Jan Dubois.
+
+    Fixed an install problem with t/file-permission.t.
+
+
+1.78        Mon Mar 24 00:32:36 CDT 2008
     [ENHANCEMENTS]
     ack can now feed its output to a pager.  It can be specified
     with --pager on the command-line, or with the ACK_PAGER environment
@@ -19,8 +51,8 @@ NEXT
 
     [INTERNALS]
     I removed t/pod-coverage.t, because I don't care about the
-    documentation.  The user-servicable parts are only for for
-    hardcore ack hacks.
+    documentation.  The user-servicable parts are only for hardcore
+    ack hacks.
 
 
 1.77_04     Fri Mar 14 00:23:46 CDT 2008

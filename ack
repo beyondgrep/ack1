@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION = '1.78';
+our $VERSION = '1.82';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.
@@ -25,7 +25,7 @@ MAIN: {
 
         # See if we want to ignore the environment. (Don't tell Al Gore.)
         if ( $_ eq '--noenv' ) {
-            delete @ENV{qw( ACK_OPTIONS ACKRC ACK_COLOR_MATCH ACK_COLOR_FILENAME ACK_SWITCHES )};
+            delete @ENV{qw( ACK_OPTIONS ACKRC ACK_COLOR_MATCH ACK_COLOR_FILENAME ACK_SWITCHES ACK_PAGER )};
             $env_ok = 0;
         }
     }
@@ -48,7 +48,16 @@ sub main {
     my $opt = App::Ack::get_command_line_options();
     if ( !-t STDIN && !eof(STDIN) ) {
         # We're going into filter mode
-        filter_mode( $opt );
+        for ( qw( f g l ) ) {
+            $opt->{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );
+        }
+        $opt->{show_filename} = 0;
+        $opt->{regex} = App::Ack::build_regex( defined $opt->{regex} ? $opt->{regex} : shift @ARGV, $opt );
+        if ( my $nargs = @ARGV ) {
+            my $s = $nargs == 1 ? '' : 's';
+            App::Ack::warn( "Ignoring $nargs argument$s on the command-line while acting as a filter." );
+        }
+        App::Ack::search( \*STDIN, 0, '-', $opt );
         exit 0;
     }
 
@@ -58,15 +67,14 @@ sub main {
         $opt->{regex} = App::Ack::build_regex( defined $opt->{regex} ? $opt->{regex} : shift @ARGV, $opt );
     }
 
-    my $what = App::Ack::get_starting_points( \@ARGV, $opt );
-    my $iter = App::Ack::get_iterator( $what, $opt );
-
     # check that all regexes do compile fine
     App::Ack::check_regex( $_ ) for ( $opt->{regex}, $opt->{G} );
 
-    App::Ack::set_up_pager( $opt->{pager} ) if defined $opt->{pager};
-
+    my $what = App::Ack::get_starting_points( \@ARGV, $opt );
+    my $iter = App::Ack::get_iterator( $what, $opt );
     App::Ack::filetype_setup();
+
+    App::Ack::set_up_pager( $opt->{pager} ) if defined $opt->{pager};
     if ( $opt->{f} ) {
         App::Ack::print_files( $iter, $opt );
     }
@@ -78,23 +86,6 @@ sub main {
     }
     close $App::Ack::fh;
     exit 0;
-}
-
-sub filter_mode {
-    my $opt = shift;
-
-    for ( qw( f g l ) ) {
-        $opt->{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );
-    }
-    $opt->{show_filename} = 0;
-    $opt->{regex} = App::Ack::build_regex( defined $opt->{regex} ? $opt->{regex} : shift @ARGV, $opt );
-    if ( my $nargs = @ARGV ) {
-        my $s = $nargs == 1 ? '' : 's';
-        App::Ack::warn( "Ignoring $nargs argument$s on the command-line while acting as a filter." );
-    }
-    App::Ack::search( \*STDIN, 0, '-', $opt );
-
-    return;
 }
 
 =head1 NAME
@@ -498,6 +489,9 @@ and perl on the shebang line).
 
 =head1 ENVIRONMENT VARIABLES
 
+For commonly-used ack options, environment variables can make life much easier.
+These variables are ignored if B<--noenv> is specified on the command line.
+
 =over 4
 
 =item ACKRC
@@ -540,9 +534,6 @@ piping output on the command-line does.
 
 =back
 
-Note: The above environment variables are ignored if B<--noenv> is
-specified on the command line.
-
 =head1 ACK & OTHER TOOLS
 
 =head2 Vim integration
@@ -558,7 +549,40 @@ step through the results in Vim:
 
   :grep Dumper perllib
 
+=head2 Emacs integration
+
+Phil Jackson put together an F<ack.el> extension that "provides a
+simple compilation mode ... has the ability to guess what files you
+want to search for based on the major-mode."
+
+L<http://www.shellarchive.co.uk/emacs.html>
+
+=head2 TextMate integration
+
+Pedro Melo is a TextMate user who writes "I spend my day mostly
+inside TextMate, and the built-in find-in-project sucks with large
+projects.  So I hacked a TextMate command that was using find +
+grep to use ack.  The result is the Search in Project with ack, and
+you can find it here:
+L<http://www.simplicidade.org/notes/archives/2008/03/search_in_proje.html>"
+
 =cut
+
+=head1 DEBUGGING ACK PROBLEMS
+
+If ack gives you output you're not expecting, start with a few simple steps.
+
+=head2 Use B<--noenv>
+
+Your environment variables and F<.ackrc> may be doing things you're
+not expecting, or forgotten you specified.  Use B<--noenv> to ignore
+your environment and F<.ackrc>.
+
+=head2 Use B<-f> to see what files you're scanning
+
+The reason I created B<-f> in the first place was as a debugging
+tool.  If ack is not finding matches you think it should find, run
+F<ack -f> to see what files are being checked.
 
 =head1 AUTHOR
 
@@ -619,6 +643,10 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Pedro Melo,
+AJ Schuster,
+Phil Jackson,
+Michael Schwern,
 Jan Dubois,
 Christopher J. Madsen,
 Matthew Wickline,

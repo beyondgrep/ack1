@@ -21,8 +21,7 @@ my @tests = (
 # 3 tests for each call to test_match()
 plan tests => @tests * 3;
 
-test_match( @$_ ) for @tests;
-
+test_match( @{$_} ) for @tests;
 
 # call ack normally and compare output to calling with --match regex
 #

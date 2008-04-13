@@ -13,7 +13,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]binary       Binary files, as defined by Perl's -B op (default: off)
     --[no]cc           .c .h .xs
     --[no]cfmx         .cfc .cfm .cfml
-    --[no]cpp          .cpp .cc .m .hpp .hh .h
+    --[no]cpp          .cpp .cc .cxx .m .hpp .hh .h .hxx
     --[no]csharp       .cs
     --[no]css          .css
     --[no]elisp        .el
@@ -36,9 +36,9 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]php          .php .phpt .php3 .php4 .php5
     --[no]plone        .pt .cpt .metadata .cpy .py
     --[no]python       .py
-    --[no]ruby         .rb .rhtml .rjs .rxml
+    --[no]ruby         .rb .rhtml .rjs .rxml .erb
     --[no]scheme       .scm
-    --[no]shell        .sh .bash .csh .ksh .zsh
+    --[no]shell        .sh .bash .csh .tcsh .ksh .zsh
     --[no]skipped      Files, but not directories, normally skipped by ack (default: off)
     --[no]smalltalk    .st
     --[no]sql          .sql .ctl

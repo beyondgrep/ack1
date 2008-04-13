@@ -557,6 +557,15 @@ want to search for based on the major-mode."
 
 L<http://www.shellarchive.co.uk/emacs.html>
 
+=head2 TextMate integration
+
+Pedro Melo is a TextMate user who writes "I spend my day mostly
+inside TextMate, and the built-in find-in-project sucks with large
+projects.  So I hacked a TextMate command that was using find +
+grep to use ack.  The result is the Search in Project with ack, and
+you can find it here:
+L<http://www.simplicidade.org/notes/archives/2008/03/search_in_proje.html>"
+
 =cut
 
 =head1 AUTHOR
@@ -618,6 +627,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Pedro Melo,
 AJ Schuster,
 Phil Jackson,
 Michael Schwern,

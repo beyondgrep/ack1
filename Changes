@@ -1,5 +1,10 @@
 Changelog for ack
 
+NEXT
+    [ENHANCEMENTS]
+    Support color on Windows.  Thanks, Jan Dubois.
+
+
 1.82        Sun Apr 13 11:36:56 CDT 2008
 
     [FIXES]

@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION = '1.82';
+our $VERSION = '1.83_01';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.
@@ -16,7 +16,7 @@ MAIN: {
     }
 
     # Do preliminary arg checking;
-    my $env_ok = 1;
+    my $env_is_usable = 1;
     for ( @ARGV ) {
         last if ( $_ eq '--' );
 
@@ -25,11 +25,12 @@ MAIN: {
 
         # See if we want to ignore the environment. (Don't tell Al Gore.)
         if ( $_ eq '--noenv' ) {
-            delete @ENV{qw( ACK_OPTIONS ACKRC ACK_COLOR_MATCH ACK_COLOR_FILENAME ACK_SWITCHES ACK_PAGER )};
-            $env_ok = 0;
+            my @keys = ( 'ACKRC', grep { /^ACK_/ } keys %ENV );
+            delete @ENV{@keys};
+            $env_is_usable = 0;
         }
     }
-    unshift( @ARGV, App::Ack::read_ackrc() ) if $env_ok;
+    unshift( @ARGV, App::Ack::read_ackrc() ) if $env_is_usable;
     App::Ack::load_colors();
 
     if ( exists $ENV{ACK_SWITCHES} ) {
@@ -188,8 +189,11 @@ B<-l>, some line counts may be zeroes.
 =item B<--color>, B<--nocolor>
 
 B<--color> highlights the matching text.  B<--nocolor> supresses
-the color.  This is on by default unless the output is redirected,
-or running under Windows.
+the color.  This is on by default unless the output is redirected.
+
+On Windows this option is only turned on by default if the
+Win32::Console::ANSI module is installed or if the C<ACK_PAGER_COLOR>
+environment variable is used.
 
 =item B<--env>, B<--noenv>
 
@@ -307,7 +311,7 @@ highlighting)
 =item B<--pager=I<program>>
 
 Direct ack's output through I<program>.  This can also be specified
-via the C<ACK_PAGER> environment variable.
+via the C<ACK_PAGER> and C<ACK_PAGER_COLOR> environment variables.
 
 Using --pager does not suppress grouping and coloring like piping
 output on the command-line does.
@@ -530,6 +534,18 @@ Specifies a pager program, such as C<more>, C<less> or C<most>, to which
 ack will send its output.
 
 Using C<ACK_PAGER> does not suppress grouping and coloring like
+piping output on the command-line does, except that on Windows
+ack will assume that C<ACK_PAGER> does not support color.
+
+C<ACK_PAGER> is being ignored if C<ACK_PAGER_COLOR> is specified too.
+
+=item ACK_PAGER_COLOR
+
+Specifies a pager program that understands ANSI color sequences, such as
+C<less -R>, to which ack will send its output.  This is primarily usefull
+on Windows where the console doesn't support color natively.
+
+Using C<ACK_PAGER_COLOR> does not suppress grouping and coloring like
 piping output on the command-line does.
 
 =back

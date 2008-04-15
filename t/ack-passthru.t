@@ -46,17 +46,13 @@ DASH_C: {
 }
 
 HIGHLIGHTING: {
-    SKIP: {
-        skip 'Highlighting does not work on Windows', 2 if is_win32();
+    my @ack_args = qw( July --text --passthru --color );
+    my @results = pipe_into_ack( 't/text/4th-of-july.txt', @ack_args );
 
-        my @ack_args = qw( July --text --passthru --color );
-        my @results = pipe_into_ack( 't/text/4th-of-july.txt', @ack_args );
+    cmp_ok( scalar @results, '=', scalar @full_lyrics, 'Got all the lines back' );
 
-        cmp_ok( scalar @results, '=', scalar @full_lyrics, 'Got all the lines back' );
-
-        my @escaped_lines = grep { /\e/ } @results;
-        is( scalar @escaped_lines, 2, 'Only two lines are highlighted' );
-    }
+    my @escaped_lines = grep { /\e/ } @results;
+    is( scalar @escaped_lines, 2, 'Only two lines are highlighted' );
 }
 
 __DATA__

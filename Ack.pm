@@ -11,14 +11,14 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.82
+Version 1.83_01
 
 =cut
 
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.82';
+    $VERSION = '1.83_01';
     $COPYRIGHT = 'Copyright 2005-2008 Andy Lester, all rights reserved.';
 }
 
@@ -173,7 +173,7 @@ Gets command-line arguments and does the Ack-specific tweaking.
 
 sub get_command_line_options {
     my %opt = (
-        pager => $ENV{ACK_PAGER},
+        pager => $ENV{ACK_PAGER_COLOR} || $ENV{ACK_PAGER},
     );
 
     my $getopt_specs = {
@@ -256,13 +256,22 @@ sub get_command_line_options {
 
     my %defaults = (
         all            => 0,
-        color          => $to_screen && !$is_windows,
+        color          => $to_screen,
         follow         => 0,
         break          => $to_screen,
         heading        => $to_screen,
         before_context => 0,
         after_context  => 0,
     );
+    if ( $is_windows && $defaults{color} && not $ENV{ACK_PAGER_COLOR} ) {
+        if ( $ENV{ACK_PAGER} || not eval { require Win32::Console::ANSI } ) {
+            $defaults{color} = 0;
+        }
+    }
+    if ( $to_screen && $ENV{ACK_PAGER_COLOR} ) {
+        $defaults{color} = 1;
+    }
+
     while ( my ($key,$value) = each %defaults ) {
         if ( not defined $opt{$key} ) {
             $opt{$key} = $value;
@@ -683,7 +692,7 @@ File presentation:
   --pager=COMMAND       Pipes all ack output through COMMAND.
                         Ignored if output is redirected.
   --nopager             Do not send output through a pager.  Cancels any
-                        setting in ~/.ackrc or ACK_PAGER.
+                        setting in ~/.ackrc, ACK_PAGER or ACK_PAGER_COLOR.
   --[no]heading         Print a filename heading above each file's results.
                         (default: on when used interactively)
   --[no]break           Print a break between results from different files.
@@ -837,17 +846,15 @@ sub get_copyright {
 
 =head2 load_colors
 
-Set default colors, load Term::ANSIColor on non Windows platforms
+Set default colors, load Term::ANSIColor
 
 =cut
 
 sub load_colors {
-    if ( not $is_windows ) {
-        eval 'use Term::ANSIColor ()';
+    eval 'use Term::ANSIColor ()';
 
-        $ENV{ACK_COLOR_MATCH}    ||= 'black on_yellow';
-        $ENV{ACK_COLOR_FILENAME} ||= 'bold green';
-    }
+    $ENV{ACK_COLOR_MATCH}    ||= 'black on_yellow';
+    $ENV{ACK_COLOR_FILENAME} ||= 'bold green';
 
     return;
 }

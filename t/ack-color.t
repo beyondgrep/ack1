@@ -9,7 +9,6 @@ use File::Next ();
 use lib 't';
 use Util;
 
-plan skip_all => 'Highlighting does not work on Windows' if is_win32();
 plan tests => 5;
 
 prep_environment();

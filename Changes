@@ -4,6 +4,9 @@ NEXT
     [ENHANCEMENTS]
     Support color on Windows.  Thanks, Jan Dubois.
 
+    [FIXES]
+    t/file-permissions.t should work now running as root
+
 
 1.82        Sun Apr 13 11:36:56 CDT 2008
 

@@ -107,3 +107,5 @@ Miscellaneous:
   --man                 Man page
   --version             Display version & copyright
   --thpppt              Bill the Cat
+
+This is version 1.83_01 of ack.

@@ -747,6 +747,8 @@ Miscellaneous:
   --man                 Man page
   --version             Display version & copyright
   --thpppt              Bill the Cat
+
+This is version $VERSION of ack.
 END_OF_HELP
 
     return;
@@ -804,7 +806,7 @@ sub _listify {
     return Text::Wrap::wrap( '', '    ', $str );
 }
 
-=head2 get_version_statement( $copyright )
+=head2 get_version_statement
 
 Returns the version information for ack.
 
@@ -822,7 +824,7 @@ under the same terms as Perl itself.
 END_OF_VERSION
 }
 
-=head2 print_version_statement( $copyright )
+=head2 print_version_statement
 
 Prints the version information for ack.
 

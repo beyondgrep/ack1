@@ -570,7 +570,7 @@ Phil Jackson put together an F<ack.el> extension that "provides a
 simple compilation mode ... has the ability to guess what files you
 want to search for based on the major-mode."
 
-L<http://www.shellarchive.co.uk/emacs.html>
+L<http://www.shellarchive.co.uk/content/emacs.html>
 
 =head2 TextMate integration
 

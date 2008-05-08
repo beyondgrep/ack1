@@ -963,6 +963,7 @@ BEGIN {
         js          => [qw( js )],
         jsp         => [qw( jsp jspx jhtm jhtml )],
         lisp        => [qw( lisp lsp )],
+        lua         => [qw( lua )],
         make        => q{Makefiles},
         mason       => [qw( mas mhtml mpl mtxt )],
         objc        => [qw( m h )],

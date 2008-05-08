@@ -6,6 +6,8 @@ NEXT
 
     ack --help outputs the current version number of ack now.
 
+    Added Lua support.  Thanks, Ben Klaas.
+
     [FIXES]
     t/file-permissions.t should work now running as root
 

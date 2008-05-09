@@ -279,6 +279,11 @@ order given on the command line.
 
 Only print the filenames of matching files, instead of the matching text.
 
+=item B<-L>, B<--files-without-matches>
+
+Only print the filenames of files that do I<NOT> match. This is equivalent
+to specifying B<-l> and B<-v>.
+
 =item B<--match I<REGEX>>
 
 Specify the I<REGEX> explicitly. This is helpful if you don't want to put the

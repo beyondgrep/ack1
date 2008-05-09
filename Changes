@@ -16,6 +16,8 @@ NEXT
     Fixed documentation regarding caveats in defining your own
     types in the .ackrc file. Multiple people reported this, thanks.
 
+    Added ack --man documentation for -L option.
+
 
 1.82        Sun Apr 13 11:36:56 CDT 2008
 

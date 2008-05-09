@@ -437,7 +437,8 @@ might look like this:
     --pager=less -r
 
 Note that arguments with spaces in them do not need to be quoted,
-as they are not interpreted by the shell.
+as they are not interpreted by the shell. Basically, each I<line>
+in the F<.ackrc> file is interpreted as one element of C<@ARGV>.
 
 F<ack> looks in your home directory for the F<.ackrc>.  You can
 specify another location with the F<ACKRC> variable, below.
@@ -469,6 +470,21 @@ As usual, you can also write B<--type=eiffel>
 instead of B<--eiffel>. Negation also works, so B<--noeiffel> excludes
 all eiffel files from a search. Redefining also works: I<ack --type-set cc=.c,.h>
 and I<.xs> files no longer belong to the type I<cc>.
+
+When defining your own types in the F<.ackrc> file you have to use
+the following:
+
+  --type-set=eiffel=.e,.eiffel
+
+or writing on separate lines
+
+  --type-set
+  eiffel=.e,.eiffel
+
+The following does B<NOT> work in the F<.ackrc> file:
+
+  --type-set eiffel=.e,.eiffel
+
 
 In order to see all currently defined types, use I<--help types>, e.g.
 I<ack --type-set backup=.bak --type-add perl=.perl --help types>

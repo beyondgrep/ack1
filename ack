@@ -47,6 +47,9 @@ MAIN: {
 
 sub main {
     my $opt = App::Ack::get_command_line_options();
+
+    $| = 1 if $opt->{flush}; # Unbuffer the output if flush mode
+
     if ( !-t STDIN && !eof(STDIN) ) {
         # We're going into filter mode
         for ( qw( f g l ) ) {
@@ -200,6 +203,12 @@ environment variable is used.
 B<--noenv> disables all environment processing. No F<.ackrc> is read
 and all environment variables are ignored. By default, F<ack> considers
 F<.ackrc> and settings in the environment.
+
+=item B<--flush>
+
+B<--flush> flushes output immediately.  This is off by default
+unless ack is running interactively (when output goes to a pipe
+or file).
 
 =item B<-f>
 
@@ -432,7 +441,7 @@ might look like this:
     # Always sort the files
     --sort-files
 
-    # Always color, even if piping to a filter
+    # Always color, even if piping to a another program
     --color
 
     # Use "less -r" as my pager

@@ -189,6 +189,7 @@ sub get_command_line_options {
         count                   => \$opt{count},
         'env!'                  => sub { }, # ignore this option, it is handled beforehand
         f                       => \$opt{f},
+        flush                   => \$opt{flush},
         'follow!'               => \$opt{follow},
         'g=s'                   => sub { shift; $opt{G} = shift; $opt{f} = 1 },
         'G=s'                   => \$opt{G},
@@ -702,6 +703,9 @@ File presentation:
   --nogroup             Same as --noheading --nobreak
   --[no]color           Highlight the matching text (default: on unless
                         output is redirected, or on Windows)
+  --flush               Flush output immediately, even when ack is used
+                        non-interactively (when output goes to a pipe or
+                        file).
 
 File finding:
   -f                    Only print the files found, without searching.

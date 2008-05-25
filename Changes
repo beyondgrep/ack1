@@ -8,6 +8,8 @@ Changelog for ack
 
     Added Lua support.  Thanks, Ben Klaas.
 
+    Added --flush to unbuffer output.
+
     [FIXES]
     t/file-permissions.t should work now running as root
 

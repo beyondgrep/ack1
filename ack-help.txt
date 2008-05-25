@@ -60,6 +60,9 @@ File presentation:
   --nogroup             Same as --noheading --nobreak
   --[no]color           Highlight the matching text (default: on unless
                         output is redirected, or on Windows)
+  --flush               Flush output immediately, even when ack is used
+                        non-interactively (when output goes to a pipe or
+                        file).
 
 File finding:
   -f                    Only print the files found, without searching.

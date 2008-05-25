@@ -519,7 +519,7 @@ sub is_searchable {
     my $filename = shift;
 
     # If these are updated, update the --help message
-    return if $filename =~ /\.bak$/;
+    return if $filename =~ /[.]bak$/;
     return if $filename =~ /~$/;
     return if $filename =~ m{[$dir_sep_chars]?(?:#.+#|core\.\d+|[._].*\.swp)$}o;
 

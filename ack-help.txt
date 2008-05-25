@@ -108,4 +108,4 @@ Miscellaneous:
   --version             Display version & copyright
   --thpppt              Bill the Cat
 
-This is version 1.83_01 of ack.
+This is version 1.84 of ack.

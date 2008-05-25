@@ -11,14 +11,14 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.83_01
+Version 1.84
 
 =cut
 
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.83_01';
+    $VERSION = '1.84';
     $COPYRIGHT = 'Copyright 2005-2008 Andy Lester, all rights reserved.';
 }
 
@@ -351,7 +351,7 @@ sub def_types_from_ARGV {
     ) or App::Ack::die( 'See ack --help or ack --man for options.' );
 
     for my $td (@typedef) {
-        my ($type, $ext) = split '=', $td->[1];
+        my ($type, $ext) = split /=/, $td->[1];
 
         if ( $td->[0] eq 'c' ) {
             # type-set

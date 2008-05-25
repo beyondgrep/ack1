@@ -27,6 +27,8 @@ functions = open opendir read readline readdir close closedir
 
 [-ValuesAndExpressions::ProhibitNoisyQuotes]
 [-ValuesAndExpressions::ProhibitEmptyQuotes]
+[-ValuesAndExpressions::ProhibitMagicNumbers]
+
 
 [-Variables::ProhibitPackageVars]
 [-Variables::ProhibitPunctuationVars]

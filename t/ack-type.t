@@ -120,7 +120,7 @@ BUILTIN: {
 
     # check that there is a warning for creating new types with --append_type
     check_stderr( "--type-add foo=.foo --foo",
-        qq{ack-standalone: --type-add: Type "foo" does not exist, creating with ".foo" ...} );
+        q{ack-standalone: --type-add: Type "foo" does not exist, creating with ".foo" ...} );
 }
 
 

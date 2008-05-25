@@ -11,8 +11,6 @@ use Util;
 
 prep_environment();
 
-my $is_windows = ($^O =~ /MSWin32/); # check for highlighting
-
 # checks also beginning of file
 BEFORE: {
     my @expected = split( /\n/, <<'EOF' );
@@ -130,15 +128,11 @@ EOF
 
 # highlighting works with context
 HIGHLIGHTING: {
-    SKIP: {
-        skip 'Highlighting does not work on Windows', 2 if $is_windows;
-
-        my @ack_args = qw( July -C5 --text --color );
-        my @results = pipe_into_ack( 't/text/4th-of-july.txt', @ack_args );
-        my @escaped_lines = grep { /\e/ } @results;
-        is( scalar @escaped_lines, 2, 'Only two lines are highlighted' );
-        is( scalar @results, 18, 'Expecting altogether 18 lines back' );
-    }
+    my @ack_args = qw( July -C5 --text --color );
+    my @results = pipe_into_ack( 't/text/4th-of-july.txt', @ack_args );
+    my @escaped_lines = grep { /\e/ } @results;
+    is( scalar @escaped_lines, 2, 'Only two lines are highlighted' );
+    is( scalar @results, 18, 'Expecting altogether 18 lines back' );
 }
 
 # grouping works with context (single file)

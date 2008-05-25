@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION = '1.82';
+our $VERSION = '1.84';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.
@@ -16,7 +16,7 @@ MAIN: {
     }
 
     # Do preliminary arg checking;
-    my $env_ok = 1;
+    my $env_is_usable = 1;
     for ( @ARGV ) {
         last if ( $_ eq '--' );
 
@@ -25,11 +25,12 @@ MAIN: {
 
         # See if we want to ignore the environment. (Don't tell Al Gore.)
         if ( $_ eq '--noenv' ) {
-            delete @ENV{qw( ACK_OPTIONS ACKRC ACK_COLOR_MATCH ACK_COLOR_FILENAME ACK_SWITCHES ACK_PAGER )};
-            $env_ok = 0;
+            my @keys = ( 'ACKRC', grep { /^ACK_/ } keys %ENV );
+            delete @ENV{@keys};
+            $env_is_usable = 0;
         }
     }
-    unshift( @ARGV, App::Ack::read_ackrc() ) if $env_ok;
+    unshift( @ARGV, App::Ack::read_ackrc() ) if $env_is_usable;
     App::Ack::load_colors();
 
     if ( exists $ENV{ACK_SWITCHES} ) {
@@ -46,6 +47,9 @@ MAIN: {
 
 sub main {
     my $opt = App::Ack::get_command_line_options();
+
+    $| = 1 if $opt->{flush}; # Unbuffer the output if flush mode
+
     if ( !-t STDIN && !eof(STDIN) ) {
         # We're going into filter mode
         for ( qw( f g l ) ) {
@@ -188,14 +192,23 @@ B<-l>, some line counts may be zeroes.
 =item B<--color>, B<--nocolor>
 
 B<--color> highlights the matching text.  B<--nocolor> supresses
-the color.  This is on by default unless the output is redirected,
-or running under Windows.
+the color.  This is on by default unless the output is redirected.
+
+On Windows, this option is off by default unless the
+L<Win32::Console::ANSI> module is installed or the C<ACK_PAGER_COLOR>
+environment variable is used.
 
 =item B<--env>, B<--noenv>
 
 B<--noenv> disables all environment processing. No F<.ackrc> is read
 and all environment variables are ignored. By default, F<ack> considers
 F<.ackrc> and settings in the environment.
+
+=item B<--flush>
+
+B<--flush> flushes output immediately.  This is off by default
+unless ack is running interactively (when output goes to a pipe
+or file).
 
 =item B<-f>
 
@@ -272,6 +285,11 @@ order given on the command line.
 
 Only print the filenames of matching files, instead of the matching text.
 
+=item B<-L>, B<--files-without-matches>
+
+Only print the filenames of files that do I<NOT> match. This is equivalent
+to specifying B<-l> and B<-v>.
+
 =item B<--match I<REGEX>>
 
 Specify the I<REGEX> explicitly. This is helpful if you don't want to put the
@@ -307,7 +325,7 @@ highlighting)
 =item B<--pager=I<program>>
 
 Direct ack's output through I<program>.  This can also be specified
-via the C<ACK_PAGER> environment variable.
+via the C<ACK_PAGER> and C<ACK_PAGER_COLOR> environment variables.
 
 Using --pager does not suppress grouping and coloring like piping
 output on the command-line does.
@@ -423,14 +441,15 @@ might look like this:
     # Always sort the files
     --sort-files
 
-    # Always color, even if piping to a filter
+    # Always color, even if piping to a another program
     --color
 
     # Use "less -r" as my pager
     --pager=less -r
 
 Note that arguments with spaces in them do not need to be quoted,
-as they are not interpreted by the shell.
+as they are not interpreted by the shell. Basically, each I<line>
+in the F<.ackrc> file is interpreted as one element of C<@ARGV>.
 
 F<ack> looks in your home directory for the F<.ackrc>.  You can
 specify another location with the F<ACKRC> variable, below.
@@ -462,6 +481,21 @@ As usual, you can also write B<--type=eiffel>
 instead of B<--eiffel>. Negation also works, so B<--noeiffel> excludes
 all eiffel files from a search. Redefining also works: I<ack --type-set cc=.c,.h>
 and I<.xs> files no longer belong to the type I<cc>.
+
+When defining your own types in the F<.ackrc> file you have to use
+the following:
+
+  --type-set=eiffel=.e,.eiffel
+
+or writing on separate lines
+
+  --type-set
+  eiffel=.e,.eiffel
+
+The following does B<NOT> work in the F<.ackrc> file:
+
+  --type-set eiffel=.e,.eiffel
+
 
 In order to see all currently defined types, use I<--help types>, e.g.
 I<ack --type-set backup=.bak --type-add perl=.perl --help types>
@@ -530,7 +564,18 @@ Specifies a pager program, such as C<more>, C<less> or C<most>, to which
 ack will send its output.
 
 Using C<ACK_PAGER> does not suppress grouping and coloring like
-piping output on the command-line does.
+piping output on the command-line does, except that on Windows
+ack will assume that C<ACK_PAGER> does not support color.
+
+C<ACK_PAGER_COLOR> overrides C<ACK_PAGER> if both are specified.
+
+=item ACK_PAGER_COLOR
+
+Specifies a pager program that understands ANSI color sequences.
+Using C<ACK_PAGER_COLOR> does not suppress grouping and coloring
+like piping output on the command-line does.
+
+If you are not on Windows, you never need to use C<ACK_PAGER_COLOR>.
 
 =back
 
@@ -555,7 +600,7 @@ Phil Jackson put together an F<ack.el> extension that "provides a
 simple compilation mode ... has the ability to guess what files you
 want to search for based on the major-mode."
 
-L<http://www.shellarchive.co.uk/emacs.html>
+L<http://www.shellarchive.co.uk/content/emacs.html>
 
 =head2 TextMate integration
 

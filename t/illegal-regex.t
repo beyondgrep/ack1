@@ -32,5 +32,7 @@ sub test_ack_with {
     is( scalar @{$stderr}, 2, "Two lines of STDERR for $testcase" );
     like( $stderr->[0], qr/Invalid regex/, "Correct ack error message for $testcase" );
     like( $stderr->[1], qr/^\s+Quantifier follows nothing/, "Correct type of error for $testcase" );
+
+    return;
 }
 

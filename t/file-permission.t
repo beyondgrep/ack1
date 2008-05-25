@@ -11,6 +11,8 @@ use Util;
 use constant NTESTS => 10;
 
 plan skip_all => q{Can't be checked under Win32} if is_win32;
+plan skip_all => q{Can't be run as root}         if $> == 0;
+
 plan tests => NTESTS;
 
 prep_environment();
@@ -46,5 +48,5 @@ sub check_with {
     is( scalar @{$stdout}, 0, 'Search normal: no normal output' );
     is( scalar @{$stderr}, 1, 'Search normal: one line of stderr output' );
     # don't check for exact text of warning, the message text depends on LC_MESSAGES
-    like( $stderr->[0], qr/file-permission\.t:/, 'Search normal: warning message ok' );
+    like( $stderr->[0], qr/file-permission[.]t:/, 'Search normal: warning message ok' );
 }

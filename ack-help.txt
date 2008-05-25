@@ -51,7 +51,7 @@ File presentation:
   --pager=COMMAND       Pipes all ack output through COMMAND.
                         Ignored if output is redirected.
   --nopager             Do not send output through a pager.  Cancels any
-                        setting in ~/.ackrc or ACK_PAGER.
+                        setting in ~/.ackrc, ACK_PAGER or ACK_PAGER_COLOR.
   --[no]heading         Print a filename heading above each file's results.
                         (default: on when used interactively)
   --[no]break           Print a break between results from different files.
@@ -60,6 +60,9 @@ File presentation:
   --nogroup             Same as --noheading --nobreak
   --[no]color           Highlight the matching text (default: on unless
                         output is redirected, or on Windows)
+  --flush               Flush output immediately, even when ack is used
+                        non-interactively (when output goes to a pipe or
+                        file).
 
 File finding:
   -f                    Only print the files found, without searching.
@@ -107,3 +110,5 @@ Miscellaneous:
   --man                 Man page
   --version             Display version & copyright
   --thpppt              Bill the Cat
+
+This is version 1.84 of ack.

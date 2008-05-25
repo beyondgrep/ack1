@@ -26,6 +26,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]js           .js
     --[no]jsp          .jsp .jspx .jhtm .jhtml
     --[no]lisp         .lisp .lsp
+    --[no]lua          .lua
     --[no]make         Makefiles
     --[no]mason        .mas .mhtml .mpl .mtxt
     --[no]objc         .m .h

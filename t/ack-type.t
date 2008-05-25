@@ -119,8 +119,8 @@ BUILTIN: {
     }
 
     # check that there is a warning for creating new types with --append_type
-    check_stderr( "--type-add foo=.foo --foo",
-        qq{ack-standalone: --type-add: Type "foo" does not exist, creating with ".foo" ...} );
+    check_stderr( '--type-add foo=.foo --foo',
+        q{ack-standalone: --type-add: Type "foo" does not exist, creating with ".foo" ...} );
 }
 
 
@@ -146,4 +146,6 @@ sub check_stderr {
     local $Test::Builder::Level = $Test::Builder::Level + 1;
     is( $stderr->[0], $expected, "Located stderr message: $expected" );
     is( @{$stderr}, 1, "Only one line of stderr for message: $expected" );
+
+    return;
 }

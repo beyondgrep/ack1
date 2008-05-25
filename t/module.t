@@ -435,7 +435,7 @@ my $iter1;
              32,
              "\n",
              1
-           ]
+           ],
          );
 
     my @e = sort by_2nd @expected;

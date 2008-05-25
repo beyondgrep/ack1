@@ -11,14 +11,14 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.82
+Version 1.84
 
 =cut
 
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.82';
+    $VERSION = '1.84';
     $COPYRIGHT = 'Copyright 2005-2008 Andy Lester, all rights reserved.';
 }
 
@@ -86,6 +86,7 @@ BEGIN {
         js          => [qw( js )],
         jsp         => [qw( jsp jspx jhtm jhtml )],
         lisp        => [qw( lisp lsp )],
+        lua         => [qw( lua )],
         make        => q{Makefiles},
         mason       => [qw( mas mhtml mpl mtxt )],
         objc        => [qw( m h )],
@@ -173,7 +174,7 @@ Gets command-line arguments and does the Ack-specific tweaking.
 
 sub get_command_line_options {
     my %opt = (
-        pager => $ENV{ACK_PAGER},
+        pager => $ENV{ACK_PAGER_COLOR} || $ENV{ACK_PAGER},
     );
 
     my $getopt_specs = {
@@ -188,6 +189,7 @@ sub get_command_line_options {
         count                   => \$opt{count},
         'env!'                  => sub { }, # ignore this option, it is handled beforehand
         f                       => \$opt{f},
+        flush                   => \$opt{flush},
         'follow!'               => \$opt{follow},
         'g=s'                   => sub { shift; $opt{G} = shift; $opt{f} = 1 },
         'G=s'                   => \$opt{G},
@@ -256,13 +258,22 @@ sub get_command_line_options {
 
     my %defaults = (
         all            => 0,
-        color          => $to_screen && !$is_windows,
+        color          => $to_screen,
         follow         => 0,
         break          => $to_screen,
         heading        => $to_screen,
         before_context => 0,
         after_context  => 0,
     );
+    if ( $is_windows && $defaults{color} && not $ENV{ACK_PAGER_COLOR} ) {
+        if ( $ENV{ACK_PAGER} || not eval { require Win32::Console::ANSI } ) {
+            $defaults{color} = 0;
+        }
+    }
+    if ( $to_screen && $ENV{ACK_PAGER_COLOR} ) {
+        $defaults{color} = 1;
+    }
+
     while ( my ($key,$value) = each %defaults ) {
         if ( not defined $opt{$key} ) {
             $opt{$key} = $value;
@@ -341,7 +352,7 @@ sub def_types_from_ARGV {
     ) or App::Ack::die( 'See ack --help or ack --man for options.' );
 
     for my $td (@typedef) {
-        my ($type, $ext) = split '=', $td->[1];
+        my ($type, $ext) = split /=/, $td->[1];
 
         if ( $td->[0] eq 'c' ) {
             # type-set
@@ -509,7 +520,7 @@ sub is_searchable {
     my $filename = shift;
 
     # If these are updated, update the --help message
-    return if $filename =~ /\.bak$/;
+    return if $filename =~ /[.]bak$/;
     return if $filename =~ /~$/;
     return if $filename =~ m{[$dir_sep_chars]?(?:#.+#|core\.\d+|[._].*\.swp)$}o;
 
@@ -683,7 +694,7 @@ File presentation:
   --pager=COMMAND       Pipes all ack output through COMMAND.
                         Ignored if output is redirected.
   --nopager             Do not send output through a pager.  Cancels any
-                        setting in ~/.ackrc or ACK_PAGER.
+                        setting in ~/.ackrc, ACK_PAGER or ACK_PAGER_COLOR.
   --[no]heading         Print a filename heading above each file's results.
                         (default: on when used interactively)
   --[no]break           Print a break between results from different files.
@@ -692,6 +703,9 @@ File presentation:
   --nogroup             Same as --noheading --nobreak
   --[no]color           Highlight the matching text (default: on unless
                         output is redirected, or on Windows)
+  --flush               Flush output immediately, even when ack is used
+                        non-interactively (when output goes to a pipe or
+                        file).
 
 File finding:
   -f                    Only print the files found, without searching.
@@ -738,6 +752,8 @@ Miscellaneous:
   --man                 Man page
   --version             Display version & copyright
   --thpppt              Bill the Cat
+
+This is version $VERSION of ack.
 END_OF_HELP
 
     return;
@@ -795,7 +811,7 @@ sub _listify {
     return Text::Wrap::wrap( '', '    ', $str );
 }
 
-=head2 get_version_statement( $copyright )
+=head2 get_version_statement
 
 Returns the version information for ack.
 
@@ -813,7 +829,7 @@ under the same terms as Perl itself.
 END_OF_VERSION
 }
 
-=head2 print_version_statement( $copyright )
+=head2 print_version_statement
 
 Prints the version information for ack.
 
@@ -837,17 +853,15 @@ sub get_copyright {
 
 =head2 load_colors
 
-Set default colors, load Term::ANSIColor on non Windows platforms
+Set default colors, load Term::ANSIColor
 
 =cut
 
 sub load_colors {
-    if ( not $is_windows ) {
-        eval 'use Term::ANSIColor ()';
+    eval 'use Term::ANSIColor ()';
 
-        $ENV{ACK_COLOR_MATCH}    ||= 'black on_yellow';
-        $ENV{ACK_COLOR_FILENAME} ||= 'bold green';
-    }
+    $ENV{ACK_COLOR_MATCH}    ||= 'black on_yellow';
+    $ENV{ACK_COLOR_FILENAME} ||= 'bold green';
 
     return;
 }

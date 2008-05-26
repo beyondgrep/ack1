@@ -375,7 +375,8 @@ sub def_types_from_ARGV {
                 unless exists $mappings{$type};
         }
 
-        my @exts = map { s/^\.//; $_ } split ',', $ext; # %types stores extensions without leading '.'
+        my @exts = split /,/, $ext;
+        s/^\.// for @exts;
 
         if ( !exists $mappings{$type} || ref($mappings{$type}) eq 'ARRAY' ) {
             push @{$mappings{$type}}, @exts;

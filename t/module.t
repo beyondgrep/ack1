@@ -64,7 +64,7 @@ HIDE_THE_WRAPPERS: {
 
 }
 
-my $iter1;
+my $original_iterator;
 {
     @result = ();
     @warns  = ();
@@ -76,7 +76,7 @@ my $iter1;
     my $what = App::Ack::get_starting_points( [$dir], \%opts );
     lists_match( $what, ["t${dir_sep}text"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
-    $iter1 = $iter;
+    $original_iterator = $iter;
     isa_ok( $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_matches( $iter, \%opts );
@@ -113,7 +113,7 @@ my $iter1;
     my $what = App::Ack::get_starting_points( [$dir, 't/etc'], \%opts );
     lists_match( $what, ["t${dir_sep}text", "t${dir_sep}etc"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
-    isnt( $iter, $iter1, 'different iterators' );
+    isnt( $iter, $original_iterator, 'different iterators' );
     isa_ok( $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_matches( $iter, \%opts );

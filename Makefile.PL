@@ -75,7 +75,7 @@ tags:
 critic:
 	perlcritic -1 -q -profile perlcriticrc ack Ack.pm t/*.t
 
-PROF_ARGS = ack-standalone --noenv --color --group -w foo ~/parrot
+PROF_ARGS = -Mblib ack --noenv --color --group -w foo ~/parrot
 
 timed: all
 	$(PERL) $(PROF_ARGS) >> /dev/null 2>&1

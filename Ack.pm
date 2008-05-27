@@ -1056,6 +1056,7 @@ sub search {
     my $line;
     while ($line = <$fh>) {
         # XXX Optimize away the case when there are no more @lines to find.
+        # XXX $has_lines, $passthru and $v never change.  Optimize.
         if ( $has_lines
                ? $. != $lines[0]  # $lines[0] should be a scalar
                : $v ? $line =~ m/$regex/ : $line !~ m/$regex/ ) {

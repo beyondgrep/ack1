@@ -9,7 +9,7 @@ use File::Next ();
 use lib 't';
 use Util;
 
-plan tests => 5;
+plan tests => 7;
 
 prep_environment();
 
@@ -30,3 +30,12 @@ MATCH_WITH_BACKREF: {
 
     ok( grep { /\e/ } @results, 'match with backreference highlighted' );
 }
+
+BRITISH_COLOR: {
+    my @files = qw( t/text/boy-named-sue.txt );
+    my @args = qw( called --colour --text );
+    my @results = run_ack( @args, @files );
+
+    ok( grep { /\e/ } @results, 'normal match highlighted' );
+}
+

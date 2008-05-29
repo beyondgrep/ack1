@@ -27,6 +27,7 @@ BEFORE_WITH_LINE_NO	t/context.t	/^BEFORE_WITH_LINE_NO: {$/;"	l
 BILL_THE_CAT	t/module.t	/^BILL_THE_CAT: {$/;"	l
 BINARY_FILES	t/interesting.t	/^BINARY_FILES: {$/;"	l
 BREAK_NO_HEADING	t/ack-group.t	/^BREAK_NO_HEADING: {$/;"	l
+BRITISH_COLOR	t/ack-color.t	/^BRITISH_COLOR: {$/;"	l
 BUILTIN	t/ack-type.t	/^BUILTIN: {$/;"	l
 CASE_INSENSITIVE	t/ack-g.t	/^CASE_INSENSITIVE: {$/;"	l
 CONTEXT_DEFAULT	t/context.t	/^CONTEXT_DEFAULT: {$/;"	l

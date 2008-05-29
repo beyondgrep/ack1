@@ -1,5 +1,9 @@
 Changelog for ack
 
+NEXT
+    Added --[no]colour to go with --[no]color.
+
+
 1.84        Sun May 25 00:17:41 CDT 2008
     [ENHANCEMENTS]
     Support color on Windows.  Thanks, Jan Dubois.

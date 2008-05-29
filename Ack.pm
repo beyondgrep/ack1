@@ -185,7 +185,7 @@ sub get_command_line_options {
         'a|all-types'           => \$opt{all},
         'break!'                => \$opt{break},
         c                       => \$opt{count},
-        'color!'                => \$opt{color},
+        'color|colour!'         => \$opt{color},
         count                   => \$opt{count},
         'env!'                  => sub { }, # ignore this option, it is handled beforehand
         f                       => \$opt{f},
@@ -704,6 +704,7 @@ File presentation:
   --nogroup             Same as --noheading --nobreak
   --[no]color           Highlight the matching text (default: on unless
                         output is redirected, or on Windows)
+  --[no]colour          Same as --[no]color
   --flush               Flush output immediately, even when ack is used
                         non-interactively (when output goes to a pipe or
                         file).

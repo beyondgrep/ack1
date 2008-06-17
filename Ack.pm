@@ -729,13 +729,13 @@ File inclusion/exclusion:
   --type=noperl         Exclude Perl files.
                         See "ack --help type" for supported filetypes.
 
-  --type-add TYPE=.EXTENSION[,.EXT2[,...]]
-                        Files with the given EXTENSION(s) are recognized as
-                        being of (the existing) type TYPE
   --type-set TYPE=.EXTENSION[,.EXT2[,...]]
                         Files with the given EXTENSION(s) are recognized as
                         being of type TYPE. This replaces an existing
                         definition for type TYPE.
+  --type-add TYPE=.EXTENSION[,.EXT2[,...]]
+                        Files with the given EXTENSION(s) are recognized as
+                        being of (the existing) type TYPE
 
   --[no]follow          Follow symlinks.  Default is off.
 

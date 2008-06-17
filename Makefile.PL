@@ -117,10 +117,10 @@ $(STANDALONE) : $(ACK) $(APP_ACK_PM) squash Makefile
 	$(PERL_T) -c $(STANDALONE)
 
 $(ACK_HELP) : $(STANDALONE)
-	$(PERL_T) $(STANDALONE) --help > $(ACK_HELP) || perl -e0
+	$(PERL_T) $(STANDALONE) --noenv --help > $(ACK_HELP) || perl -e0
 
 $(ACK_HELP_TYPES) : $(STANDALONE)
-	$(PERL_T) $(STANDALONE) --help=types > $(ACK_HELP_TYPES) || perl -e0
+	$(PERL_T) $(STANDALONE) --noenv --help=types > $(ACK_HELP_TYPES) || perl -e0
 
 MAKE_FRAG
 

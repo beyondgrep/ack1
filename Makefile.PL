@@ -75,6 +75,9 @@ tags:
 critic:
 	perlcritic -1 -q -profile perlcriticrc ack Ack.pm t/*.t
 
+tidy:
+	perltidy -b -pro=perltidyrc ack Ack.pm
+
 PROF_ARGS = -Mblib ack --noenv --color --group -w foo ~/parrot
 
 timed: all

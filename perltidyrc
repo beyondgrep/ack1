@@ -1,158 +1,25 @@
--i=4    # Indenting
--nt     # No tabs
--ple    # Same line endings
--bt=1
--pt=1
--sbt=2
+--maximum-line-length=120
+--indent-columns=4
+--preserve-line-endings
+--no-tabs
 
+--continuation-indentation=4
 
-#  -io     "indent only": just do indentation, no other formatting.
-#  -sil=n  set starting indentation level to n;  use if auto detection fails
-#  -ole=s  specify output line ending (s=dos or win, mac, unix)
-#  -ple    keep output line endings same as input (input must be filename)
-# 
-# Whitespace Control
-#  -fws    freeze whitespace; this disables all whitespace changes
-#            and disables the following switches:
-#  -bt=n   sets brace tightness,  n= (0 = loose, 1=default, 2 = tight)
-#  -bbt    same as -bt but for code block braces; same as -bt if not given
-#  -bbvt   block braces vertically tight; use with -bl or -bli
-#  -bbvtl=s  make -bbvt to apply to selected list of block types
-#  -pt=n   paren tightness (n=0, 1 or 2)
-#  -sbt=n  square bracket tightness (n=0, 1, or 2)
-#  -bvt=n  brace vertical tightness, 
-#          n=(0=open, 1=close unless multiple steps on a line, 2=always close)
-#  -pvt=n  paren vertical tightness (see -bvt for n)
-#  -sbvt=n square bracket vertical tightness (see -bvt for n)
-#  -bvtc=n closing brace vertical tightness: 
-#          n=(0=open, 1=sometimes close, 2=always close)
-#  -pvtc=n closing paren vertical tightness, see -bvtc for n.
-#  -sbvtc=n closing square bracket vertical tightness, see -bvtc for n.
-#  -ci=n   sets continuation indentation=n,  default is n=2 spaces
-#  -lp     line up parentheses, brackets, and non-BLOCK braces
-#  -sfs    add space before semicolon in for( ; ; )
-#  -aws    allow perltidy to add whitespace (default)
-#  -dws    delete all old non-essential whitespace 
-#  -icb    indent closing brace of a code block
-#  -cti=n  closing indentation of paren, square bracket, or non-block brace: 
-#          n=0 none, =1 align with opening, =2 one full indentation level
-#  -icp    equivalent to -cti=2
-#  -wls=s  want space left of tokens in string; i.e. -nwls='+ - * /'
-#  -wrs=s  want space right of tokens in string;
-#  -sts    put space before terminal semicolon of a statement
-#  -sak=s  put space between keywords given in s and '(';
-#  -nsak=s no space between keywords in s and '('; i.e. -nsak='my our local'
-# 
-# Line Break Control
-#  -fnl    freeze newlines; this disables all line break changes
-#             and disables the following switches:
-#  -anl    add newlines;  ok to introduce new line breaks
-#  -bbs    add blank line before subs and packages
-#  -bbc    add blank line before block comments
-#  -bbb    add blank line between major blocks
-#  -sob    swallow optional blank lines
-#  -ce     cuddled else; use this style: '} else {'
-#  -dnl    delete old newlines (default)
-#  -mbl=n  maximum consecutive blank lines (default=1)
-#  -l=n    maximum line length;  default n=80
-#  -bl     opening brace on new line 
-#  -sbl    opening sub brace on new line.  value of -bl is used if not given.
-#  -bli    opening brace on new line and indented
-#  -bar    opening brace always on right, even for long clauses
-#  -vt=n   vertical tightness (requires -lp); n controls break after opening
-#          token: 0=never  1=no break if next line balanced   2=no break
-#  -vtc=n  vertical tightness of closing container; n controls if closing
-#          token starts new line: 0=always  1=not unless list  1=never
-#  -wba=s  want break after tokens in string; i.e. wba=': .'
-#  -wbb=s  want break before tokens in string
-# 
-# Following Old Breakpoints
-#  -kis    keep interior semicolons.  Allows multiple statements per line.
-#  -boc    break at old comma breaks: turns off all automatic list formatting
-#  -bol    break at old logical breakpoints: or, and, ||, && (default)
-#  -bok    break at old list keyword breakpoints such as map, sort (default)
-#  -bot    break at old conditional (ternary ?:) operator breakpoints (default)
-#  -cab=n  break at commas after a comma-arrow (=>):
-#          n=0 break at all commas after =>
-#          n=1 stable: break unless this breaks an existing one-line container
-#          n=2 break only if a one-line container cannot be formed
-#          n=3 do not treat commas after => specially at all
-# 
-# Comment controls
-#  -ibc    indent block comments (default)
-#  -isbc   indent spaced block comments; may indent unless no leading space
-#  -msc=n  minimum desired spaces to side comment, default 4
-#  -fpsc=n fix position for side comments; default 0;
-#  -csc    add or update closing side comments after closing BLOCK brace
-#  -dcsc   delete closing side comments created by a -csc command
-#  -cscp=s change closing side comment prefix to be other than '## end'
-#  -cscl=s change closing side comment to apply to selected list of blocks
-#  -csci=n minimum number of lines needed to apply a -csc tag, default n=6
-#  -csct=n maximum number of columns of appended text, default n=20 
-#  -cscw   causes warning if old side comment is overwritten with -csc
-# 
-#  -sbc    use 'static block comments' identified by leading '##' (default)
-#  -sbcp=s change static block comment identifier to be other than '##'
-#  -osbc   outdent static block comments
-# 
-#  -ssc    use 'static side comments' identified by leading '##' (default)
-#  -sscp=s change static side comment identifier to be other than '##'
-# 
-# Delete selected text
-#  -dac    delete all comments AND pod
-#  -dbc    delete block comments     
-#  -dsc    delete side comments  
-#  -dp     delete pod
-# 
-# Send selected text to a '.TEE' file
-#  -tac    tee all comments AND pod
-#  -tbc    tee block comments       
-#  -tsc    tee side comments       
-#  -tp     tee pod           
-# 
-# Outdenting
-#  -olq    outdent long quoted strings (default) 
-#  -olc    outdent a long block comment line
-#  -ola    outdent statement labels
-#  -okw    outdent control keywords (redo, next, last, goto, return)
-#  -okwl=s specify alternative keywords for -okw command
-# 
-# Other controls
-#  -mft=n  maximum fields per table; default n=40
-#  -x      do not format lines before hash-bang line (i.e., for VMS)
-#  -asc    allows perltidy to add a ';' when missing (default)
-#  -dsm    allows perltidy to delete an unnecessary ';'  (default)
-# 
-# Combinations of other parameters
-#  -gnu     attempt to follow GNU Coding Standards as applied to perl
-#  -mangle  remove as many newlines as possible (but keep comments and pods)
-#  -extrude  insert as many newlines as possible
-# 
-# Dump and die, debugging
-#  -dop    dump options used in this run to standard output and quit
-#  -ddf    dump default options to standard output and quit
-#  -dsn    dump all option short names to standard output and quit
-#  -dln    dump option long names to standard output and quit
-#  -dpro   dump whatever configuration file is in effect to standard output
-#  -dtt    dump all token types to standard output and quit
-# 
-# HTML
-#  -html write an html file (see 'man perl2web' for many options)
-#        Note: when -html is used, no indentation or formatting are done.
-#        Hint: try perltidy -html -css=mystyle.css filename.pl
-#        and edit mystyle.css to change the appearance of filename.html.
-#        -nnn gives line numbers
-#        -pre only writes out <pre>..</pre> code section
-#        -toc places a table of contents to subs at the top (default)
-#        -pod passes pod text through pod2html (default)
-#        -frm write html as a frame (3 files)
-#        -text=s extra extension for table of contents if -frm, default='toc'
-#        -sext=s extra extension for file content if -frm, default='src'
-# 
-# A prefix of "n" negates short form toggle switches, and a prefix of "no"
-# negates the long forms.  For example, -nasc means don't add missing
-# semicolons.  
-# 
-# If you are unable to see this entire text, try "perltidy -h | more"
-# For more detailed information, and additional options, try "man perltidy",
-# or go to the perltidy home page at http://perltidy.sourceforge.net
+--paren-tightness=1
+--brace-tightness=1
+--block-brace-tightness=0
+--square-bracket-tightness=1
+--space-keyword-paren
+--nocuddled-else
+--opening-token-right
+--delete-old-newlines
+--comma-arrow-breakpoints=0
+--nobreak-at-old-ternary-breakpoints
+
+--noblanks-before-comments
+--blanks-before-subs
+--blanks-before-blocks
+
+-asc   # allows perltidy to add a ';' when missing (default)
+-dsm   # allows perltidy to delete an unnecessary ';'  (default)
+

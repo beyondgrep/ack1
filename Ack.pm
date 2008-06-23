@@ -1482,6 +1482,8 @@ sub set_up_pager {
         App::Ack::die( qq{Unable to pipe to pager "$command": $!} );
     }
     $fh = $pager;
+
+    return;
 }
 
 =head1 COPYRIGHT & LICENSE

@@ -1444,25 +1444,24 @@ sub get_iterator {
     my $what = shift;
     my $opt  = shift;
 
-    # Starting points are always search, no matter what
-    my %starting_points   = map { ($_ => 1) } @{$what};
-    my $is_starting_point = sub { return $starting_points{$_[0]} };
+    # Starting points are always searched, no matter what
+    my %starting_point = map { ($_ => 1) } @{$what};
 
     my $g_regex = defined $opt->{G} ? qr/$opt->{G}/ : undef;
     my $file_filter;
 
     if ( $g_regex ) {
         $file_filter
-            = $opt->{u}   ? sub { $File::Next::name =~ /$g_regex/ }
-            : $opt->{all} ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$g_regex/ && is_searchable( $File::Next::name ) ) }
-            :               sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$g_regex/ && is_interesting( @_ ) ) }
+            = $opt->{u}   ? sub { $File::Next::name =~ /$g_regex/ } # XXX Maybe this should be a 1, no?
+            : $opt->{all} ? sub { $starting_point{ $File::Next::name } || ( $File::Next::name =~ /$g_regex/ && is_searchable( $File::Next::name ) ) }
+            :               sub { $starting_point{ $File::Next::name } || ( $File::Next::name =~ /$g_regex/ && is_interesting( @_ ) ) }
             ;
     }
     else {
         $file_filter
             = $opt->{u}   ? sub {1}
-            : $opt->{all} ? sub { $is_starting_point->( $File::Next::name ) || is_searchable( $File::Next::name ) }
-            :               sub { $is_starting_point->( $File::Next::name ) || is_interesting( @_ ) }
+            : $opt->{all} ? sub { $starting_point{ $File::Next::name } || is_searchable( $File::Next::name ) }
+            :               sub { $starting_point{ $File::Next::name } || is_interesting( @_ ) }
             ;
     }
 

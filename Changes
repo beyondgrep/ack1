@@ -7,6 +7,10 @@ NEXT
 
     Added --[no]colour to go with --[no]color.
 
+    [INTERNALS]
+    Tweaking in the file-finding iterator shaves of entire hundredths
+    of a second in my test runs!  Because everyone deserves performance.
+
 
 1.84        Sun May 25 00:17:41 CDT 2008
     [ENHANCEMENTS]

@@ -1442,10 +1442,11 @@ Return the File::Next file iterator
 
 sub get_iterator {
     my $what = shift;
-    my $opt = shift;
+    my $opt  = shift;
 
     # Starting points are always search, no matter what
-    my $is_starting_point = sub { return grep { $_ eq $_[0] } @{$what} };
+    my %starting_points   = map { ($_ => 1) } @{$what};
+    my $is_starting_point = sub { return $starting_points{$_[0]} };
 
     my $g_regex = defined $opt->{G} ? qr/$opt->{G}/ : undef;
     my $file_filter;

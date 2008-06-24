@@ -230,5 +230,6 @@ smallprof	Makefile.PL	/^smallprof: all$/;"	l
 tags	Makefile.PL	/^tags:$/;"	l
 test_ack_with	t/illegal-regex.t	/^sub test_ack_with {$/;"	s
 test_match	t/ack-match.t	/^sub test_match {$/;"	s
+tidy	Makefile.PL	/^tidy:$/;"	l
 timed	Makefile.PL	/^timed: all$/;"	l
 warn	Ack.pm	/^sub warn { ## no critic (ProhibitBuiltinHomonyms)$/;"	s

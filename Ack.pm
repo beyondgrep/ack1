@@ -1448,14 +1448,22 @@ sub get_iterator {
     my $is_starting_point = sub { return grep { $_ eq $_[0] } @{$what} };
 
     my $g_regex = defined $opt->{G} ? qr/$opt->{G}/ : undef;
-    my $file_filter
-        = $opt->{u}   && defined $opt->{G} ? sub { $File::Next::name =~ /$g_regex/ }
-        : $opt->{all} && defined $opt->{G} ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$g_regex/ && is_searchable( $File::Next::name ) ) }
-        : $opt->{u}                        ? sub {1}
-        : $opt->{all}                      ? sub { $is_starting_point->( $File::Next::name ) || is_searchable( $File::Next::name ) }
-        : defined $opt->{G}                ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$g_regex/ && is_interesting( @_ ) ) }
-        :                                    sub { $is_starting_point->( $File::Next::name ) || is_interesting( @_ ) }
-        ;
+    my $file_filter;
+
+    if ( $g_regex ) {
+        $file_filter
+            = $opt->{u}   ? sub { $File::Next::name =~ /$g_regex/ }
+            : $opt->{all} ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$g_regex/ && is_searchable( $File::Next::name ) ) }
+            :               sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$g_regex/ && is_interesting( @_ ) ) }
+            ;
+    }
+    else {
+        $file_filter
+            = $opt->{u}   ? sub {1}
+            : $opt->{all} ? sub { $is_starting_point->( $File::Next::name ) || is_searchable( $File::Next::name ) }
+            :               sub { $is_starting_point->( $File::Next::name ) || is_interesting( @_ ) }
+            ;
+    }
 
     my $descend_filter
         = $opt->{n} ? sub {0}

@@ -211,6 +211,7 @@ sub get_command_line_options {
         'passthru'              => \$opt{passthru},
         'print0'                => \$opt{print0},
         'Q|literal'             => \$opt{Q},
+        'smart-case!'           => \$opt{smart_case},
         'sort-files'            => \$opt{sort_files},
         'u|unrestricted'        => \$opt{u},
         'v|invert-match'        => \$opt{v},
@@ -544,6 +545,11 @@ sub build_regex {
         $str = "$str\\b" if $str =~ /\w$/;
     }
 
+    my $regex_is_lc = $str eq lc $str;
+    if ( $opt->{i} || ($opt->{smart_case} && $regex_is_lc) ) {
+        $str = "(?i)$str";
+    }
+
     return $str;
 }
 
@@ -657,6 +663,8 @@ Example: ack -i select
 
 Searching:
   -i, --ignore-case     Ignore case distinctions in PATTERN
+  --[no]smart-case      Ignore case distinctions in PATTERN,
+                        only if PATTERN contains no upper case
   -v, --invert-match    Invert match: select non-matching lines
   -w, --word-regexp     Force PATTERN to match only whole words
   -Q, --literal         Quote all metacharacters; PATTERN is literal
@@ -965,10 +973,7 @@ sub needs_line_scan {
     my $rc = sysread( $fh, $buffer, $size );
     return 0 unless $rc && ( $rc == $size );
 
-    return
-        $opt->{i}
-            ? ( $buffer =~ /$regex/im )
-            : ( $buffer =~ /$regex/m );
+    return $buffer =~ /$regex/m;
 }
 
 # print subs added in order to make it easy for a third party
@@ -1038,7 +1043,7 @@ sub search {
         undef $regex; # Don't match when printing matching line
     }
     else {
-        $regex = $opt->{i} ? qr/$opt->{regex}/i : qr/$opt->{regex}/;
+        $regex = qr/$opt->{regex}/;
     }
 
 
@@ -1215,7 +1220,7 @@ sub search_and_list {
     my $count = $opt->{count};
     my $ors = $opt->{print0} ? "\0" : "\n"; # output record separator
 
-    my $regex = $opt->{i} ? qr/$opt->{regex}/i : qr/$opt->{regex}/;
+    my $regex = qr/$opt->{regex}/;
 
     if ( $opt->{v} ) {
         while (<$fh>) {

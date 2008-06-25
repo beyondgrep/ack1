@@ -2,6 +2,8 @@ Changelog for ack
 
 NEXT
     [ENHANCEMENTS]
+    Added --smart-case option.  Thanks, Leland Johnson.
+
     --shell file type now recognizes tcsh.  Thanks to Chris Dolan
     and, indirectly, Perl::Critic.
 

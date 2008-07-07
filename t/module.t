@@ -53,14 +53,14 @@ our @result;
 our @warns;
 HIDE_THE_WRAPPERS: {
     no warnings 'redefine';
-    sub App::Ack::print_first_filename { push @::result,  ['first_filename', @_]; }
-    sub App::Ack::print_separator      { push @::result,  ['separator',      @_]; }
-    sub App::Ack::print                { push @::result,  ['print',          @_]; }
-    sub App::Ack::print_filename       { push @::result,  ['filename',       @_]; }
-    sub App::Ack::print_line_no        { push @::result,  ['line_no',        @_]; }
-    sub App::Ack::print_count          { push @::result,  ['count',          @_]; }
-    sub App::Ack::print_count0         { push @::result,  ['count0',         @_]; }
-    sub App::Ack::warn                 { push @::warns,   $_[0];                   } ## no critic (ProhibitBuiltinHomonyms)
+    sub App::Ack::print_first_filename { push @::result,  ['first_filename', @_]; return; }
+    sub App::Ack::print_separator      { push @::result,  ['separator',      @_]; return; }
+    sub App::Ack::print                { push @::result,  ['print',          @_]; return; }
+    sub App::Ack::print_filename       { push @::result,  ['filename',       @_]; return; }
+    sub App::Ack::print_line_no        { push @::result,  ['line_no',        @_]; return; }
+    sub App::Ack::print_count          { push @::result,  ['count',          @_]; return; }
+    sub App::Ack::print_count0         { push @::result,  ['count0',         @_]; return; }
+    sub App::Ack::warn                 { push @::warns,   $_[0];                  return; } ## no critic (ProhibitBuiltinHomonyms)
 
 }
 

@@ -365,6 +365,8 @@ Ignore case in the search strings if PATTERN contains no uppercase
 characters. This is similar to C<smartcase> in vim. This option is
 off by default.
 
+B<-i> always overrides this option.
+
 This applies only to the PATTERN, not to the regexes given for the
 B<-g> and B<-G> options.
 

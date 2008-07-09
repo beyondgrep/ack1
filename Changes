@@ -1,6 +1,6 @@
 Changelog for ack
 
-NEXT
+1.86
     [ENHANCEMENTS]
     Added --smart-case option.  Thanks, Leland Johnson.
 
@@ -8,6 +8,9 @@ NEXT
     and, indirectly, Perl::Critic.
 
     Added --[no]colour to go with --[no]color.
+
+    [DOCUMENTATION]
+    Added a Tips section.
 
     [INTERNALS]
     Tweaking in the file-finding iterator shaves of entire hundredths

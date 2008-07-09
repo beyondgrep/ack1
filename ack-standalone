@@ -368,6 +368,8 @@ Ignore case in the search strings if PATTERN contains no uppercase
 characters. This is similar to C<smartcase> in vim. This option is
 off by default.
 
+B<-i> always overrides this option.
+
 This applies only to the PATTERN, not to the regexes given for the
 B<-g> and B<-G> options.
 
@@ -1480,6 +1482,7 @@ Searching:
   -i, --ignore-case     Ignore case distinctions in PATTERN
   --[no]smart-case      Ignore case distinctions in PATTERN,
                         only if PATTERN contains no upper case
+                        Ignored if -i is specified
   -v, --invert-match    Invert match: select non-matching lines
   -w, --word-regexp     Force PATTERN to match only whole words
   -Q, --literal         Quote all metacharacters; PATTERN is literal

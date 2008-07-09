@@ -13,6 +13,9 @@ Example: ack -i select
 
 Searching:
   -i, --ignore-case     Ignore case distinctions in PATTERN
+  --[no]smart-case      Ignore case distinctions in PATTERN,
+                        only if PATTERN contains no upper case
+                        Ignored if -i is specified
   -v, --invert-match    Invert match: select non-matching lines
   -w, --word-regexp     Force PATTERN to match only whole words
   -Q, --literal         Quote all metacharacters; PATTERN is literal
@@ -60,6 +63,7 @@ File presentation:
   --nogroup             Same as --noheading --nobreak
   --[no]color           Highlight the matching text (default: on unless
                         output is redirected, or on Windows)
+  --[no]colour          Same as --[no]color
   --flush               Flush output immediately, even when ack is used
                         non-interactively (when output goes to a pipe or
                         file).
@@ -84,13 +88,13 @@ File inclusion/exclusion:
   --type=noperl         Exclude Perl files.
                         See "ack --help type" for supported filetypes.
 
-  --type-add TYPE=.EXTENSION[,.EXT2[,...]]
-                        Files with the given EXTENSION(s) are recognized as
-                        being of (the existing) type TYPE
   --type-set TYPE=.EXTENSION[,.EXT2[,...]]
                         Files with the given EXTENSION(s) are recognized as
                         being of type TYPE. This replaces an existing
                         definition for type TYPE.
+  --type-add TYPE=.EXTENSION[,.EXT2[,...]]
+                        Files with the given EXTENSION(s) are recognized as
+                        being of (the existing) type TYPE
 
   --[no]follow          Follow symlinks.  Default is off.
 
@@ -111,4 +115,4 @@ Miscellaneous:
   --version             Display version & copyright
   --thpppt              Bill the Cat
 
-This is version 1.84 of ack.
+This is version 1.86 of ack.

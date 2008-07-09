@@ -53,18 +53,18 @@ our @result;
 our @warns;
 HIDE_THE_WRAPPERS: {
     no warnings 'redefine';
-    sub App::Ack::print_first_filename { push @::result,  ['first_filename', @_]; }
-    sub App::Ack::print_separator      { push @::result,  ['separator',      @_]; }
-    sub App::Ack::print                { push @::result,  ['print',          @_]; }
-    sub App::Ack::print_filename       { push @::result,  ['filename',       @_]; }
-    sub App::Ack::print_line_no        { push @::result,  ['line_no',        @_]; }
-    sub App::Ack::print_count          { push @::result,  ['count',          @_]; }
-    sub App::Ack::print_count0         { push @::result,  ['count0',         @_]; }
-    sub App::Ack::warn                 { push @::warns,   $_[0];                   } ## no critic (ProhibitBuiltinHomonyms)
+    sub App::Ack::print_first_filename { push @::result,  ['first_filename', @_]; return; }
+    sub App::Ack::print_separator      { push @::result,  ['separator',      @_]; return; }
+    sub App::Ack::print                { push @::result,  ['print',          @_]; return; }
+    sub App::Ack::print_filename       { push @::result,  ['filename',       @_]; return; }
+    sub App::Ack::print_line_no        { push @::result,  ['line_no',        @_]; return; }
+    sub App::Ack::print_count          { push @::result,  ['count',          @_]; return; }
+    sub App::Ack::print_count0         { push @::result,  ['count0',         @_]; return; }
+    sub App::Ack::warn                 { push @::warns,   $_[0];                  return; } ## no critic (ProhibitBuiltinHomonyms)
 
 }
 
-my $iter1;
+my $original_iterator;
 {
     @result = ();
     @warns  = ();
@@ -76,7 +76,7 @@ my $iter1;
     my $what = App::Ack::get_starting_points( [$dir], \%opts );
     lists_match( $what, ["t${dir_sep}text"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
-    $iter1 = $iter;
+    $original_iterator = $iter;
     isa_ok( $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_matches( $iter, \%opts );
@@ -113,7 +113,7 @@ my $iter1;
     my $what = App::Ack::get_starting_points( [$dir, 't/etc'], \%opts );
     lists_match( $what, ["t${dir_sep}text", "t${dir_sep}etc"], 'get_starting_points' );
     my $iter = App::Ack::get_iterator( $what, \%opts );
-    isnt( $iter, $iter1, 'different iterators' );
+    isnt( $iter, $original_iterator, 'different iterators' );
     isa_ok( $iter, 'CODE' );
     App::Ack::filetype_setup();
     App::Ack::print_matches( $iter, \%opts );

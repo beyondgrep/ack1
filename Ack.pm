@@ -11,14 +11,14 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.84
+Version 1.86
 
 =cut
 
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.84';
+    $VERSION = '1.86';
     $COPYRIGHT = 'Copyright 2005-2008 Andy Lester, all rights reserved.';
 }
 
@@ -185,7 +185,7 @@ sub get_command_line_options {
         'a|all-types'           => \$opt{all},
         'break!'                => \$opt{break},
         c                       => \$opt{count},
-        'color!'                => \$opt{color},
+        'color|colour!'         => \$opt{color},
         count                   => \$opt{count},
         'env!'                  => sub { }, # ignore this option, it is handled beforehand
         f                       => \$opt{f},
@@ -211,6 +211,7 @@ sub get_command_line_options {
         'passthru'              => \$opt{passthru},
         'print0'                => \$opt{print0},
         'Q|literal'             => \$opt{Q},
+        'smart-case!'           => \$opt{smart_case},
         'sort-files'            => \$opt{sort_files},
         'u|unrestricted'        => \$opt{u},
         'v|invert-match'        => \$opt{v},
@@ -375,7 +376,8 @@ sub def_types_from_ARGV {
                 unless exists $mappings{$type};
         }
 
-        my @exts = map { s/^\.//; $_ } split ',', $ext; # %types stores extensions without leading '.'
+        my @exts = split /,/, $ext;
+        s/^\.// for @exts;
 
         if ( !exists $mappings{$type} || ref($mappings{$type}) eq 'ARRAY' ) {
             push @{$mappings{$type}}, @exts;
@@ -494,7 +496,7 @@ sub filetypes {
 
     if ( $header =~ /^#!/ ) {
         return ($1,TEXT)       if $header =~ /\b(ruby|p(?:erl|hp|ython))\b/;
-        return ('shell',TEXT)  if $header =~ /\b(?:ba|c|k|z)?sh\b/;
+        return ('shell',TEXT)  if $header =~ /\b(?:ba|t?c|k|z)?sh\b/;
     }
     else {
         return ('xml',TEXT)    if $header =~ /\Q<?xml /i;
@@ -541,6 +543,11 @@ sub build_regex {
     if ( $opt->{w} ) {
         $str = "\\b$str" if $str =~ /^\w/;
         $str = "$str\\b" if $str =~ /\w$/;
+    }
+
+    my $regex_is_lc = $str eq lc $str;
+    if ( $opt->{i} || ($opt->{smart_case} && $regex_is_lc) ) {
+        $str = "(?i)$str";
     }
 
     return $str;
@@ -656,6 +663,9 @@ Example: ack -i select
 
 Searching:
   -i, --ignore-case     Ignore case distinctions in PATTERN
+  --[no]smart-case      Ignore case distinctions in PATTERN,
+                        only if PATTERN contains no upper case
+                        Ignored if -i is specified
   -v, --invert-match    Invert match: select non-matching lines
   -w, --word-regexp     Force PATTERN to match only whole words
   -Q, --literal         Quote all metacharacters; PATTERN is literal
@@ -703,6 +713,7 @@ File presentation:
   --nogroup             Same as --noheading --nobreak
   --[no]color           Highlight the matching text (default: on unless
                         output is redirected, or on Windows)
+  --[no]colour          Same as --[no]color
   --flush               Flush output immediately, even when ack is used
                         non-interactively (when output goes to a pipe or
                         file).
@@ -727,13 +738,13 @@ File inclusion/exclusion:
   --type=noperl         Exclude Perl files.
                         See "ack --help type" for supported filetypes.
 
-  --type-add TYPE=.EXTENSION[,.EXT2[,...]]
-                        Files with the given EXTENSION(s) are recognized as
-                        being of (the existing) type TYPE
   --type-set TYPE=.EXTENSION[,.EXT2[,...]]
                         Files with the given EXTENSION(s) are recognized as
                         being of type TYPE. This replaces an existing
                         definition for type TYPE.
+  --type-add TYPE=.EXTENSION[,.EXT2[,...]]
+                        Files with the given EXTENSION(s) are recognized as
+                        being of (the existing) type TYPE
 
   --[no]follow          Follow symlinks.  Default is off.
 
@@ -963,10 +974,7 @@ sub needs_line_scan {
     my $rc = sysread( $fh, $buffer, $size );
     return 0 unless $rc && ( $rc == $size );
 
-    return
-        $opt->{i}
-            ? ( $buffer =~ /$regex/im )
-            : ( $buffer =~ /$regex/m );
+    return $buffer =~ /$regex/m;
 }
 
 # print subs added in order to make it easy for a third party
@@ -1036,7 +1044,7 @@ sub search {
         undef $regex; # Don't match when printing matching line
     }
     else {
-        $regex = $opt->{i} ? qr/$opt->{regex}/i : qr/$opt->{regex}/;
+        $regex = qr/$opt->{regex}/;
     }
 
 
@@ -1055,6 +1063,7 @@ sub search {
     my $line;
     while ($line = <$fh>) {
         # XXX Optimize away the case when there are no more @lines to find.
+        # XXX $has_lines, $passthru and $v never change.  Optimize.
         if ( $has_lines
                ? $. != $lines[0]  # $lines[0] should be a scalar
                : $v ? $line =~ m/$regex/ : $line !~ m/$regex/ ) {
@@ -1212,7 +1221,7 @@ sub search_and_list {
     my $count = $opt->{count};
     my $ors = $opt->{print0} ? "\0" : "\n"; # output record separator
 
-    my $regex = $opt->{i} ? qr/$opt->{regex}/i : qr/$opt->{regex}/;
+    my $regex = qr/$opt->{regex}/;
 
     if ( $opt->{v} ) {
         while (<$fh>) {
@@ -1439,28 +1448,38 @@ Return the File::Next file iterator
 
 sub get_iterator {
     my $what = shift;
-    my $opt = shift;
+    my $opt  = shift;
 
-    # Starting points are always search, no matter what
-    my $is_starting_point = sub { return grep { $_ eq $_[0] } @{$what} };
+    # Starting points are always searched, no matter what
+    my %starting_point = map { ($_ => 1) } @{$what};
 
     my $g_regex = defined $opt->{G} ? qr/$opt->{G}/ : undef;
-    my $file_filter
-        = $opt->{u}   && defined $opt->{G} ? sub { $File::Next::name =~ /$g_regex/ }
-        : $opt->{all} && defined $opt->{G} ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$g_regex/ && is_searchable( $File::Next::name ) ) }
-        : $opt->{u}                        ? sub {1}
-        : $opt->{all}                      ? sub { $is_starting_point->( $File::Next::name ) || is_searchable( $File::Next::name ) }
-        : defined $opt->{G}                ? sub { $is_starting_point->( $File::Next::name ) || ( $File::Next::name =~ /$g_regex/ && is_interesting( @_ ) ) }
-        :                                    sub { $is_starting_point->( $File::Next::name ) || is_interesting( @_ ) }
-        ;
+    my $file_filter;
+
+    if ( $g_regex ) {
+        $file_filter
+            = $opt->{u}   ? sub { $File::Next::name =~ /$g_regex/ } # XXX Maybe this should be a 1, no?
+            : $opt->{all} ? sub { $starting_point{ $File::Next::name } || ( $File::Next::name =~ /$g_regex/ && is_searchable( $File::Next::name ) ) }
+            :               sub { $starting_point{ $File::Next::name } || ( $File::Next::name =~ /$g_regex/ && is_interesting( @_ ) ) }
+            ;
+    }
+    else {
+        $file_filter
+            = $opt->{u}   ? sub {1}
+            : $opt->{all} ? sub { $starting_point{ $File::Next::name } || is_searchable( $File::Next::name ) }
+            :               sub { $starting_point{ $File::Next::name } || is_interesting( @_ ) }
+            ;
+    }
+
+    my $descend_filter
+        = $opt->{n} ? sub {0}
+        : $opt->{u} ? sub {1}
+        : \&ignoredir_filter;
+
     my $iter =
         File::Next::files( {
             file_filter     => $file_filter,
-            descend_filter  => $opt->{n}
-                                    ? sub {0}
-                                    : $opt->{u}
-                                        ? sub {1}
-                                        : \&ignoredir_filter,
+            descend_filter  => $descend_filter,
             error_handler   => sub { my $msg = shift; App::Ack::warn( $msg ) },
             sort_files      => $opt->{sort_files},
             follow_symlinks => $opt->{follow},
@@ -1479,6 +1498,8 @@ sub set_up_pager {
         App::Ack::die( qq{Unable to pipe to pager "$command": $!} );
     }
     $fh = $pager;
+
+    return;
 }
 
 =head1 COPYRIGHT & LICENSE

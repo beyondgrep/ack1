@@ -9,7 +9,7 @@ This tests whether L<ack(1)>'s command line options work as expected.
 
 =cut
 
-use Test::More tests => 30;
+use Test::More tests => 34;
 use File::Next 0.34; # For the reslash() function
 
 use lib 't';
@@ -45,6 +45,25 @@ for ( qw( -i --ignore-case ) ) {
         qr{UPPER CASE},
         qq{$_ works correctly for ascii};
     option_in_usage( $_ );
+}
+
+# Smart case
+{
+    my ($opt, $opt_doc_name) = ('--smart-case', '--[no]smart-case');
+    like
+        qx{ $^X -T $ack $opt "upper case" t/swamp/options.pl },
+        qr{UPPER CASE},
+        qq{$opt turn on ignore-case when PATTERN has no upper};
+    unlike
+        qx{ $^X -T $ack $opt "Upper case" t/swamp/options.pl },
+        qr{UPPER CASE},
+        qq{$opt does nothing when PATTERN has upper};
+    option_in_usage( $opt_doc_name );
+
+    like
+        qx{ $^X -T $ack $opt -i "UpPer CaSe" t/swamp/options.pl },
+        qr{UPPER CASE},
+        qq{-i overrides $opt, forcing ignore case, even when PATTERN has upper};
 }
 
 # Invert match

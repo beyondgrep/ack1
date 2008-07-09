@@ -75,7 +75,10 @@ tags:
 critic:
 	perlcritic -1 -q -profile perlcriticrc ack Ack.pm t/*.t
 
-PROF_ARGS = ack-standalone --noenv --color --group -w foo ~/parrot
+tidy:
+	perltidy -b -pro=perltidyrc ack Ack.pm
+
+PROF_ARGS = -Mblib ack-standalone --noenv --color --group -w foo ~/parrot
 
 timed: all
 	$(PERL) $(PROF_ARGS) >> /dev/null 2>&1
@@ -114,10 +117,10 @@ $(STANDALONE) : $(ACK) $(APP_ACK_PM) squash Makefile
 	$(PERL_T) -c $(STANDALONE)
 
 $(ACK_HELP) : $(STANDALONE)
-	$(PERL_T) $(STANDALONE) --help > $(ACK_HELP) || perl -e0
+	$(PERL_T) $(STANDALONE) --noenv --help > $(ACK_HELP) || perl -e0
 
 $(ACK_HELP_TYPES) : $(STANDALONE)
-	$(PERL_T) $(STANDALONE) --help=types > $(ACK_HELP_TYPES) || perl -e0
+	$(PERL_T) $(STANDALONE) --noenv --help=types > $(ACK_HELP_TYPES) || perl -e0
 
 MAKE_FRAG
 

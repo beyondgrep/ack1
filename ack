@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION = '1.84';
+our $VERSION = '1.86';
 # Check http://petdance.com/ack/ for updates
 
 # These are all our globals.
@@ -359,6 +359,17 @@ and B<-G> options.
 
 Specify a path to an alternate F<.ackrc> file.
 
+=item B<--smart-case>, B<--no-smart-case>
+
+Ignore case in the search strings if PATTERN contains no uppercase
+characters. This is similar to C<smartcase> in vim. This option is
+off by default.
+
+B<-i> always overrides this option.
+
+This applies only to the PATTERN, not to the regexes given for the
+B<-g> and B<-G> options.
+
 =item B<--sort-files>
 
 Sorts the found files lexically.  Use this if you want your file
@@ -628,6 +639,48 @@ your environment and F<.ackrc>.
 The reason I created B<-f> in the first place was as a debugging
 tool.  If ack is not finding matches you think it should find, run
 F<ack -f> to see what files are being checked.
+
+=head1 TIPS
+
+=head2 Use the F<.ackrc> file.
+
+The F<.ackrc> is the place to put all your options you use most of
+the time but don't want to remember.  Put all your --type-add and
+--type-set definitions in it.  If you like --smart-case, set it
+there, too.  I also set --sort-files there.
+
+=head2 Use F<-f> for working with big codesets
+
+Ack does more than search files.  C<ack -f --perl> will create a
+list of all the Perl files in a tree, ideal for sending into F<xargs>.
+For example:
+
+    # Change all "this" to "that" in all Perl files in a tree.
+    ack -f --perl | perl -p -i -e's/this/that/g'
+
+=head2 Use F<-Q> when in doubt about metacharacters
+
+If you're searching for something with a regular expression
+metacharacter, most often a period in a filename or IP address, add
+the -Q to avoid false positives without all the backslashing.  See
+the following example for more...
+
+=head2 Use ack to watch log files
+
+Here's one I used the other day to find trouble spots for a website
+visitor.  The user had a problem loading F<troublesome.gif>, so I
+took the access log and scanned it with ack twice.
+
+    ack -Q aa.bb.cc.dd /path/to/access.log | ack -Q -B5 troublesome.gif
+
+The first ack finds only the lines in the Apache log for the given
+IP.  The second finds the match on my troublesome GIF, and shows
+the previous five lines from the log in each case.
+
+=head2 Share your knowledge
+
+Join the ack-users mailing list.  Send me your tips and I may add
+them here.
 
 =head1 AUTHOR
 

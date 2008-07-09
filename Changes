@@ -1,6 +1,6 @@
 Changelog for ack
 
-1.86
+1.86        Wed Jul  9 01:27:21 CDT 2008
     [ENHANCEMENTS]
     Added --smart-case option.  Thanks, Leland Johnson.
 

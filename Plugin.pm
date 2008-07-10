@@ -90,9 +90,9 @@ per worksheet.
 
 =cut
 
-=head2 next_line()
+=head2 next_text()
 
-Returns an array of the next line and its ID.  Returns an empty
+Returns an array of the next text and its ID.  Returns an empty
 list at the end of the resource.
 
 =cut
@@ -110,5 +110,89 @@ If you have to shutdown the file, such as closing a database
 connection,here's where to do it.
 
 =cut
+
+package App::Ack::Plugin::Base;
+
+sub new {
+    my $class    = shift;
+    my $filename = shift;
+
+    my $self = bless {
+        filename        => $filename,
+        fh              => undef,
+        could_be_binary => undef,
+        opened          => undef,
+        id              => undef,
+    }, $class;
+
+    return $self;
+}
+
+=head2 next_resource()
+
+Opens the file specified by I<$filename> and returns a filehandle and
+a flag that says whether it could be binary.
+
+If there's a failure, it throws a warning and returns an empty list.
+
+=cut
+
+sub next_resource {
+    my $self = shift;
+
+    return if $self->{opened};
+
+    if ( $self->{filename} eq '-' ) {
+        $self->{fh} = *STDIN;
+        $self->{could_be_binary} = 0;
+    }
+    else {
+        if ( !open( $self->{fh}, '<', $self->{filename} ) ) {
+            App::Ack::warn( "$self->{filename}: $!" );
+            return;
+        }
+        $self->{could_be_binary} = 1;
+    }
+
+    return $self->{filename};
+}
+
+=head2 next_text()
+
+Gets next line from the file
+
+=cut
+
+sub next_text {
+    my $self = shift;
+
+    return readline $self->{fh};
+}
+
+=head2 close_resource()
+
+Closes the file
+
+=cut
+
+sub close_resource {
+    my $self = shift;
+
+    if ( close $self->{fh} ) {
+        return 1;
+    }
+    App::Ack::warn( "$self->{filename}: $!" );
+    return 0;
+}
+
+=head2 shutdown()
+
+Nothing to do
+
+=cut
+
+sub shutdown {
+    return;
+}
 
 1; # End of App::Ack::Plugin

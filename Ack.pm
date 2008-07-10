@@ -903,50 +903,6 @@ sub is_interesting {
 }
 
 
-=head2 open_file( $filename )
-
-Opens the file specified by I<$filename> and returns a filehandle and
-a flag that says whether it could be binary.
-
-If there's a failure, it throws a warning and returns an empty list.
-
-=cut
-
-sub open_file {
-    my $filename = shift;
-
-    my $fh;
-    my $could_be_binary;
-
-    if ( $filename eq '-' ) {
-        $fh = *STDIN;
-        $could_be_binary = 0;
-    }
-    else {
-        if ( !open( $fh, '<', $filename ) ) {
-            App::Ack::warn( "$filename: $!" );
-            return;
-        }
-        $could_be_binary = 1;
-    }
-
-    return ($fh,$could_be_binary);
-}
-
-=head2 close_file( $fh, $filename )
-
-Close L<$fh> opened from L<$filename>.
-
-=cut
-
-sub close_file {
-    if ( close $_[0] ) {
-        return 1;
-    }
-    App::Ack::warn( "$_[1]: $!" );
-    return 0;
-}
-
 
 =head2 needs_line_scan( $fh, $regex, \%opts )
 
@@ -1005,7 +961,7 @@ sub print_count0 {
 }
 
 
-=head2 search( $fh, $could_be_binary, $filename, \%opt )
+=head2 search_resource( $res, \%opt )
 
 Main search method
 
@@ -1022,10 +978,8 @@ Main search method
     my $any_output;                   # has there been any output for the current file yet
     my $context_overall_output_count; # has there been any output at all
 
-sub search {
-    my $fh = shift;
-    my $could_be_binary = shift;
-    $filename = shift;
+sub search_resource {
+    my $res = shift;
     my $opt = shift;
 
     my $v = $opt->{v};
@@ -1033,6 +987,7 @@ sub search {
     my $max = $opt->{m};
     my $nmatches = 0;
 
+    $filename = $res->{filename};
     $display_filename = undef;
 
     # for --line processing
@@ -1103,12 +1058,12 @@ sub search {
 
         shift @lines if $has_lines;
 
-        if ( $could_be_binary ) {
+        if ( $res->{could_be_binary} ) {
             if ( -B $filename ) {
                 App::Ack::print( "Binary file $filename matches\n" );
                 last;
             }
-            $could_be_binary = 0;
+            $res->{could_be_binary} = 0;
         }
         if ( $keep_context ) {
             if ( @before ) {
@@ -1205,7 +1160,7 @@ sub print_match_or_context {
 } # scope around search() and print_match_or_context()
 
 
-=head2 search_and_list( $fh, $filename, \%opt )
+=head2 search_and_list( $res, $fh, $filename, \%opt )
 
 Optimized version of searching for -l and --count, which do not
 show lines.
@@ -1300,10 +1255,11 @@ sub print_files_with_matches {
 
     my $nmatches = 0;
     while ( defined ( my $filename = $iter->() ) ) {
-        my ($fh) = open_file( $filename );
-        next unless defined $fh; # error while opening file
-        $nmatches += search_and_list( $fh, $filename, $opt );
-        close_file( $fh, $filename );
+        my $file = App::Ack::Plugin::Base->new( $filename ) or next;
+        while ( my $res = $file->next_resource() ) {
+            $nmatches += search_and_list( $res, $opt );
+        }
+        $file->close_resource();
         last if $nmatches && $opt->{1};
     }
 
@@ -1325,22 +1281,11 @@ sub print_matches {
 
     my $nmatches = 0;
     while ( defined ( my $filename = $iter->() ) ) {
-        my ($fh,$could_be_binary) = open_file( $filename );
-        next unless defined $fh; # error while opening file
-        my $needs_line_scan;
-        if ( $opt->{regex} && !$opt->{passthru} ) {
-            $needs_line_scan = needs_line_scan( $fh, $opt->{regex}, $opt );
-            if ( $needs_line_scan ) {
-                seek( $fh, 0, 0 );
-            }
+        my $file = App::Ack::Plugin::Base->new( $filename ) or next;
+        while ( my $res = $file->next_resource() ) {
+            $nmatches += search_resource( $res, $opt );
         }
-        else {
-            $needs_line_scan = 1;
-        }
-        if ( $needs_line_scan ) {
-            $nmatches += search( $fh, $could_be_binary, $filename, $opt );
-        }
-        close_file( $fh, $filename );
+        $file->close_resource();
         last if $nmatches && $opt->{1};
     }
     return;

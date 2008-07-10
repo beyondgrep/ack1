@@ -1733,37 +1733,6 @@ sub is_interesting {
 
 
 
-sub open_file {
-    my $filename = shift;
-
-    my $fh;
-    my $could_be_binary;
-
-    if ( $filename eq '-' ) {
-        $fh = *STDIN;
-        $could_be_binary = 0;
-    }
-    else {
-        if ( !open( $fh, '<', $filename ) ) {
-            App::Ack::warn( "$filename: $!" );
-            return;
-        }
-        $could_be_binary = 1;
-    }
-
-    return ($fh,$could_be_binary);
-}
-
-
-sub close_file {
-    if ( close $_[0] ) {
-        return 1;
-    }
-    App::Ack::warn( "$_[1]: $!" );
-    return 0;
-}
-
-
 
 sub needs_line_scan {
     my $fh = shift;
@@ -1825,10 +1794,8 @@ sub print_count0 {
     my $any_output;                   # has there been any output for the current file yet
     my $context_overall_output_count; # has there been any output at all
 
-sub search {
-    my $fh = shift;
-    my $could_be_binary = shift;
-    $filename = shift;
+sub search_resource {
+    my $res = shift;
     my $opt = shift;
 
     my $v = $opt->{v};
@@ -1836,6 +1803,7 @@ sub search {
     my $max = $opt->{m};
     my $nmatches = 0;
 
+    $filename = $res->{filename};
     $display_filename = undef;
 
     # for --line processing
@@ -1906,12 +1874,12 @@ sub search {
 
         shift @lines if $has_lines;
 
-        if ( $could_be_binary ) {
+        if ( $res->{could_be_binary} ) {
             if ( -B $filename ) {
                 App::Ack::print( "Binary file $filename matches\n" );
                 last;
             }
-            $could_be_binary = 0;
+            $res->{could_be_binary} = 0;
         }
         if ( $keep_context ) {
             if ( @before ) {
@@ -2073,10 +2041,11 @@ sub print_files_with_matches {
 
     my $nmatches = 0;
     while ( defined ( my $filename = $iter->() ) ) {
-        my ($fh) = open_file( $filename );
-        next unless defined $fh; # error while opening file
-        $nmatches += search_and_list( $fh, $filename, $opt );
-        close_file( $fh, $filename );
+        my $file = App::Ack::Plugin::Base->new( $filename ) or next;
+        while ( my $res = $file->next_resource() ) {
+            $nmatches += search_and_list( $res, $opt );
+        }
+        $file->close_resource();
         last if $nmatches && $opt->{1};
     }
 
@@ -2093,22 +2062,11 @@ sub print_matches {
 
     my $nmatches = 0;
     while ( defined ( my $filename = $iter->() ) ) {
-        my ($fh,$could_be_binary) = open_file( $filename );
-        next unless defined $fh; # error while opening file
-        my $needs_line_scan;
-        if ( $opt->{regex} && !$opt->{passthru} ) {
-            $needs_line_scan = needs_line_scan( $fh, $opt->{regex}, $opt );
-            if ( $needs_line_scan ) {
-                seek( $fh, 0, 0 );
-            }
+        my $file = App::Ack::Plugin::Base->new( $filename ) or next;
+        while ( my $res = $file->next_resource() ) {
+            $nmatches += search_resource( $res, $opt );
         }
-        else {
-            $needs_line_scan = 1;
-        }
-        if ( $needs_line_scan ) {
-            $nmatches += search( $fh, $could_be_binary, $filename, $opt );
-        }
-        close_file( $fh, $filename );
+        $file->close_resource();
         last if $nmatches && $opt->{1};
     }
     return;
@@ -2259,8 +2217,65 @@ package App::Ack::Plugin;
 
 
 
-sub important_function_in_plugin() {
-    print "blah";
+package App::Ack::Plugin::Base;
+
+sub new {
+    my $class    = shift;
+    my $filename = shift;
+
+    my $self = bless {
+        filename        => $filename,
+        fh              => undef,
+        could_be_binary => undef,
+        opened          => undef,
+        id              => undef,
+    }, $class;
+
+    return $self;
+}
+
+
+sub next_resource {
+    my $self = shift;
+
+    return if $self->{opened};
+
+    if ( $self->{filename} eq '-' ) {
+        $self->{fh} = *STDIN;
+        $self->{could_be_binary} = 0;
+    }
+    else {
+        if ( !open( $self->{fh}, '<', $self->{filename} ) ) {
+            App::Ack::warn( "$self->{filename}: $!" );
+            return;
+        }
+        $self->{could_be_binary} = 1;
+    }
+
+    return $self->{filename};
+}
+
+
+sub next_text {
+    my $self = shift;
+
+    return readline $self->{fh};
+}
+
+
+sub close_resource {
+    my $self = shift;
+
+    if ( close $self->{fh} ) {
+        return 1;
+    }
+    App::Ack::warn( "$self->{filename}: $!" );
+    return 0;
+}
+
+
+sub shutdown {
+    return;
 }
 
 1; # End of App::Ack::Plugin

@@ -2,10 +2,11 @@
 
 use warnings;
 use strict;
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 BEGIN {
     use_ok( 'App::Ack' );
+    use_ok( 'App::Ack::Plugin' );
     use_ok( 'File::Next' );
 }
 

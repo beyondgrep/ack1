@@ -11,7 +11,10 @@ my %parms = (
     AUTHOR              => 'Andy Lester <andy@petdance.com>',
     ABSTRACT            => 'A grep-like program specifically for large source trees',
     VERSION_FROM        => 'Ack.pm',
-    PM                  => { 'Ack.pm' => '$(INST_LIBDIR)/App/Ack.pm' },
+    PM                  => {
+        'Ack.pm'    => '$(INST_LIBDIR)/App/Ack.pm',
+        'Plugin.pm' => '$(INST_LIBDIR)/App/Ack/Plugin.pm',
+    },
     EXE_FILES           => [ 'ack' ],
     PREREQ_PM => {
         'Test::Harness'     => 2.50, # Something reasonably newish

@@ -3,6 +3,7 @@ Changes
 MANIFEST
 Makefile.PL
 META.yml
+Plugin.pm
 README
 ack
 ack-help.txt

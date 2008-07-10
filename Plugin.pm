@@ -14,6 +14,14 @@ This is designed as a framework to let the plugins do all the work.  Here are so
 
 =over 4
 
+=item .zip, .tar, .jar
+
+Walk through individual files in the container
+
+=item .gz, .Z
+
+Expand the file content
+
 =item .xls
 
 Iterate through sheets within the workbook.
@@ -22,9 +30,22 @@ Iterate through sheets within the workbook.
 
 Search through text of the Word document.
 
+=item .mp3
+
+Search the ID3 tags.
+
+=item Whatever you want
+
+Maybe you have file that defines a connection to a database and you
+have ack walk through rows of a table.
+
 =back
 
 =head1 TERMS
+
+=head2 Resource
+
+A resource 
 
 A resource is...
 

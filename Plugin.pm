@@ -43,26 +43,25 @@ have ack walk through rows of a table.
 
 =head1 TERMS
 
-=head2 Resource
+In normal, text-mode ack, looks like this:
 
-A resource 
+    foo.pl:18:Blah blah blah
 
-A resource is...
-
-A line is...
+In this case, "foo.pl" is the "resource", "18" is the "ID", and
+"Blah blah blah" is the "line".
 
 =head1 FUNCTIONS
 
 Each App::Ack::Plugin module must include the following functions,
 with the specified functionality.
 
-This is how, roughly, the 
+This is how, roughly, the app will call the plugin:
 
     my $plugin = App::Ack::Plugin::Example->new( $filename );
 
     while ( my $resource = $plugin->next_resource() ) {
         # Handle start of the resource
-        while ( my $line = $plugin->next_line() ) {
+        while ( my ($line,$id) = $plugin->next_line() ) {
             # Search for stuff in $line
         }
         $resource->close_resource();
@@ -71,22 +70,37 @@ This is how, roughly, the
 
 =head2 new( $filename )
 
+Standard constructor.  What you do inside, ack doesn't care.
+
 =cut
 
 =head2 next_resource()
+
+Returns the next resource in the file.  Returns undef if there is none.
+
+For files like MP3 files, there will only be one resource in the
+file.  For an Excel workbook, it will likely return one resource
+per worksheet.
 
 =cut
 
 =head2 next_line()
 
+Returns an array of the next line and its ID.  Returns an empty
+list at the end of the resource.
+
+=cut
+
+=head2 close_resource()
+
+If there's some shutdown to be done on the resource, perhaps closing an opened database table, this is where to do it.
+
 =cut
 
 =head2 shutdown()
 
-=cut
+If you have to shutdown the file, such as closing a database connection,here's where to do it.
 
-sub important_function_in_plugin() {
-    print "blah";
-}
+=cut
 
 1; # End of App::Ack::Plugin

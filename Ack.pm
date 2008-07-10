@@ -492,7 +492,7 @@ sub filetypes {
         return;
     }
     my $header = <$fh>;
-    close_file( $fh, $filename ) or return;
+    close $fh or App::Ack::warn( "$filename: $!\n" );
 
     if ( $header =~ /^#!/ ) {
         return ($1,TEXT)       if $header =~ /\b(ruby|p(?:erl|hp|ython))\b/;

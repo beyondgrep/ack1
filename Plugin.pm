@@ -33,4 +33,8 @@ with the specified functionality.
 
 =cut
 
+sub important_function_in_plugin() {
+    print "blah";
+}
+
 1; # End of App::Ack::Plugin

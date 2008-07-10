@@ -59,7 +59,8 @@ sub MY::postamble {
     my $file_next_filename = qx(perldoc -l File::Next);
     my $postamble = <<'MAKE_FRAG';
 ACK             = ack
-APP_ACK_PM      = Ack.pm
+ACK_PM          = Ack.pm
+PLUGIN_PM       = Plugin.pm
 STANDALONE      = ack-standalone
 ACK_HELP        = ack-help.txt
 ACK_HELP_TYPES  = ack-help-types.txt
@@ -76,10 +77,10 @@ tags:
 		--languages=Perl --langmap=Perl:+.t \
 
 critic:
-	perlcritic -1 -q -profile perlcriticrc ack Ack.pm t/*.t
+	perlcritic -1 -q -profile perlcriticrc ack Ack.pm Plugin.pm t/*.t
 
 tidy:
-	perltidy -b -pro=perltidyrc ack Ack.pm
+	perltidy -b -pro=perltidyrc ack Ack.pm Plugin.pm
 
 PROF_ARGS = -Mblib ack-standalone --noenv --color --group -w foo ~/parrot
 
@@ -114,8 +115,8 @@ nytprof: all
 	$(PERL) -d:NYTProf $(PROF_ARGS) >> /dev/null 2>&1
 	nytprofhtml
 
-$(STANDALONE) : $(ACK) $(APP_ACK_PM) squash Makefile
-	$(PERL) squash ack File::Next $(APP_ACK_PM) > $(STANDALONE)
+$(STANDALONE) : $(ACK) $(ACK_PM) squash Makefile
+	$(PERL) squash ack File::Next $(ACK_PM) $(PLUGIN_PM) > $(STANDALONE)
 	$(CHMOD) 0755 $(STANDALONE)
 	$(PERL_T) -c $(STANDALONE)
 

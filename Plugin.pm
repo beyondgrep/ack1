@@ -48,7 +48,13 @@ In normal, text-mode ack, looks like this:
     foo.pl:18:Blah blah blah
 
 In this case, "foo.pl" is the "resource", "18" is the "ID", and
-"Blah blah blah" is the "line".
+"Blah blah blah" is the "text".
+
+For an MP3 file, you might have "take-it-off.mp3" as the resource,
+"Title" as the ID, and "Take It Off" as the text.
+
+On a PDF, resource could be "requirements.pdf", ID could be "page
+24, line 34", and the line of text as the text.
 
 =head1 FUNCTIONS
 
@@ -93,13 +99,15 @@ list at the end of the resource.
 
 =head2 close_resource()
 
-If there's some shutdown to be done on the resource, perhaps closing an opened database table, this is where to do it.
+If there's some shutdown to be done on the resource, perhaps closing
+an opened database table, this is where to do it.
 
 =cut
 
 =head2 shutdown()
 
-If you have to shutdown the file, such as closing a database connection,here's where to do it.
+If you have to shutdown the file, such as closing a database
+connection,here's where to do it.
 
 =cut
 

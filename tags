@@ -21,6 +21,7 @@ App	t/module.t	/^    sub App::Ack::print_line_no        { push @::result,  ['lin
 App	t/module.t	/^    sub App::Ack::print_separator      { push @::result,  ['separator',      @_]; return; }$/;"	s
 App	t/module.t	/^    sub App::Ack::warn                 { push @::warns,   $_[0];                  return; } ## no critic (ProhibitBuiltinHomonyms)$/;"	s
 App::Ack	Ack.pm	/^package App::Ack;$/;"	p
+App::Ack::Plugin	Plugin.pm	/^package App::Ack::Plugin;$/;"	p
 BACK_ANCHOR	t/ack-g.t	/^BACK_ANCHOR: {$/;"	l
 BEFORE	t/context.t	/^BEFORE: {$/;"	l
 BEFORE_WITH_LINE_NO	t/context.t	/^BEFORE_WITH_LINE_NO: {$/;"	l

@@ -408,7 +408,7 @@ Files with the given EXTENSION(s) are recognized as being of type
 TYPE. This replaces an existing definition for type TYPE.  See also
 L</"Defining your own types">.
 
-=item B<-u, --unrestricted>
+=item B<-u>, B<--unrestricted>
 
 All files and directories (including blib/, core.*, ...) are searched,
 nothing is skipped. When both B<-u> and B<--ignore-dir> are used, the

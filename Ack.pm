@@ -962,7 +962,7 @@ sub print_count0 {
 }
 
 
-=head2 search_resource( $repo, $res, \%opt )
+=head2 search_resource( $res, \%opt )
 
 Main search method
 
@@ -980,7 +980,6 @@ Main search method
     my $context_overall_output_count; # has there been any output at all
 
 sub search_resource {
-    my $repo = shift;
     my $res = shift;
     my $opt = shift;
 
@@ -1294,7 +1293,7 @@ sub print_matches {
     while ( defined ( my $filename = $iter->() ) ) {
         my $repo = App::Ack::Repository->new( $filename ) or next;
         while ( my $res = $repo->next_resource() ) {
-            $nmatches += search_resource( $repo, $res, $opt );
+            $nmatches += search_resource( $res, $opt );
             $res->close();
         }
         last if $nmatches && $opt->{1};

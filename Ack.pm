@@ -1467,4 +1467,26 @@ under the same terms as Perl itself.
 
 =cut
 
+package App::Ack::STDIN;
+
+sub new {
+    my $class = shift;
+    return bless {}, $class;
+}
+
+sub name { return '-' }
+sub next_text {
+    my $self = shift;
+
+    my $line = <STDIN>;
+    if ( defined $line ) {
+        return ($line,$.);
+    }
+    return;
+}
+
+sub close {
+    return;
+}
+
 1; # End of App::Ack

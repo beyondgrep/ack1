@@ -961,7 +961,7 @@ sub print_count0 {
 }
 
 
-=head2 search_resource( $res, \%opt )
+=head2 search_resource( $repo, $res, \%opt )
 
 Main search method
 
@@ -979,6 +979,7 @@ Main search method
     my $context_overall_output_count; # has there been any output at all
 
 sub search_resource {
+    my $repo = shift;
     my $res = shift;
     my $opt = shift;
 
@@ -987,7 +988,7 @@ sub search_resource {
     my $max = $opt->{m};
     my $nmatches = 0;
 
-    $filename = $res->{filename};
+    $filename = $repo->{filename};
     $display_filename = undef;
 
     # for --line processing
@@ -1058,7 +1059,7 @@ sub search_resource {
 
         shift @lines if $has_lines;
 
-        if ( $res->{could_be_binary} ) {
+        if ( $repo->{could_be_binary} ) {
             if ( -B $filename ) {
                 App::Ack::print( "Binary file $filename matches\n" );
                 last;
@@ -1281,12 +1282,13 @@ sub print_matches {
 
     my $nmatches = 0;
     while ( defined ( my $filename = $iter->() ) ) {
-        my $file = App::Ack::Plugin::Base->new( $filename ) or next;
-        while ( my $res = $file->next_resource() ) {
-            $nmatches += search_resource( $res, $opt );
+        my $repo = App::Ack::Plugin::Base->new( $filename ) or next;
+        while ( my $res = $repo->next_resource() ) {
+            $nmatches += search_resource( $repo, $res, $opt );
         }
-        $file->close_resource();
+        $repo->close_resource();
         last if $nmatches && $opt->{1};
+        $repo->shutdown();
     }
     return;
 }

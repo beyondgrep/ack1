@@ -72,7 +72,6 @@ sub run_ack_with_stderr {
     }
 
     my $cmd = build_command_line( @args );
-    print "# $cmd\n";
     @stdout = `$cmd`;
 
     open( CATCHERR, '<', $catcherr_file );

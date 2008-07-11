@@ -62,13 +62,12 @@ list at the end of the resource.
 
 sub next_text {
     my $self = shift;
-    if ( $self->{fh} ) {
-        my $text = readline $self->{fh};
-        if ( defined $text ) {
-            $self->{line}++;
-            return ($text, $self->{line});
-        }
+
+    my $text = readline $self->{fh};
+    if ( defined $text ) {
+        return ($text, ++$self->{line});
     }
+
     return;
 }
 
@@ -81,11 +80,8 @@ Close the resource.  In this case, it's just a text file.
 sub close {
     my $self = shift;
 
-    if ( $self->{fh} ) {
-        if ( !close $self->{fh} ) {
-            App::Ack::warn( $self->name() . ": $!" );
-        }
-        delete $self->{fh};
+    if ( not close $self->{fh} ) {
+        App::Ack::warn( $self->name() . ": $!" );
     }
 
     return;

@@ -129,11 +129,16 @@ If there is no ID, because there is only one text item in the
 resource, such as the description field on a GIF, then return
 I<undef> for an ID.
 
+You are guaranteed that ack will not call C<next_text()> after it
+reaches the end of the resource.
+
 =item * close()
 
 Closes the resource if necessary.  This might be freeing memory
 from scanning a SQL table, but not closing the database connection,
 which would be at the repository level.
+
+You are guaranteed that ack will call C<close()> exactly once.
 
 =back
 

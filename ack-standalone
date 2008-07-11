@@ -2319,13 +2319,12 @@ sub name {
 
 sub next_text {
     my $self = shift;
-    if ( $self->{fh} ) {
-        my $text = readline $self->{fh};
-        if ( defined $text ) {
-            $self->{line}++;
-            return ($text, $self->{line});
-        }
+
+    my $text = readline $self->{fh};
+    if ( defined $text ) {
+        return ($text, ++$self->{line});
     }
+
     return;
 }
 
@@ -2333,11 +2332,8 @@ sub next_text {
 sub close {
     my $self = shift;
 
-    if ( $self->{fh} ) {
-        if ( !close $self->{fh} ) {
-            App::Ack::warn( $self->name() . ": $!" );
-        }
-        delete $self->{fh};
+    if ( not close $self->{fh} ) {
+        App::Ack::warn( $self->name() . ": $!" );
     }
 
     return;

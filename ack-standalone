@@ -64,7 +64,7 @@ sub main {
             my $s = $nargs == 1 ? '' : 's';
             App::Ack::warn( "Ignoring $nargs argument$s on the command-line while acting as a filter." );
         }
-        my $res = App::Ack::STDIN->new();
+        my $res = App::Ack::Resource->new( '-' );
         App::Ack::search_resource( $res, $opt );
         exit 0;
     }
@@ -2219,28 +2219,6 @@ sub set_up_pager {
     return;
 }
 
-
-package App::Ack::STDIN;
-
-sub new {
-    my $class = shift;
-    return bless {}, $class;
-}
-
-sub name { return '-' }
-sub next_text {
-    my $self = shift;
-
-    my $line = <STDIN>;
-    if ( defined $line ) {
-        return ($line,$.);
-    }
-    return;
-}
-
-sub close {
-    return;
-}
 
 1; # End of App::Ack
 package App::Ack::Repository;

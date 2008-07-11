@@ -25,7 +25,6 @@ FIND_PACKAGES: {
     my @expected = (
         'package File::Next;',
         'package App::Ack;',
-        'package App::Ack::STDIN;',
         'package App::Ack::Repository;',
         'package App::Ack::Resource;',
     );

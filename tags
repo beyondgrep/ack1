@@ -24,7 +24,6 @@ App::Ack	Ack.pm	/^package App::Ack;$/;"	p
 App::Ack::Plugin	Plugin.pm	/^package App::Ack::Plugin;$/;"	p
 App::Ack::Repository	Repository.pm	/^package App::Ack::Repository;$/;"	p
 App::Ack::Resource	Resource.pm	/^package App::Ack::Resource;$/;"	p
-App::Ack::STDIN	Ack.pm	/^package App::Ack::STDIN;$/;"	p
 BACK_ANCHOR	t/ack-g.t	/^BACK_ANCHOR: {$/;"	l
 BEFORE	t/context.t	/^BEFORE: {$/;"	l
 BEFORE_WITH_LINE_NO	t/context.t	/^BEFORE_WITH_LINE_NO: {$/;"	l
@@ -165,7 +164,6 @@ check_stderr	t/ack-type.t	/^sub check_stderr {$/;"	s
 check_u	t/ack-u.t	/^sub check_u {$/;"	s
 check_with	t/ack-type.t	/^sub check_with {$/;"	s
 check_with	t/file-permission.t	/^sub check_with {$/;"	s
-close	Ack.pm	/^sub close {$/;"	s
 close	Repository.pm	/^sub close {$/;"	s
 close	Resource.pm	/^sub close {$/;"	s
 critic	Makefile.PL	/^critic:$/;"	l
@@ -197,14 +195,11 @@ lists_match	t/Util.pm	/^sub lists_match {$/;"	s
 load_colors	Ack.pm	/^sub load_colors {$/;"	s
 main	Makefile.PL	/^package main;$/;"	p
 main	ack	/^sub main {$/;"	s
-name	Ack.pm	/^sub name { return '-' }$/;"	s
 name	Resource.pm	/^sub name {$/;"	s
 needs_line_scan	Ack.pm	/^sub needs_line_scan {$/;"	s
-new	Ack.pm	/^sub new {$/;"	s
 new	Repository.pm	/^sub new {$/;"	s
 new	Resource.pm	/^sub new {$/;"	s
 next_resource	Repository.pm	/^sub next_resource {$/;"	s
-next_text	Ack.pm	/^sub next_text {$/;"	s
 next_text	Resource.pm	/^sub next_text {$/;"	s
 nytprof	Makefile.PL	/^nytprof: all$/;"	l
 option_in_usage	t/longopts.t	/^sub option_in_usage {$/;"	s

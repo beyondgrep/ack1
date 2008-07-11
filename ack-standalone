@@ -1877,8 +1877,9 @@ sub search_resource {
 
         shift @lines if $has_lines;
 
-        if ( $repo->{could_be_binary} ) {
-            if ( -B $filename ) {
+        # XXX This only works on my own specific files.  It's not generic.
+        if ( $res->{could_be_binary} ) {
+            if ( -B $res->{filename} ) {
                 App::Ack::print( "Binary file $filename matches\n" );
                 last;
             }

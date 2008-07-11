@@ -989,7 +989,7 @@ sub search_resource {
     my $max = $opt->{m};
     my $nmatches = 0;
 
-    $filename = $repo->{filename};
+    $filename = $res->name;
     $display_filename = undef;
 
     # for --line processing
@@ -1172,8 +1172,8 @@ show lines.
 =cut
 
 sub search_and_list {
-    my $fh = shift;
-    my $filename = shift;
+    my $repo = shift;
+    my $res = shift;
     my $opt = shift;
 
     my $nmatches = 0;
@@ -1182,8 +1182,10 @@ sub search_and_list {
 
     my $regex = qr/$opt->{regex}/;
 
+    # XXX Need to be doing some closing here.
     if ( $opt->{v} ) {
-        while (<$fh>) {
+        my $id;
+        while ( ($_,$id) = $res->next_text ) {
             if ( /$regex/ ) {
                 return 0 unless $count;
             }
@@ -1193,7 +1195,8 @@ sub search_and_list {
         }
     }
     else {
-        while (<$fh>) {
+        my $id;
+        while ( ($_,$id) = $res->next_text ) {
             if ( /$regex/ ) {
                 ++$nmatches;
                 last unless $count;
@@ -1202,10 +1205,10 @@ sub search_and_list {
     }
 
     if ( $nmatches ) {
-        App::Ack::print_count($filename, $nmatches, $ors, $count);
+        App::Ack::print_count($res->name, $nmatches, $ors, $count);
     }
     elsif ( $count && !$opt->{l} ) {
-        App::Ack::print_count0($filename, $ors);
+        App::Ack::print_count0($res->name, $ors);
     }
 
     return $nmatches ? 1 : 0;

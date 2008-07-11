@@ -84,9 +84,9 @@ critic:
 	perlcritic -1 -q -profile perlcriticrc ack Ack.pm Plugin.pm t/*.t
 
 tidy:
-	perltidy -b -pro=perltidyrc ack Ack.pm Plugin.pm
+	perltidy -b -pro=perltidyrc ack Ack.pm Resource.pm Repository.pm
 
-PROF_ARGS = -Mblib ack-standalone --noenv --color --group -w foo ~/parrot
+PROF_ARGS = -Mblib ack --noenv --color --group -w foo ~/parrot
 
 timed: all
 	$(PERL) $(PROF_ARGS) >> /dev/null 2>&1
@@ -119,8 +119,8 @@ nytprof: all
 	$(PERL) -d:NYTProf $(PROF_ARGS) >> /dev/null 2>&1
 	nytprofhtml
 
-$(STANDALONE) : $(ACK) $(ACK_PM) $(PLUGIN_PM) $(REPOSITORY_PM) $(RESOURCE_PM) squash Makefile
-	$(PERL) squash ack File::Next $(ACK_PM) $(PLUGIN_PM) $(REPOSITORY_PM) $(RESOURCE_PM) > $(STANDALONE)
+$(STANDALONE) : $(ACK) $(ACK_PM) $(REPOSITORY_PM) $(RESOURCE_PM) squash Makefile
+	$(PERL) squash ack File::Next $(ACK_PM) $(REPOSITORY_PM) $(RESOURCE_PM) > $(STANDALONE)
 	$(CHMOD) 0755 $(STANDALONE)
 	$(PERL_T) -c $(STANDALONE)
 

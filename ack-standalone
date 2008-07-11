@@ -1832,23 +1832,25 @@ sub search_resource {
     my $before_starts_at_line;
     my $after = 0; # number of lines still to print after a match
 
-    my $line;
+    my $text;
     my $id;
+    my $lineno = 0;
 
-    while ( ($line,$id) = $res->next_text() ) {
+    while ( ($text,$id) = $res->next_text() ) {
+        ++$lineno;
         # XXX Optimize away the case when there are no more @lines to find.
         # XXX $has_lines, $passthru and $v never change.  Optimize.
         if ( $has_lines
-               ? $. != $lines[0]  # $lines[0] should be a scalar
-               : $v ? $line =~ m/$regex/ : $line !~ m/$regex/ ) {
+               ? $lineno != $lines[0]  # $lines[0] should be a scalar
+               : $v ? $text =~ m/$regex/ : $text !~ m/$regex/ ) {
             if ( $passthru ) {
-                App::Ack::print( $line );
+                App::Ack::print( $text );
                 next;
             }
 
             if ( $keep_context ) {
                 if ( $after ) {
-                    print_match_or_context( $opt, 0, $., $line );
+                    print_match_or_context( $opt, 0, $lineno, $text );
                     $after--;
                 }
                 elsif ( $before_context ) {
@@ -1859,9 +1861,9 @@ sub search_resource {
                         }
                     }
                     else {
-                        $before_starts_at_line = $.;
+                        $before_starts_at_line = $lineno;
                     }
-                    push @before, $line;
+                    push @before, $text;
                 }
                 last if $max && ( $nmatches >= $max ) && !$after;
             }
@@ -1898,7 +1900,7 @@ sub search_resource {
                 $after = $after_context;
             }
         }
-        print_match_or_context( $opt, 1, $., $line );
+        print_match_or_context( $opt, 1, $id, $text );
 
         last if $max && ( $nmatches >= $max ) && !$after;
     } # while

@@ -4,6 +4,8 @@ MANIFEST
 Makefile.PL
 META.yml
 Plugin.pm
+Repository.pm
+Resource.pm
 README
 ack
 ack-help.txt

@@ -6,7 +6,8 @@ use Test::More tests => 3;
 
 BEGIN {
     use_ok( 'App::Ack' );
-    use_ok( 'App::Ack::Plugin' );
+    use_ok( 'App::Ack::Repository' );
+    use_ok( 'App::Ack::Resource' );
     use_ok( 'File::Next' );
 }
 

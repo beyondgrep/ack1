@@ -43,6 +43,8 @@ have ack walk through rows of a table.
 
 =head1 TERMS
 
+A repository is a container of resources.  XXX Explain & expand.
+
 In normal, text-mode ack, looks like this:
 
     foo.pl:18:Blah blah blah
@@ -63,136 +65,78 @@ with the specified functionality.
 
 This is how, roughly, the app will call the plugin:
 
-    my $plugin = App::Ack::Plugin::Example->new( $filename );
+    my $repo = App::Ack::Repository->new( $filename );
 
-    while ( my $resource = $plugin->next_resource() ) {
+    while ( my $res = $repo->next_resource() ) {
         # Handle start of the resource
-        while ( my ($line,$id) = $plugin->next_line() ) {
+        while ( my ($line,$id) = $res->next_text() ) {
             # Search for stuff in $line
         }
-        $resource->close_resource();
+        $resource->close();
     }
-    $plugin->shutdown();
+    $repository->close();
 
-=head2 new( $filename )
+=head1 REQUIRED FUNCTIONS
 
-Standard constructor.  What you do inside, ack doesn't care.
+=head2 Repository functions
 
-=cut
+=over 4
 
-=head2 next_resource()
+=item * new( $filename )
 
 Returns the next resource in the file.  Returns undef if there is none.
+
+It is the caller's responsibility to call ->close() on the resource.
 
 For files like MP3 files, there will only be one resource in the
 file.  For an Excel workbook, it will likely return one resource
 per worksheet.
 
-=cut
+=item * next_resource()
 
-=head2 next_text()
+=item * close()
+
+Closes the repository if necessary.  This might be closing a database connection.
+
+=back
+
+=head2 Resource functions
+
+=over 4
+
+=item * new()
+
+Opens the resource.  The constructor can take whatever arguments
+are necessary to open it.  Since the repository opens the resource,
+not ack itself, you're free to pass whatever you like.
+
+=item * name()
+
+Returns the name of the resource, in whatever way the resource sees
+fit to describe itself.  Usually, this will just be a file name,
+but could also be a filename + sheet name in the case of an Excel
+workbook.
+
+=item * next_text()
 
 Returns an array of the next text and its ID.  Returns an empty
 list at the end of the resource.
 
-=cut
+For scanning through a file, the ID is probably just a line number.
+It might also be a field name, or a database table row ID.
 
-=head2 close_resource()
+If there is no ID, because there is only one text item in the
+resource, such as the description field on a GIF, then return
+I<undef> for an ID.
 
-If there's some shutdown to be done on the resource, perhaps closing
-an opened database table, this is where to do it.
+=item * close()
 
-=cut
+Closes the resource if necessary.  This might be freeing memory
+from scanning a SQL table, but not closing the database connection,
+which would be at the repository level.
 
-=head2 shutdown()
-
-If you have to shutdown the file, such as closing a database
-connection,here's where to do it.
-
-=cut
-
-package App::Ack::Plugin::Base;
-
-sub new {
-    my $class    = shift;
-    my $filename = shift;
-
-    my $self = bless {
-        filename        => $filename,
-        fh              => undef,
-        could_be_binary => undef,
-        opened          => undef,
-        id              => undef,
-    }, $class;
-
-    return $self;
-}
-
-=head2 next_resource()
-
-Opens the file specified by I<$filename> and returns a filehandle and
-a flag that says whether it could be binary.
-
-If there's a failure, it throws a warning and returns an empty list.
+=back
 
 =cut
-
-sub next_resource {
-    my $self = shift;
-
-    return if $self->{opened};
-
-    if ( $self->{filename} eq '-' ) {
-        $self->{fh} = *STDIN;
-        $self->{could_be_binary} = 0;
-    }
-    else {
-        if ( !open( $self->{fh}, '<', $self->{filename} ) ) {
-            App::Ack::warn( "$self->{filename}: $!" );
-            return;
-        }
-        $self->{could_be_binary} = 1;
-    }
-
-    return $self->{filename};
-}
-
-=head2 next_text()
-
-Gets next line from the file
-
-=cut
-
-sub next_text {
-    my $self = shift;
-
-    return readline $self->{fh};
-}
-
-=head2 close_resource()
-
-Closes the file
-
-=cut
-
-sub close_resource {
-    my $self = shift;
-
-    if ( close $self->{fh} ) {
-        return 1;
-    }
-    App::Ack::warn( "$self->{filename}: $!" );
-    return 0;
-}
-
-=head2 shutdown()
-
-Nothing to do
-
-=cut
-
-sub shutdown {
-    return;
-}
 
 1; # End of App::Ack::Plugin

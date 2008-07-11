@@ -12,8 +12,10 @@ my %parms = (
     ABSTRACT            => 'A grep-like program specifically for large source trees',
     VERSION_FROM        => 'Ack.pm',
     PM                  => {
-        'Ack.pm'    => '$(INST_LIBDIR)/App/Ack.pm',
-        'Plugin.pm' => '$(INST_LIBDIR)/App/Ack/Plugin.pm',
+        'Ack.pm'        => '$(INST_LIBDIR)/App/Ack.pm',
+        'Plugin.pm'     => '$(INST_LIBDIR)/App/Ack/Plugin.pm',
+        'Repository.pm' => '$(INST_LIBDIR)/App/Ack/Repository.pm',
+        'Resource.pm'   => '$(INST_LIBDIR)/App/Ack/Resource.pm',
     },
     EXE_FILES           => [ 'ack' ],
     PREREQ_PM => {
@@ -61,6 +63,8 @@ sub MY::postamble {
 ACK             = ack
 ACK_PM          = Ack.pm
 PLUGIN_PM       = Plugin.pm
+REPOSITORY_PM   = Repository.pm
+RESOURCE_PM     = Resource.pm
 STANDALONE      = ack-standalone
 ACK_HELP        = ack-help.txt
 ACK_HELP_TYPES  = ack-help-types.txt
@@ -115,8 +119,8 @@ nytprof: all
 	$(PERL) -d:NYTProf $(PROF_ARGS) >> /dev/null 2>&1
 	nytprofhtml
 
-$(STANDALONE) : $(ACK) $(ACK_PM) squash Makefile
-	$(PERL) squash ack File::Next $(ACK_PM) $(PLUGIN_PM) > $(STANDALONE)
+$(STANDALONE) : $(ACK) $(ACK_PM) $(PLUGIN_PM) $(REPOSITORY_PM) $(RESOURCE_PM) squash Makefile
+	$(PERL) squash ack File::Next $(ACK_PM) $(PLUGIN_PM) $(REPOSITORY_PM) $(RESOURCE_PM) > $(STANDALONE)
 	$(CHMOD) 0755 $(STANDALONE)
 	$(PERL_T) -c $(STANDALONE)
 

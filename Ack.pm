@@ -4,6 +4,7 @@ use warnings;
 use strict;
 
 use File::Next 0.40;
+use App::Ack::Repository;
 
 =head1 NAME
 
@@ -1017,7 +1018,9 @@ sub search_resource {
     my $after = 0; # number of lines still to print after a match
 
     my $line;
-    while ($line = <$fh>) {
+    my $id;
+
+    while ( ($line,$id) = $res->next_text() ) {
         # XXX Optimize away the case when there are no more @lines to find.
         # XXX $has_lines, $passthru and $v never change.  Optimize.
         if ( $has_lines
@@ -1256,12 +1259,13 @@ sub print_files_with_matches {
 
     my $nmatches = 0;
     while ( defined ( my $filename = $iter->() ) ) {
-        my $file = App::Ack::Plugin::Base->new( $filename ) or next;
-        while ( my $res = $file->next_resource() ) {
-            $nmatches += search_and_list( $res, $opt );
+        my $repo = App::Ack::Repository->new( $filename ) or next;
+        while ( my $res = $repo->next_resource() ) {
+            $nmatches += search_and_list( $repo, $res, $opt );
+            $res->close();
         }
-        $file->close_resource();
         last if $nmatches && $opt->{1};
+        $repo->close();
     }
 
     return;
@@ -1282,13 +1286,13 @@ sub print_matches {
 
     my $nmatches = 0;
     while ( defined ( my $filename = $iter->() ) ) {
-        my $repo = App::Ack::Plugin::Base->new( $filename ) or next;
+        my $repo = App::Ack::Repository->new( $filename ) or next;
         while ( my $res = $repo->next_resource() ) {
             $nmatches += search_resource( $repo, $res, $opt );
+            $res->close();
         }
-        $repo->close_resource();
         last if $nmatches && $opt->{1};
-        $repo->shutdown();
+        $repo->close();
     }
     return;
 }

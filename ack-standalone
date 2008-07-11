@@ -1833,7 +1833,9 @@ sub search_resource {
     my $after = 0; # number of lines still to print after a match
 
     my $line;
-    while ($line = <$fh>) {
+    my $id;
+
+    while ( ($line,$id) = $res->next_text() ) {
         # XXX Optimize away the case when there are no more @lines to find.
         # XXX $has_lines, $passthru and $v never change.  Optimize.
         if ( $has_lines
@@ -2042,12 +2044,13 @@ sub print_files_with_matches {
 
     my $nmatches = 0;
     while ( defined ( my $filename = $iter->() ) ) {
-        my $file = App::Ack::Plugin::Base->new( $filename ) or next;
-        while ( my $res = $file->next_resource() ) {
-            $nmatches += search_and_list( $res, $opt );
+        my $repo = App::Ack::Repository->new( $filename ) or next;
+        while ( my $res = $repo->next_resource() ) {
+            $nmatches += search_and_list( $repo, $res, $opt );
+            $res->close();
         }
-        $file->close_resource();
         last if $nmatches && $opt->{1};
+        $repo->close();
     }
 
     return;
@@ -2063,13 +2066,13 @@ sub print_matches {
 
     my $nmatches = 0;
     while ( defined ( my $filename = $iter->() ) ) {
-        my $repo = App::Ack::Plugin::Base->new( $filename ) or next;
+        my $repo = App::Ack::Repository->new( $filename ) or next;
         while ( my $res = $repo->next_resource() ) {
             $nmatches += search_resource( $repo, $res, $opt );
+            $res->close();
         }
-        $repo->close_resource();
         last if $nmatches && $opt->{1};
-        $repo->shutdown();
+        $repo->close();
     }
     return;
 }
@@ -2215,11 +2218,45 @@ sub set_up_pager {
 package App::Ack::Plugin;
 
 
+1; # End of App::Ack::Plugin
+package App::Ack::Repository;
 
 
+use warnings;
+use strict;
+
+sub new {
+    my $class    = shift;
+    my $filename = shift;
+
+    my $self = bless {
+        filename => $filename,
+        nexted   => 0,
+    }, $class;
+
+    return $self;
+}
 
 
-package App::Ack::Plugin::Base;
+sub next_resource {
+    my $self = shift;
+
+    return if $self->{nexted};
+    $self->{nexted} = 1;
+
+    return App::Ack::Resource->new( $self->{filename} );
+}
+
+
+sub close {
+}
+
+1;
+package App::Ack::Resource;
+
+use warnings;
+use strict;
+
 
 sub new {
     my $class    = shift;
@@ -2233,15 +2270,6 @@ sub new {
         id              => undef,
     }, $class;
 
-    return $self;
-}
-
-
-sub next_resource {
-    my $self = shift;
-
-    return if $self->{opened};
-
     if ( $self->{filename} eq '-' ) {
         $self->{fh} = *STDIN;
         $self->{could_be_binary} = 0;
@@ -2254,30 +2282,41 @@ sub next_resource {
         $self->{could_be_binary} = 1;
     }
 
+    return $self;
+}
+
+
+sub name {
+    my $self = shift;
+
     return $self->{filename};
 }
 
 
 sub next_text {
     my $self = shift;
-
-    return readline $self->{fh};
-}
-
-
-sub close_resource {
-    my $self = shift;
-
-    if ( close $self->{fh} ) {
-        return 1;
+    if ( $self->{fh} ) {
+        my $text = readline $self->{fh};
+        if ( defined $text ) {
+            $self->{line}++;
+            return ($text, $self->{line});
+        }
     }
-    App::Ack::warn( "$self->{filename}: $!" );
-    return 0;
-}
-
-
-sub shutdown {
     return;
 }
 
-1; # End of App::Ack::Plugin
+
+sub close {
+    my $self = shift;
+
+    if ( $self->{fh} ) {
+        if ( !close $self->{fh} ) {
+            App::Ack::warn( $self->name() . ": $!" );
+        }
+        delete $self->{fh};
+    }
+
+    return;
+}
+
+1;

@@ -20,6 +20,8 @@ my $hh = [qw(
 
 my $ruby = [qw(
     t/etc/shebang.rb.xxx
+    t/swamp/Rakefile
+    t/swamp/sample.rake
 )];
 
 my $fortran = [qw(

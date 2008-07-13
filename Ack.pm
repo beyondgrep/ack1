@@ -97,7 +97,8 @@ BEGIN {
         php         => [qw( php phpt php3 php4 php5 )],
         plone       => [qw( pt cpt metadata cpy py )],
         python      => [qw( py )],
-        ruby        => [qw( rb rhtml rjs rxml erb )],
+        rake        => q{Rakefiles},
+        ruby        => [qw( rb rhtml rjs rxml erb rake )],
         scheme      => [qw( scm )],
         shell       => [qw( sh bash csh tcsh ksh zsh )],
         skipped     => q{Files, but not directories, normally skipped by ack (default: off)},
@@ -459,6 +460,7 @@ sub filetypes {
     return 'skipped' unless is_searchable( $filename );
 
     return ('make',TEXT) if $filename =~ m{[$dir_sep_chars]?Makefile$}io;
+    return ('rake','ruby',TEXT) if $filename =~ m{[$dir_sep_chars]?Rakefile$}io;
 
     # If there's an extension, look it up
     if ( $filename =~ m{\.([^\.$dir_sep_chars]+)$}o ) {

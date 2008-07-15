@@ -47,6 +47,8 @@ ACK_F_TEXT: {
         t/swamp/javascript.js
         t/swamp/Makefile
         t/swamp/Makefile.PL
+        t/swamp/notaMakefile
+        t/swamp/notaRakefile
         t/swamp/options.pl
         t/swamp/parrot.pir
         t/swamp/perl-test.t

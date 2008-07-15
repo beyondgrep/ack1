@@ -4,6 +4,10 @@ NEXT
     [ENHANCEMENTS]
     Added support for --rake files, which are also --ruby files.
 
+    [FIXES]
+    Fixed a bug where files ending in "Makefile" were mistakenly
+    identified as Makefiles.
+
 
 1.86        Wed Jul  9 01:27:21 CDT 2008
     [ENHANCEMENTS]

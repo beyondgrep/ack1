@@ -459,8 +459,11 @@ sub filetypes {
 
     return 'skipped' unless is_searchable( $filename );
 
-    return ('make',TEXT) if $filename =~ m{[$dir_sep_chars]?Makefile$}io;
-    return ('rake','ruby',TEXT) if $filename =~ m{[$dir_sep_chars]?Rakefile$}io;
+    my $basename = $filename;
+    $basename =~ s{.*[$dir_sep_chars]}{};
+
+    return ('make',TEXT)        if lc $basename eq 'makefile';
+    return ('rake','ruby',TEXT) if lc $basename eq 'rakefile';
 
     # If there's an extension, look it up
     if ( $filename =~ m{\.([^\.$dir_sep_chars]+)$}o ) {

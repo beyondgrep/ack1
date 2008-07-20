@@ -358,10 +358,6 @@ Quote all metacharacters in PATTERN, it is treated as a literal.
 This applies only to the PATTERN, not to the regexes given for the B<-g>
 and B<-G> options.
 
-=item B<--rc=file>
-
-Specify a path to an alternate F<.ackrc> file.
-
 =item B<--smart-case>, B<--no-smart-case>
 
 Ignore case in the search strings if PATTERN contains no uppercase
@@ -2257,3 +2253,100 @@ sub set_up_pager {
 
 
 1; # End of App::Ack
+package App::Ack::Repository;
+
+
+use warnings;
+use strict;
+
+sub new {
+    my $class    = shift;
+    my $filename = shift;
+
+    my $self = bless {
+        filename => $filename,
+        nexted   => 0,
+    }, $class;
+
+    return $self;
+}
+
+
+sub next_resource {
+    my $self = shift;
+
+    return if $self->{nexted};
+    $self->{nexted} = 1;
+
+    return App::Ack::Resource->new( $self->{filename} );
+}
+
+
+sub close {
+}
+
+1;
+package App::Ack::Resource;
+
+use warnings;
+use strict;
+
+
+sub new {
+    my $class    = shift;
+    my $filename = shift;
+
+    my $self = bless {
+        filename        => $filename,
+        fh              => undef,
+        could_be_binary => undef,
+        opened          => undef,
+        id              => undef,
+    }, $class;
+
+    if ( $self->{filename} eq '-' ) {
+        $self->{fh} = *STDIN;
+        $self->{could_be_binary} = 0;
+    }
+    else {
+        if ( !open( $self->{fh}, '<', $self->{filename} ) ) {
+            App::Ack::warn( "$self->{filename}: $!" );
+            return;
+        }
+        $self->{could_be_binary} = 1;
+    }
+
+    return $self;
+}
+
+
+sub name {
+    my $self = shift;
+
+    return $self->{filename};
+}
+
+
+sub next_text {
+    my $self = shift;
+
+    my $text = readline $self->{fh};
+    if ( defined $text ) {
+        return ($text, ++$self->{line});
+    }
+
+    return;
+}
+
+
+sub close {
+    my $self = shift;
+
+    if ( not close $self->{fh} ) {
+        App::Ack::warn( $self->name() . ": $!" );
+    }
+
+    return;
+}
+
+1;

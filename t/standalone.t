@@ -25,6 +25,8 @@ FIND_PACKAGES: {
     my @expected = (
         'package File::Next;',
         'package App::Ack;',
+        'package App::Ack::Repository;',
+        'package App::Ack::Resource;',
     );
     my @files = ( $ack );
     my @args = qw( ^package -h );

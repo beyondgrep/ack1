@@ -1,4 +1,7 @@
 Ack.pm
+Repository.pm
+Resource.pm
+
 Changes
 MANIFEST
 Makefile.PL

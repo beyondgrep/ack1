@@ -11,7 +11,11 @@ my %parms = (
     AUTHOR              => 'Andy Lester <andy@petdance.com>',
     ABSTRACT            => 'A grep-like program specifically for large source trees',
     VERSION_FROM        => 'Ack.pm',
-    PM                  => { 'Ack.pm' => '$(INST_LIBDIR)/App/Ack.pm' },
+    PM                  => {
+        'Ack.pm'        => '$(INST_LIBDIR)/App/Ack.pm',
+        'Repository.pm' => '$(INST_LIBDIR)/App/Ack/Repository.pm',
+        'Resource.pm'   => '$(INST_LIBDIR)/App/Ack/Resource.pm',
+    },
     EXE_FILES           => [ 'ack' ],
     PREREQ_PM => {
         'Test::Harness'     => 2.50, # Something reasonably newish
@@ -56,7 +60,10 @@ sub MY::postamble {
     my $file_next_filename = qx(perldoc -l File::Next);
     my $postamble = <<'MAKE_FRAG';
 ACK             = ack
-APP_ACK_PM      = Ack.pm
+ACK_PM          = Ack.pm
+REPOSITORY_PM   = Repository.pm
+RESOURCE_PM     = Resource.pm
+ALL_PM          = $(ACK_PM) $(REPOSITORY_PM) $(RESOURCE_PM)
 STANDALONE      = ack-standalone
 ACK_HELP        = ack-help.txt
 ACK_HELP_TYPES  = ack-help-types.txt
@@ -73,10 +80,10 @@ tags:
 		--languages=Perl --langmap=Perl:+.t \
 
 critic:
-	perlcritic -1 -q -profile perlcriticrc ack Ack.pm t/*.t
+	perlcritic -1 -q -profile perlcriticrc ack $(ALL_PM) t/*.t
 
 tidy:
-	perltidy -b -pro=perltidyrc ack Ack.pm
+	perltidy -b -pro=perltidyrc ack $(ALL_PM)
 
 PROF_ARGS = -Mblib ack-standalone --noenv --color --group -w foo ~/parrot
 
@@ -111,8 +118,8 @@ nytprof: all
 	$(PERL) -d:NYTProf $(PROF_ARGS) >> /dev/null 2>&1
 	nytprofhtml
 
-$(STANDALONE) : $(ACK) $(APP_ACK_PM) squash Makefile
-	$(PERL) squash ack File::Next $(APP_ACK_PM) > $(STANDALONE)
+$(STANDALONE) : $(ACK) $(ALL_PM) squash Makefile
+	$(PERL) squash ack File::Next $(ALL_PM) > $(STANDALONE)
 	$(CHMOD) 0755 $(STANDALONE)
 	$(PERL_T) -c $(STANDALONE)
 

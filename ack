@@ -355,10 +355,6 @@ Quote all metacharacters in PATTERN, it is treated as a literal.
 This applies only to the PATTERN, not to the regexes given for the B<-g>
 and B<-G> options.
 
-=item B<--rc=file>
-
-Specify a path to an alternate F<.ackrc> file.
-
 =item B<--smart-case>, B<--no-smart-case>
 
 Ignore case in the search strings if PATTERN contains no uppercase

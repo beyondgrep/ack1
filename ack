@@ -1,5 +1,13 @@
 #!/usr/local/bin/perl
 
+=for TODO
+
+Handle tarballs: .rb inside .tar inside .gz
+
+The filetypes check breaks encapsulation.
+
+=cut
+
 use warnings;
 use strict;
 
@@ -61,7 +69,9 @@ sub main {
             my $s = $nargs == 1 ? '' : 's';
             App::Ack::warn( "Ignoring $nargs argument$s on the command-line while acting as a filter." );
         }
-        App::Ack::search( \*STDIN, 0, '-', $opt );
+        my $res = App::Ack::Resource->new( '-' );
+        App::Ack::search_resource( $res, $opt );
+        $res->close();
         exit 0;
     }
 

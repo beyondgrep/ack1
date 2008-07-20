@@ -34,8 +34,12 @@ sub next_resource {
 
 =head2 close
 
-Does nothing, because file opening and closing is handled on the
-resource level.
+Does nothing.  For the base repository, the opening & closing are
+handled at the resource level.
+
+If this repository were, say, an Excel workbook, you'd probably
+close the file.  If it were a database, you'd close the database
+connection.
 
 =cut
 

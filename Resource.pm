@@ -41,7 +41,7 @@ sub new {
     return $self;
 }
 
-=head2 name()
+=head2 $res->name()
 
 Returns the name of the resource.
 
@@ -53,7 +53,53 @@ sub name {
     return $self->{filename};
 }
 
-=head2 next_text()
+=head2 $res->is_binary()
+
+Tells whether the resource is binary.
+
+=cut
+
+sub is_binary() {
+    my $self = shift;
+
+    if ( $self->{could_be_binary} ) {
+        return -B $self->{fh};
+    }
+
+    return 0;
+}
+
+
+=head2 $res->needs_line_scan( $regex, \%opts )
+
+Slurp up an entire file up to 100K, see if there are any matches
+in it, and if so, let us know so we can iterate over it directly.
+If it's bigger than 100K or the match is inverted, we have to do
+the line-by-line, too.
+
+=cut
+
+sub needs_line_scan {
+    my $self  = shift;
+    my $regex = shift;
+    my $opt   = shift;
+
+    return 1 if $opt->{v};
+
+    my $size = -s $self->{fh};
+
+    if ( $size > 100_000 ) {
+        return 1;
+    }
+
+    my $buffer;
+    my $rc = sysread( $self->{fh}, $buffer, $size );
+    return 0 unless $rc && ( $rc == $size );
+
+    return $buffer =~ /$regex/m;
+}
+
+=head2 $res->next_text()
 
 Returns an array of the next text and its ID.  Returns an empty
 list at the end of the resource.
@@ -63,15 +109,18 @@ list at the end of the resource.
 sub next_text {
     my $self = shift;
 
+    # XXX Can/should I read directly into $.?
     my $text = readline $self->{fh};
     if ( defined $text ) {
-        return ($text, ++$self->{line});
+        $_ = $text;
+        $. = ++$self->{line};
+        return 1;
     }
 
     return;
 }
 
-=head2 close()
+=head2 $res->close()
 
 Close the resource.  In this case, it's just a text file.
 

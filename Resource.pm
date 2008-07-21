@@ -1,5 +1,7 @@
 package App::Ack::Resource;
 
+use App::Ack;
+
 use warnings;
 use strict;
 
@@ -55,7 +57,8 @@ sub name {
 
 =head2 $res->is_binary()
 
-Tells whether the resource is binary.
+Tells whether the resource is binary.  If it is, and ack finds a
+match in the file, then ack will not try to display a match line.
 
 =cut
 
@@ -63,57 +66,84 @@ sub is_binary() {
     my $self = shift;
 
     if ( $self->{could_be_binary} ) {
-        return -B $self->{fh};
+        return -B $self->{filename};
     }
 
     return 0;
 }
 
 
-=head2 $res->needs_line_scan( $regex, \%opts )
+=head2 $res->needs_line_scan( \%opts )
 
-Slurp up an entire file up to 100K, see if there are any matches
-in it, and if so, let us know so we can iterate over it directly.
-If it's bigger than 100K or the match is inverted, we have to do
-the line-by-line, too.
+API: Tells if the resource needs a line-by-line scan.  This is a big
+optimization because if you can tell from the outset that the pattern
+is not found in the resource at all, then there's no need to do the
+line-by-line iteration.  If in doubt, return true.
+
+Base: Slurp up an entire file up to 100K, see if there are any
+matches in it, and if so, let us know so we can iterate over it
+directly.  If it's bigger than 100K or the match is inverted, we
+have to do the line-by-line, too.
 
 =cut
 
 sub needs_line_scan {
     my $self  = shift;
-    my $regex = shift;
     my $opt   = shift;
 
     return 1 if $opt->{v};
 
     my $size = -s $self->{fh};
-
-    if ( $size > 100_000 ) {
+    if ( $size == 0 ) {
+        return 0;
+    }
+    elsif ( $size > 100_000 ) {
         return 1;
     }
 
     my $buffer;
     my $rc = sysread( $self->{fh}, $buffer, $size );
+    if ( not defined $rc ) {
+        App::Ack::warn( "$self->{filename}: $!" );
+        return 1;
+    }
     return 0 unless $rc && ( $rc == $size );
 
+    my $regex = $opt->{regex};
     return $buffer =~ /$regex/m;
+}
+
+=head2 $res->reset()
+
+Resets the resource back to the beginning.  This is only called if
+C<needs_line_scan()> is true, but not always if C<needs_line_scan()>
+is true.
+
+=cut
+
+sub reset {
+    my $self = shift;
+
+    seek( $self->{fh}, 0, 0 )
+        or App::Ack::warn( "$self->{filename}: $!" );
+
+    return;
 }
 
 =head2 $res->next_text()
 
-Returns an array of the next text and its ID.  Returns an empty
-list at the end of the resource.
+API: Gets the next line of text from the resource.  Returns true
+if there is one, or false if not.
+
+Sets C<$_> with the line of text, and C<$.> for the ID number of
+the text.  This basically emulates a call to C<< <$fh> >>.
 
 =cut
 
 sub next_text {
-    my $self = shift;
-
-    # XXX Can/should I read directly into $.?
-    my $text = readline $self->{fh};
-    if ( defined $text ) {
-        $_ = $text;
-        $. = ++$self->{line};
+    $_ = readline $_[0]->{fh};
+    if ( defined $_ ) {
+        $. = ++$_[0]->{line};
         return 1;
     }
 
@@ -122,7 +152,7 @@ sub next_text {
 
 =head2 $res->close()
 
-Close the resource.  In this case, it's just a text file.
+API: Close the resource.
 
 =cut
 

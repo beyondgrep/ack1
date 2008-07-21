@@ -963,7 +963,6 @@ sub search_resource {
     my $opt = shift;
 
     $filename = $res->name();
-    my $could_be_binary = shift;
 
     my $v = $opt->{v};
     my $passthru = $opt->{passthru};
@@ -983,7 +982,6 @@ sub search_resource {
     else {
         $regex = qr/$opt->{regex}/;
     }
-
 
     # for context processing
     $last_output_line = -1;
@@ -1263,7 +1261,19 @@ sub print_matches {
         my $repo = App::Ack::Repository->new( $filename ) or next;
 
         while ( my $res = $repo->next_resource() ) {
-            $nmatches += search_resource( $res, $opt );
+            my $needs_line_scan;
+            if ( $opt->{regex} && !$opt->{passthru} ) {
+                $needs_line_scan = $res->needs_line_scan( $opt );
+                if ( $needs_line_scan ) {
+                    $res->reset();
+                }
+            }
+            else {
+                $needs_line_scan = 1;
+            }
+            if ( $needs_line_scan ) {
+                $nmatches += search_resource( $res, $opt );
+            }
             $res->close();
         }
         last if $nmatches && $opt->{1};

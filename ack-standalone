@@ -1790,7 +1790,6 @@ sub search_resource {
     my $opt = shift;
 
     $filename = $res->name();
-    my $could_be_binary = shift;
 
     my $v = $opt->{v};
     my $passthru = $opt->{passthru};
@@ -1810,7 +1809,6 @@ sub search_resource {
     else {
         $regex = qr/$opt->{regex}/;
     }
-
 
     # for context processing
     $last_output_line = -1;
@@ -2055,7 +2053,19 @@ sub print_matches {
         my $repo = App::Ack::Repository->new( $filename ) or next;
 
         while ( my $res = $repo->next_resource() ) {
-            $nmatches += search_resource( $res, $opt );
+            my $needs_line_scan;
+            if ( $opt->{regex} && !$opt->{passthru} ) {
+                $needs_line_scan = $res->needs_line_scan( $opt );
+                if ( $needs_line_scan ) {
+                    $res->reset();
+                }
+            }
+            else {
+                $needs_line_scan = 1;
+            }
+            if ( $needs_line_scan ) {
+                $nmatches += search_resource( $res, $opt );
+            }
             $res->close();
         }
         last if $nmatches && $opt->{1};
@@ -2237,6 +2247,7 @@ sub close {
 1;
 package App::Ack::Resource;
 
+
 use warnings;
 use strict;
 
@@ -2280,7 +2291,7 @@ sub is_binary() {
     my $self = shift;
 
     if ( $self->{could_be_binary} ) {
-        return -B $self->{fh};
+        return -B $self->{filename};
     }
 
     return 0;
@@ -2290,32 +2301,45 @@ sub is_binary() {
 
 sub needs_line_scan {
     my $self  = shift;
-    my $regex = shift;
     my $opt   = shift;
 
     return 1 if $opt->{v};
 
     my $size = -s $self->{fh};
-
-    if ( $size > 100_000 ) {
+    if ( $size == 0 ) {
+        return 0;
+    }
+    elsif ( $size > 100_000 ) {
         return 1;
     }
 
     my $buffer;
     my $rc = sysread( $self->{fh}, $buffer, $size );
+    if ( not defined $rc ) {
+        App::Ack::warn( "$self->{filename}: $!" );
+        return 1;
+    }
     return 0 unless $rc && ( $rc == $size );
 
+    my $regex = $opt->{regex};
     return $buffer =~ /$regex/m;
 }
 
 
-sub next_text {
+sub reset {
     my $self = shift;
 
-    my $text = readline $self->{fh};
-    if ( defined $text ) {
-        $_ = $text;
-        $. = ++$self->{line};
+    seek( $self->{fh}, 0, 0 )
+        or App::Ack::warn( "$self->{filename}: $!" );
+
+    return;
+}
+
+
+sub next_text {
+    $_ = readline $_[0]->{fh};
+    if ( defined $_ ) {
+        $. = ++$_[0]->{line};
         return 1;
     }
 

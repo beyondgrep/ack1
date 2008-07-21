@@ -165,7 +165,6 @@ check_with	t/ack-type.t	/^sub check_with {$/;"	s
 check_with	t/file-permission.t	/^sub check_with {$/;"	s
 close	Repository.pm	/^sub close {$/;"	s
 close	Resource.pm	/^sub close {$/;"	s
-close_file	Ack.pm	/^sub close_file {$/;"	s
 critic	Makefile.PL	/^critic:$/;"	l
 def_types_from_ARGV	Ack.pm	/^sub def_types_from_ARGV {$/;"	s
 delete_type	Ack.pm	/^sub delete_type {$/;"	s
@@ -186,6 +185,7 @@ get_starting_points	Ack.pm	/^sub get_starting_points {$/;"	s
 get_version_statement	Ack.pm	/^sub get_version_statement {$/;"	s
 homepage	Makefile.PL	/^    homepage: http:\/\/petdance.com\/ack\/$/;"	l
 ignoredir_filter	Ack.pm	/^sub ignoredir_filter {$/;"	s
+is_binary	Resource.pm	/^sub is_binary() {$/;"	s
 is_filetype	t/Util.pm	/^sub is_filetype {$/;"	s
 is_interesting	Ack.pm	/^sub is_interesting {$/;"	s
 is_searchable	Ack.pm	/^sub is_searchable {$/;"	s
@@ -196,13 +196,12 @@ load_colors	Ack.pm	/^sub load_colors {$/;"	s
 main	Makefile.PL	/^package main;$/;"	p
 main	ack	/^sub main {$/;"	s
 name	Resource.pm	/^sub name {$/;"	s
-needs_line_scan	Ack.pm	/^sub needs_line_scan {$/;"	s
+needs_line_scan	Resource.pm	/^sub needs_line_scan {$/;"	s
 new	Repository.pm	/^sub new {$/;"	s
 new	Resource.pm	/^sub new {$/;"	s
 next_resource	Repository.pm	/^sub next_resource {$/;"	s
 next_text	Resource.pm	/^sub next_text {$/;"	s
 nytprof	Makefile.PL	/^nytprof: all$/;"	l
-open_file	Ack.pm	/^sub open_file {$/;"	s
 option_in_usage	t/longopts.t	/^sub option_in_usage {$/;"	s
 pipe_into_ack	t/Util.pm	/^sub pipe_into_ack {$/;"	s
 prep_environment	t/Util.pm	/^sub prep_environment {$/;"	s
@@ -224,6 +223,7 @@ profiler	Makefile.PL	/^profiler: all$/;"	l
 read_ackrc	Ack.pm	/^sub read_ackrc {$/;"	s
 remove_dir_sep	Ack.pm	/^sub remove_dir_sep {$/;"	s
 reorder	t/module.t	/^sub reorder {$/;"	s
+reset	Resource.pm	/^sub reset {$/;"	s
 resources	Makefile.PL	/^resources:$/;"	l
 run_ack	t/Util.pm	/^sub run_ack {$/;"	s
 run_ack_with_stderr	t/Util.pm	/^sub run_ack_with_stderr {$/;"	s

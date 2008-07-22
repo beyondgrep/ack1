@@ -15,6 +15,7 @@ my %parms = (
         'Ack.pm'        => '$(INST_LIBDIR)/App/Ack.pm',
         'Repository.pm' => '$(INST_LIBDIR)/App/Ack/Repository.pm',
         'Resource.pm'   => '$(INST_LIBDIR)/App/Ack/Resource.pm',
+        'Tar.pm'        => '$(INST_LIBDIR)/App/Ack/Repository/Tar.pm',
     },
     EXE_FILES           => [ 'ack' ],
     PREREQ_PM => {

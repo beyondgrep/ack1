@@ -2,6 +2,10 @@ package App::Ack::Repository::Tar;
 
 use Archive::Tar;
 
+sub extensions_handled {
+    return qw( .tar .gz .tgz .tar.gz );
+}
+
 sub new {
     my $class = shift;
     my $filename = shift;

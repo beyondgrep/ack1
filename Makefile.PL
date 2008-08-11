@@ -13,6 +13,7 @@ my %parms = (
     VERSION_FROM        => 'Ack.pm',
     PM                  => {
         'Ack.pm'        => '$(INST_LIBDIR)/App/Ack.pm',
+        'Plugin.pm'     => '$(INST_LIBDIR)/App/Ack/Plugin.pm',
         'Repository.pm' => '$(INST_LIBDIR)/App/Ack/Repository.pm',
         'Resource.pm'   => '$(INST_LIBDIR)/App/Ack/Resource.pm',
         'Tar.pm'        => '$(INST_LIBDIR)/App/Ack/Repository/Tar.pm',

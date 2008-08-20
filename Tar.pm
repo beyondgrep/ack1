@@ -1,3 +1,5 @@
+package App::Ack::Plugin::Tar;
+
 package App::Ack::Repository::Tar;
 
 use Archive::Tar;

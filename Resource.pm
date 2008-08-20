@@ -5,6 +5,16 @@ use App::Ack;
 use warnings;
 use strict;
 
+sub FAIL {
+    require Carp;
+    Carp::confess( 'Must be overloaded' );
+}
+
+=head1 SYNOPSIS
+
+This is the base class for App::Ack::Resource and any resources
+that derive from it.
+
 =head1 METHODS
 
 =head2 new( $filename )
@@ -17,30 +27,7 @@ If there's a failure, it throws a warning and returns an empty list.
 =cut
 
 sub new {
-    my $class    = shift;
-    my $filename = shift;
-
-    my $self = bless {
-        filename        => $filename,
-        fh              => undef,
-        could_be_binary => undef,
-        opened          => undef,
-        id              => undef,
-    }, $class;
-
-    if ( $self->{filename} eq '-' ) {
-        $self->{fh} = *STDIN;
-        $self->{could_be_binary} = 0;
-    }
-    else {
-        if ( !open( $self->{fh}, '<', $self->{filename} ) ) {
-            App::Ack::warn( "$self->{filename}: $!" );
-            return;
-        }
-        $self->{could_be_binary} = 1;
-    }
-
-    return $self;
+    FAIL();
 }
 
 =head2 $res->name()
@@ -50,9 +37,7 @@ Returns the name of the resource.
 =cut
 
 sub name {
-    my $self = shift;
-
-    return $self->{filename};
+    FAIL();
 }
 
 =head2 $res->is_binary()
@@ -63,13 +48,7 @@ match in the file, then ack will not try to display a match line.
 =cut
 
 sub is_binary() {
-    my $self = shift;
-
-    if ( $self->{could_be_binary} ) {
-        return -B $self->{filename};
-    }
-
-    return 0;
+    FAIL();
 }
 
 
@@ -88,29 +67,7 @@ have to do the line-by-line, too.
 =cut
 
 sub needs_line_scan {
-    my $self  = shift;
-    my $opt   = shift;
-
-    return 1 if $opt->{v};
-
-    my $size = -s $self->{fh};
-    if ( $size == 0 ) {
-        return 0;
-    }
-    elsif ( $size > 100_000 ) {
-        return 1;
-    }
-
-    my $buffer;
-    my $rc = sysread( $self->{fh}, $buffer, $size );
-    if ( not defined $rc ) {
-        App::Ack::warn( "$self->{filename}: $!" );
-        return 1;
-    }
-    return 0 unless $rc && ( $rc == $size );
-
-    my $regex = $opt->{regex};
-    return $buffer =~ /$regex/m;
+    FAIL();
 }
 
 =head2 $res->reset()
@@ -122,12 +79,7 @@ is true.
 =cut
 
 sub reset {
-    my $self = shift;
-
-    seek( $self->{fh}, 0, 0 )
-        or App::Ack::warn( "$self->{filename}: $!" );
-
-    return;
+    FAIL();
 }
 
 =head2 $res->next_text()
@@ -141,13 +93,7 @@ the text.  This basically emulates a call to C<< <$fh> >>.
 =cut
 
 sub next_text {
-    $_ = readline $_[0]->{fh};
-    if ( defined $_ ) {
-        $. = ++$_[0]->{line};
-        return 1;
-    }
-
-    return;
+    FAIL();
 }
 
 =head2 $res->close()
@@ -157,13 +103,7 @@ API: Close the resource.
 =cut
 
 sub close {
-    my $self = shift;
-
-    if ( not close $self->{fh} ) {
-        App::Ack::warn( $self->name() . ": $!" );
-    }
-
-    return;
+    FAIL();
 }
 
 1;

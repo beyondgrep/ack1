@@ -6,6 +6,8 @@ Handle tarballs: .rb inside .tar inside .gz
 
 The filetypes check breaks encapsulation.
 
+Don't install Resource.pm and Repository.pm if we don't have to.
+
 =cut
 
 use warnings;
@@ -69,7 +71,7 @@ sub main {
             my $s = $nargs == 1 ? '' : 's';
             App::Ack::warn( "Ignoring $nargs argument$s on the command-line while acting as a filter." );
         }
-        my $res = App::Ack::Resource->new( '-' );
+        my $res = App::Ack::Resource::Basic->new( '-' );
         App::Ack::search_resource( $res, $opt );
         $res->close();
         exit 0;

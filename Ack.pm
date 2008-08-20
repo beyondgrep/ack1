@@ -5,7 +5,7 @@ use strict;
 
 use File::Next 0.40;
 
-use App::Ack::Repository;
+use App::Ack::Plugin::Basic;
 
 =head1 NAME
 
@@ -995,7 +995,7 @@ sub search_resource {
     my $before_starts_at_line;
     my $after = 0; # number of lines still to print after a match
 
-    while ( $res->next_text() ) {
+    while ( $res->next_text ) {
         # XXX Optimize away the case when there are no more @lines to find.
         # XXX $has_lines, $passthru and $v never change.  Optimize.
         if ( $has_lines
@@ -1230,7 +1230,7 @@ sub print_files_with_matches {
 
     my $nmatches = 0;
     while ( defined ( my $filename = $iter->() ) ) {
-        my $repo = App::Ack::Repository->new( $filename );
+        my $repo = App::Ack::Repository::Basic->new( $filename );
         my $res;
         while ( $res = $repo->next_resource() ) {
             $nmatches += search_and_list( $res, $opt );
@@ -1260,11 +1260,12 @@ sub print_matches {
     while ( defined ( my $filename = $iter->() ) ) {
         my $repo;
         if ( $filename =~ /\.tar\.gz$/ ) {
+            App::Ack::die( 'Not working here yet' );
             require App::Ack::Repository::Tar; # XXX Error checking
             $repo = App::Ack::Repository::Tar->new( $filename );
         }
         else {
-            $repo = App::Ack::Repository->new( $filename );
+            $repo = App::Ack::Repository::Basic->new( $filename );
         }
         $repo or next;
 

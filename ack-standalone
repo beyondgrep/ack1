@@ -10,6 +10,8 @@ Handle tarballs: .rb inside .tar inside .gz
 
 The filetypes check breaks encapsulation.
 
+Don't install Resource.pm and Repository.pm if we don't have to.
+
 =cut
 
 use warnings;
@@ -72,7 +74,7 @@ sub main {
             my $s = $nargs == 1 ? '' : 's';
             App::Ack::warn( "Ignoring $nargs argument$s on the command-line while acting as a filter." );
         }
-        my $res = App::Ack::Resource->new( '-' );
+        my $res = App::Ack::Resource::Basic->new( '-' );
         App::Ack::search_resource( $res, $opt );
         $res->close();
         exit 0;
@@ -1822,7 +1824,7 @@ sub search_resource {
     my $before_starts_at_line;
     my $after = 0; # number of lines still to print after a match
 
-    while ( $res->next_text() ) {
+    while ( $res->next_text ) {
         # XXX Optimize away the case when there are no more @lines to find.
         # XXX $has_lines, $passthru and $v never change.  Optimize.
         if ( $has_lines
@@ -2027,7 +2029,7 @@ sub print_files_with_matches {
 
     my $nmatches = 0;
     while ( defined ( my $filename = $iter->() ) ) {
-        my $repo = App::Ack::Repository->new( $filename );
+        my $repo = App::Ack::Repository::Basic->new( $filename );
         my $res;
         while ( $res = $repo->next_resource() ) {
             $nmatches += search_and_list( $res, $opt );
@@ -2052,11 +2054,12 @@ sub print_matches {
     while ( defined ( my $filename = $iter->() ) ) {
         my $repo;
         if ( $filename =~ /\.tar\.gz$/ ) {
+            App::Ack::die( 'Not working here yet' );
             require App::Ack::Repository::Tar; # XXX Error checking
             $repo = App::Ack::Repository::Tar->new( $filename );
         }
         else {
-            $repo = App::Ack::Repository->new( $filename );
+            $repo = App::Ack::Repository::Basic->new( $filename );
         }
         $repo or next;
 
@@ -2226,35 +2229,84 @@ package App::Ack::Repository;
 use warnings;
 use strict;
 
+sub FAIL {
+    require Carp;
+    Carp::confess( 'Must be overloaded' );
+}
+
+
 sub new {
-    my $class    = shift;
-    my $filename = shift;
-
-    my $self = bless {
-        filename => $filename,
-        nexted   => 0,
-    }, $class;
-
-    return $self;
+    FAIL();
 }
 
 
 sub next_resource {
-    my $self = shift;
-
-    return if $self->{nexted};
-    $self->{nexted} = 1;
-
-    return App::Ack::Resource->new( $self->{filename} );
+    FAIL();
 }
 
 
 sub close {
+    FAIL();
 }
 
 1;
 package App::Ack::Resource;
 
+
+use warnings;
+use strict;
+
+sub FAIL {
+    require Carp;
+    Carp::confess( 'Must be overloaded' );
+}
+
+
+sub new {
+    FAIL();
+}
+
+
+sub name {
+    FAIL();
+}
+
+
+sub is_binary() {
+    FAIL();
+}
+
+
+
+sub needs_line_scan {
+    FAIL();
+}
+
+
+sub reset {
+    FAIL();
+}
+
+
+sub next_text {
+    FAIL();
+}
+
+
+sub close {
+    FAIL();
+}
+
+1;
+package App::Ack::Plugin::Basic;
+
+
+
+package App::Ack::Resource::Basic;
+
+
+
+our @ISA = qw( App::Ack::Resource );
 
 use warnings;
 use strict;
@@ -2364,5 +2416,42 @@ sub close {
 
     return;
 }
+
+package App::Ack::Repository::Basic;
+
+
+our @ISA = qw( App::Ack::Repository );
+
+
+use warnings;
+use strict;
+
+sub new {
+    my $class    = shift;
+    my $filename = shift;
+
+    my $self = bless {
+        filename => $filename,
+        nexted   => 0,
+    }, $class;
+
+    return $self;
+}
+
+
+sub next_resource {
+    my $self = shift;
+
+    return if $self->{nexted};
+    $self->{nexted} = 1;
+
+    return App::Ack::Resource::Basic->new( $self->{filename} );
+}
+
+
+sub close {
+}
+
+
 
 1;

@@ -13,10 +13,11 @@ my %parms = (
     VERSION_FROM        => 'Ack.pm',
     PM                  => {
         'Ack.pm'        => '$(INST_LIBDIR)/App/Ack.pm',
-        'Plugin.pm'     => '$(INST_LIBDIR)/App/Ack/Plugin.pm',
         'Repository.pm' => '$(INST_LIBDIR)/App/Ack/Repository.pm',
         'Resource.pm'   => '$(INST_LIBDIR)/App/Ack/Resource.pm',
-        'Tar.pm'        => '$(INST_LIBDIR)/App/Ack/Repository/Tar.pm',
+        'Plugin.pm'     => '$(INST_LIBDIR)/App/Ack/Plugin.pm',
+        'Basic.pm'      => '$(INST_LIBDIR)/App/Ack/Plugin/Basic.pm',
+        'Tar.pm'        => '$(INST_LIBDIR)/App/Ack/Plugin/Tar.pm',
     },
     EXE_FILES           => [ 'ack' ],
     PREREQ_PM => {
@@ -63,9 +64,10 @@ sub MY::postamble {
     my $postamble = <<'MAKE_FRAG';
 ACK             = ack
 ACK_PM          = Ack.pm
+BASIC_PM        = Basic.pm
 REPOSITORY_PM   = Repository.pm
 RESOURCE_PM     = Resource.pm
-ALL_PM          = $(ACK_PM) $(REPOSITORY_PM) $(RESOURCE_PM)
+ALL_PM          = $(ACK_PM) $(REPOSITORY_PM) $(RESOURCE_PM) $(BASIC_PM)
 STANDALONE      = ack-standalone
 ACK_HELP        = ack-help.txt
 ACK_HELP_TYPES  = ack-help-types.txt
@@ -87,7 +89,8 @@ critic:
 tidy:
 	perltidy -b -pro=perltidyrc ack $(ALL_PM)
 
-PROF_ARGS = -Mblib ack-standalone --noenv --color --group -w foo ~/parrot
+#PROF_ARGS = -Mblib ack-standalone --noenv --color --group -w foo ~/parrot
+PROF_ARGS = -Mblib ./ack --noenv --color --group -w foo ~/parrot
 
 timed: all
 	$(PERL) $(PROF_ARGS) >> /dev/null 2>&1

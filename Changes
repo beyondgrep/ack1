@@ -1,7 +1,22 @@
 Changelog for ack
 
+IN PROCESS
+    Big plugin infrastructure.  Woot!
+
+    =for TODO
+
+    Handle tarballs: .rb inside .tar inside .gz
+
+    The filetypes check breaks encapsulation.
+
+    Don't install Resource.pm and Repository.pm if we don't have to.
+
+    =cut
+
 NEXT
     [ENHANCEMENTS]
+
+
     Added support for --rake files, which are also --ruby files.
 
     [FIXES]

@@ -61,7 +61,9 @@ sub main {
             my $s = $nargs == 1 ? '' : 's';
             App::Ack::warn( "Ignoring $nargs argument$s on the command-line while acting as a filter." );
         }
-        App::Ack::search( \*STDIN, 0, '-', $opt );
+        my $res = App::Ack::Resource::Basic->new( '-' );
+        App::Ack::search_resource( $res, $opt );
+        $res->close();
         exit 0;
     }
 

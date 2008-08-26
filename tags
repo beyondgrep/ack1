@@ -21,6 +21,15 @@ App	t/module.t	/^    sub App::Ack::print_line_no        { push @::result,  ['lin
 App	t/module.t	/^    sub App::Ack::print_separator      { push @::result,  ['separator',      @_]; return; }$/;"	s
 App	t/module.t	/^    sub App::Ack::warn                 { push @::warns,   $_[0];                  return; } ## no critic (ProhibitBuiltinHomonyms)$/;"	s
 App::Ack	Ack.pm	/^package App::Ack;$/;"	p
+App::Ack::Plugin	Plugin.pm	/^package App::Ack::Plugin;$/;"	p
+App::Ack::Plugin::Basic	Basic.pm	/^package App::Ack::Plugin::Basic;$/;"	p
+App::Ack::Plugin::Tar	Tar.pm	/^package App::Ack::Plugin::Tar;$/;"	p
+App::Ack::Repository	Repository.pm	/^package App::Ack::Repository;$/;"	p
+App::Ack::Repository::Basic	Basic.pm	/^package App::Ack::Repository::Basic;$/;"	p
+App::Ack::Repository::Tar	Tar.pm	/^package App::Ack::Repository::Tar;$/;"	p
+App::Ack::Resource	Resource.pm	/^package App::Ack::Resource;$/;"	p
+App::Ack::Resource::Basic	Basic.pm	/^package App::Ack::Resource::Basic;$/;"	p
+App::Ack::Resource::Tar	Tar.pm	/^package App::Ack::Resource::Tar;$/;"	p
 BACK_ANCHOR	t/ack-g.t	/^BACK_ANCHOR: {$/;"	l
 BEFORE	t/context.t	/^BEFORE: {$/;"	l
 BEFORE_WITH_LINE_NO	t/context.t	/^BEFORE_WITH_LINE_NO: {$/;"	l
@@ -54,6 +63,8 @@ DASH_U_BEATS_THE_PANTS_OFF_IGNORE_DIR_ANY_DAY_OF_THE_WEEK	t/ack-ignore-dir.t	/^D
 DASH_V	t/ack-1.t	/^DASH_V: {$/;"	l
 EXPAND_FILENAMES_SCOPE	Ack.pm	/^EXPAND_FILENAMES_SCOPE: {$/;"	l
 Example	Ack.pm	/^Example: ack -i select$/;"	l
+FAIL	Repository.pm	/^sub FAIL {$/;"	s
+FAIL	Resource.pm	/^sub FAIL {$/;"	s
 FAIL_MATCHING_VIA_CONTENT	t/filetypes.t	/^FAIL_MATCHING_VIA_CONTENT: {$/;"	l
 FILES_HAVE_BEEN_SET_UP_AS_EXPECTED	t/ack-ignore-dir.t	/^FILES_HAVE_BEEN_SET_UP_AS_EXPECTED: {$/;"	l
 FILETYPES	t/module.t	/^FILETYPES: {$/;"	l
@@ -161,7 +172,10 @@ check_stderr	t/ack-type.t	/^sub check_stderr {$/;"	s
 check_u	t/ack-u.t	/^sub check_u {$/;"	s
 check_with	t/ack-type.t	/^sub check_with {$/;"	s
 check_with	t/file-permission.t	/^sub check_with {$/;"	s
-close_file	Ack.pm	/^sub close_file {$/;"	s
+close	Basic.pm	/^sub close {$/;"	s
+close	Repository.pm	/^sub close {$/;"	s
+close	Resource.pm	/^sub close {$/;"	s
+close	Tar.pm	/^sub close {$/;"	s
 critic	Makefile.PL	/^critic:$/;"	l
 def_types_from_ARGV	Ack.pm	/^sub def_types_from_ARGV {$/;"	s
 delete_type	Ack.pm	/^sub delete_type {$/;"	s
@@ -169,6 +183,7 @@ die	Ack.pm	/^sub die { ## no critic (ProhibitBuiltinHomonyms)$/;"	s
 dprof	Makefile.PL	/^dprof: all$/;"	l
 dproflb	Makefile.PL	/^dproflb: all$/;"	l
 expand_filenames	Ack.pm	/^    sub expand_filenames {$/;"	s
+extensions_handled	Tar.pm	/^sub extensions_handled {$/;"	s
 fastprof	Makefile.PL	/^fastprof: all$/;"	l
 filetype_setup	Ack.pm	/^sub filetype_setup {$/;"	s
 filetypes	Ack.pm	/^sub filetypes {$/;"	s
@@ -182,6 +197,9 @@ get_starting_points	Ack.pm	/^sub get_starting_points {$/;"	s
 get_version_statement	Ack.pm	/^sub get_version_statement {$/;"	s
 homepage	Makefile.PL	/^    homepage: http:\/\/petdance.com\/ack\/$/;"	l
 ignoredir_filter	Ack.pm	/^sub ignoredir_filter {$/;"	s
+is_binary	Basic.pm	/^sub is_binary() {$/;"	s
+is_binary	Resource.pm	/^sub is_binary() {$/;"	s
+is_binary	Tar.pm	/^sub is_binary {$/;"	s
 is_filetype	t/Util.pm	/^sub is_filetype {$/;"	s
 is_interesting	Ack.pm	/^sub is_interesting {$/;"	s
 is_searchable	Ack.pm	/^sub is_searchable {$/;"	s
@@ -191,9 +209,23 @@ lists_match	t/Util.pm	/^sub lists_match {$/;"	s
 load_colors	Ack.pm	/^sub load_colors {$/;"	s
 main	Makefile.PL	/^package main;$/;"	p
 main	ack	/^sub main {$/;"	s
-needs_line_scan	Ack.pm	/^sub needs_line_scan {$/;"	s
+name	Basic.pm	/^sub name {$/;"	s
+name	Resource.pm	/^sub name {$/;"	s
+name	Tar.pm	/^sub name {$/;"	s
+needs_line_scan	Basic.pm	/^sub needs_line_scan {$/;"	s
+needs_line_scan	Resource.pm	/^sub needs_line_scan {$/;"	s
+needs_line_scan	Tar.pm	/^sub needs_line_scan {$/;"	s
+new	Basic.pm	/^sub new {$/;"	s
+new	Repository.pm	/^sub new {$/;"	s
+new	Resource.pm	/^sub new {$/;"	s
+new	Tar.pm	/^sub new {$/;"	s
+next_resource	Basic.pm	/^sub next_resource {$/;"	s
+next_resource	Repository.pm	/^sub next_resource {$/;"	s
+next_resource	Tar.pm	/^sub next_resource {$/;"	s
+next_text	Basic.pm	/^sub next_text {$/;"	s
+next_text	Resource.pm	/^sub next_text {$/;"	s
+next_text	Tar.pm	/^sub next_text {$/;"	s
 nytprof	Makefile.PL	/^nytprof: all$/;"	l
-open_file	Ack.pm	/^sub open_file {$/;"	s
 option_in_usage	t/longopts.t	/^sub option_in_usage {$/;"	s
 pipe_into_ack	t/Util.pm	/^sub pipe_into_ack {$/;"	s
 prep_environment	t/Util.pm	/^sub prep_environment {$/;"	s
@@ -215,11 +247,14 @@ profiler	Makefile.PL	/^profiler: all$/;"	l
 read_ackrc	Ack.pm	/^sub read_ackrc {$/;"	s
 remove_dir_sep	Ack.pm	/^sub remove_dir_sep {$/;"	s
 reorder	t/module.t	/^sub reorder {$/;"	s
+reset	Basic.pm	/^sub reset {$/;"	s
+reset	Resource.pm	/^sub reset {$/;"	s
+reset	Tar.pm	/^sub reset {$/;"	s
 resources	Makefile.PL	/^resources:$/;"	l
 run_ack	t/Util.pm	/^sub run_ack {$/;"	s
 run_ack_with_stderr	t/Util.pm	/^sub run_ack_with_stderr {$/;"	s
-search	Ack.pm	/^sub search {$/;"	s
 search_and_list	Ack.pm	/^sub search_and_list {$/;"	s
+search_resource	Ack.pm	/^sub search_resource {$/;"	s
 set_up_assertion_that_these_options_will_ignore_those_directories	t/ack-ignore-dir.t	/^sub set_up_assertion_that_these_options_will_ignore_those_directories {$/;"	s
 set_up_pager	Ack.pm	/^sub set_up_pager {$/;"	s
 sets_match	t/Util.pm	/^sub sets_match {$/;"	s

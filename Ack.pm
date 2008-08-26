@@ -5,6 +5,8 @@ use strict;
 
 use File::Next 0.40;
 
+use App::Ack::Plugin::Basic;
+
 =head1 NAME
 
 App::Ack - A container for functions for the ack program
@@ -497,7 +499,7 @@ sub filetypes {
         return;
     }
     my $header = <$fh>;
-    close_file( $fh, $filename ) or return;
+    close $fh;
 
     if ( $header =~ /^#!/ ) {
         return ($1,TEXT)       if $header =~ /\b(ruby|p(?:erl|hp|ython))\b/;
@@ -908,79 +910,6 @@ sub is_interesting {
 }
 
 
-=head2 open_file( $filename )
-
-Opens the file specified by I<$filename> and returns a filehandle and
-a flag that says whether it could be binary.
-
-If there's a failure, it throws a warning and returns an empty list.
-
-=cut
-
-sub open_file {
-    my $filename = shift;
-
-    my $fh;
-    my $could_be_binary;
-
-    if ( $filename eq '-' ) {
-        $fh = *STDIN;
-        $could_be_binary = 0;
-    }
-    else {
-        if ( !open( $fh, '<', $filename ) ) {
-            App::Ack::warn( "$filename: $!" );
-            return;
-        }
-        $could_be_binary = 1;
-    }
-
-    return ($fh,$could_be_binary);
-}
-
-=head2 close_file( $fh, $filename )
-
-Close L<$fh> opened from L<$filename>.
-
-=cut
-
-sub close_file {
-    if ( close $_[0] ) {
-        return 1;
-    }
-    App::Ack::warn( "$_[1]: $!" );
-    return 0;
-}
-
-
-=head2 needs_line_scan( $fh, $regex, \%opts )
-
-Slurp up an entire file up to 100K, see if there are any matches
-in it, and if so, let us know so we can iterate over it directly.
-If it's bigger than 100K or the match is inverted, we have to do
-the line-by-line, too.
-
-=cut
-
-sub needs_line_scan {
-    my $fh = shift;
-    my $regex = shift;
-    my $opt = shift;
-
-    return 1 if $opt->{v};
-
-    my $size = -s $fh;
-
-    if ( $size > 100_000 ) {
-        return 1;
-    }
-
-    my $buffer;
-    my $rc = sysread( $fh, $buffer, $size );
-    return 0 unless $rc && ( $rc == $size );
-
-    return $buffer =~ /$regex/m;
-}
 
 # print subs added in order to make it easy for a third party
 # module (such as App::Wack) to redefine the display methods
@@ -1010,9 +939,11 @@ sub print_count0 {
 }
 
 
-=head2 search( $fh, $could_be_binary, $filename, \%opt )
+=head2 search_resource( $resource, \%opt )
 
-Main search method
+Main search method.
+
+Assumes an open resource, and that the caller will close the resource.
 
 =cut
 
@@ -1027,11 +958,11 @@ Main search method
     my $any_output;                   # has there been any output for the current file yet
     my $context_overall_output_count; # has there been any output at all
 
-sub search {
-    my $fh = shift;
-    my $could_be_binary = shift;
-    $filename = shift;
+sub search_resource {
+    my $res = shift;
     my $opt = shift;
+
+    $filename = $res->name();
 
     my $v = $opt->{v};
     my $passthru = $opt->{passthru};
@@ -1052,7 +983,6 @@ sub search {
         $regex = qr/$opt->{regex}/;
     }
 
-
     # for context processing
     $last_output_line = -1;
     $any_output = 0;
@@ -1065,21 +995,20 @@ sub search {
     my $before_starts_at_line;
     my $after = 0; # number of lines still to print after a match
 
-    my $line;
-    while ($line = <$fh>) {
+    while ( $res->next_text ) {
         # XXX Optimize away the case when there are no more @lines to find.
         # XXX $has_lines, $passthru and $v never change.  Optimize.
         if ( $has_lines
                ? $. != $lines[0]  # $lines[0] should be a scalar
-               : $v ? $line =~ m/$regex/ : $line !~ m/$regex/ ) {
+               : $v ? m/$regex/ : !m/$regex/ ) {
             if ( $passthru ) {
-                App::Ack::print( $line );
+                App::Ack::print( $_ );
                 next;
             }
 
             if ( $keep_context ) {
                 if ( $after ) {
-                    print_match_or_context( $opt, 0, $., $line );
+                    print_match_or_context( $opt, 0, $., $_ );
                     $after--;
                 }
                 elsif ( $before_context ) {
@@ -1092,7 +1021,7 @@ sub search {
                     else {
                         $before_starts_at_line = $.;
                     }
-                    push @before, $line;
+                    push @before, $_;
                 }
                 last if $max && ( $nmatches >= $max ) && !$after;
             }
@@ -1108,12 +1037,9 @@ sub search {
 
         shift @lines if $has_lines;
 
-        if ( $could_be_binary ) {
-            if ( -B $filename ) {
-                App::Ack::print( "Binary file $filename matches\n" );
-                last;
-            }
-            $could_be_binary = 0;
+        if ( $res->is_binary ) {
+            App::Ack::print( "Binary file $filename matches\n" );
+            last;
         }
         if ( $keep_context ) {
             if ( @before ) {
@@ -1128,13 +1054,13 @@ sub search {
                 $after = $after_context;
             }
         }
-        print_match_or_context( $opt, 1, $., $line );
+        print_match_or_context( $opt, 1, $., $_ );
 
         last if $max && ( $nmatches >= $max ) && !$after;
     } # while
 
     return $nmatches;
-}   # search()
+}   # search_resource()
 
 
 =head2 print_match_or_context( $opt, $is_match, $starting_line_no, @lines )
@@ -1207,7 +1133,7 @@ sub print_match_or_context {
     return;
 } # print_match_or_context()
 
-} # scope around search() and print_match_or_context()
+} # scope around search_resource() and print_match_or_context()
 
 
 =head2 search_and_list( $fh, $filename, \%opt )
@@ -1218,8 +1144,7 @@ show lines.
 =cut
 
 sub search_and_list {
-    my $fh = shift;
-    my $filename = shift;
+    my $res = shift;
     my $opt = shift;
 
     my $nmatches = 0;
@@ -1229,7 +1154,7 @@ sub search_and_list {
     my $regex = qr/$opt->{regex}/;
 
     if ( $opt->{v} ) {
-        while (<$fh>) {
+        while ( $res->next_text ) {
             if ( /$regex/ ) {
                 return 0 unless $count;
             }
@@ -1239,7 +1164,7 @@ sub search_and_list {
         }
     }
     else {
-        while (<$fh>) {
+        while ( $res->next_text ) {
             if ( /$regex/ ) {
                 ++$nmatches;
                 last unless $count;
@@ -1248,10 +1173,10 @@ sub search_and_list {
     }
 
     if ( $nmatches ) {
-        App::Ack::print_count($filename, $nmatches, $ors, $count);
+        App::Ack::print_count( $res->name, $nmatches, $ors, $count );
     }
     elsif ( $count && !$opt->{l} ) {
-        App::Ack::print_count0($filename, $ors);
+        App::Ack::print_count0( $res->name, $ors );
     }
 
     return $nmatches ? 1 : 0;
@@ -1305,11 +1230,14 @@ sub print_files_with_matches {
 
     my $nmatches = 0;
     while ( defined ( my $filename = $iter->() ) ) {
-        my ($fh) = open_file( $filename );
-        next unless defined $fh; # error while opening file
-        $nmatches += search_and_list( $fh, $filename, $opt );
-        close_file( $fh, $filename );
-        last if $nmatches && $opt->{1};
+        my $repo = App::Ack::Repository::Basic->new( $filename );
+        my $res;
+        while ( $res = $repo->next_resource() ) {
+            $nmatches += search_and_list( $res, $opt );
+            $res->close();
+            last if $nmatches && $opt->{1};
+        }
+        $repo->close();
     }
 
     return;
@@ -1330,23 +1258,35 @@ sub print_matches {
 
     my $nmatches = 0;
     while ( defined ( my $filename = $iter->() ) ) {
-        my ($fh,$could_be_binary) = open_file( $filename );
-        next unless defined $fh; # error while opening file
-        my $needs_line_scan;
-        if ( $opt->{regex} && !$opt->{passthru} ) {
-            $needs_line_scan = needs_line_scan( $fh, $opt->{regex}, $opt );
-            if ( $needs_line_scan ) {
-                seek( $fh, 0, 0 );
-            }
+        my $repo;
+        if ( $filename =~ /\.tar\.gz$/ ) {
+            App::Ack::die( 'Not working here yet' );
+            require App::Ack::Repository::Tar; # XXX Error checking
+            $repo = App::Ack::Repository::Tar->new( $filename );
         }
         else {
-            $needs_line_scan = 1;
+            $repo = App::Ack::Repository::Basic->new( $filename );
         }
-        if ( $needs_line_scan ) {
-            $nmatches += search( $fh, $could_be_binary, $filename, $opt );
+        $repo or next;
+
+        while ( my $res = $repo->next_resource() ) {
+            my $needs_line_scan;
+            if ( $opt->{regex} && !$opt->{passthru} ) {
+                $needs_line_scan = $res->needs_line_scan( $opt );
+                if ( $needs_line_scan ) {
+                    $res->reset();
+                }
+            }
+            else {
+                $needs_line_scan = 1;
+            }
+            if ( $needs_line_scan ) {
+                $nmatches += search_resource( $res, $opt );
+            }
+            $res->close();
         }
-        close_file( $fh, $filename );
         last if $nmatches && $opt->{1};
+        $repo->close();
     }
     return;
 }

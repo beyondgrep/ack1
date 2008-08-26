@@ -1,0 +1,23 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+use Perl6::Say;
+
+use Archive::Tar;
+
+my $filename = '/Users/andy/sample.tar.gz';
+
+
+my $tar = Archive::Tar->new( $filename );
+
+foreach my $file ( $tar->get_files ) {
+    next if $file->is_symlink;
+    next if $file->is_hardlink;
+    next unless $file->is_file;
+
+    my $name = $file->name;
+
+    say $file->full_path;
+}

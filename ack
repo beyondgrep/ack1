@@ -739,6 +739,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Richard Carlsson,
 Pedro Melo,
 AJ Schuster,
 Phil Jackson,

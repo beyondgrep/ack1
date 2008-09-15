@@ -79,7 +79,7 @@ BEGIN {
         csharp      => [qw( cs )],
         css         => [qw( css )],
         elisp       => [qw( el )],
-        erlang      => [qw( erl )],
+        erlang      => [qw( erl hrl )],
         fortran     => [qw( f f77 f90 f95 f03 for ftn fpp )],
         haskell     => [qw( hs lhs )],
         hh          => [qw( h )],

@@ -16,6 +16,8 @@ IN PROCESS
 NEXT
     [ENHANCEMENTS]
 
+    Added support for .hrl Erlang header files.  Thanks, Richard
+    Carlsson.
 
     Added support for --rake files, which are also --ruby files.
 

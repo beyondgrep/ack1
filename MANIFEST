@@ -16,6 +16,8 @@ capture-stderr
 squash
 TODO
 
+etc/ack.bash_completion.sh
+
 t/00-load.t
 t/ack-1.t
 t/ack-a.t

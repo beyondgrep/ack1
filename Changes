@@ -1,5 +1,6 @@
 Changelog for ack
 
+
 IN PROCESS
     Big plugin infrastructure.  Woot!
 
@@ -13,6 +14,7 @@ IN PROCESS
 
     =cut
 
+
 NEXT
     [ENHANCEMENTS]
 
@@ -24,6 +26,10 @@ NEXT
     [FIXES]
     Fixed a bug where files ending in "Makefile" were mistakenly
     identified as Makefiles.
+
+    [ADDITIONS]
+    Created a new etc/ directory and its first addition, a bash
+    auto-completion file from Adam James.
 
 
 1.86        Wed Jul  9 01:27:21 CDT 2008

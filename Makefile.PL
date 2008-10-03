@@ -27,7 +27,6 @@ my %parms = (
         'Test::More'        => 0,
         'File::Next'        => 0.40, # Handle files called "0"
         'File::Basename'    => 0,
-        'Some::Other::Module' => 1.45,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'ack-1*' },

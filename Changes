@@ -27,6 +27,10 @@ NEXT
     Fixed a bug where files ending in "Makefile" were mistakenly
     identified as Makefiles.
 
+    We now use the C<-p> file test operator to see if input is
+    coming from a pipe, rather than than faking it with C<-t> and
+    C<eof>.  Thanks to Sitaram Chamarty.
+
     [ADDITIONS]
     Created a new etc/ directory and its first addition, a bash
     auto-completion file from Adam James.

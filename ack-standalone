@@ -53,7 +53,7 @@ sub main {
 
     $| = 1 if $opt->{flush}; # Unbuffer the output if flush mode
 
-    if ( !-t STDIN && !eof(STDIN) ) {
+    if ( -p STDIN ) { # Check to see if it's a pipe
         # We're going into filter mode
         for ( qw( f g l ) ) {
             $opt->{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );
@@ -742,6 +742,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Sitaram Chamarty,
 Adam James,
 Richard Carlsson,
 Pedro Melo,

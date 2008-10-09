@@ -157,8 +157,7 @@ the text.  This basically emulates a call to C<< <$fh> >>.
 =cut
 
 sub next_text {
-    $_ = readline $_[0]->{fh};
-    if ( defined $_ ) {
+    if ( defined ($_ = readline $_[0]->{fh}) ) {
         $. = ++$_[0]->{line};
         return 1;
     }

@@ -21,12 +21,10 @@ SINGLE_TEXT_MATCH: {
 
     sets_match( \@results, \@expected, 'Looking for first instance of Sue!' );
     is( get_rc(), 0, 'found Sue so good RC needed');
-      
 }
 
 
 NO_MATCH: {
-
     my @files = qw( t/text/boy-named-sue.txt );
     my @args = qw( Pumpkin  --text );
     my @results = run_ack( @args, @files );
@@ -36,5 +34,3 @@ NO_MATCH: {
 ## TBD RC 2 for bad file?
 
 ## TBD Core, Signal ??
-
-

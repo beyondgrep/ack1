@@ -111,6 +111,7 @@ NORMAL_CASE	t/ack-v.t	/^NORMAL_CASE: {$/;"	l
 NORMAL_COLOR	t/ack-color.t	/^NORMAL_COLOR: {$/;"	l
 NOT_CASE_INSENSITIVE	t/ack-g.t	/^NOT_CASE_INSENSITIVE: {$/;"	l
 NO_GROUPING	t/ack-group.t	/^NO_GROUPING: {$/;"	l
+NO_MATCH	t/rc.t	/^NO_MATCH: {$/;"	l
 NO_METACHARCTERS	t/ack-g.t	/^NO_METACHARCTERS: {$/;"	l
 NO_O	t/ack-o.t	/^NO_O: {$/;"	l
 NO_STARTDIR	t/ack-g.t	/^NO_STARTDIR: {$/;"	l
@@ -134,6 +135,7 @@ QUOTEMETA_FILE_NOT	t/ack-g.t	/^QUOTEMETA_FILE_NOT: {$/;"	l
 Repository	Makefile.PL	/^    Repository: http:\/\/code.google.com\/p\/ack\/source$/;"	l
 SEARCH_FOR_DASH_DASH_NOENV	t/ack-env.t	/^SEARCH_FOR_DASH_DASH_NOENV: {$/;"	l
 SINGLE_TEXT_MATCH	t/ack-1.t	/^SINGLE_TEXT_MATCH: {$/;"	l
+SINGLE_TEXT_MATCH	t/rc.t	/^SINGLE_TEXT_MATCH: {$/;"	l
 SINGLE_TEXT_MATCH_ENV	t/ack-env.t	/^SINGLE_TEXT_MATCH_ENV: {$/;"	l
 SINGLE_TEXT_MATCH_NOENV	t/ack-env.t	/^SINGLE_TEXT_MATCH_NOENV: {$/;"	l
 SKIP	t/file-permission.t	/^SKIP: {$/;"	l
@@ -193,6 +195,7 @@ fill_type_wanted	t/module.t	/^sub fill_type_wanted {$/;"	s
 get_command_line_options	Ack.pm	/^sub get_command_line_options {$/;"	s
 get_copyright	Ack.pm	/^sub get_copyright {$/;"	s
 get_iterator	Ack.pm	/^sub get_iterator {$/;"	s
+get_rc	t/Util.pm	/^sub get_rc{$/;"	s
 get_starting_points	Ack.pm	/^sub get_starting_points {$/;"	s
 get_version_statement	Ack.pm	/^sub get_version_statement {$/;"	s
 homepage	Makefile.PL	/^    homepage: http:\/\/petdance.com\/ack\/$/;"	l

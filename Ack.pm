@@ -1240,7 +1240,7 @@ sub print_files_with_matches {
         $repo->close();
     }
 
-    return;
+    return $nmatches;
 }
 
 =head2 print_matches( $iter, $opt )
@@ -1288,7 +1288,7 @@ sub print_matches {
         last if $nmatches && $opt->{1};
         $repo->close();
     }
-    return;
+    return  $nmatches;
 }
 
 =head2 filetype_setup()

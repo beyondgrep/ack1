@@ -47,7 +47,7 @@ sub slurp {
 
 sub run_ack {
     my @args = @_;
-
+	
     my ($stdout, $stderr) = run_ack_with_stderr( @args );
 
     if ( $TODO ) {
@@ -61,6 +61,11 @@ sub run_ack {
     return @{$stdout};
 }
 
+{ # scope for $AckReturnCode;
+
+# capture returncode
+our $AckReturnCode;
+
 sub run_ack_with_stderr {
     my @args = @_;
 
@@ -72,7 +77,11 @@ sub run_ack_with_stderr {
     }
 
     my $cmd = build_command_line( @args );
+	
     @stdout = `$cmd`;
+    my ($sig,$core,$rc)=( ($? & 127),  ($? & 128) , ($? >> 8) );
+    $AckReturnCode=$rc;
+	## XXX what do do with $core or $sig?
 
     open( CATCHERR, '<', $catcherr_file );
     while( <CATCHERR> ) {
@@ -85,6 +94,12 @@ sub run_ack_with_stderr {
     chomp @stderr;
     return ( \@stdout, \@stderr );
 }
+
+sub get_rc{
+  return $AckReturnCode;
+}
+
+} # scope for $AckReturnCode
 
 sub pipe_into_ack {
     my $input = shift;

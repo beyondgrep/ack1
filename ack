@@ -80,18 +80,20 @@ sub main {
     my $iter = App::Ack::get_iterator( $what, $opt );
     App::Ack::filetype_setup();
 
+    my $nmatches = 0;
+
     App::Ack::set_up_pager( $opt->{pager} ) if defined $opt->{pager};
     if ( $opt->{f} ) {
         App::Ack::print_files( $iter, $opt );
     }
     elsif ( $opt->{l} || $opt->{count} ) {
-        App::Ack::print_files_with_matches( $iter, $opt );
+        $nmatches = App::Ack::print_files_with_matches( $iter, $opt );
     }
     else {
-        App::Ack::print_matches( $iter, $opt );
+        $nmatches = App::Ack::print_matches( $iter, $opt );
     }
     close $App::Ack::fh;
-    exit 0;
+    exit  (! $nmatches) ;
 }
 
 =head1 NAME

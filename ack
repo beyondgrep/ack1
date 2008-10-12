@@ -165,6 +165,9 @@ throw I<grep> away, because there are times you'll still need it.
 E.g., searching through huge files looking for regexes that can be
 expressed with I<grep> syntax should be quicker with I<grep>.
 
+If your script or parent program uses I<grep> C<--quiet>  or 
+C<--silent> or needs exit 2 on IO error, use I<grep>.
+
 =head1 OPTIONS
 
 =over 4
@@ -621,6 +624,19 @@ projects.  So I hacked a TextMate command that was using find +
 grep to use ack.  The result is the Search in Project with ack, and
 you can find it here:
 L<http://www.simplicidade.org/notes/archives/2008/03/search_in_proje.html>"
+
+=head2 Shell and Return Code
+
+For greater compatibility with I<grep>, I<ack> in normal use 
+now returns shell return or exit code of 
+0 only if something is found and 
+1 if no match is found. 
+(Shell exit code 1 is C<$?=256> in perl with C<system> or backticks.)
+
+The I<grep>  code 2 for errors is not used. 
+
+0 is returned if C<-f> or C<-g> are specified, 
+irrespective of number of files found if any.
 
 =cut
 

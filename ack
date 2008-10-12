@@ -93,7 +93,7 @@ sub main {
         $nmatches = App::Ack::print_matches( $iter, $opt );
     }
     close $App::Ack::fh;
-    exit  (! $nmatches) ;
+    exit ($nmatches ? 0 : 1);
 }
 
 =head1 NAME
@@ -165,7 +165,7 @@ throw I<grep> away, because there are times you'll still need it.
 E.g., searching through huge files looking for regexes that can be
 expressed with I<grep> syntax should be quicker with I<grep>.
 
-If your script or parent program uses I<grep> C<--quiet>  or 
+If your script or parent program uses I<grep> C<--quiet> or
 C<--silent> or needs exit 2 on IO error, use I<grep>.
 
 =head1 OPTIONS
@@ -627,16 +627,16 @@ L<http://www.simplicidade.org/notes/archives/2008/03/search_in_proje.html>"
 
 =head2 Shell and Return Code
 
-For greater compatibility with I<grep>, I<ack> in normal use 
-now returns shell return or exit code of 
-0 only if something is found and 
-1 if no match is found. 
+For greater compatibility with I<grep>, I<ack> in normal use returns
+shell return or exit code of 0 only if something is found and 1 if
+no match is found.
+
 (Shell exit code 1 is C<$?=256> in perl with C<system> or backticks.)
 
-The I<grep>  code 2 for errors is not used. 
+The I<grep> code 2 for errors is not used.
 
-0 is returned if C<-f> or C<-g> are specified, 
-irrespective of number of files found if any.
+0 is returned if C<-f> or C<-g> are specified, irrespective of
+number of files found.
 
 =cut
 

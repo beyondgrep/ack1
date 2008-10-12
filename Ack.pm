@@ -655,11 +655,11 @@ sub show_help {
     my $ignore_dirs = _listify( sort { _key($a) cmp _key($b) } keys %ignore_dirs );
 
     App::Ack::print( <<"END_OF_HELP" );
-Usage: ack [OPTION]... PATTERN [FILES]
+Usage: ack [OPTION]... PATTERN [FILE]
 
 Search for PATTERN in each source file in the tree from cwd on down.
 If [FILES] is specified, then only those files/directories are checked.
-ack may also search STDIN, but only if no FILES are specified, or if
+ack may also search STDIN, but only if no FILE are specified, or if
 one of FILES is "-".
 
 Default switches may be specified in ACK_OPTIONS environment variable or
@@ -770,6 +770,8 @@ Miscellaneous:
   --man                 Man page
   --version             Display version & copyright
   --thpppt              Bill the Cat
+
+Exit status is 0 if match, 1 if no match.
 
 This is version $VERSION of ack.
 END_OF_HELP

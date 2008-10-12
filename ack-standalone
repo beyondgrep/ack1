@@ -96,7 +96,7 @@ sub main {
         $nmatches = App::Ack::print_matches( $iter, $opt );
     }
     close $App::Ack::fh;
-    exit  (! $nmatches) ;
+    exit ($nmatches ? 0 : 1);
 }
 
 =head1 NAME
@@ -168,7 +168,7 @@ throw I<grep> away, because there are times you'll still need it.
 E.g., searching through huge files looking for regexes that can be
 expressed with I<grep> syntax should be quicker with I<grep>.
 
-If your script or parent program uses I<grep> C<--quiet>  or 
+If your script or parent program uses I<grep> C<--quiet> or
 C<--silent> or needs exit 2 on IO error, use I<grep>.
 
 =head1 OPTIONS
@@ -628,11 +628,18 @@ grep to use ack.  The result is the Search in Project with ack, and
 you can find it here:
 L<http://www.simplicidade.org/notes/archives/2008/03/search_in_proje.html>"
 
-=head2 Shell etc
+=head2 Shell and Return Code
 
-For greater compatibility with I<grep>, I<ack> in normal use 
-now returns shell return or exit code of 0 only if something is found and 1 if not. 
-The I<grep>  code 2 for errors is not supported.
+For greater compatibility with I<grep>, I<ack> in normal use returns
+shell return or exit code of 0 only if something is found and 1 if
+no match is found.
+
+(Shell exit code 1 is C<$?=256> in perl with C<system> or backticks.)
+
+The I<grep> code 2 for errors is not used.
+
+0 is returned if C<-f> or C<-g> are specified, irrespective of
+number of files found.
 
 =cut
 
@@ -1525,11 +1532,11 @@ sub show_help {
     my $ignore_dirs = _listify( sort { _key($a) cmp _key($b) } keys %ignore_dirs );
 
     App::Ack::print( <<"END_OF_HELP" );
-Usage: ack [OPTION]... PATTERN [FILES]
+Usage: ack [OPTION]... PATTERN [FILE]
 
 Search for PATTERN in each source file in the tree from cwd on down.
 If [FILES] is specified, then only those files/directories are checked.
-ack may also search STDIN, but only if no FILES are specified, or if
+ack may also search STDIN, but only if no FILE are specified, or if
 one of FILES is "-".
 
 Default switches may be specified in ACK_OPTIONS environment variable or
@@ -1640,6 +1647,8 @@ Miscellaneous:
   --man                 Man page
   --version             Display version & copyright
   --thpppt              Bill the Cat
+
+Exit status is 0 if match, 1 if no match.
 
 This is version $VERSION of ack.
 END_OF_HELP

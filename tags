@@ -151,6 +151,7 @@ TRAILING_PUNC	t/ack-w.t	/^TRAILING_PUNC: {$/;"	l
 UNANCHORED	t/multiline.t	/^UNANCHORED: {$/;"	l
 UNRESTRICTED_AND_DASH_G_INTERACTION	t/ack-g.t	/^UNRESTRICTED_AND_DASH_G_INTERACTION: {$/;"	l
 Usage	Ack.pm	/^Usage: ack [OPTION]... PATTERN [FILES]$/;"	l
+Usage	Ack.pm	/^Usage: ack [OPTION]... PATTERN [FILE]$/;"	l
 VERSION	t/module.t	/^VERSION: {$/;"	l
 WITH_O	t/ack-o.t	/^WITH_O: {$/;"	l
 WITH_O	t/context.t	/^WITH_O: {$/;"	l
@@ -200,8 +201,8 @@ get_starting_points	Ack.pm	/^sub get_starting_points {$/;"	s
 get_version_statement	Ack.pm	/^sub get_version_statement {$/;"	s
 homepage	Makefile.PL	/^    homepage: http:\/\/petdance.com\/ack\/$/;"	l
 ignoredir_filter	Ack.pm	/^sub ignoredir_filter {$/;"	s
-is_binary	Basic.pm	/^sub is_binary() {$/;"	s
-is_binary	Resource.pm	/^sub is_binary() {$/;"	s
+is_binary	Basic.pm	/^sub is_binary {$/;"	s
+is_binary	Resource.pm	/^sub is_binary {$/;"	s
 is_binary	Tar.pm	/^sub is_binary {$/;"	s
 is_filetype	t/Util.pm	/^sub is_filetype {$/;"	s
 is_interesting	Ack.pm	/^sub is_interesting {$/;"	s

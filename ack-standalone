@@ -2285,7 +2285,7 @@ sub name {
 }
 
 
-sub is_binary() {
+sub is_binary {
     FAIL();
 }
 
@@ -2318,11 +2318,11 @@ package App::Ack::Plugin::Basic;
 package App::Ack::Resource::Basic;
 
 
-
-our @ISA = qw( App::Ack::Resource );
-
 use warnings;
 use strict;
+
+
+our @ISA = qw( App::Ack::Resource );
 
 
 sub new {
@@ -2360,7 +2360,7 @@ sub name {
 }
 
 
-sub is_binary() {
+sub is_binary {
     my $self = shift;
 
     if ( $self->{could_be_binary} ) {

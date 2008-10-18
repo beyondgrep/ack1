@@ -13,13 +13,13 @@ package App::Ack::Resource::Basic;
 
 =cut
 
+use warnings;
+use strict;
+
 use App::Ack;
 use App::Ack::Resource;
 
 our @ISA = qw( App::Ack::Resource );
-
-use warnings;
-use strict;
 
 =head1 METHODS
 
@@ -78,7 +78,7 @@ match in the file, then ack will not try to display a match line.
 
 =cut
 
-sub is_binary() {
+sub is_binary {
     my $self = shift;
 
     if ( $self->{could_be_binary} ) {

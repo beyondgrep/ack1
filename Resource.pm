@@ -47,7 +47,7 @@ match in the file, then ack will not try to display a match line.
 
 =cut
 
-sub is_binary() {
+sub is_binary {
     FAIL();
 }
 

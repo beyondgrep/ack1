@@ -97,7 +97,7 @@ LINE_1_TO_5	t/ack-line.t	/^LINE_1_TO_5: {$/;"	l
 LINE_1_TO_5_CONTEXT	t/ack-line.t	/^LINE_1_TO_5_CONTEXT: {$/;"	l
 LINE_AND_PASSTHRU	t/ack-line.t	/^LINE_AND_PASSTHRU: {$/;"	l
 L_PRINT0	t/ack-print0.t	/^L_PRINT0: {$/;"	l
-MAIN	ack	/^MAIN: {$/;"	l
+MAIN	ack-base	/^MAIN: {$/;"	l
 MATCH_VIA_CONTENT	t/filetypes.t	/^MATCH_VIA_CONTENT: {$/;"	l
 MATCH_WITH_BACKREF	t/ack-color.t	/^MATCH_WITH_BACKREF: {$/;"	l
 METACHARACTERS	t/ack-g.t	/^METACHARACTERS: {$/;"	l
@@ -164,6 +164,7 @@ _key	Ack.pm	/^sub _key {$/;"	s
 _listify	Ack.pm	/^sub _listify {$/;"	s
 _my_program	Ack.pm	/^sub _my_program {$/;"	s
 _thpppt	Ack.pm	/^sub _thpppt {$/;"	s
+ack	t/command-line-files.t	/^ack: non-existent-file.txt: No such file or directory$/;"	l
 ack_lists_match	t/Util.pm	/^sub ack_lists_match {$/;"	s
 ack_sets_match	t/Util.pm	/^sub ack_sets_match {$/;"	s
 bugtracker	Makefile.PL	/^    bugtracker: http:\/\/code.google.com\/p\/ack\/issues\/list$/;"	l
@@ -212,7 +213,7 @@ license	Makefile.PL	/^    license: http:\/\/dev.perl.org\/licenses\/$/;"	l
 lists_match	t/Util.pm	/^sub lists_match {$/;"	s
 load_colors	Ack.pm	/^sub load_colors {$/;"	s
 main	Makefile.PL	/^package main;$/;"	p
-main	ack	/^sub main {$/;"	s
+main	ack-base	/^sub main {$/;"	s
 name	Basic.pm	/^sub name {$/;"	s
 name	Resource.pm	/^sub name {$/;"	s
 name	Tar.pm	/^sub name {$/;"	s

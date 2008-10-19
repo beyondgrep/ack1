@@ -4,6 +4,8 @@ Changelog for ack
 IN PROCESS
     Big plugin infrastructure.  Woot!
 
+    ack-standalone no longer exists.  ack is now built from ack-base.
+
     =for TODO
 
     Handle tarballs: .rb inside .tar inside .gz

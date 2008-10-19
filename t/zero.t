@@ -47,7 +47,7 @@ HANDLE_ZEROES: {
 
 DASH_F: {
     my @args = qw( -f --perl );
-    my $cmd = "$^X -T ../../ack-standalone @args";
+    my $cmd = "$^X -T ../../ack @args";
     my @results = `$cmd`;
     chomp @results;
 

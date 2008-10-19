@@ -9,9 +9,9 @@ Makefile.PL
 META.yml
 README
 ack
+ack-base
 ack-help.txt
 ack-help-types.txt
-ack-standalone
 capture-stderr
 squash
 TODO

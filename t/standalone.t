@@ -10,7 +10,7 @@ use Util;
 
 prep_environment();
 
-my $ack = 'ack-standalone';
+my $ack = 'ack';
 
 ok( -e $ack, 'exists' );
 ok( -r $ack, 'readable' );

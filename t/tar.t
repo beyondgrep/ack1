@@ -34,6 +34,7 @@ $files[1]:1:#define FOO 1
 $files[2]:2:    FOO = 47
 EOF
 
+    # $ ack --plugin=Tar -i foo t/swamp
     my @files = qw( t/swamp );
     my @args = qw( --plugin=Tar -i foo );
 

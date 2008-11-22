@@ -18,6 +18,7 @@ my @files = qw(
 );
 
 $_ = File::Next::reslash($_) for @files;
+my $tar = File::Next::reslash( 't/swamp/solution8.tar' );
 
 =pod
 
@@ -29,9 +30,9 @@ stuff to test
 
 BASIC_SEARCH: {
     my @expected = split( /\n/, <<"EOF" );
-$files[0]:3:use constant NAME => 'Foo';
-$files[1]:1:#define FOO 1
-$files[2]:2:    FOO = 47
+$tar:$files[0]:3:use constant NAME => 'Foo';
+$tar:$files[1]:1:#define FOO 1
+$tar:$files[2]:2:    FOO = 47
 EOF
 
     # $ ack --plugin=Tar -i foo t/swamp

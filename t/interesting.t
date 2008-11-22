@@ -95,7 +95,7 @@ PARROT_FILES_NODESCEND: {
 PARROT_FILES_NODESCEND_EMPTY: {
     my $iter =
         File::Next::files( {
-            file_filter => $is_parrot,
+            file_filter    => $is_parrot,
             descend_filter => sub{0},
         }, 't/' );
 
@@ -106,7 +106,7 @@ PARROT_FILES_NODESCEND_EMPTY: {
 PERL_FILES_BY_NAME: {
     my $iter =
         File::Next::files( {
-            file_filter => $is_parrot,
+            file_filter    => $is_parrot,
             descend_filter => sub{0},
         }, 't/swamp/perl.pod' );
 
@@ -117,12 +117,13 @@ PERL_FILES_BY_NAME: {
 BINARY_FILES: {
     my $iter =
         File::Next::files( {
-            file_filter => $is_binary,
+            file_filter    => $is_binary,
             descend_filter => \&App::Ack::ignoredir_filter,
         }, 't/swamp' );
 
     my @files = slurp( $iter );
     sets_match( \@files, [qw(
         t/swamp/moose-andy.jpg
+        t/swamp/solution8.tar
     )], 'BINARY_FILES' );
 }

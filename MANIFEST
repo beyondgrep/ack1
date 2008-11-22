@@ -53,6 +53,7 @@ t/multiline.t
 t/pod.t
 t/rc.t
 t/standalone.t
+t/tar.t
 t/zero.t
 t/Util.pm
 
@@ -119,6 +120,7 @@ t/swamp/perl.cgi
 t/swamp/perl.pl
 t/swamp/perl.pm
 t/swamp/perl.pod
+t/swamp/solution8.tar
 t/text/4th-of-july.txt
 t/text/boy-named-sue.txt
 t/text/freedom-of-choice.txt

@@ -29,7 +29,7 @@ my %parms = (
         'File::Basename'    => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean               => { FILES => 'ack-1*' },
+    clean               => { FILES => 'ack-1* nytprof*' },
 );
 
 if ( $ExtUtils::MakeMaker::VERSION =~ /^\d\.\d\d$/ and $ExtUtils::MakeMaker::VERSION > 6.30 ) {

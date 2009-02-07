@@ -1,29 +1,24 @@
 Changelog for ack
 
-
-IN PROCESS
-    Big plugin infrastructure.  Woot!
-
+1.88        Sat Feb  7 13:51:35 CST 2009
+    [BIG CHANGES]
     ack-standalone no longer exists.  ack is now built from ack-base.
+    What used to be called "ack-standalone" is now just "ack."
 
-    =for TODO
+    ack has a new plugin system, so you can build plugins to search
+    whatever filetype you want.  The plugin API is not yet set in
+    stone.
 
-    Handle tarballs: .rb inside .tar inside .gz
-
-    The filetypes check breaks encapsulation.
-
-    Don't install Resource.pm and Repository.pm if we don't have to.
-
-    =cut
+    The plugin system has not been optimized.  ack is about 1/3rd
+    slower than before.
 
 
-NEXT
     [ENHANCEMENTS]
-
     Added support for .hrl Erlang header files.  Thanks, Richard
     Carlsson.
 
     Added support for --rake files, which are also --ruby files.
+
 
     [FIXES]
     Fixed a bug where files ending in "Makefile" were mistakenly
@@ -33,9 +28,15 @@ NEXT
     coming from a pipe, rather than than faking it with C<-t> and
     C<eof>.  Thanks to Sitaram Chamarty.
 
+
     [ADDITIONS]
     Created a new etc/ directory and its first addition, a bash
     auto-completion file from Adam James.
+
+
+    [DOCUMENTATION]
+    Clarified the licensing information that hand-waved "under the
+    same terms as Perl itself."
 
 
 1.86        Wed Jul  9 01:27:21 CDT 2008

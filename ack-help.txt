@@ -117,4 +117,4 @@ Miscellaneous:
 
 Exit status is 0 if match, 1 if no match.
 
-This is version 1.86 of ack.
+This is version 1.88 of ack.

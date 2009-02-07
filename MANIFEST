@@ -1,4 +1,5 @@
 Ack.pm
+Basic.pm
 Plugin.pm
 Repository.pm
 Resource.pm
@@ -120,6 +121,8 @@ t/swamp/perl.cgi
 t/swamp/perl.pl
 t/swamp/perl.pm
 t/swamp/perl.pod
+t/swamp/Rakefile
+t/swamp/sample.rake
 t/swamp/solution8.tar
 t/text/4th-of-july.txt
 t/text/boy-named-sue.txt

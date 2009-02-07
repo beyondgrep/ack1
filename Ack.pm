@@ -13,15 +13,15 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.86
+Version 1.88
 
 =cut
 
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.86';
-    $COPYRIGHT = 'Copyright 2005-2008 Andy Lester, all rights reserved.';
+    $VERSION = '1.88';
+    $COPYRIGHT = 'Copyright 2005-2009 Andy Lester, all rights reserved.';
 }
 
 our $fh;
@@ -1451,10 +1451,20 @@ sub set_up_pager {
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2005-2008 Andy Lester, all rights reserved.
+Copyright 2005-2009 Andy Lester, all rights reserved.
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+This program is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+=over 4
+
+=item * the GNU General Public License as published by the Free
+Software Foundation; either version 1, or (at your option) any later
+version, or
+
+=item * the "Artistic License" which comes with Perl 5.
+
+=back
 
 =cut
 

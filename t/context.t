@@ -137,16 +137,16 @@ HIGHLIGHTING: {
 
 # grouping works with context (single file)
 GROUPING_SINGLE_FILE: {
-    my $target_file = File::Next::reslash( 't/etc/shebang.rb.xxx' );
+    my $target_file = File::Next::reslash( 't/etc/shebang.py.xxx' );
     my @expected = split( /\n/, <<"EOF" );
 $target_file
-1:#!/usr/bin/ruby
+1:#!/usr/bin/python
 EOF
 
-    my $regex = 'ruby';
-    my @args = ( '--ruby', '--group', '-C', $regex );
+    my $regex = 'python';
+    my @args = ( '--python', '--group', '-C', $regex );
 
-    ack_lists_match( [ @args ], \@expected, "Looking for $regex in ruby files with grouping" );
+    ack_lists_match( [ @args ], \@expected, "Looking for $regex in Python files with grouping" );
 }
 
 

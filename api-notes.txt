@@ -1,0 +1,19 @@
+# The ackrc
+ack --plugin=Tarball
+
+ack --check=tarball
+ack --check=gz
+
+
+ack --plugin=PDF,enable
+
+ack --plugin=MP3,disable
+
+ack --plugin=HTTP,disable
+
+
+# The command line
+
+$ ack --enable=Tarball
+
+$ ack --Tarball 

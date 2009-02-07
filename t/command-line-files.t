@@ -46,7 +46,7 @@ FILE_NOT_THERE: {
     my $file = File::Next::reslash( 't/swamp/perl.pod' );
 
     my @expected_stderr = split( /\n/, <<'EOF' );
-ack-standalone: non-existent-file.txt: No such file or directory
+ack: non-existent-file.txt: No such file or directory
 EOF
 
     my @expected_stdout = split( /\n/, <<"EOF" );

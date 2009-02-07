@@ -20,6 +20,8 @@ my $hh = [qw(
 
 my $ruby = [qw(
     t/etc/shebang.rb.xxx
+    t/swamp/Rakefile
+    t/swamp/sample.rake
 )];
 
 my $fortran = [qw(
@@ -113,14 +115,14 @@ BUILTIN: {
 
     for my $builtin ( @builtins ) {
         check_stderr( "--type-set $builtin=.foo",
-            qq{ack-standalone: --type-set: Builtin type "$builtin" cannot be changed.} );
+            qq{ack: --type-set: Builtin type "$builtin" cannot be changed.} );
         check_stderr( "--type-add $builtin=.foo",
-            qq{ack-standalone: --type-add: Builtin type "$builtin" cannot be changed.} );
+            qq{ack: --type-add: Builtin type "$builtin" cannot be changed.} );
     }
 
     # check that there is a warning for creating new types with --append_type
     check_stderr( '--type-add foo=.foo --foo',
-        q{ack-standalone: --type-add: Type "foo" does not exist, creating with ".foo" ...} );
+        q{ack: --type-add: Type "foo" does not exist, creating with ".foo" ...} );
 }
 
 

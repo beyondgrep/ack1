@@ -1,8 +1,8 @@
-Usage: ack [OPTION]... PATTERN [FILES]
+Usage: ack [OPTION]... PATTERN [FILE]
 
 Search for PATTERN in each source file in the tree from cwd on down.
 If [FILES] is specified, then only those files/directories are checked.
-ack may also search STDIN, but only if no FILES are specified, or if
+ack may also search STDIN, but only if no FILE are specified, or if
 one of FILES is "-".
 
 Default switches may be specified in ACK_OPTIONS environment variable or
@@ -115,4 +115,6 @@ Miscellaneous:
   --version             Display version & copyright
   --thpppt              Bill the Cat
 
-This is version 1.86 of ack.
+Exit status is 0 if match, 1 if no match.
+
+This is version 1.88 of ack.

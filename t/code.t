@@ -5,7 +5,7 @@ use strict;
 
 use Test::More;
 
-my @files = ( qw( ack ack-standalone Ack.pm ), glob( 't/*.t' ) );
+my @files = ( qw( ack ack-base Ack.pm ), glob( 't/*.t' ) );
 
 plan tests => scalar @files;
 

@@ -17,7 +17,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]csharp       .cs
     --[no]css          .css
     --[no]elisp        .el
-    --[no]erlang       .erl
+    --[no]erlang       .erl .hrl
     --[no]fortran      .f .f77 .f90 .f95 .f03 .for .ftn .fpp
     --[no]haskell      .hs .lhs
     --[no]hh           .h
@@ -37,7 +37,8 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]php          .php .phpt .php3 .php4 .php5
     --[no]plone        .pt .cpt .metadata .cpy .py
     --[no]python       .py
-    --[no]ruby         .rb .rhtml .rjs .rxml .erb
+    --[no]rake         Rakefiles
+    --[no]ruby         .rb .rhtml .rjs .rxml .erb .rake
     --[no]scheme       .scm
     --[no]shell        .sh .bash .csh .tcsh .ksh .zsh
     --[no]skipped      Files, but not directories, normally skipped by ack (default: off)

@@ -11,7 +11,14 @@ my %parms = (
     AUTHOR              => 'Andy Lester <andy@petdance.com>',
     ABSTRACT            => 'A grep-like program specifically for large source trees',
     VERSION_FROM        => 'Ack.pm',
-    PM                  => { 'Ack.pm' => '$(INST_LIBDIR)/App/Ack.pm' },
+    PM                  => {
+        'Ack.pm'        => '$(INST_LIBDIR)/App/Ack.pm',
+        'Repository.pm' => '$(INST_LIBDIR)/App/Ack/Repository.pm',
+        'Resource.pm'   => '$(INST_LIBDIR)/App/Ack/Resource.pm',
+        'Plugin.pm'     => '$(INST_LIBDIR)/App/Ack/Plugin.pm',
+        'Basic.pm'      => '$(INST_LIBDIR)/App/Ack/Plugin/Basic.pm',
+        #'Tar.pm'        => '$(INST_LIBDIR)/App/Ack/Plugin/Tar.pm',
+    },
     EXE_FILES           => [ 'ack' ],
     PREREQ_PM => {
         'Test::Harness'     => 2.50, # Something reasonably newish
@@ -22,7 +29,7 @@ my %parms = (
         'File::Basename'    => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean               => { FILES => 'ack-1*' },
+    clean               => { FILES => 'ack-1* nytprof*' },
 );
 
 if ( $ExtUtils::MakeMaker::VERSION =~ /^\d\.\d\d$/ and $ExtUtils::MakeMaker::VERSION > 6.30 ) {
@@ -47,7 +54,7 @@ package MY;
 sub MY::top_targets {
     my $str = shift->SUPER::top_targets(@_);
 
-    $str =~ s/^pure_all.+/$& ack-standalone ack-help.txt ack-help-types.txt/m;
+    $str =~ s/^pure_all.+/$& ack ack-help.txt ack-help-types.txt/m;
 
     return $str;
 }
@@ -56,8 +63,12 @@ sub MY::postamble {
     my $file_next_filename = qx(perldoc -l File::Next);
     my $postamble = <<'MAKE_FRAG';
 ACK             = ack
-APP_ACK_PM      = Ack.pm
-STANDALONE      = ack-standalone
+BASE            = ack-base
+ACK_PM          = Ack.pm
+BASIC_PM        = Basic.pm
+REPOSITORY_PM   = Repository.pm
+RESOURCE_PM     = Resource.pm
+ALL_PM          = $(ACK_PM) $(REPOSITORY_PM) $(RESOURCE_PM) $(BASIC_PM)
 ACK_HELP        = ack-help.txt
 ACK_HELP_TYPES  = ack-help-types.txt
 PERL_T          = $(PERL) -T
@@ -69,16 +80,16 @@ tags:
 		--exclude=blib \
 		--exclude=.svn \
 		--exclude='*~' \
-		--exclude=ack-standalone \
+		--exclude=$(ACK) \
 		--languages=Perl --langmap=Perl:+.t \
 
 critic:
-	perlcritic -1 -q -profile perlcriticrc ack Ack.pm t/*.t
+	perlcritic -1 -q -profile perlcriticrc $(BASE) $(ALL_PM) t/*.t
 
 tidy:
-	perltidy -b -pro=perltidyrc ack Ack.pm
+	perltidy -b -pro=perltidyrc $(BASE) $(ALL_PM)
 
-PROF_ARGS = -Mblib ack-standalone --noenv --color --group -w foo ~/parrot
+PROF_ARGS = -Mblib ./$(ACK) --noenv --color --group -w foo ~/parrot
 
 timed: all
 	$(PERL) $(PROF_ARGS) >> /dev/null 2>&1
@@ -111,16 +122,16 @@ nytprof: all
 	$(PERL) -d:NYTProf $(PROF_ARGS) >> /dev/null 2>&1
 	nytprofhtml
 
-$(STANDALONE) : $(ACK) $(APP_ACK_PM) squash Makefile
-	$(PERL) squash ack File::Next $(APP_ACK_PM) > $(STANDALONE)
-	$(CHMOD) 0755 $(STANDALONE)
-	$(PERL_T) -c $(STANDALONE)
+$(ACK) : $(BASE) $(ALL_PM) squash Makefile
+	$(PERL) squash ack-base File::Next $(ALL_PM) > $(ACK)
+	$(CHMOD) 0755 $(ACK)
+	$(PERL_T) -c $(ACK)
 
-$(ACK_HELP) : $(STANDALONE)
-	$(PERL_T) $(STANDALONE) --noenv --help > $(ACK_HELP) || perl -e0
+$(ACK_HELP) : $(ACK)
+	$(PERL_T) $(ACK) --noenv --help > $(ACK_HELP) || perl -e0
 
-$(ACK_HELP_TYPES) : $(STANDALONE)
-	$(PERL_T) $(STANDALONE) --noenv --help=types > $(ACK_HELP_TYPES) || perl -e0
+$(ACK_HELP_TYPES) : $(ACK)
+	$(PERL_T) $(ACK) --noenv --help=types > $(ACK_HELP_TYPES) || perl -e0
 
 MAKE_FRAG
 

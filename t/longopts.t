@@ -18,7 +18,7 @@ use Util;
 prep_environment();
 
 my $swamp = 't/swamp';
-my $ack   = './ack-standalone';
+my $ack   = './ack';
 
 # Help
 for ( qw( --help ) ) {

@@ -47,6 +47,8 @@ ACK_F_TEXT: {
         t/swamp/javascript.js
         t/swamp/Makefile
         t/swamp/Makefile.PL
+        t/swamp/notaMakefile
+        t/swamp/notaRakefile
         t/swamp/options.pl
         t/swamp/parrot.pir
         t/swamp/perl-test.t
@@ -55,6 +57,8 @@ ACK_F_TEXT: {
         t/swamp/perl.pl
         t/swamp/perl.pm
         t/swamp/perl.pod
+        t/swamp/Rakefile
+        t/swamp/sample.rake
         t/text/4th-of-july.txt
         t/text/boy-named-sue.txt
         t/text/freedom-of-choice.txt

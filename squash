@@ -1,17 +1,21 @@
 #!perl
 
-# Quickie utility for squashing together the parts for the standalone version
-
+# Squashes together the parts of ack into the single ack app.
 use warnings;
 use strict;
 
 use File::Next;
 
-# make clear that ack-standalone is not supposed to be edited
+# make clear that ack is not supposed to be edited
 my $NO_EDIT_COMMENT = <<'EOCOMMENT';
 #
-# This standalone version of ack is generated code.
+# This file, ack, is generated code.
 # Please DO NOT EDIT or send patches for it.
+#
+# Please take a look at the source from
+# http://code.google.com/p/ack/source
+# and submit patches against the individual files
+# that build ack.
 #
 EOCOMMENT
 
@@ -31,7 +35,7 @@ for my $arg ( @ARGV ) {
         next if /^use (File::Next|App::Ack)/;
 
         # See if we're in module POD blocks
-        my $skip = ($filename ne 'ack') && (/^=/ .. /^=cut/);
+        my $skip = ($filename ne 'ack-base') && (/^=/ .. /^=cut/);
         if ( !$skip ) {
             # Replace the shebang line and append 'no edit' comment
             if ( s{^#!.+}{#!/usr/bin/env perl} ) {

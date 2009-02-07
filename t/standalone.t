@@ -10,7 +10,7 @@ use Util;
 
 prep_environment();
 
-my $ack = 'ack-standalone';
+my $ack = 'ack';
 
 ok( -e $ack, 'exists' );
 ok( -r $ack, 'readable' );
@@ -22,13 +22,18 @@ else {
 }
 
 FIND_PACKAGES: {
-    my @expected = (
-        'package File::Next;',
-        'package App::Ack;',
+    my @expected = map { "package $_;" } qw(
+        File::Next
+        App::Ack
+        App::Ack::Plugin::Basic
+        App::Ack::Repository
+        App::Ack::Repository::Basic
+        App::Ack::Resource
+        App::Ack::Resource::Basic
     );
     my @files = ( $ack );
     my @args = qw( ^package -h );
     my @results = run_ack( @args, @files );
 
-    lists_match( \@results, \@expected, 'Looking for packages' );
+    sets_match( \@results, \@expected, 'Looking for packages' );
 }

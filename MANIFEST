@@ -1,16 +1,23 @@
 Ack.pm
+Basic.pm
+Plugin.pm
+Repository.pm
+Resource.pm
+
 Changes
 MANIFEST
 Makefile.PL
 META.yml
 README
 ack
+ack-base
 ack-help.txt
 ack-help-types.txt
-ack-standalone
 capture-stderr
 squash
 TODO
+
+etc/ack.bash_completion.sh
 
 t/00-load.t
 t/ack-1.t
@@ -45,7 +52,9 @@ t/longopts.t
 t/module.t
 t/multiline.t
 t/pod.t
+t/rc.t
 t/standalone.t
+t/tar.t
 t/zero.t
 t/Util.pm
 
@@ -101,6 +110,8 @@ t/swamp/html.html
 t/swamp/incomplete-last-line.txt
 t/swamp/javascript.js
 t/swamp/moose-andy.jpg
+t/swamp/notaMakefile
+t/swamp/notaRakefile
 t/swamp/options.pl
 t/swamp/options.pl.bak
 t/swamp/parrot.pir
@@ -110,6 +121,9 @@ t/swamp/perl.cgi
 t/swamp/perl.pl
 t/swamp/perl.pm
 t/swamp/perl.pod
+t/swamp/Rakefile
+t/swamp/sample.rake
+t/swamp/solution8.tar
 t/text/4th-of-july.txt
 t/text/boy-named-sue.txt
 t/text/freedom-of-choice.txt

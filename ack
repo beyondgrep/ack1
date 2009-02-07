@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 #
-# ack is generated code.
+# This file, ack, is generated code.
 # Please DO NOT EDIT or send patches for it.
 #
 # Please take a look at the source from

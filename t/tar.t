@@ -3,6 +3,7 @@
 use warnings;
 use strict;
 
+use Test::More skip_all => 'Testing the uncompleted feature of acking through a tar file.';
 use Test::More tests => 6;
 
 use lib 't';

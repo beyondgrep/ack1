@@ -39,10 +39,10 @@ if ( $ExtUtils::MakeMaker::VERSION =~ /^\d\.\d\d$/ and $ExtUtils::MakeMaker::VER
 if ( $ExtUtils::MakeMaker::VERSION ge '6.36' ) {
     $parms{EXTRA_META} = <<EOF;
 resources:
-    homepage: http://petdance.com/ack/
+    homepage: http://betterthangrep.com/
     bugtracker: http://code.google.com/p/ack/issues/list
     license: http://dev.perl.org/licenses/
-    Repository: http://code.google.com/p/ack/source
+    repository: http://code.google.com/p/ack/source
     MailingList: http://groups.google.com/group/ack-users
 EOF
     }

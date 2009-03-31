@@ -464,8 +464,9 @@ sub filetypes {
     my $basename = $filename;
     $basename =~ s{.*[$dir_sep_chars]}{};
 
-    return ('make',TEXT)        if lc $basename eq 'makefile';
-    return ('rake','ruby',TEXT) if lc $basename eq 'rakefile';
+    my $lc_basename = lc $basename;
+    return ('make',TEXT)        if $lc_basename eq 'makefile';
+    return ('rake','ruby',TEXT) if $lc_basename eq 'rakefile';
 
     # If there's an extension, look it up
     if ( $filename =~ m{\.([^\.$dir_sep_chars]+)$}o ) {

@@ -7,7 +7,6 @@ Resource.pm
 Changes
 MANIFEST
 Makefile.PL
-META.yml
 README
 ack
 ack-base

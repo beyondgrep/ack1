@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 our $VERSION = '1.88';
-# Check http://petdance.com/ack/ for updates
+# Check http://betterthangrep.com/ for updates
 
 # These are all our globals.
 
@@ -742,7 +742,7 @@ Support for and information about F<ack> can be found at:
 
 =item * The ack homepage
 
-L<http://petdance.com/ack/>
+L<http://betterthangrep.com/>
 
 =item * The ack issues list at Google Code
 

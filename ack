@@ -13,7 +13,7 @@ use warnings;
 use strict;
 
 our $VERSION = '1.88';
-# Check http://petdance.com/ack/ for updates
+# Check http://betterthangrep.com/ for updates
 
 # These are all our globals.
 
@@ -706,6 +706,20 @@ the previous five lines from the log in each case.
 Join the ack-users mailing list.  Send me your tips and I may add
 them here.
 
+=head1 FAQ
+
+=head2 Wouldn't it be great if F<ack> did search & replace?
+
+No, ack will always be read-only.  Perl has a perfectly good way
+to do search & replace in files, using the C<-i>, C<-p> and C<-n>
+switches.
+
+You can certainly use ack to select your files to update.  For
+example, to change all "foo" to "bar" in all PHP files, you can do
+this form the Unix shell:
+
+    $ perl -i -p -e's/foo/bar/g' $(ack -f --php)
+
 =head1 AUTHOR
 
 Andy Lester, C<< <andy at petdance.com> >>
@@ -736,7 +750,7 @@ Support for and information about F<ack> can be found at:
 
 =item * The ack homepage
 
-L<http://petdance.com/ack/>
+L<http://betterthangrep.com/>
 
 =item * The ack issues list at Google Code
 
@@ -1401,8 +1415,9 @@ sub filetypes {
     my $basename = $filename;
     $basename =~ s{.*[$dir_sep_chars]}{};
 
-    return ('make',TEXT)        if lc $basename eq 'makefile';
-    return ('rake','ruby',TEXT) if lc $basename eq 'rakefile';
+    my $lc_basename = lc $basename;
+    return ('make',TEXT)        if $lc_basename eq 'makefile';
+    return ('rake','ruby',TEXT) if $lc_basename eq 'rakefile';
 
     # If there's an extension, look it up
     if ( $filename =~ m{\.([^\.$dir_sep_chars]+)$}o ) {

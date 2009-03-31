@@ -39,7 +39,7 @@ if ( $ExtUtils::MakeMaker::VERSION =~ /^\d\.\d\d$/ and $ExtUtils::MakeMaker::VER
 if ( $ExtUtils::MakeMaker::VERSION ge '6.46' ) {
     $parms{META_MERGE} = {
         resources => {
-            homepage    => 'http://petdance.com/ack/',
+            homepage    => 'http://betterthangrep.com/',
             bugtracker  => 'http://code.google.com/p/ack/issues/list',
             license     => 'http://dev.perl.org/licenses/',
             repository  => 'http://code.google.com/p/ack/source',

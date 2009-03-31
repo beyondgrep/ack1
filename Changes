@@ -1,5 +1,11 @@
 Changelog for ack
 
+NEXT
+    [DISTRIBUTION]
+    Updated Makefile.PL to use new ExtUtils::MakeMaker features.
+    Thanks, Schwern.
+
+
 1.88        Sat Feb  7 13:51:35 CST 2009
     [BIG CHANGES]
     ack-standalone no longer exists.  ack is now built from ack-base.

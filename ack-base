@@ -698,6 +698,20 @@ the previous five lines from the log in each case.
 Join the ack-users mailing list.  Send me your tips and I may add
 them here.
 
+=head1 FAQ
+
+=head2 Wouldn't it be great if F<ack> did search & replace?
+
+No, ack will always be read-only.  Perl has a perfectly good way
+to do search & replace in files, using the C<-i>, C<-p> and C<-n>
+switches.
+
+You can certainly use ack to select your files to update.  For
+example, to change all "foo" to "bar" in all PHP files, you can do
+this form the Unix shell:
+
+    $ perl -i -p -e's/foo/bar/g' $(ack -f --php)
+
 =head1 AUTHOR
 
 Andy Lester, C<< <andy at petdance.com> >>

@@ -8,6 +8,9 @@ NEXT
     [FIXES]
     Fixed an amazingly bad call to cmp_ok() in t/ack-passthru.t.
 
+    [DOCUMENTATION]
+    Started an ack FAQ.
+
 
 1.88        Sat Feb  7 13:51:35 CST 2009
     [BIG CHANGES]

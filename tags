@@ -31,6 +31,7 @@ App::Ack::Resource	Resource.pm	/^package App::Ack::Resource;$/;"	p
 App::Ack::Resource::Basic	Basic.pm	/^package App::Ack::Resource::Basic;$/;"	p
 App::Ack::Resource::Tar	Tar.pm	/^package App::Ack::Resource::Tar;$/;"	p
 BACK_ANCHOR	t/ack-g.t	/^BACK_ANCHOR: {$/;"	l
+BASIC_SEARCH	t/tar.t	/^BASIC_SEARCH: {$/;"	l
 BEFORE	t/context.t	/^BEFORE: {$/;"	l
 BEFORE_WITH_LINE_NO	t/context.t	/^BEFORE_WITH_LINE_NO: {$/;"	l
 BILL_THE_CAT	t/module.t	/^BILL_THE_CAT: {$/;"	l
@@ -104,7 +105,6 @@ METACHARACTERS	t/ack-g.t	/^METACHARACTERS: {$/;"	l
 MY	Makefile.PL	/^package MY;$/;"	p
 MY	Makefile.PL	/^sub MY::postamble {$/;"	s
 MY	Makefile.PL	/^sub MY::top_targets {$/;"	s
-MailingList	Makefile.PL	/^    MailingList: http:\/\/groups.google.com\/group\/ack-users$/;"	l
 Miscellaneous	Ack.pm	/^Miscellaneous:$/;"	l
 NORMAL	t/ack-passthru.t	/^NORMAL: {$/;"	l
 NORMAL_CASE	t/ack-v.t	/^NORMAL_CASE: {$/;"	l
@@ -132,7 +132,6 @@ PERL_TEST_CASE_INSENSITIVE_FILE_NOT	t/ack-g.t	/^PERL_TEST_CASE_INSENSITIVE_FILE_
 QUOTEMETA_CONTENT	t/ack-g.t	/^QUOTEMETA_CONTENT: {$/;"	l
 QUOTEMETA_CONTENT_SWAPPED	t/ack-g.t	/^QUOTEMETA_CONTENT_SWAPPED: {$/;"	l
 QUOTEMETA_FILE_NOT	t/ack-g.t	/^QUOTEMETA_FILE_NOT: {$/;"	l
-Repository	Makefile.PL	/^    Repository: http:\/\/code.google.com\/p\/ack\/source$/;"	l
 SEARCH_FOR_DASH_DASH_NOENV	t/ack-env.t	/^SEARCH_FOR_DASH_DASH_NOENV: {$/;"	l
 SINGLE_TEXT_MATCH	t/ack-1.t	/^SINGLE_TEXT_MATCH: {$/;"	l
 SINGLE_TEXT_MATCH	t/rc.t	/^SINGLE_TEXT_MATCH: {$/;"	l
@@ -167,7 +166,6 @@ _thpppt	Ack.pm	/^sub _thpppt {$/;"	s
 ack	t/command-line-files.t	/^ack: non-existent-file.txt: No such file or directory$/;"	l
 ack_lists_match	t/Util.pm	/^sub ack_lists_match {$/;"	s
 ack_sets_match	t/Util.pm	/^sub ack_sets_match {$/;"	s
-bugtracker	Makefile.PL	/^    bugtracker: http:\/\/code.google.com\/p\/ack\/issues\/list$/;"	l
 build_command_line	t/Util.pm	/^sub build_command_line {$/;"	s
 build_regex	Ack.pm	/^sub build_regex {$/;"	s
 by_2nd	t/module.t	/^sub by_2nd { return $a->[1] cmp $b->[1]}$/;"	s
@@ -200,7 +198,6 @@ get_iterator	Ack.pm	/^sub get_iterator {$/;"	s
 get_rc	t/Util.pm	/^sub get_rc{$/;"	s
 get_starting_points	Ack.pm	/^sub get_starting_points {$/;"	s
 get_version_statement	Ack.pm	/^sub get_version_statement {$/;"	s
-homepage	Makefile.PL	/^    homepage: http:\/\/petdance.com\/ack\/$/;"	l
 ignoredir_filter	Ack.pm	/^sub ignoredir_filter {$/;"	s
 is_binary	Basic.pm	/^sub is_binary {$/;"	s
 is_binary	Resource.pm	/^sub is_binary {$/;"	s
@@ -209,7 +206,6 @@ is_filetype	t/Util.pm	/^sub is_filetype {$/;"	s
 is_interesting	Ack.pm	/^sub is_interesting {$/;"	s
 is_searchable	Ack.pm	/^sub is_searchable {$/;"	s
 is_win32	t/Util.pm	/^sub is_win32 {$/;"	s
-license	Makefile.PL	/^    license: http:\/\/dev.perl.org\/licenses\/$/;"	l
 lists_match	t/Util.pm	/^sub lists_match {$/;"	s
 load_colors	Ack.pm	/^sub load_colors {$/;"	s
 main	Makefile.PL	/^package main;$/;"	p
@@ -255,7 +251,6 @@ reorder	t/module.t	/^sub reorder {$/;"	s
 reset	Basic.pm	/^sub reset {$/;"	s
 reset	Resource.pm	/^sub reset {$/;"	s
 reset	Tar.pm	/^sub reset {$/;"	s
-resources	Makefile.PL	/^resources:$/;"	l
 run_ack	t/Util.pm	/^sub run_ack {$/;"	s
 run_ack_with_stderr	t/Util.pm	/^sub run_ack_with_stderr {$/;"	s
 search_and_list	Ack.pm	/^sub search_and_list {$/;"	s

@@ -49,7 +49,7 @@ HIGHLIGHTING: {
     my @ack_args = qw( July --text --passthru --color );
     my @results = pipe_into_ack( 't/text/4th-of-july.txt', @ack_args );
 
-    cmp_ok( scalar @results, '=', scalar @full_lyrics, 'Got all the lines back' );
+    is( scalar @results, scalar @full_lyrics, 'Got all the lines back' );
 
     my @escaped_lines = grep { /\e/ } @results;
     is( scalar @escaped_lines, 2, 'Only two lines are highlighted' );

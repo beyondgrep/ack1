@@ -839,14 +839,24 @@ Returns the version information for ack.
 =cut
 
 sub get_version_statement {
+    require Config;
+
     my $copyright = get_copyright();
+    my $this_perl = $Config::Config{perlpath};
+    if ($^O ne 'VMS') {
+        my $ext = $Config::Config{_exe};
+        $this_perl .= $ext unless $this_perl =~ m/$ext$/i;
+    }
+
     return <<"END_OF_VERSION";
 ack $VERSION
+Running under Perl $] at $this_perl
 
 $copyright
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+This program is free software; you can redistribute it and/or modify
+it under the terms of either: the GNU General Public License as
+published by the Free Software Foundation; or the Artistic License.
 END_OF_VERSION
 }
 

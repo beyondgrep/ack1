@@ -843,7 +843,7 @@ it under the terms of either:
 Software Foundation; either version 1, or (at your option) any later
 version, or
 
-=item * the "Artistic License" which comes with Perl 5.
+=item * the Artistic License version 2.0.
 
 =back
 
@@ -1735,14 +1735,24 @@ sub _listify {
 
 
 sub get_version_statement {
+    require Config;
+
     my $copyright = get_copyright();
+    my $this_perl = $Config::Config{perlpath};
+    if ($^O ne 'VMS') {
+        my $ext = $Config::Config{_exe};
+        $this_perl .= $ext unless $this_perl =~ m/$ext$/i;
+    }
+
     return <<"END_OF_VERSION";
 ack $VERSION
+Running under Perl $] at $this_perl
 
 $copyright
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+This program is free software; you can redistribute it and/or modify
+it under the terms of either: the GNU General Public License as
+published by the Free Software Foundation; or the Artistic License.
 END_OF_VERSION
 }
 

@@ -61,10 +61,10 @@ sub run_ack {
     return @{$stdout};
 }
 
-{ # scope for $AckReturnCode;
+{ # scope for $ack_return_code;
 
 # capture returncode
-our $AckReturnCode;
+our $ack_return_code;
 
 sub run_ack_with_stderr {
     my @args = @_;
@@ -80,14 +80,14 @@ sub run_ack_with_stderr {
 
     @stdout = `$cmd`;
     my ($sig,$core,$rc) = (($? & 127),  ($? & 128) , ($? >> 8));
-    $AckReturnCode=$rc;
+    $ack_return_code = $rc;
     ## XXX what do do with $core or $sig?
 
-    open( CATCHERR, '<', $catcherr_file );
-    while( <CATCHERR> ) {
+    open( my $fh, '<', $catcherr_file );
+    while( <$fh> ) {
         push( @stderr, $_ );
     }
-    close CATCHERR;
+    close $fh or die $!;
     unlink $catcherr_file;
 
     chomp @stdout;
@@ -96,10 +96,10 @@ sub run_ack_with_stderr {
 }
 
 sub get_rc {
-  return $AckReturnCode;
+    return $ack_return_code;
 }
 
-} # scope for $AckReturnCode
+} # scope for $ack_return_code
 
 sub pipe_into_ack {
     my $input = shift;

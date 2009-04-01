@@ -195,7 +195,7 @@ fill_type_wanted	t/module.t	/^sub fill_type_wanted {$/;"	s
 get_command_line_options	Ack.pm	/^sub get_command_line_options {$/;"	s
 get_copyright	Ack.pm	/^sub get_copyright {$/;"	s
 get_iterator	Ack.pm	/^sub get_iterator {$/;"	s
-get_rc	t/Util.pm	/^sub get_rc{$/;"	s
+get_rc	t/Util.pm	/^sub get_rc {$/;"	s
 get_starting_points	Ack.pm	/^sub get_starting_points {$/;"	s
 get_version_statement	Ack.pm	/^sub get_version_statement {$/;"	s
 ignoredir_filter	Ack.pm	/^sub ignoredir_filter {$/;"	s

@@ -33,7 +33,7 @@ for ( qw( --help ) ) {
 for ( qw( --version ) ) {
     like
         qx{ $^X -T $ack $_ },
-        qr{ ^ack .* Copyright .* Perl }xs,
+        qr{ ^ack .* Copyright }xs,
         qq{$_ output is correct};
     option_in_usage( $_ );
 }

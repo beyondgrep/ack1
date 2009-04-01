@@ -24,7 +24,7 @@ sub build_command_line {
         for ( @args ) {
             s/(\\+)$/$1$1/;     # Double all trailing backslashes
             s/"/\\"/g;          # Backslash all quotes
-            $_ = qq("$_");
+            $_ = qq{"$_"};
         }
     }
     else {
@@ -47,7 +47,7 @@ sub slurp {
 
 sub run_ack {
     my @args = @_;
-	
+
     my ($stdout, $stderr) = run_ack_with_stderr( @args );
 
     if ( $TODO ) {
@@ -77,11 +77,11 @@ sub run_ack_with_stderr {
     }
 
     my $cmd = build_command_line( @args );
-	
+
     @stdout = `$cmd`;
-    my ($sig,$core,$rc)=( ($? & 127),  ($? & 128) , ($? >> 8) );
+    my ($sig,$core,$rc) = (($? & 127),  ($? & 128) , ($? >> 8));
     $AckReturnCode=$rc;
-	## XXX what do do with $core or $sig?
+    ## XXX what do do with $core or $sig?
 
     open( CATCHERR, '<', $catcherr_file );
     while( <CATCHERR> ) {
@@ -95,7 +95,7 @@ sub run_ack_with_stderr {
     return ( \@stdout, \@stderr );
 }
 
-sub get_rc{
+sub get_rc {
   return $AckReturnCode;
 }
 

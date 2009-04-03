@@ -199,6 +199,7 @@ get_rc	t/Util.pm	/^sub get_rc {$/;"	s
 get_starting_points	Ack.pm	/^sub get_starting_points {$/;"	s
 get_version_statement	Ack.pm	/^sub get_version_statement {$/;"	s
 ignoredir_filter	Ack.pm	/^sub ignoredir_filter {$/;"	s
+input_from_pipe	Ack.pm	/^sub input_from_pipe() {$/;"	s
 is_binary	Basic.pm	/^sub is_binary {$/;"	s
 is_binary	Resource.pm	/^sub is_binary {$/;"	s
 is_binary	Tar.pm	/^sub is_binary {$/;"	s
@@ -228,6 +229,7 @@ next_text	Resource.pm	/^sub next_text {$/;"	s
 next_text	Tar.pm	/^sub next_text {$/;"	s
 nytprof	Makefile.PL	/^nytprof: all$/;"	l
 option_in_usage	t/longopts.t	/^sub option_in_usage {$/;"	s
+output_to_pipe	Ack.pm	/^sub output_to_pipe() {$/;"	s
 pipe_into_ack	t/Util.pm	/^sub pipe_into_ack {$/;"	s
 prep_environment	t/Util.pm	/^sub prep_environment {$/;"	s
 print	Ack.pm	/^sub print                   { print {$fh} @_ }$/;"	s

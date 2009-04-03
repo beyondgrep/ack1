@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION = '1.88';
+our $VERSION = '1.89_01';
 # Check http://betterthangrep.com/ for updates
 
 # These are all our globals.
@@ -50,7 +50,7 @@ sub main {
 
     $| = 1 if $opt->{flush}; # Unbuffer the output if flush mode
 
-    if ( -p STDIN ) { # Check to see if it's a pipe
+    if ( App::Ack::input_from_pipe() ) {
         # We're going into filter mode
         for ( qw( f g l ) ) {
             $opt->{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );

@@ -13,14 +13,14 @@ App::Ack - A container for functions for the ack program
 
 =head1 VERSION
 
-Version 1.88
+Version 1.89_01
 
 =cut
 
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.88';
+    $VERSION = '1.89_01';
     $COPYRIGHT = 'Copyright 2005-2009 Andy Lester, all rights reserved.';
 }
 
@@ -39,7 +39,6 @@ our %ignore_dirs;
 our $dir_sep_chars;
 our $is_cygwin;
 our $is_windows;
-our $to_screen;
 
 use File::Spec ();
 use File::Glob ':glob';
@@ -126,7 +125,6 @@ BEGIN {
 
     $is_cygwin      = ($^O eq 'cygwin');
     $is_windows     = ($^O =~ /MSWin32/);
-    $to_screen      = -t *STDOUT;
     $dir_sep_chars  = $is_windows ? quotemeta( '\\/' ) : quotemeta( File::Spec->catfile( '', '' ) );
 }
 
@@ -260,6 +258,7 @@ sub get_command_line_options {
     $parser->getoptions( %{$getopt_specs} ) or
         App::Ack::die( 'See ack --help or ack --man for options.' );
 
+    my $to_screen = not output_to_pipe();
     my %defaults = (
         all            => 0,
         color          => $to_screen,
@@ -1449,7 +1448,7 @@ sub get_iterator {
 sub set_up_pager {
     my $command = shift;
 
-    return unless $to_screen;
+    return unless App::Ack::output_to_pipe();
 
     my $pager;
     if ( not open( $pager, '|-', $command ) ) {
@@ -1459,6 +1458,28 @@ sub set_up_pager {
 
     return;
 }
+
+=head2 input_from_pipe()
+
+Returns true if ack's input is coming from a pipe.
+
+=cut
+
+sub input_from_pipe() {
+    return -p STDIN;
+}
+
+
+=head2 output_to_pipe()
+
+Returns true if ack's input is coming from a pipe.
+
+=cut
+
+sub output_to_pipe() {
+    return -p STDOUT;
+}
+
 
 =head1 COPYRIGHT & LICENSE
 

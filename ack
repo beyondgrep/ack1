@@ -1043,6 +1043,9 @@ our %type_wanted;
 our %mappings;
 our %ignore_dirs;
 
+our $input_from_pipe;
+our $output_to_pipe;
+
 our $dir_sep_chars;
 our $is_cygwin;
 our $is_windows;
@@ -1130,9 +1133,13 @@ BEGIN {
         }
     }
 
-    $is_cygwin      = ($^O eq 'cygwin');
-    $is_windows     = ($^O =~ /MSWin32/);
-    $dir_sep_chars  = $is_windows ? quotemeta( '\\/' ) : quotemeta( File::Spec->catfile( '', '' ) );
+    # These have to be checked before any filehandle diddling.
+    $output_to_pipe  = not -t *STDOUT;
+    $input_from_pipe = -p STDIN;
+
+    $is_cygwin       = ($^O eq 'cygwin');
+    $is_windows      = ($^O =~ /MSWin32/);
+    $dir_sep_chars   = $is_windows ? quotemeta( '\\/' ) : quotemeta( File::Spec->catfile( '', '' ) );
 }
 
 
@@ -2275,13 +2282,13 @@ sub set_up_pager {
 
 
 sub input_from_pipe() {
-    return -p STDIN;
+    return $input_from_pipe;
 }
 
 
 
 sub output_to_pipe() {
-    return -p STDOUT;
+    return $output_to_pipe;
 }
 
 

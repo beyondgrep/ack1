@@ -10,6 +10,8 @@ NEXT
     under, and the full path to the Perl executable.
 
     [FIXES]
+    More tweaks to get the detection of input and output pipes working.
+
     Fixed an amazingly bad call to cmp_ok() in t/ack-passthru.t.
 
     [DOCUMENTATION]

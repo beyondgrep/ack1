@@ -9,7 +9,7 @@ This tests whether L<ack(1)>'s command line options work as expected.
 
 =cut
 
-use Test::More tests => 47;
+use Test::More tests => 51;
 use File::Next 0.34; # For the reslash() function
 
 use lib 't';
@@ -130,19 +130,27 @@ my $expected = File::Next::reslash( 't/swamp/options.pl' );
 
 # Files with matches
 for my $arg ( qw( -l --files-with-matches ) ) {
-    like
-        qx{ $^X -T $ack $arg "use strict" t/swamp/options.pl },
+    my @args    = ( $arg, 'use strict' );
+    my @files   = qw( t/swamp/options.pl );
+    my $results = run_ack( @args, @files );
+    like(
+        $results,
         qr{\Q$expected},
-        qq{$arg prints matching files};
+        qq{$arg prints matching files}
+    );
     option_in_usage( $arg );
 }
 
 # Files without match
 for my $arg ( qw( -L --files-without-match ) ) {
-    like
-        qx{ $^X -T $ack $arg "use snorgledork" t/swamp/options.pl },
+    my @args    = ( $arg, 'use snorgledork' );
+    my @files   = qw( t/swamp/options.pl );
+    my $results = run_ack( @args, @files );
+    like(
+        $results,
         qr{\Q$expected},
-        qq{$arg prints matching files};
+        qq{$arg prints matching files}
+    );
     option_in_usage( $arg );
 }
 

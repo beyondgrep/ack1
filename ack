@@ -213,6 +213,14 @@ On Windows, this option is off by default unless the
 L<Win32::Console::ANSI> module is installed or the C<ACK_PAGER_COLOR>
 environment variable is used.
 
+=item B<--color-filename=I<color>>
+
+Sets the color to be used for filenames.
+
+=item B<--color-match=I<color>>
+
+Sets the color to be used for matches.
+
 =item B<--env>, B<--noenv>
 
 B<--noenv> disables all environment processing. No F<.ackrc> is read
@@ -573,10 +581,14 @@ Underline and underscore are equivalent, as are clear and reset.
 The color alone sets the foreground color, and on_color sets the
 background color.
 
+This option can also be set with B<--color-filename>.
+
 =item ACK_COLOR_MATCH
 
 Specifies the color of the matching text when printed in B<--color>
 mode.  By default, it's "black on_yellow".
+
+This option can also be set with B<--color-match>.
 
 See B<ACK_COLOR_FILENAME> for the color specifications.
 
@@ -1183,6 +1195,8 @@ sub get_command_line_options {
         'break!'                => \$opt{break},
         c                       => \$opt{count},
         'color|colour!'         => \$opt{color},
+        'color-match=s'         => \$ENV{ACK_COLOR_MATCH},
+        'color-filename=s'      => \$ENV{ACK_COLOR_FILENAME},
         count                   => \$opt{count},
         'env!'                  => sub { }, # ignore this option, it is handled beforehand
         f                       => \$opt{f},
@@ -1634,6 +1648,8 @@ File presentation:
   --[no]color           Highlight the matching text (default: on unless
                         output is redirected, or on Windows)
   --[no]colour          Same as --[no]color
+  --color-filename=COLOR
+  --color-match=COLOR   Set the color for matches and filenames.
   --flush               Flush output immediately, even when ack is used
                         non-interactively (when output goes to a pipe or
                         file).

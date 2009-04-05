@@ -194,6 +194,8 @@ sub get_command_line_options {
         'break!'                => \$opt{break},
         c                       => \$opt{count},
         'color|colour!'         => \$opt{color},
+        'color-match=s'         => \$ENV{ACK_COLOR_MATCH},
+        'color-filename=s'      => \$ENV{ACK_COLOR_FILENAME},
         count                   => \$opt{count},
         'env!'                  => sub { }, # ignore this option, it is handled beforehand
         f                       => \$opt{f},
@@ -728,6 +730,8 @@ File presentation:
   --[no]color           Highlight the matching text (default: on unless
                         output is redirected, or on Windows)
   --[no]colour          Same as --[no]color
+  --color-filename=COLOR
+  --color-match=COLOR   Set the color for matches and filenames.
   --flush               Flush output immediately, even when ack is used
                         non-interactively (when output goes to a pipe or
                         file).

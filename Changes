@@ -9,6 +9,10 @@ NEXT
     --version now shows the version of Perl that ack is running
     under, and the full path to the Perl executable.
 
+    Added new switches --color-match and --color-filename, which
+    let you define ACK_COLOR_MATCH and ACK_COLOR_FILENAME from the
+    command line.
+
     [FIXES]
     More tweaks to get the detection of input and output pipes working.
 

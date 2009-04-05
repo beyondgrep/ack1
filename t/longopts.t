@@ -9,7 +9,7 @@ This tests whether L<ack(1)>'s command line options work as expected.
 
 =cut
 
-use Test::More tests => 45;
+use Test::More tests => 47;
 use File::Next 0.34; # For the reslash() function
 
 use lib 't';
@@ -115,10 +115,14 @@ for my $arg ( qw( -w --word-regexp ) ) {
 
 # Literal
 for my $arg ( qw( -Q --literal ) ) {
-    like
-        qx{ $^X -T $ack $arg "[abc]" t/swamp/options.pl },
+    my @args    = ( $arg, '[abc]' );
+    my @files   = qw( t/swamp/options.pl );
+    my $results = run_ack( @args, @files );
+    like(
+        $results,
         qr{\Q[abc]\E},
-        qq{$arg matches a literal string};
+        qq{$arg matches a literal string}
+    );
     option_in_usage( $arg );
 }
 

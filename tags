@@ -138,6 +138,7 @@ SINGLE_TEXT_MATCH	t/rc.t	/^SINGLE_TEXT_MATCH: {$/;"	l
 SINGLE_TEXT_MATCH_ENV	t/ack-env.t	/^SINGLE_TEXT_MATCH_ENV: {$/;"	l
 SINGLE_TEXT_MATCH_NOENV	t/ack-env.t	/^SINGLE_TEXT_MATCH_NOENV: {$/;"	l
 SKIP	t/file-permission.t	/^SKIP: {$/;"	l
+SMART_CASE	t/longopts.t	/^SMART_CASE: {$/;"	l
 SPECIFYING_A_BAK_FILE	t/command-line-files.t	/^SPECIFYING_A_BAK_FILE: {$/;"	l
 STANDARD_GROUPING	t/ack-group.t	/^STANDARD_GROUPING: {$/;"	l
 STARTING_POINTS	t/module.t	/^STARTING_POINTS: {$/;"	l

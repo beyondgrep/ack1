@@ -58,7 +58,7 @@ sub run_ack {
             or diag( join( "\n", "STDERR:", @{$stderr} ) );
     }
 
-    return @{$stdout};
+    return wantarray ? @{$stdout} : join( "\n", @{$stdout} );
 }
 
 { # scope for $ack_return_code;
@@ -83,8 +83,8 @@ sub run_ack_with_stderr {
     $ack_return_code = $rc;
     ## XXX what do do with $core or $sig?
 
-    open( my $fh, '<', $catcherr_file );
-    while( <$fh> ) {
+    open( my $fh, '<', $catcherr_file ) or die $!;
+    while ( <$fh> ) {
         push( @stderr, $_ );
     }
     close $fh or die $!;

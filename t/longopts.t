@@ -9,7 +9,7 @@ This tests whether L<ack(1)>'s command line options work as expected.
 
 =cut
 
-use Test::More tests => 34;
+use Test::More tests => 45;
 use File::Next 0.34; # For the reslash() function
 
 use lib 't';
@@ -21,103 +21,125 @@ my $swamp = 't/swamp';
 my $ack   = './ack';
 
 # Help
-for ( qw( --help ) ) {
-    like
-        qx{ $^X -T $ack $_ },
+for my $arg ( qw( --help ) ) {
+    my @args = ($arg);
+    my $results = run_ack( @args );
+    like(
+        $results,
         qr{ ^Usage: .* Example: }xs,
-        qq{$_ output is correct};
-    option_in_usage( $_ );
+        qq{$arg output is correct}
+    );
+    option_in_usage( $arg );
 }
 
 # Version
-for ( qw( --version ) ) {
-    like
-        qx{ $^X -T $ack $_ },
+for my $arg ( qw( --version ) ) {
+    my @args = ($arg);
+    my $results = run_ack( @args );
+    like(
+        $results,
         qr{ ^ack .* Copyright }xs,
-        qq{$_ output is correct};
-    option_in_usage( $_ );
+        qq{$arg output is correct}
+    );
+    option_in_usage( $arg );
 }
 
 # Ignore case
-for ( qw( -i --ignore-case ) ) {
-    like
-        qx{ $^X -T $ack $_ "upper case" t/swamp/options.pl },
+for my $arg ( qw( -i --ignore-case ) ) {
+    my @args    = ( $arg, 'upper case' );
+    my @files   = ( 't/swamp/options.pl' );
+    my $results = run_ack( @args, @files );
+    like(
+        $results,
         qr{UPPER CASE},
-        qq{$_ works correctly for ascii};
-    option_in_usage( $_ );
+        qq{$arg works correctly for ascii}
+    );
+    option_in_usage( $arg );
 }
 
-# Smart case
-{
-    my ($opt, $opt_doc_name) = ('--smart-case', '--[no]smart-case');
-    like
-        qx{ $^X -T $ack $opt "upper case" t/swamp/options.pl },
+SMART_CASE: {
+    my @files = 't/swamp/options.pl';
+    my $opt = '--smart-case';
+    like(
+        +run_ack( $opt, 'upper case', @files ),
         qr{UPPER CASE},
-        qq{$opt turn on ignore-case when PATTERN has no upper};
-    unlike
-        qx{ $^X -T $ack $opt "Upper case" t/swamp/options.pl },
+        qq{$opt turn on ignore-case when PATTERN has no upper}
+    );
+    unlike(
+        +run_ack( $opt, 'Upper case', @files ),
         qr{UPPER CASE},
-        qq{$opt does nothing when PATTERN has upper};
-    option_in_usage( $opt_doc_name );
+        qq{$opt does nothing when PATTERN has upper}
+    );
+    option_in_usage( '--[no]smart-case' );
 
-    like
-        qx{ $^X -T $ack $opt -i "UpPer CaSe" t/swamp/options.pl },
+    like(
+        +run_ack( $opt, '-i', 'UpPer CaSe', @files ),
         qr{UPPER CASE},
-        qq{-i overrides $opt, forcing ignore case, even when PATTERN has upper};
+        qq{-i overrides $opt, forcing ignore case, even when PATTERN has upper}
+    );
 }
 
 # Invert match
 #   this test was changed from using unlike to using like because
 #   old versions of Test::More::unlike (before 0.48_2) cannot
 #   work with multiline output (which ack produces in this case).
-for ( qw( -v --invert-match ) ) {
-    like
-        qx{ $^X -T $ack $_ "use warnings" t/swamp/options.pl },
+for my $arg ( qw( -v --invert-match ) ) {
+    my @args    = ( $arg, 'use warnings' );
+    my @files   = qw( t/swamp/options.pl );
+    my $results = run_ack( @args, @files );
+    like(
+        $results,
         qr{use strict;\n\n=head1 NAME}, # no 'use warnings' in between here
-        qq{$_ works correctly};
-    option_in_usage( $_ );
+        qq{$arg works correctly}
+    );
+    option_in_usage( $arg );
 }
 
 # Word regexp
-for ( qw( -w --word-regexp ) ) {
-    like
-        qx{ $^X -T $ack $_ "word" t/swamp/options.pl },
+for my $arg ( qw( -w --word-regexp ) ) {
+    my @args    = ( $arg, 'word' );
+    my @files   = qw( t/swamp/options.pl );
+    my $results = run_ack( @args, @files );
+    like(
+        $results,
         qr{ word },
-        qq{$_ ignores non-words};
-    unlike
-        qx{ $^X -T $ack $_ "word" t/swamp/options.pl },
+        qq{$arg ignores non-words}
+    );
+    unlike(
+        $results,
         qr{notaword},
-        qq{$_ ignores non-words};
-    option_in_usage( $_ );
+        qq{$arg ignores non-words}
+    );
+    option_in_usage( $arg );
 }
 
 # Literal
-for ( qw( -Q --literal ) ) {
+for my $arg ( qw( -Q --literal ) ) {
     like
-        qx{ $^X -T $ack $_ "[abc]" t/swamp/options.pl },
+        qx{ $^X -T $ack $arg "[abc]" t/swamp/options.pl },
         qr{\Q[abc]\E},
-        qq{$_ matches a literal string};
-    option_in_usage( $_ );
+        qq{$arg matches a literal string};
+    option_in_usage( $arg );
 }
 
 my $expected = File::Next::reslash( 't/swamp/options.pl' );
 
 # Files with matches
-for ( qw( -l --files-with-matches ) ) {
+for my $arg ( qw( -l --files-with-matches ) ) {
     like
-        qx{ $^X -T $ack $_ "use strict" t/swamp/options.pl },
+        qx{ $^X -T $ack $arg "use strict" t/swamp/options.pl },
         qr{\Q$expected},
-        qq{$_ prints matching files};
-    option_in_usage( $_ );
+        qq{$arg prints matching files};
+    option_in_usage( $arg );
 }
 
 # Files without match
-for ( qw( -L --files-without-match ) ) {
+for my $arg ( qw( -L --files-without-match ) ) {
     like
-        qx{ $^X -T $ack $_ "use snorgledork" t/swamp/options.pl },
+        qx{ $^X -T $ack $arg "use snorgledork" t/swamp/options.pl },
         qr{\Q$expected},
-        qq{$_ prints matching files};
-    option_in_usage( $_ );
+        qq{$arg prints matching files};
+    option_in_usage( $arg );
 }
 
 my $usage;

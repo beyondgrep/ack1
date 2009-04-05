@@ -17,7 +17,7 @@ SINGLE_TEXT_MATCH_ENV: {
 
     my @files = qw( t/text );
     local $ENV{ACK_OPTIONS} = '-1';         # set the parameter via the options
-    my @args = qw( Sue! -h --text --env );  # and specifying --env does not change the result
+    my @args = qw( Sue! -h --text --env --nocolor );  # and specifying --env does not change the result
     my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Looking for first instance of Sue! with --env' );
@@ -41,7 +41,7 @@ SEARCH_FOR_DASH_DASH_NOENV: {
     my @expected = ' magic string --noenv';
     my @files = qw( t/text );
     local $ENV{ACK_OPTIONS} = '-h --cc';          # set the parameter via the options
-    my @args = qw( -- --noenv t/swamp ); # but disable environment processing
+    my @args = qw( --nocolor -- --noenv t/swamp ); # but disable environment processing
     my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Looking for Sue! with --noenv' );

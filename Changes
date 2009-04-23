@@ -1,6 +1,6 @@
 Changelog for ack
 
-NEXT
+1.89_01
     [DISTRIBUTION]
     Updated Makefile.PL to use new ExtUtils::MakeMaker features.
     Thanks, Schwern.
@@ -15,6 +15,8 @@ NEXT
 
     Added new switch --column to display the column of the first
     hit on the row.  Thanks to Eric Van Dewoestine.
+
+    Added .ss to --scheme.
 
     [FIXES]
     More tweaks to get the detection of input and output pipes

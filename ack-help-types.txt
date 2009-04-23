@@ -39,7 +39,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]python       .py
     --[no]rake         Rakefiles
     --[no]ruby         .rb .rhtml .rjs .rxml .erb .rake
-    --[no]scheme       .scm
+    --[no]scheme       .scm .ss
     --[no]shell        .sh .bash .csh .tcsh .ksh .zsh
     --[no]skipped      Files, but not directories, normally skipped by ack (default: off)
     --[no]smalltalk    .st

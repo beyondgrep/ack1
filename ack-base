@@ -213,6 +213,11 @@ Sets the color to be used for filenames.
 
 Sets the color to be used for matches.
 
+=item B<--column>
+
+Show the column number of the first match.  This is helpful for editors
+that can place your cursor at a given position.
+
 =item B<--env>, B<--noenv>
 
 B<--noenv> disables all environment processing. No F<.ackrc> is read
@@ -783,6 +788,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Eric Van Dewoestine.
 Sitaram Chamarty,
 Adam James,
 Richard Carlsson,

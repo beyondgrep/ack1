@@ -196,6 +196,7 @@ sub get_command_line_options {
         'color|colour!'         => \$opt{color},
         'color-match=s'         => \$ENV{ACK_COLOR_MATCH},
         'color-filename=s'      => \$ENV{ACK_COLOR_FILENAME},
+        'column!'               => \$opt{column},
         count                   => \$opt{count},
         'env!'                  => sub { }, # ignore this option, it is handled beforehand
         f                       => \$opt{f},
@@ -703,6 +704,7 @@ Search output:
   -H, --with-filename   Print the filename for each match
   -h, --no-filename     Suppress the prefixing filename on output
   -c, --count           Show number of lines matching per file
+  --column              Show the column number of the first match
 
   -A NUM, --after-context=NUM
                         Print NUM lines of trailing context after matching
@@ -943,6 +945,7 @@ sub print_blank_line        { App::Ack::print( "\n" ) }
 sub print_separator         { App::Ack::print( "--\n" ) }
 sub print_filename          { App::Ack::print( $_[0], $_[1] ) }
 sub print_line_no           { App::Ack::print( $_[0], $_[1] ) }
+sub print_column_no         { App::Ack::print( $_[0], $_[1] ) }
 sub print_count {
     my $filename = shift;
     my $nmatches = shift;
@@ -1100,6 +1103,7 @@ sub print_match_or_context {
     my $color = $opt->{color};
     my $heading = $opt->{heading};
     my $show_filename = $opt->{show_filename};
+    my $show_column = $opt->{with_column};
 
     if ( $show_filename ) {
         if ( not defined $display_filename ) {
@@ -1137,6 +1141,8 @@ sub print_match_or_context {
             }
         }
         else {
+            my $col = $-[0] + 1;
+
             if ( $color && $is_match && $regex &&
                  s/$regex/Term::ANSIColor::colored( substr($_, $-[0], $+[0] - $-[0]), $ENV{ACK_COLOR_MATCH} )/eg ) {
                 # At the end of the line reset the color and remove newline
@@ -1145,6 +1151,9 @@ sub print_match_or_context {
             else {
                 # remove any kind of newline at the end of the line
                 s/[\r\n]*\z//;
+            }
+            if ( $show_column ) {
+                App::Ack::print_column_no( $col, $sep );
             }
             App::Ack::print($_ . "\n");
         }

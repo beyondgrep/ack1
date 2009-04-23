@@ -13,8 +13,12 @@ NEXT
     let you define ACK_COLOR_MATCH and ACK_COLOR_FILENAME from the
     command line.
 
+    Added new switch --column to display the column of the first
+    hit on the row.  Thanks to Eric Van Dewoestine.
+
     [FIXES]
-    More tweaks to get the detection of input and output pipes working.
+    More tweaks to get the detection of input and output pipes
+    working.
 
     Fixed an amazingly bad call to cmp_ok() in t/ack-passthru.t.
 

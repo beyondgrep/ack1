@@ -1982,10 +1982,10 @@ sub print_match_or_context {
     my $is_match = shift; # is there a match on the line?
     my $line_no  = shift;
 
-    my $color = $opt->{color};
-    my $heading = $opt->{heading};
+    my $color         = $opt->{color};
+    my $heading       = $opt->{heading};
     my $show_filename = $opt->{show_filename};
-    my $show_column = $opt->{with_column};
+    my $show_column   = $opt->{column};
 
     if ( $show_filename ) {
         if ( not defined $display_filename ) {
@@ -2312,13 +2312,13 @@ sub set_up_pager {
 }
 
 
-sub input_from_pipe() {
+sub input_from_pipe {
     return $input_from_pipe;
 }
 
 
 
-sub output_to_pipe() {
+sub output_to_pipe {
     return $output_to_pipe;
 }
 

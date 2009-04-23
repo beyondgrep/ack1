@@ -153,6 +153,8 @@ UNRESTRICTED_AND_DASH_G_INTERACTION	t/ack-g.t	/^UNRESTRICTED_AND_DASH_G_INTERACT
 Usage	Ack.pm	/^Usage: ack [OPTION]... PATTERN [FILES]$/;"	l
 Usage	Ack.pm	/^Usage: ack [OPTION]... PATTERN [FILE]$/;"	l
 VERSION	t/module.t	/^VERSION: {$/;"	l
+WITHOUT_COLUMNS	t/ack-column.t	/^WITHOUT_COLUMNS: {$/;"	l
+WITH_COLUMNS	t/ack-column.t	/^WITH_COLUMNS: {$/;"	l
 WITH_O	t/ack-o.t	/^WITH_O: {$/;"	l
 WITH_O	t/context.t	/^WITH_O: {$/;"	l
 WITH_OUTPUT	t/ack-o.t	/^WITH_OUTPUT: {$/;"	l
@@ -235,6 +237,7 @@ pipe_into_ack	t/Util.pm	/^sub pipe_into_ack {$/;"	s
 prep_environment	t/Util.pm	/^sub prep_environment {$/;"	s
 print	Ack.pm	/^sub print                   { print {$fh} @_ }$/;"	s
 print_blank_line	Ack.pm	/^sub print_blank_line        { App::Ack::print( "\\n" ) }$/;"	s
+print_column_no	Ack.pm	/^sub print_column_no         { App::Ack::print( $_[0], $_[1] ) }$/;"	s
 print_count	Ack.pm	/^sub print_count {$/;"	s
 print_count0	Ack.pm	/^sub print_count0 {$/;"	s
 print_filename	Ack.pm	/^sub print_filename          { App::Ack::print( $_[0], $_[1] ) }$/;"	s

@@ -1,11 +1,8 @@
 Changelog for ack
 
-1.89_02
-    [FIXES]
-    No longer die if you have a .tar.gz file in your tree.
+NEXT
 
-
-1.89_01
+1.89_02     Wed May 13 16:20:21 CDT 2009
     [DISTRIBUTION]
     Updated Makefile.PL to use new ExtUtils::MakeMaker features.
     Thanks, Schwern.
@@ -24,6 +21,8 @@ Changelog for ack
     Added .ss to --scheme.
 
     [FIXES]
+    No longer die if you have a .tar.gz file in your tree.
+
     More tweaks to get the detection of input and output pipes
     working.
 

@@ -2143,7 +2143,8 @@ sub print_matches {
     my $nmatches = 0;
     while ( defined ( my $filename = $iter->() ) ) {
         my $repo;
-        if ( $filename =~ /\.tar\.gz$/ ) {
+        my $tarballs_work = 0;
+        if ( $tarballs_work && $filename =~ /\.tar\.gz$/ ) {
             App::Ack::die( 'Not working here yet' );
             require App::Ack::Repository::Tar; # XXX Error checking
             $repo = App::Ack::Repository::Tar->new( $filename );

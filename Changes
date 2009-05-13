@@ -1,5 +1,10 @@
 Changelog for ack
 
+1.89_02
+    [FIXES]
+    No longer die if you have a .tar.gz file in your tree.
+
+
 1.89_01
     [DISTRIBUTION]
     Updated Makefile.PL to use new ExtUtils::MakeMaker features.

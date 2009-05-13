@@ -121,6 +121,7 @@ t/swamp/perl.cgi
 t/swamp/perl.pl
 t/swamp/perl.pm
 t/swamp/perl.pod
+t/swamp/perl.tar.gz
 t/swamp/Rakefile
 t/swamp/sample.rake
 t/swamp/solution8.tar

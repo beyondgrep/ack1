@@ -689,7 +689,11 @@ list of all the Perl files in a tree, ideal for sending into F<xargs>.
 For example:
 
     # Change all "this" to "that" in all Perl files in a tree.
-    ack -f --perl | perl -p -i -e's/this/that/g'
+    ack -f --perl | xargs perl -p -i -e's/this/that/g'
+
+or if you prefer:
+
+    perl -p -i -e's/this/thatg/' $(ack -f --perl)
 
 =head2 Use F<-Q> when in doubt about metacharacters
 

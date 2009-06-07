@@ -4,6 +4,9 @@ NEXT
     [FIXES]
     Expanded --files-without-match to --files-without-matches.
 
+    [DOCUMENTATION]
+    Fixed an incorrect command line in the docs for -f.
+
 1.89_02     Wed May 13 16:20:21 CDT 2009
     [DISTRIBUTION]
     Updated Makefile.PL to use new ExtUtils::MakeMaker features.

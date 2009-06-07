@@ -24,8 +24,8 @@ Search output:
   --line=NUM            Only print line(s) NUM of each file
   -l, --files-with-matches
                         Only print filenames containing matches
-  -L, --files-without-match
-                        Only print filenames with no match
+  -L, --files-without-matches
+                        Only print filenames with no matches
   -o                    Show only the part of a line matching PATTERN
                         (turns off text highlighting)
   --passthru            Print all lines, whether matching or not

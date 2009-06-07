@@ -142,7 +142,7 @@ for my $arg ( qw( -l --files-with-matches ) ) {
 }
 
 # Files without match
-for my $arg ( qw( -L --files-without-match ) ) {
+for my $arg ( qw( -L --files-without-matches ) ) {
     my @args    = ( $arg, 'use snorgledork' );
     my @files   = qw( t/swamp/options.pl );
     my $results = run_ack( @args, @files );

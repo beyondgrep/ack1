@@ -796,7 +796,8 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
-Eric Van Dewoestine.
+Ingmar Vanhassel,
+Eric Van Dewoestine,
 Sitaram Chamarty,
 Adam James,
 Richard Carlsson,
@@ -1218,7 +1219,7 @@ sub get_command_line_options {
         'i|ignore-case'         => \$opt{i},
         'lines=s'               => sub { shift; my $val = shift; push @{$opt{lines}}, $val },
         'l|files-with-matches'  => \$opt{l},
-        'L|files-without-match' => sub { $opt{l} = $opt{v} = 1 },
+        'L|files-without-matches' => sub { $opt{l} = $opt{v} = 1 },
         'm|max-count=i'         => \$opt{m},
         'match=s'               => \$opt{regex},
         n                       => \$opt{n},
@@ -1615,8 +1616,8 @@ Search output:
   --line=NUM            Only print line(s) NUM of each file
   -l, --files-with-matches
                         Only print filenames containing matches
-  -L, --files-without-match
-                        Only print filenames with no match
+  -L, --files-without-matches
+                        Only print filenames with no matches
   -o                    Show only the part of a line matching PATTERN
                         (turns off text highlighting)
   --passthru            Print all lines, whether matching or not

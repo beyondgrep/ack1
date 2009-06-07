@@ -1,6 +1,8 @@
 Changelog for ack
 
 NEXT
+    [FIXES]
+    Expanded --files-without-match to --files-without-matches.
 
 1.89_02     Wed May 13 16:20:21 CDT 2009
     [DISTRIBUTION]

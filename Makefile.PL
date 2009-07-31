@@ -27,6 +27,7 @@ my %parms = (
         'Test::More'        => 0,
         'File::Next'        => 0.40, # Handle files called "0"
         'File::Basename'    => 0,
+        'Pod::Usage'        => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'ack-1* nytprof*' },

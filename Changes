@@ -7,6 +7,9 @@ NEXT
     [DOCUMENTATION]
     Fixed an incorrect command line in the docs for -f.
 
+    Added notes on --pager.  Thanks to Mike Morearty.
+
+
 1.89_02     Wed May 13 16:20:21 CDT 2009
     [DISTRIBUTION]
     Updated Makefile.PL to use new ExtUtils::MakeMaker features.

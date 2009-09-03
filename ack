@@ -800,6 +800,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Mike Morearty,
 Ingmar Vanhassel,
 Eric Van Dewoestine,
 Sitaram Chamarty,
@@ -855,7 +856,7 @@ and Pete Krawczyk.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2005-2009 Andy Lester, all rights reserved.
+Copyright 2005-2009 Andy Lester.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of either:
@@ -877,7 +878,7 @@ use strict;
 use warnings;
 
 
-our $VERSION = '1.02';
+our $VERSION = '1.06';
 
 
 
@@ -903,6 +904,8 @@ BEGIN {
 
 
 sub files {
+    ($_[0] eq __PACKAGE__) && die 'File::Next::files must not be invoked as File::Next->files';
+
     my ($parms,@queue) = _setup( \%files_defaults, @_ );
     my $filter = $parms->{file_filter};
 
@@ -933,8 +936,8 @@ sub files {
 
 
 
-sub sort_standard($$)   { return $_[0]->[1] cmp $_[1]->[1] };
-sub sort_reverse($$)    { return $_[1]->[1] cmp $_[0]->[1] };
+sub sort_standard($$)   { return $_[0]->[1] cmp $_[1]->[1] }
+sub sort_reverse($$)    { return $_[1]->[1] cmp $_[0]->[1] }
 
 sub reslash {
     my $path = shift;
@@ -1003,8 +1006,7 @@ sub _candidate_files {
     my $follow_symlinks = $parms->{follow_symlinks};
     my $sort_sub = $parms->{sort_files};
 
-    while ( defined ( my $file = readdir $dh ) ) {
-        next if $skip_dirs{$file};
+    for my $file ( grep { !exists $skip_dirs{$_} } readdir $dh ) {
         my $has_stat;
 
         # Only do directory checking if we have a descend_filter
@@ -1648,8 +1650,8 @@ Search output:
                         only works with -f, -g, -l, -L or -c.
 
 File presentation:
-  --pager=COMMAND       Pipes all ack output through COMMAND.
-                        Ignored if output is redirected.
+  --pager=COMMAND       Pipes all ack output through COMMAND.  For example,
+                        --pager="less -R".  Ignored if output is redirected.
   --nopager             Do not send output through a pager.  Cancels any
                         setting in ~/.ackrc, ACK_PAGER or ACK_PAGER_COLOR.
   --[no]heading         Print a filename heading above each file's results.

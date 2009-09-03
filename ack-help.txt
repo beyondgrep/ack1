@@ -52,8 +52,8 @@ Search output:
                         only works with -f, -g, -l, -L or -c.
 
 File presentation:
-  --pager=COMMAND       Pipes all ack output through COMMAND.
-                        Ignored if output is redirected.
+  --pager=COMMAND       Pipes all ack output through COMMAND.  For example,
+                        --pager="less -R".  Ignored if output is redirected.
   --nopager             Do not send output through a pager.  Cancels any
                         setting in ~/.ackrc, ACK_PAGER or ACK_PAGER_COLOR.
   --[no]heading         Print a filename heading above each file's results.

@@ -30,24 +30,30 @@ for my $arg ( @ARGV ) {
 
     warn "Reading $filename\n";
     open( my $fh, '<', $filename ) or die "Can't open $filename: $!";
-
+    my $in_pod = 0;
     while ( <$fh> ) {
         next if /^use (File::Next|App::Ack)/;
 
         # See if we're in module POD blocks
-        my $skip = ($filename ne 'ack-base') && (/^=/ .. /^=cut/);
-        if ( !$skip ) {
-            # Replace the shebang line and append 'no edit' comment
-            if ( s{^#!.+}{#!/usr/bin/env perl} ) {
-                $_ .= $NO_EDIT_COMMENT;
+        if ( $filename ne 'ack-base' ) {
+            if ( /^=(\w+)/ ) {
+                $in_pod = ($1 ne 'cut');
+                next;
             }
-
-            # Remove Perl::Critic comments.
-            # I'd like to remove all comments, but this is a start
-            s{\s*##.+critic.*}{};
-
-            $code .= $_;
+            elsif ( $in_pod ) {
+                next;
+            }
         }
+
+        # Replace the shebang line and append 'no edit' comment
+        if ( s{^#!.+}{#!/usr/bin/env perl} ) {
+            $_ .= $NO_EDIT_COMMENT;
+        }
+
+        # Remove Perl::Critic comments.
+        # I'd like to remove all comments, but this is a start
+        s{\s*##.+critic.*}{};
+        $code .= $_;
     }
     close $fh;
 }

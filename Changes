@@ -9,6 +9,10 @@ NEXT
 
     Added notes on --pager.  Thanks to Mike Morearty.
 
+    [BUILD]
+    Made the squash program more robust when handling POD.  Thanks
+    to Kent Fredric.
+
 
 1.89_02     Wed May 13 16:20:21 CDT 2009
     [DISTRIBUTION]

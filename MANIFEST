@@ -43,6 +43,7 @@ t/ack-w.t
 t/code.t
 t/command-line-files.t
 t/context.t
+t/encoding.t
 t/filetypes.t
 t/file-permission.t
 t/illegal-regex.t

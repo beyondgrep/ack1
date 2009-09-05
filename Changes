@@ -16,6 +16,9 @@ NEXT
     [FIXES]
     Expanded --files-without-match to --files-without-matches.
 
+    Removed all the hi-bit characters, so we don't have any encoding
+    problems.  It's all entities now.
+
     [DOCUMENTATION]
     Fixed an incorrect command line in the docs for -f.
 

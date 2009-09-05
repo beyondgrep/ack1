@@ -9,6 +9,8 @@ NEXT
     --no-recurse for orthoganality. Thanks to Mark Stosberg and
     Ryan Niebur.
 
+    Version in --version is prettier.  Thanks, Ori Avtalion.
+
     [FIXES]
     Expanded --files-without-match to --files-without-matches.
 

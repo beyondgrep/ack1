@@ -862,10 +862,11 @@ sub get_version_statement {
         my $ext = $Config::Config{_exe};
         $this_perl .= $ext unless $this_perl =~ m/$ext$/i;
     }
+    my $ver = sprintf( '%vd', $^V );
 
     return <<"END_OF_VERSION";
 ack $VERSION
-Running under Perl $] at $this_perl
+Running under Perl $ver at $this_perl
 
 $copyright
 

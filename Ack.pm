@@ -72,6 +72,7 @@ BEGIN {
 
     %mappings = (
         actionscript => [qw( as mxml )],
+        ada         => [qw( ada adb ads )],
         asm         => [qw( asm s )],
         batch       => [qw( bat cmd )],
         binary      => q{Binary files, as defined by Perl's -B op (default: off)},

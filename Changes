@@ -1,6 +1,9 @@
 Changelog for ack
 
 NEXT
+    [ENHANCEMENTS]
+    Added Ada support.  Thanks to Shaun Patterson.
+
     [FIXES]
     Expanded --files-without-match to --files-without-matches.
 

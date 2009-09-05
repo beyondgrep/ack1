@@ -11,6 +11,8 @@ NEXT
 
     Version in --version is prettier.  Thanks, Ori Avtalion.
 
+    Added an updated ack.bash_completion.sh from Adam James.
+
     [FIXES]
     Expanded --files-without-match to --files-without-matches.
 

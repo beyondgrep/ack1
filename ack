@@ -800,6 +800,7 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Ryan Niebur,
 Kent Fredric,
 Mike Morearty,
 Ingmar Vanhassel,
@@ -1230,7 +1231,7 @@ sub get_command_line_options {
         'L|files-without-matches' => sub { $opt{l} = $opt{v} = 1 },
         'm|max-count=i'         => \$opt{m},
         'match=s'               => \$opt{regex},
-        n                       => \$opt{n},
+        'n|no-recurse'          => \$opt{n},
         o                       => sub { $opt{output} = '$&' },
         'output=s'              => \$opt{output},
         'pager=s'               => \$opt{pager},
@@ -1238,6 +1239,7 @@ sub get_command_line_options {
         'passthru'              => \$opt{passthru},
         'print0'                => \$opt{print0},
         'Q|literal'             => \$opt{Q},
+        'r|R|recurse'           => sub {},
         'smart-case!'           => \$opt{smart_case},
         'sort-files'            => \$opt{sort_files},
         'u|unrestricted'        => \$opt{u},
@@ -1682,7 +1684,8 @@ File inclusion/exclusion:
                         Ignores CVS, .svn and other ignored directories
   -u, --unrestricted    All files and directories searched
   --[no]ignore-dir=name Add/Remove directory from the list of ignored dirs
-  -n                    No descending into subdirectories
+  -r, -R, --recurse     Recurse into subdirectories (ack's default behavior)
+  -n, --no-recurse      No descending into subdirectories
   -G REGEX              Only search files that match REGEX
 
   --perl                Include only Perl files.

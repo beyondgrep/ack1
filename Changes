@@ -4,6 +4,11 @@ NEXT
     [ENHANCEMENTS]
     Added Ada support.  Thanks to Shaun Patterson.
 
+    Added -r, -R and --recurse options as in grep.  They have no
+    effect because directory recursion is on by default.  Also added
+    --no-recurse for orthoganality. Thanks to Mark Stosberg and
+    Ryan Niebur.
+
     [FIXES]
     Expanded --files-without-match to --files-without-matches.
 

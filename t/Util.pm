@@ -34,6 +34,12 @@ sub build_command_line {
     return "$^X -T ./capture-stderr $catcherr_file @args";
 }
 
+sub build_ack_command_line {
+    my @args = @_;
+
+    return build_command_line( './ack', @args );
+}
+
 sub slurp {
     my $iter = shift;
 
@@ -77,7 +83,7 @@ sub run_ack_with_stderr {
         unshift( @args, '--noenv' );
     }
 
-    my $cmd = build_command_line( './ack', @args );
+    my $cmd = build_ack_command_line( @args );
 
     @stdout = `$cmd`;
     my ($sig,$core,$rc) = (($? & 127),  ($? & 128) , ($? >> 8));
@@ -106,7 +112,7 @@ sub pipe_into_ack {
     my $input = shift;
     my @args = @_;
 
-    my $cmd = build_command_line( './ack', @args );
+    my $cmd = build_ack_command_line( @args );
     $cmd = "$^X -pe1 $input | $cmd";
     my @results = `$cmd`;
     chomp @results;

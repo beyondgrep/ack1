@@ -12,11 +12,11 @@ prep_environment();
 
 SINGLE_TEXT_MATCH: {
     my @expected = (
-        'And I said: "My name is Sue! How do you do! Now you gonna die!"',
+        'Was before he left, he went and named me Sue.'
     );
 
     my @files = qw( t/text );
-    my @args = qw( Sue! -1 -h --text );
+    my @args = qw( Sue -1 -h --text );
     my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Looking for first instance of Sue!' );
@@ -29,7 +29,7 @@ DASH_V: {
     );
 
     my @files = qw( t/text/boy-named-sue.txt );
-    my @args = qw( Sue! -1 -h -v --text );
+    my @args = qw( Sue -1 -h -v --text );
     my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Looking for first non-match' );

@@ -60,7 +60,7 @@ sub run_ack {
         fail( q{Automatically fail stderr check for TODO tests.} );
     }
     else {
-        is( scalar @{$stderr}, 0, 'Should have no output to stderr' )
+        is( scalar @{$stderr}, 0, "Should have no output to stderr: ack @args" )
             or diag( join( "\n", "STDERR:", @{$stderr} ) );
     }
 

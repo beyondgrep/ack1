@@ -169,6 +169,7 @@ _thpppt	Ack.pm	/^sub _thpppt {$/;"	s
 ack	t/command-line-files.t	/^ack: non-existent-file.txt: No such file or directory$/;"	l
 ack_lists_match	t/Util.pm	/^sub ack_lists_match {$/;"	s
 ack_sets_match	t/Util.pm	/^sub ack_sets_match {$/;"	s
+build_ack_command_line	t/Util.pm	/^sub build_ack_command_line {$/;"	s
 build_command_line	t/Util.pm	/^sub build_command_line {$/;"	s
 build_regex	Ack.pm	/^sub build_regex {$/;"	s
 by_2nd	t/module.t	/^sub by_2nd { return $a->[1] cmp $b->[1]}$/;"	s

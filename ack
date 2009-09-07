@@ -2039,7 +2039,7 @@ sub print_match_or_context {
         }
         else {
             if ( $color && $is_match && $regex &&
-                 s/$regex/Term::ANSIColor::colored( substr($_, $match_start, $match_end - $match_start), $ENV{ACK_COLOR_MATCH} )/eg ) {
+                 s/$regex/Term::ANSIColor::colored( substr($_, $-[0], $+[0] - $-[0]), $ENV{ACK_COLOR_MATCH} )/eg ) {
                 # At the end of the line reset the color and remove newline
                 s/[\r\n]*\z/\e[0m\e[K/;
             }

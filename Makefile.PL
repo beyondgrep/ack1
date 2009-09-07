@@ -43,7 +43,7 @@ if ( $ExtUtils::MakeMaker::VERSION ge '6.46' ) {
             homepage    => 'http://betterthangrep.com/',
             bugtracker  => 'http://code.google.com/p/ack/issues/list',
             license     => 'http://dev.perl.org/licenses/',
-            Repository  => 'http://code.google.com/p/ack/source',
+            repository  => 'http://code.google.com/p/ack/source',
             MailingList => 'http://groups.google.com/group/ack-users',
         }
     };

@@ -1934,7 +1934,7 @@ sub search_resource {
 
             if ( $keep_context ) {
                 if ( $after ) {
-                    print_match_or_context( $opt, 0, $., $_ );
+                    print_match_or_context( $opt, 0, $., $-[0], $+[0], $_ );
                     $after--;
                 }
                 elsif ( $before_context ) {
@@ -1969,7 +1969,7 @@ sub search_resource {
         }
         if ( $keep_context ) {
             if ( @before ) {
-                print_match_or_context( $opt, 0, $before_starts_at_line, @before );
+                print_match_or_context( $opt, 0, $before_starts_at_line, $-[0], $+[0], @before );
                 @before = ();
                 $before_starts_at_line = 0;
             }
@@ -1980,7 +1980,7 @@ sub search_resource {
                 $after = $after_context;
             }
         }
-        print_match_or_context( $opt, 1, $., $_ );
+        print_match_or_context( $opt, 1, $., $-[0], $+[0], $_ );
 
         last if $max && ( $nmatches >= $max ) && !$after;
     } # while
@@ -1991,9 +1991,11 @@ sub search_resource {
 
 
 sub print_match_or_context {
-    my $opt      = shift; # opts array
-    my $is_match = shift; # is there a match on the line?
-    my $line_no  = shift;
+    my $opt         = shift; # opts array
+    my $is_match    = shift; # is there a match on the line?
+    my $line_no     = shift;
+    my $match_start = shift;
+    my $match_end   = shift;
 
     my $color         = $opt->{color};
     my $heading       = $opt->{heading};
@@ -2037,7 +2039,7 @@ sub print_match_or_context {
         }
         else {
             if ( $color && $is_match && $regex &&
-                 s/$regex/Term::ANSIColor::colored( substr($_, $-[0], $+[0] - $-[0]), $ENV{ACK_COLOR_MATCH} )/eg ) {
+                 s/$regex/Term::ANSIColor::colored( substr($_, $match_start, $match_end - $match_start), $ENV{ACK_COLOR_MATCH} )/eg ) {
                 # At the end of the line reset the color and remove newline
                 s/[\r\n]*\z/\e[0m\e[K/;
             }
@@ -2046,7 +2048,7 @@ sub print_match_or_context {
                 s/[\r\n]*\z//;
             }
             if ( $show_column ) {
-                App::Ack::print_column_no( $-[0]+1, $sep );
+                App::Ack::print_column_no( $match_start+1, $sep );
             }
             App::Ack::print($_ . "\n");
         }

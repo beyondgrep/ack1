@@ -1145,8 +1145,6 @@ sub print_match_or_context {
             }
         }
         else {
-            my $col = $-[0] + 1;
-
             if ( $color && $is_match && $regex &&
                  s/$regex/Term::ANSIColor::colored( substr($_, $-[0], $+[0] - $-[0]), $ENV{ACK_COLOR_MATCH} )/eg ) {
                 # At the end of the line reset the color and remove newline
@@ -1157,7 +1155,7 @@ sub print_match_or_context {
                 s/[\r\n]*\z//;
             }
             if ( $show_column ) {
-                App::Ack::print_column_no( $col, $sep );
+                App::Ack::print_column_no( $-[0]+1, $sep );
             }
             App::Ack::print($_ . "\n");
         }

@@ -22,6 +22,8 @@ NEXT
     Fixed capture-stderr to localize some globals that were obscuring
     errors.  Thanks very much to Christopher Madsen.
 
+    Fixed uninitialized errors in tickets #138 and #159.
+
     [DOCUMENTATION]
     Fixed an incorrect command line in the docs for -f.
 

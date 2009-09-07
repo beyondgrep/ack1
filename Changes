@@ -19,6 +19,9 @@ NEXT
     Removed all the hi-bit characters, so we don't have any encoding
     problems.  It's all entities now.
 
+    Fixed capture-stderr to localize some globals that were obscuring
+    errors.  Thanks very much to Christopher Madsen.
+
     [DOCUMENTATION]
     Fixed an incorrect command line in the docs for -f.
 

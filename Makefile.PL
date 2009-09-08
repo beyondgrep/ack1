@@ -27,6 +27,7 @@ my %parms = (
         'Test::More'        => 0,
         'File::Next'        => 0.40, # Handle files called "0"
         'File::Basename'    => 0,
+        'Pod::Usage'        => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'ack-1* nytprof*' },
@@ -36,16 +37,17 @@ if ( $ExtUtils::MakeMaker::VERSION =~ /^\d\.\d\d$/ and $ExtUtils::MakeMaker::VER
     $parms{LICENSE} = 'perl';
 }
 
-if ( $ExtUtils::MakeMaker::VERSION ge '6.36' ) {
-    $parms{EXTRA_META} = <<EOF;
-resources:
-    homepage: http://petdance.com/ack/
-    bugtracker: http://code.google.com/p/ack/issues/list
-    license: http://dev.perl.org/licenses/
-    Repository: http://code.google.com/p/ack/source
-    MailingList: http://groups.google.com/group/ack-users
-EOF
-    }
+if ( $ExtUtils::MakeMaker::VERSION ge '6.46' ) {
+    $parms{META_MERGE} = {
+        resources => {
+            homepage    => 'http://betterthangrep.com/',
+            bugtracker  => 'http://code.google.com/p/ack/issues/list',
+            license     => 'http://dev.perl.org/licenses/',
+            repository  => 'http://code.google.com/p/ack/source',
+            MailingList => 'http://groups.google.com/group/ack-users',
+        }
+    };
+}
 
 WriteMakefile( %parms );
 

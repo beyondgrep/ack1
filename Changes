@@ -1,5 +1,69 @@
 Changelog for ack
 
+1.90        Mon Sep  7 23:24:24 CDT 2009
+    [ENHANCEMENTS]
+    Added Ada support.  Thanks to Shaun Patterson.
+
+    Added -r, -R and --recurse options as in grep.  They have no
+    effect because directory recursion is on by default.  Also added
+    --no-recurse for orthoganality. Thanks to Mark Stosberg and
+    Ryan Niebur.
+
+    Version in --version is prettier.  Thanks, Ori Avtalion.
+
+    Added an updated ack.bash_completion.sh from Adam James.
+
+    [FIXES]
+    Expanded --files-without-match to --files-without-matches.
+
+    Removed all the hi-bit characters, so we don't have any encoding
+    problems.  It's all entities now.
+
+    Fixed capture-stderr to localize some globals that were obscuring
+    errors.  Thanks very much to Christopher Madsen.
+
+    Fixed uninitialized errors in tickets #138 and #159.
+
+    [DOCUMENTATION]
+    Fixed an incorrect command line in the docs for -f.
+
+    Added notes on --pager.  Thanks to Mike Morearty.
+
+    [BUILD]
+    Made the squash program more robust when handling POD.  Thanks
+    to Kent Fredric.
+
+
+1.89_02     Wed May 13 16:20:21 CDT 2009
+    [DISTRIBUTION]
+    Updated Makefile.PL to use new ExtUtils::MakeMaker features.
+    Thanks, Schwern.
+
+    [FEATURES]
+    --version now shows the version of Perl that ack is running
+    under, and the full path to the Perl executable.
+
+    Added new switches --color-match and --color-filename, which
+    let you define ACK_COLOR_MATCH and ACK_COLOR_FILENAME from the
+    command line.
+
+    Added new switch --column to display the column of the first
+    hit on the row.  Thanks to Eric Van Dewoestine.
+
+    Added .ss to --scheme.
+
+    [FIXES]
+    No longer die if you have a .tar.gz file in your tree.
+
+    More tweaks to get the detection of input and output pipes
+    working.
+
+    Fixed an amazingly bad call to cmp_ok() in t/ack-passthru.t.
+
+    [DOCUMENTATION]
+    Started an ack FAQ.
+
+
 1.88        Sat Feb  7 13:51:35 CST 2009
     [BIG CHANGES]
     ack-standalone no longer exists.  ack is now built from ack-base.

@@ -24,7 +24,7 @@ COPYRIGHT: {
 
 VERSION: {
     my $version = App::Ack::get_version_statement('Copyright');
-    like( $version, qr{This program is free software; you can redistribute it and/or modify it}, 'free software' );
+    like( $version, qr{This program is free software}, 'free software' );
     like( $version, qr{Copyright}, 'Copyright' );
 }
 

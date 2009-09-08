@@ -16,6 +16,7 @@ ACK_F: {
     my @expected = qw(
         t/etc/shebang.empty.xxx
         t/swamp/moose-andy.jpg
+        t/swamp/perl.tar.gz
         t/swamp/solution8.tar
     );
 

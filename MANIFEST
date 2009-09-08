@@ -7,7 +7,6 @@ Resource.pm
 Changes
 MANIFEST
 Makefile.PL
-META.yml
 README
 ack
 ack-base
@@ -25,6 +24,7 @@ t/ack-a.t
 t/ack-binary.t
 t/ack-c.t
 t/ack-color.t
+t/ack-column.t
 t/ack-env.t
 t/ack-g.t
 t/ack-group.t
@@ -43,6 +43,7 @@ t/ack-w.t
 t/code.t
 t/command-line-files.t
 t/context.t
+t/encoding.t
 t/filetypes.t
 t/file-permission.t
 t/illegal-regex.t
@@ -121,6 +122,7 @@ t/swamp/perl.cgi
 t/swamp/perl.pl
 t/swamp/perl.pm
 t/swamp/perl.pod
+t/swamp/perl.tar.gz
 t/swamp/Rakefile
 t/swamp/sample.rake
 t/swamp/solution8.tar

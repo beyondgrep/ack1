@@ -24,14 +24,20 @@ sub build_command_line {
         for ( @args ) {
             s/(\\+)$/$1$1/;     # Double all trailing backslashes
             s/"/\\"/g;          # Backslash all quotes
-            $_ = qq("$_");
+            $_ = qq{"$_"};
         }
     }
     else {
         @args = map { quotemeta $_ } @args;
     }
 
-    return "$^X -T ./capture-stderr $catcherr_file ./ack @args";
+    return "$^X -T ./capture-stderr $catcherr_file @args";
+}
+
+sub build_ack_command_line {
+    my @args = @_;
+
+    return build_command_line( './ack', @args );
 }
 
 sub slurp {
@@ -47,24 +53,24 @@ sub slurp {
 
 sub run_ack {
     my @args = @_;
-	
+
     my ($stdout, $stderr) = run_ack_with_stderr( @args );
 
     if ( $TODO ) {
         fail( q{Automatically fail stderr check for TODO tests.} );
     }
     else {
-        is( scalar @{$stderr}, 0, 'Should have no output to stderr' )
+        is( scalar @{$stderr}, 0, "Should have no output to stderr: ack @args" )
             or diag( join( "\n", "STDERR:", @{$stderr} ) );
     }
 
-    return @{$stdout};
+    return wantarray ? @{$stdout} : join( "\n", @{$stdout} );
 }
 
-{ # scope for $AckReturnCode;
+{ # scope for $ack_return_code;
 
 # capture returncode
-our $AckReturnCode;
+our $ack_return_code;
 
 sub run_ack_with_stderr {
     my @args = @_;
@@ -72,22 +78,23 @@ sub run_ack_with_stderr {
     my @stdout;
     my @stderr;
 
+    # The --noenv makes sure we don't pull in anything from the user.
     if ( !grep { $_ =~ /^--(no)?env$/ } @args ) {
         unshift( @args, '--noenv' );
     }
 
-    my $cmd = build_command_line( @args );
-	
-    @stdout = `$cmd`;
-    my ($sig,$core,$rc)=( ($? & 127),  ($? & 128) , ($? >> 8) );
-    $AckReturnCode=$rc;
-	## XXX what do do with $core or $sig?
+    my $cmd = build_ack_command_line( @args );
 
-    open( CATCHERR, '<', $catcherr_file );
-    while( <CATCHERR> ) {
+    @stdout = `$cmd`;
+    my ($sig,$core,$rc) = (($? & 127),  ($? & 128) , ($? >> 8));
+    $ack_return_code = $rc;
+    ## XXX what do do with $core or $sig?
+
+    open( my $fh, '<', $catcherr_file ) or die $!;
+    while ( <$fh> ) {
         push( @stderr, $_ );
     }
-    close CATCHERR;
+    close $fh or die $!;
     unlink $catcherr_file;
 
     chomp @stdout;
@@ -95,17 +102,17 @@ sub run_ack_with_stderr {
     return ( \@stdout, \@stderr );
 }
 
-sub get_rc{
-  return $AckReturnCode;
+sub get_rc {
+    return $ack_return_code;
 }
 
-} # scope for $AckReturnCode
+} # scope for $ack_return_code
 
 sub pipe_into_ack {
     my $input = shift;
     my @args = @_;
 
-    my $cmd = build_command_line( @args );
+    my $cmd = build_ack_command_line( @args );
     $cmd = "$^X -pe1 $input | $cmd";
     my @results = `$cmd`;
     chomp @results;

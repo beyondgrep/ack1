@@ -3,8 +3,8 @@
 use warnings;
 use strict;
 
-our $VERSION = '1.88';
-# Check http://petdance.com/ack/ for updates
+our $VERSION = '1.90';
+# Check http://betterthangrep.com/ for updates
 
 # These are all our globals.
 
@@ -50,7 +50,7 @@ sub main {
 
     $| = 1 if $opt->{flush}; # Unbuffer the output if flush mode
 
-    if ( -p STDIN ) { # Check to see if it's a pipe
+    if ( App::Ack::input_from_pipe() ) {
         # We're going into filter mode
         for ( qw( f g l ) ) {
             $opt->{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );
@@ -204,6 +204,19 @@ the color.  This is on by default unless the output is redirected.
 On Windows, this option is off by default unless the
 L<Win32::Console::ANSI> module is installed or the C<ACK_PAGER_COLOR>
 environment variable is used.
+
+=item B<--color-filename=I<color>>
+
+Sets the color to be used for filenames.
+
+=item B<--color-match=I<color>>
+
+Sets the color to be used for matches.
+
+=item B<--column>
+
+Show the column number of the first match.  This is helpful for editors
+that can place your cursor at a given position.
 
 =item B<--env>, B<--noenv>
 
@@ -565,10 +578,14 @@ Underline and underscore are equivalent, as are clear and reset.
 The color alone sets the foreground color, and on_color sets the
 background color.
 
+This option can also be set with B<--color-filename>.
+
 =item ACK_COLOR_MATCH
 
 Specifies the color of the matching text when printed in B<--color>
 mode.  By default, it's "black on_yellow".
+
+This option can also be set with B<--color-match>.
 
 See B<ACK_COLOR_FILENAME> for the color specifications.
 
@@ -672,7 +689,11 @@ list of all the Perl files in a tree, ideal for sending into F<xargs>.
 For example:
 
     # Change all "this" to "that" in all Perl files in a tree.
-    ack -f --perl | perl -p -i -e's/this/that/g'
+    ack -f --perl | xargs perl -p -i -e's/this/that/g'
+
+or if you prefer:
+
+    perl -p -i -e's/this/thatg/' $(ack -f --perl)
 
 =head2 Use F<-Q> when in doubt about metacharacters
 
@@ -697,6 +718,20 @@ the previous five lines from the log in each case.
 
 Join the ack-users mailing list.  Send me your tips and I may add
 them here.
+
+=head1 FAQ
+
+=head2 Wouldn't it be great if F<ack> did search & replace?
+
+No, ack will always be read-only.  Perl has a perfectly good way
+to do search & replace in files, using the C<-i>, C<-p> and C<-n>
+switches.
+
+You can certainly use ack to select your files to update.  For
+example, to change all "foo" to "bar" in all PHP files, you can do
+this form the Unix shell:
+
+    $ perl -i -p -e's/foo/bar/g' $(ack -f --php)
 
 =head1 AUTHOR
 
@@ -728,7 +763,7 @@ Support for and information about F<ack> can be found at:
 
 =item * The ack homepage
 
-L<http://petdance.com/ack/>
+L<http://betterthangrep.com/>
 
 =item * The ack issues list at Google Code
 
@@ -757,6 +792,11 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Ryan Niebur,
+Kent Fredric,
+Mike Morearty,
+Ingmar Vanhassel,
+Eric Van Dewoestine,
 Sitaram Chamarty,
 Adam James,
 Richard Carlsson,
@@ -777,10 +817,10 @@ Kevin Riggle,
 Ori Avtalion,
 Torsten Blix,
 Nigel Metheringham,
-Gábor Szabó,
+GE<aacute>bor SzabE<oacute>,
 Tod Hagan,
 Michael Hendricks,
-Ævar Arnfjörð Bjarmason,
+E<AElig>var ArnfjE<ouml>rE<eth> Bjarmason,
 Piers Cawley,
 Stephen Steneker,
 Elias Lutfallah,
@@ -795,11 +835,11 @@ Elliot Shank,
 Merijn Broeren,
 Uwe Voelker,
 Rick Scott,
-Ask Bjørn Hansen,
+Ask BjE<oslash>rn Hansen,
 Jerry Gay,
 Will Coleda,
 Mike O'Regan,
-Slaven Rezić,
+Slaven ReziE<0x107>,
 Mark Stosberg,
 David Alan Pisoni,
 Adriano Ferreira,
@@ -810,7 +850,7 @@ and Pete Krawczyk.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2005-2009 Andy Lester, all rights reserved.
+Copyright 2005-2009 Andy Lester.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of either:
@@ -821,7 +861,7 @@ it under the terms of either:
 Software Foundation; either version 1, or (at your option) any later
 version, or
 
-=item * the "Artistic License" which comes with Perl 5.
+=item * the Artistic License version 2.0.
 
 =back
 

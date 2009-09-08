@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION = '1.89_02';
+our $VERSION = '1.90';
 # Check http://betterthangrep.com/ for updates
 
 # These are all our globals.

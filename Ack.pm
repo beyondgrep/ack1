@@ -21,7 +21,7 @@ our $VERSION;
 our $COPYRIGHT;
 BEGIN {
     $VERSION = '1.90';
-    $COPYRIGHT = 'Copyright 2005-2009 Andy Lester, all rights reserved.';
+    $COPYRIGHT = 'Copyright 2005-2009 Andy Lester.';
 }
 
 our $fh;
@@ -1508,7 +1508,7 @@ sub output_to_pipe {
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2005-2009 Andy Lester, all rights reserved.
+Copyright 2005-2009 Andy Lester.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of either:

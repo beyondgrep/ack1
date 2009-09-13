@@ -789,9 +789,9 @@ L<http://cpanratings.perl.org/d/ack>
 
 L<http://search.cpan.org/dist/ack>
 
-=item * Subversion repository
+=item * Git source repository
 
-L<http://ack.googlecode.com/svn/>
+L<http://github.com/petdance/ack>
 
 =back
 
@@ -1055,7 +1055,7 @@ our $VERSION;
 our $COPYRIGHT;
 BEGIN {
     $VERSION = '1.90';
-    $COPYRIGHT = 'Copyright 2005-2009 Andy Lester, all rights reserved.';
+    $COPYRIGHT = 'Copyright 2005-2009 Andy Lester.';
 }
 
 our $fh;

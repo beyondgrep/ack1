@@ -1,6 +1,9 @@
 NEXT
 The source code for ack is now at github: http://github.com/petdance/ack
 
+[ENHANCEMENTS]
+Added Scala support.  Thanks to Dan Sully.
+
 
 1.90        Mon Sep  7 23:24:24 CDT 2009
 [ENHANCEMENTS]

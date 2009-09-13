@@ -1,3 +1,17 @@
+# The switches
+
+The --plugin=X option tells ack to load a plugin called
+App::Ack::Plugin::X, and to search files that the plugin knows
+about.
+
+The opposite, --no-plugin=X specifically tells ack not to use the
+plugin App::Ack::Plugin::X.  This allows you to disable a plugin
+loaded in an ackrc file.
+
+--available-plugins searches for App::Ack::Plugin:: modules installed
+in the search path.
+
+
 # The ackrc
 ack --plugin=Tarball
 
@@ -9,11 +23,9 @@ ack --plugin=PDF,enable
 
 ack --plugin=MP3,disable
 
-ack --plugin=HTTP,disable
-
 
 # The command line
 
-$ ack --enable=Tarball
+$ ack --no-plugin=Tarball
 
 $ ack --Tarball 

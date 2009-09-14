@@ -28,4 +28,3 @@ ack --plugin=MP3,disable
 
 $ ack --no-plugin=Tarball
 
-$ ack --Tarball 

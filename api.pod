@@ -13,7 +13,7 @@ loaded in an ackrc file.
 =head2 --available-plugins
 
 --available-plugins searches for App::Ack::Plugin:: modules installed
-in the search path.
+in the search path and displays a list to the user.
 
 =head1 Plugin philosophy
 

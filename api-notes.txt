@@ -14,15 +14,8 @@ in the search path.
 
 # The ackrc
 ack --plugin=Tarball
-
-ack --check=tarball
-ack --check=gz
-
-
-ack --plugin=PDF,enable
-
-ack --plugin=MP3,disable
-
+ack --plugin=PDF
+ack --plugin=MP3
 
 # The command line
 

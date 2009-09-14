@@ -92,7 +92,7 @@ sub main {
 
     App::Ack::set_up_pager( $opt->{pager} ) if defined $opt->{pager};
     if ( $opt->{f} ) {
-        App::Ack::print_files( $iter, $opt );
+        $nmatches = App::Ack::print_files( $iter, $opt );
     }
     elsif ( $opt->{l} || $opt->{count} ) {
         $nmatches = App::Ack::print_files_with_matches( $iter, $opt );
@@ -660,8 +660,8 @@ no match is found.
 
 The I<grep> code 2 for errors is not used.
 
-0 is returned if C<-f> or C<-g> are specified, irrespective of
-number of files found.
+If C<-f> or C<-g> are specified, then 0 is returned if at least one
+file is found.  If no files are found, then 1 is returned.
 
 =cut
 
@@ -800,6 +800,7 @@ L<http://github.com/petdance/ack>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+JR Boyens,
 Dan Sully,
 Ryan Niebur,
 Kent Fredric,
@@ -2119,12 +2120,14 @@ sub print_files {
 
     my $ors = $opt->{print0} ? "\0" : "\n";
 
+    my $nmatches = 0;
     while ( defined ( my $file = $iter->() ) ) {
         App::Ack::print $file, $ors;
+        $nmatches++;
         last if $opt->{1};
     }
 
-    return;
+    return $nmatches;
 }
 
 

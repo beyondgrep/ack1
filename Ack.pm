@@ -1247,12 +1247,14 @@ sub print_files {
 
     my $ors = $opt->{print0} ? "\0" : "\n";
 
+    my $nmatches = 0;
     while ( defined ( my $file = $iter->() ) ) {
         App::Ack::print $file, $ors;
+        $nmatches++;
         last if $opt->{1};
     }
 
-    return;
+    return $nmatches;
 }
 
 =head2 print_files_with_matches( $iter, $opt )

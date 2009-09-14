@@ -11,6 +11,14 @@ loaded in an ackrc file.
 --available-plugins searches for App::Ack::Plugin:: modules installed
 in the search path.
 
+# Plugin philosophy
+
+The first thing loading a plugin does is add a filetype that ack
+knows about.  For instance, loading the JPEG plugin may now mean
+that ack recognizes .jpeg and .jpg extensions.
+
+Loading a plugin 
+
 
 # The ackrc
 ack --plugin=Tarball

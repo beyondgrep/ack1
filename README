@@ -23,18 +23,24 @@ You can look for information at:
     CPAN Ratings:
         http://cpanratings.perl.org/d/ack
 
-    Project Home at Google Code
-	    http://code.google.com/p/ack/
+    Project Home at Github
+        http://github.com/petdance/ack
 
     Issue list at Google Code (report bugs there)
         http://code.google.com/p/ack/issues/list
 
     Mailing List
-	    ack-users@googlegroups.com
+        ack-users@googlegroups.com
 
 COPYRIGHT AND LICENCE
 
-Copyright (C) 2005-2008 Andy Lester
+Copyright 2005-2009 Andy Lester.
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+This program is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+* the GNU General Public License as published by the Free Software
+Foundation; either version 1, or (at your option) any later version,
+or
+
+* the Artistic License version 2.0.

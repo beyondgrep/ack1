@@ -729,6 +729,31 @@ them here.
 
 =head1 FAQ
 
+=head2 Why isn't ack finding a match in (some file)?
+
+Probably because it's of a type that ack doesn't recognize.
+
+ack's searching behavior is driven by filetype.  If ack doesn't
+know what kind of file it is, ack ignores it.
+
+If you want ack to search files that it doesn't recognize, use the
+C<-a> switch.
+
+If you want ack to search every file, even ones that it always
+ignores like coredumps and backup files, use the C<-u> switch.
+
+=head2 Why does ack ignore unknown files by default?
+
+ack is designed by a programmer, for programmers, for searching
+large trees of code.  Most codebases have a lot files in them which
+aren't source files (like compiled object files, source control
+metadata, etc), and grep wastes a lot of time searching through all
+of those as well and returning matches from those files.
+
+That's why ack's behavior of not searching things it doesn't recognize
+is one of its greatest strengths: the speed you get from only
+searching the things that you want to be looking at.
+
 =head2 Wouldn't it be great if F<ack> did search & replace?
 
 No, ack will always be read-only.  Perl has a perfectly good way
@@ -800,6 +825,7 @@ L<http://github.com/petdance/ack>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Packy Anderson,
 JR Boyens,
 Dan Sully,
 Ryan Niebur,

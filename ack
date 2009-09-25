@@ -744,22 +744,15 @@ ignores like coredumps and backup files, use the C<-u> switch.
 
 =head2 Why does ack ignore unknown files by default?
 
-Because most codebases have a lot files in them which aren't source
-files (like compiled object files, source control metadata, etc),
-and grep wastes a lot of time searching through all of those as
-well and returning matches from those files.  In my personal
-experience (and everyone's experience varies) files without extensions
-tend not to be source/program metadata files, and THAT'S why ack's
-behaviour of not searching things it doesn't recognize is one of
-its greatest strengths: the speed you get from only searching the
-things that you want to be looking at.
+ack is designed by a programmer, for programmers, for searching
+large trees of code.  Most codebases have a lot files in them which
+aren't source files (like compiled object files, source control
+metadata, etc), and grep wastes a lot of time searching through all
+of those as well and returning matches from those files.
 
-Since making it search everything by default out of the box would
-remove one of the best differentiators from grep that ack has, and
-since turning on "search everything" is a mere two characters in
-an .ackrc file away from being someone's PERSONAL default behaviour,
-I can understand Andy's adamance that ack's search behaviour remain
-the way it is.
+That's why ack's behavior of not searching things it doesn't recognize
+is one of its greatest strengths: the speed you get from only
+searching the things that you want to be looking at.
 
 =head2 Wouldn't it be great if F<ack> did search & replace?
 
@@ -772,8 +765,6 @@ example, to change all "foo" to "bar" in all PHP files, you can do
 this form the Unix shell:
 
     $ perl -i -p -e's/foo/bar/g' $(ack -f --php)
-
-
 
 =head1 AUTHOR
 
@@ -834,6 +825,7 @@ L<http://github.com/petdance/ack>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Packy Anderson,
 JR Boyens,
 Dan Sully,
 Ryan Niebur,

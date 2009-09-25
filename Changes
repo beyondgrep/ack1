@@ -1,6 +1,10 @@
 NEXT
 The source code for ack is now at github: http://github.com/petdance/ack
 
+[FIXES]
+The --pager flag would not work.  Now it does.
+
+
 [ENHANCEMENTS]
 Added Scala support.  Thanks to Dan Sully.
 

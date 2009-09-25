@@ -1476,7 +1476,7 @@ sub get_iterator {
 sub set_up_pager {
     my $command = shift;
 
-    return unless App::Ack::output_to_pipe();
+    return if App::Ack::output_to_pipe();
 
     my $pager;
     if ( not open( $pager, '|-', $command ) ) {

@@ -729,6 +729,38 @@ them here.
 
 =head1 FAQ
 
+=head2 Why isn't ack finding a match in (some file)?
+
+Probably because it's of a type that ack doesn't recognize.
+
+ack's searching behavior is driven by filetype.  If ack doesn't
+know what kind of file it is, ack ignores it.
+
+If you want ack to search files that it doesn't recognize, use the
+C<-a> switch.
+
+If you want ack to search every file, even ones that it always
+ignores like coredumps and backup files, use the C<-u> switch.
+
+=head2 Why does ack ignore unknown files by default?
+
+Because most codebases have a lot files in them which aren't source
+files (like compiled object files, source control metadata, etc),
+and grep wastes a lot of time searching through all of those as
+well and returning matches from those files.  In my personal
+experience (and everyone's experience varies) files without extensions
+tend not to be source/program metadata files, and THAT'S why ack's
+behaviour of not searching things it doesn't recognize is one of
+its greatest strengths: the speed you get from only searching the
+things that you want to be looking at.
+
+Since making it search everything by default out of the box would
+remove one of the best differentiators from grep that ack has, and
+since turning on "search everything" is a mere two characters in
+an .ackrc file away from being someone's PERSONAL default behaviour,
+I can understand Andy's adamance that ack's search behaviour remain
+the way it is.
+
 =head2 Wouldn't it be great if F<ack> did search & replace?
 
 No, ack will always be read-only.  Perl has a perfectly good way
@@ -740,6 +772,8 @@ example, to change all "foo" to "bar" in all PHP files, you can do
 this form the Unix shell:
 
     $ perl -i -p -e's/foo/bar/g' $(ack -f --php)
+
+
 
 =head1 AUTHOR
 
@@ -2319,7 +2353,7 @@ sub get_iterator {
 sub set_up_pager {
     my $command = shift;
 
-    return unless App::Ack::output_to_pipe();
+    return if App::Ack::output_to_pipe();
 
     my $pager;
     if ( not open( $pager, '|-', $command ) ) {

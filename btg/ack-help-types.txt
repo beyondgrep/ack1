@@ -8,6 +8,7 @@ Note that some extensions may appear in multiple types.  For example,
 .pod files are both Perl and Parrot.
 
     --[no]actionscript .as .mxml
+    --[no]ada          .ada .adb .ads
     --[no]asm          .asm .s
     --[no]batch        .bat .cmd
     --[no]binary       Binary files, as defined by Perl's -B op (default: off)
@@ -39,7 +40,6 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]python       .py
     --[no]rake         Rakefiles
     --[no]ruby         .rb .rhtml .rjs .rxml .erb .rake
-    --[no]scala        .scala
     --[no]scheme       .scm .ss
     --[no]shell        .sh .bash .csh .tcsh .ksh .zsh
     --[no]skipped      Files, but not directories, normally skipped by ack (default: off)

@@ -33,15 +33,15 @@ _   /|
 
         <?php include "ack-lists.php" ?>
 
-        <h2>Latest version of ack: 1.88, February 6th, 2009</h2>
-        Read the <a href="http://ack.googlecode.com/svn/tags/latest/Changes">Changelog</a>
+        <h2>Latest version of ack: 1.90, September 7th, 2009</h2>
+        Read the <a href="http://cpansearch.perl.org/src/PETDANCE/ack-1.90/Changes">Changelog</a>
 
         <p>
-        <b>ack</b> is a tool like grep, aimed at programmers with large trees of
+        <b>ack</b> is a tool like <i>grep</i>, designed for programmers with large trees of
         heterogeneous source code.
         <p>
         ack is written purely in Perl, and takes advantage of the power of Perl's
-        regular expressions. 
+        regular expressions.
         </p>
 
         <h2>How to install ack</h2>
@@ -56,12 +56,12 @@ _   /|
             </li>
             <li>
             <b>Download the
-                <a href="http://ack.googlecode.com/svn/tags/latest/ack">standalone version</a></b> of ack
+                <a href="http://betterthangrep.com/ack-standalone">standalone version</a></b> of ack
             that requires no modules beyond what's in core Perl, and putting it in your path.
             If you don't want to mess with setting up Perl's CPAN shell, this is easiest.
             <blockquote>
                 <code>
-                    curl http://ack.googlecode.com/svn/tags/latest/ack &gt; ~/bin/ack &amp;&amp; chmod 0755 !$
+                    curl http://betterthangrep.com/ack-standalone &gt; ~/bin/ack &amp;&amp; chmod 0755 !$
                 </code>
             </blockquote>
             </li>
@@ -219,7 +219,7 @@ _   /|
             <li><b>Command name is 25% fewer characters to type!</b>  Save days of free-time! Heck, it's 50% shorter compared to <tt>grep -r</tt>.</li>
         </ol>
         <hr>
-        <h2>Ack's command flags</h2>
+        <h2>ack's command flags</h2>
 
 <pre>
 $ ack --help

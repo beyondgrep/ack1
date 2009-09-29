@@ -24,8 +24,8 @@ Search output:
   --line=NUM            Only print line(s) NUM of each file
   -l, --files-with-matches
                         Only print filenames containing matches
-  -L, --files-without-match
-                        Only print filenames with no match
+  -L, --files-without-matches
+                        Only print filenames with no matches
   -o                    Show only the part of a line matching PATTERN
                         (turns off text highlighting)
   --passthru            Print all lines, whether matching or not
@@ -37,6 +37,7 @@ Search output:
   -H, --with-filename   Print the filename for each match
   -h, --no-filename     Suppress the prefixing filename on output
   -c, --count           Show number of lines matching per file
+  --column              Show the column number of the first match
 
   -A NUM, --after-context=NUM
                         Print NUM lines of trailing context after matching
@@ -51,8 +52,8 @@ Search output:
                         only works with -f, -g, -l, -L or -c.
 
 File presentation:
-  --pager=COMMAND       Pipes all ack output through COMMAND.
-                        Ignored if output is redirected.
+  --pager=COMMAND       Pipes all ack output through COMMAND.  For example,
+                        --pager="less -R".  Ignored if output is redirected.
   --nopager             Do not send output through a pager.  Cancels any
                         setting in ~/.ackrc, ACK_PAGER or ACK_PAGER_COLOR.
   --[no]heading         Print a filename heading above each file's results.
@@ -64,6 +65,8 @@ File presentation:
   --[no]color           Highlight the matching text (default: on unless
                         output is redirected, or on Windows)
   --[no]colour          Same as --[no]color
+  --color-filename=COLOR
+  --color-match=COLOR   Set the color for matches and filenames.
   --flush               Flush output immediately, even when ack is used
                         non-interactively (when output goes to a pipe or
                         file).
@@ -79,7 +82,8 @@ File inclusion/exclusion:
                         Ignores CVS, .svn and other ignored directories
   -u, --unrestricted    All files and directories searched
   --[no]ignore-dir=name Add/Remove directory from the list of ignored dirs
-  -n                    No descending into subdirectories
+  -r, -R, --recurse     Recurse into subdirectories (ack's default behavior)
+  -n, --no-recurse      No descending into subdirectories
   -G REGEX              Only search files that match REGEX
 
   --perl                Include only Perl files.
@@ -100,7 +104,8 @@ File inclusion/exclusion:
 
   Directories ignored by default:
     autom4te.cache, blib, _build, .bzr, .cdv, cover_db, CVS, _darcs, ~.dep,
-    ~.dot, .git, .hg, ~.nib, .pc, ~.plst, RCS, SCCS, _sgbak and .svn
+    ~.dot, .git, .hg, ~.nib, nytprof, .pc, ~.plst, RCS, SCCS, _sgbak and
+    .svn
 
   Files not checked for type:
     /~$/           - Unix backup files
@@ -117,4 +122,4 @@ Miscellaneous:
 
 Exit status is 0 if match, 1 if no match.
 
-This is version 1.88 of ack.
+This is version 1.90 of ack.

@@ -99,7 +99,7 @@ BEGIN {
         ocaml       => [qw( ml mli )],
         parrot      => [qw( pir pasm pmc ops pod pg tg )],
         perl        => [qw( pl pm pod t )],
-        php         => [qw( php phpt php3 php4 php5 )],
+        php         => [qw( php phpt php3 php4 php5 phtml)],
         plone       => [qw( pt cpt metadata cpy py )],
         python      => [qw( py )],
         rake        => q{Rakefiles},

@@ -8,6 +8,8 @@ The --pager flag would not work.  Now it does.  Thanks Packy Anderson.
 [ENHANCEMENTS]
 Added Scala support.  Thanks to Dan Sully.
 
+Added .phtml as an extension for PHP.
+
 Using -f or -g now return a proper error code.  If files are found,
 ack returns 0.  If none are found, ack returns 1.  This is a change
 in the specification, but the code didn't match the specfication

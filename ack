@@ -766,6 +766,10 @@ this form the Unix shell:
 
     $ perl -i -p -e's/foo/bar/g' $(ack -f --php)
 
+=head2 There's already a program/package called ack.
+
+Yes, I know.
+
 =head1 AUTHOR
 
 Andy Lester, C<< <andy at petdance.com> >>

@@ -1317,7 +1317,7 @@ sub get_command_line_options {
     my $parser = Getopt::Long::Parser->new();
     $parser->configure( 'bundling', 'no_ignore_case', );
     $parser->getoptions( %{$getopt_specs} ) or
-        App::Ack::die( 'See ack --help or ack --man for options.' );
+        App::Ack::die( 'See ack --help, ack --help-types or ack --man for options.' );
 
     my $to_screen = not output_to_pipe();
     my %defaults = (

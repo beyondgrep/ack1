@@ -29,6 +29,7 @@ my %parms = (
         'File::Basename'    => 0,
         'Pod::Usage'        => 0,
     },
+    MAN3PODS            => {}, # no need for man pages for any of the .pm files
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'ack-1* nytprof*' },
 );

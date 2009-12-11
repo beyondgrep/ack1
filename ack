@@ -12,7 +12,7 @@
 use warnings;
 use strict;
 
-our $VERSION = '1.90';
+our $VERSION = '1.92';
 # Check http://betterthangrep.com/ for updates
 
 # These are all our globals.
@@ -775,6 +775,16 @@ enhancements.
 
 Yes, I know.
 
+=head2 Why is it called ack if it's called ack-grep?
+
+The name of the program is "ack".  Some packagers have called it
+"ack-grep" when creating packages because there's already a package
+out there called "ack" that has nothing to do with this ack.
+
+I suggest you rename your ack-grep install to "ack" because one of
+the crucial benefits of ack is having a name that's so short and
+simple to type.
+
 =head1 AUTHOR
 
 Andy Lester, C<< <andy at petdance.com> >>
@@ -1091,7 +1101,7 @@ use strict;
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.90';
+    $VERSION = '1.92';
     $COPYRIGHT = 'Copyright 2005-2009 Andy Lester.';
 }
 

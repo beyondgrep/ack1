@@ -41,7 +41,7 @@ if ( $ExtUtils::MakeMaker::VERSION ge '6.46' ) {
     $parms{META_MERGE} = {
         resources => {
             homepage    => 'http://betterthangrep.com/',
-            bugtracker  => 'http://code.google.com/p/ack/issues/list',
+            bugtracker  => 'http://github.com/petdance/ack',
             license     => 'http://dev.perl.org/licenses/',
             repository  => 'git://github.com/petdance/ack.git',
             MailingList => 'http://groups.google.com/group/ack-users',

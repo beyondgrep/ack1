@@ -471,10 +471,10 @@ use constant TEXT => 'text';
 sub filetypes {
     my $filename = shift;
 
-    return 'skipped' unless is_searchable( $filename );
-
     my $basename = $filename;
     $basename =~ s{.*[$dir_sep_chars]}{};
+
+    return 'skipped' unless is_searchable( $basename );
 
     my $lc_basename = lc $basename;
     return ('make',TEXT)        if $lc_basename eq 'makefile';
@@ -536,6 +536,8 @@ Recognized files:
   /[._].*\.swp$/  - Vi(m) swap files
   /core\.\d+$/    - core dumps
 
+Note that I<$filename> must be just a file, not a full path.
+
 =cut
 
 sub is_searchable {
@@ -544,7 +546,9 @@ sub is_searchable {
     # If these are updated, update the --help message
     return if $filename =~ /[.]bak$/;
     return if $filename =~ /~$/;
-    return if $filename =~ m{[$dir_sep_chars]?(?:#.+#|core\.\d+|[._].*\.swp)$}o;
+    return if $filename =~ m{^#.*#$}o;
+    return if $filename =~ m{^core\.\d+$}o;
+    return if $filename =~ m{[._].*\.swp$}o;
 
     return 1;
 }
@@ -1444,14 +1448,14 @@ sub get_iterator {
     if ( $g_regex ) {
         $file_filter
             = $opt->{u}   ? sub { $File::Next::name =~ /$g_regex/ } # XXX Maybe this should be a 1, no?
-            : $opt->{all} ? sub { $starting_point{ $File::Next::name } || ( $File::Next::name =~ /$g_regex/ && is_searchable( $File::Next::name ) ) }
+            : $opt->{all} ? sub { $starting_point{ $File::Next::name } || ( $File::Next::name =~ /$g_regex/ && is_searchable( $_ ) ) }
             :               sub { $starting_point{ $File::Next::name } || ( $File::Next::name =~ /$g_regex/ && is_interesting( @_ ) ) }
             ;
     }
     else {
         $file_filter
             = $opt->{u}   ? sub {1}
-            : $opt->{all} ? sub { $starting_point{ $File::Next::name } || is_searchable( $File::Next::name ) }
+            : $opt->{all} ? sub { $starting_point{ $File::Next::name } || is_searchable( $_ ) }
             :               sub { $starting_point{ $File::Next::name } || is_interesting( @_ ) }
             ;
     }

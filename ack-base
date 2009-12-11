@@ -135,7 +135,7 @@ including:
 
 =over 4
 
-=item * Backup files: Files ending with F<~>, or F<#*#>
+=item * Backup files: Files matching F<#*#> or ending with F<~>.
 
 =item * Coredumps: Files matching F<core.\d+>
 
@@ -758,6 +758,11 @@ this form the Unix shell:
 
     $ perl -i -p -e's/foo/bar/g' $(ack -f --php)
 
+=head2 Can you make ack recognize F<.xyz> files?
+
+That's an enhancement.  Please see the section in the manual about
+enhancements.
+
 =head2 There's already a program/package called ack.
 
 Yes, I know.
@@ -769,17 +774,17 @@ Andy Lester, C<< <andy at petdance.com> >>
 =head1 BUGS
 
 Please report any bugs or feature requests to the issues list at
-Google Code: L<http://code.google.com/p/ack/issues/list>
+Github: L<http://github.com/petdance/ack/issues>
 
 =head1 ENHANCEMENTS
 
 All enhancement requests MUST first be posted to the ack-users
 mailing list at L<http://groups.google.com/group/ack-users>.  I
 will not consider a request without it first getting seen by other
-ack users.
+ack users.  This includes requests for new filetypes.
 
 There is a list of enhancements I want to make to F<ack> in the ack
-issues list at Google Code: L<http://code.google.com/p/ack/issues/list>
+issues list at Github: L<http://github.com/petdance/ack/issues>
 
 Patches are always welcome, but patches with tests get the most
 attention.
@@ -794,9 +799,9 @@ Support for and information about F<ack> can be found at:
 
 L<http://betterthangrep.com/>
 
-=item * The ack issues list at Google Code
+=item * The ack issues list at Github
 
-L<http://code.google.com/p/ack/issues/list>
+L<http://github.com/petdance/ack/issues>
 
 =item * AnnoCPAN: Annotated CPAN documentation
 

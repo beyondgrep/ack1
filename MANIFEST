@@ -111,6 +111,7 @@ t/swamp/html.html
 t/swamp/incomplete-last-line.txt
 t/swamp/javascript.js
 t/swamp/moose-andy.jpg
+t/swamp/not-an-#emacs-workfile#
 t/swamp/notaMakefile
 t/swamp/notaRakefile
 t/swamp/options.pl

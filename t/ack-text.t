@@ -13,6 +13,7 @@ use Util;
 prep_environment();
 
 ACK_F_TEXT: {
+    no warnings 'qw'; # The pound signs in one of the filenames fires a warning.
     my @expected = qw(
         t/etc/buttonhook.html.xxx
         t/etc/buttonhook.noxml.xxx
@@ -44,9 +45,10 @@ ACK_F_TEXT: {
         t/swamp/html.htm
         t/swamp/html.html
         t/swamp/incomplete-last-line.txt
-        t/swamp/javascript.js
         t/swamp/Makefile
         t/swamp/Makefile.PL
+        t/swamp/javascript.js
+        t/swamp/not-an-#emacs-workfile#
         t/swamp/notaMakefile
         t/swamp/notaRakefile
         t/swamp/options.pl

@@ -4,7 +4,7 @@
 # Please DO NOT EDIT or send patches for it.
 #
 # Please take a look at the source from
-# http://code.google.com/p/ack/source
+# http://github.com/petdance/ack
 # and submit patches against the individual files
 # that build ack.
 #
@@ -143,7 +143,7 @@ including:
 
 =over 4
 
-=item * Backup files: Files ending with F<~>, or F<#*#>
+=item * Backup files: Files matching F<#*#> or ending with F<~>.
 
 =item * Coredumps: Files matching F<core.\d+>
 
@@ -766,6 +766,11 @@ this form the Unix shell:
 
     $ perl -i -p -e's/foo/bar/g' $(ack -f --php)
 
+=head2 Can you make ack recognize F<.xyz> files?
+
+That's an enhancement.  Please see the section in the manual about
+enhancements.
+
 =head2 There's already a program/package called ack.
 
 Yes, I know.
@@ -777,17 +782,17 @@ Andy Lester, C<< <andy at petdance.com> >>
 =head1 BUGS
 
 Please report any bugs or feature requests to the issues list at
-Google Code: L<http://code.google.com/p/ack/issues/list>
+Github: L<http://github.com/petdance/ack/issues>
 
 =head1 ENHANCEMENTS
 
 All enhancement requests MUST first be posted to the ack-users
 mailing list at L<http://groups.google.com/group/ack-users>.  I
 will not consider a request without it first getting seen by other
-ack users.
+ack users.  This includes requests for new filetypes.
 
 There is a list of enhancements I want to make to F<ack> in the ack
-issues list at Google Code: L<http://code.google.com/p/ack/issues/list>
+issues list at Github: L<http://github.com/petdance/ack/issues>
 
 Patches are always welcome, but patches with tests get the most
 attention.
@@ -802,9 +807,9 @@ Support for and information about F<ack> can be found at:
 
 L<http://betterthangrep.com/>
 
-=item * The ack issues list at Google Code
+=item * The ack issues list at Github
 
-L<http://code.google.com/p/ack/issues/list>
+L<http://github.com/petdance/ack/issues>
 
 =item * AnnoCPAN: Annotated CPAN documentation
 
@@ -1481,10 +1486,10 @@ use constant TEXT => 'text';
 sub filetypes {
     my $filename = shift;
 
-    return 'skipped' unless is_searchable( $filename );
-
     my $basename = $filename;
     $basename =~ s{.*[$dir_sep_chars]}{};
+
+    return 'skipped' unless is_searchable( $basename );
 
     my $lc_basename = lc $basename;
     return ('make',TEXT)        if $lc_basename eq 'makefile';
@@ -1542,7 +1547,9 @@ sub is_searchable {
     # If these are updated, update the --help message
     return if $filename =~ /[.]bak$/;
     return if $filename =~ /~$/;
-    return if $filename =~ m{[$dir_sep_chars]?(?:#.+#|core\.\d+|[._].*\.swp)$}o;
+    return if $filename =~ m{^#.*#$}o;
+    return if $filename =~ m{^core\.\d+$}o;
+    return if $filename =~ m{[._].*\.swp$}o;
 
     return 1;
 }
@@ -2317,14 +2324,14 @@ sub get_iterator {
     if ( $g_regex ) {
         $file_filter
             = $opt->{u}   ? sub { $File::Next::name =~ /$g_regex/ } # XXX Maybe this should be a 1, no?
-            : $opt->{all} ? sub { $starting_point{ $File::Next::name } || ( $File::Next::name =~ /$g_regex/ && is_searchable( $File::Next::name ) ) }
+            : $opt->{all} ? sub { $starting_point{ $File::Next::name } || ( $File::Next::name =~ /$g_regex/ && is_searchable( $_ ) ) }
             :               sub { $starting_point{ $File::Next::name } || ( $File::Next::name =~ /$g_regex/ && is_interesting( @_ ) ) }
             ;
     }
     else {
         $file_filter
             = $opt->{u}   ? sub {1}
-            : $opt->{all} ? sub { $starting_point{ $File::Next::name } || is_searchable( $File::Next::name ) }
+            : $opt->{all} ? sub { $starting_point{ $File::Next::name } || is_searchable( $_ ) }
             :               sub { $starting_point{ $File::Next::name } || is_interesting( @_ ) }
             ;
     }

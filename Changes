@@ -4,6 +4,12 @@ The source code for ack is now at github: http://github.com/petdance/ack
 [FIXES]
 The --pager flag would not work.  Now it does.  Thanks Packy Anderson.
 
+File matching for Emacs work files that match #*# was wrong.  It
+was checking the entire path, not just the basename.  This is fixed.
+(http://github.com/petdance/ack/issues/closed/#issue/101)
+
+Fixed URLs that pointed to old Google Code.
+
 
 [ENHANCEMENTS]
 Added Scala support.  Thanks to Dan Sully.

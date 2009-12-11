@@ -21,14 +21,20 @@ App	t/module.t	/^    sub App::Ack::print_line_no        { push @::result,  ['lin
 App	t/module.t	/^    sub App::Ack::print_separator      { push @::result,  ['separator',      @_]; return; }$/;"	s
 App	t/module.t	/^    sub App::Ack::warn                 { push @::warns,   $_[0];                  return; } ## no critic (ProhibitBuiltinHomonyms)$/;"	s
 App::Ack	Ack.pm	/^package App::Ack;$/;"	p
+App::Ack	btg/ack-standalone	/^package App::Ack;$/;"	p
 App::Ack::Plugin	Plugin.pm	/^package App::Ack::Plugin;$/;"	p
 App::Ack::Plugin::Basic	Basic.pm	/^package App::Ack::Plugin::Basic;$/;"	p
+App::Ack::Plugin::Basic	btg/ack-standalone	/^package App::Ack::Plugin::Basic;$/;"	p
 App::Ack::Plugin::Tar	Tar.pm	/^package App::Ack::Plugin::Tar;$/;"	p
 App::Ack::Repository	Repository.pm	/^package App::Ack::Repository;$/;"	p
+App::Ack::Repository	btg/ack-standalone	/^package App::Ack::Repository;$/;"	p
 App::Ack::Repository::Basic	Basic.pm	/^package App::Ack::Repository::Basic;$/;"	p
+App::Ack::Repository::Basic	btg/ack-standalone	/^package App::Ack::Repository::Basic;$/;"	p
 App::Ack::Repository::Tar	Tar.pm	/^package App::Ack::Repository::Tar;$/;"	p
 App::Ack::Resource	Resource.pm	/^package App::Ack::Resource;$/;"	p
+App::Ack::Resource	btg/ack-standalone	/^package App::Ack::Resource;$/;"	p
 App::Ack::Resource::Basic	Basic.pm	/^package App::Ack::Resource::Basic;$/;"	p
+App::Ack::Resource::Basic	btg/ack-standalone	/^package App::Ack::Resource::Basic;$/;"	p
 App::Ack::Resource::Tar	Tar.pm	/^package App::Ack::Resource::Tar;$/;"	p
 BACK_ANCHOR	t/ack-g.t	/^BACK_ANCHOR: {$/;"	l
 BASIC_SEARCH	t/tar.t	/^BASIC_SEARCH: {$/;"	l
@@ -63,9 +69,12 @@ DASH_NOIGNORE_DIR_MULTIPLE_TIMES	t/ack-ignore-dir.t	/^DASH_NOIGNORE_DIR_MULTIPLE
 DASH_U_BEATS_THE_PANTS_OFF_IGNORE_DIR_ANY_DAY_OF_THE_WEEK	t/ack-ignore-dir.t	/^DASH_U_BEATS_THE_PANTS_OFF_IGNORE_DIR_ANY_DAY_OF_THE_WEEK: {$/;"	l
 DASH_V	t/ack-1.t	/^DASH_V: {$/;"	l
 EXPAND_FILENAMES_SCOPE	Ack.pm	/^EXPAND_FILENAMES_SCOPE: {$/;"	l
+EXPAND_FILENAMES_SCOPE	btg/ack-standalone	/^EXPAND_FILENAMES_SCOPE: {$/;"	l
 Example	Ack.pm	/^Example: ack -i select$/;"	l
+Example	btg/ack-standalone	/^Example: ack -i select$/;"	l
 FAIL	Repository.pm	/^sub FAIL {$/;"	s
 FAIL	Resource.pm	/^sub FAIL {$/;"	s
+FAIL	btg/ack-standalone	/^sub FAIL {$/;"	s
 FAIL_MATCHING_VIA_CONTENT	t/filetypes.t	/^FAIL_MATCHING_VIA_CONTENT: {$/;"	l
 FILES_HAVE_BEEN_SET_UP_AS_EXPECTED	t/ack-ignore-dir.t	/^FILES_HAVE_BEEN_SET_UP_AS_EXPECTED: {$/;"	l
 FILETYPES	t/module.t	/^FILETYPES: {$/;"	l
@@ -75,6 +84,7 @@ FILE_ON_COMMAND_LINE_IS_ALWAYS_SEARCHED_EVEN_WITH_WRONG_TYPE	t/ack-g.t	/^FILE_ON
 FIND_PACKAGES	t/standalone.t	/^FIND_PACKAGES: {$/;"	l
 FRONT_ANCHOR	t/ack-g.t	/^FRONT_ANCHOR: {$/;"	l
 F_PRINT0	t/ack-print0.t	/^F_PRINT0: {$/;"	l
+File::Next	btg/ack-standalone	/^package File::Next;$/;"	p
 GROUPING_MULTIPLE_FILES	t/context.t	/^GROUPING_MULTIPLE_FILES: {$/;"	l
 GROUPING_SINGLE_FILE	t/context.t	/^GROUPING_SINGLE_FILE: {$/;"	l
 G_NO_PRINT0	t/ack-print0.t	/^G_NO_PRINT0: {$/;"	l
@@ -99,13 +109,16 @@ LINE_1_TO_5_CONTEXT	t/ack-line.t	/^LINE_1_TO_5_CONTEXT: {$/;"	l
 LINE_AND_PASSTHRU	t/ack-line.t	/^LINE_AND_PASSTHRU: {$/;"	l
 L_PRINT0	t/ack-print0.t	/^L_PRINT0: {$/;"	l
 MAIN	ack-base	/^MAIN: {$/;"	l
+MAIN	btg/ack-standalone	/^MAIN: {$/;"	l
 MATCH_VIA_CONTENT	t/filetypes.t	/^MATCH_VIA_CONTENT: {$/;"	l
 MATCH_WITH_BACKREF	t/ack-color.t	/^MATCH_WITH_BACKREF: {$/;"	l
 METACHARACTERS	t/ack-g.t	/^METACHARACTERS: {$/;"	l
+MULTIPLE_MATCHES	t/ack-color.t	/^MULTIPLE_MATCHES: {$/;"	l
 MY	Makefile.PL	/^package MY;$/;"	p
 MY	Makefile.PL	/^sub MY::postamble {$/;"	s
 MY	Makefile.PL	/^sub MY::top_targets {$/;"	s
 Miscellaneous	Ack.pm	/^Miscellaneous:$/;"	l
+Miscellaneous	btg/ack-standalone	/^Miscellaneous:$/;"	l
 NORMAL	t/ack-passthru.t	/^NORMAL: {$/;"	l
 NORMAL_CASE	t/ack-v.t	/^NORMAL_CASE: {$/;"	l
 NORMAL_COLOR	t/ack-color.t	/^NORMAL_COLOR: {$/;"	l
@@ -143,7 +156,9 @@ SPECIFYING_A_BAK_FILE	t/command-line-files.t	/^SPECIFYING_A_BAK_FILE: {$/;"	l
 STANDARD_GROUPING	t/ack-group.t	/^STANDARD_GROUPING: {$/;"	l
 STARTING_POINTS	t/module.t	/^STARTING_POINTS: {$/;"	l
 Searching	Ack.pm	/^Searching:$/;"	l
+Searching	btg/ack-standalone	/^Searching:$/;"	l
 TEXT	Ack.pm	/^use constant TEXT => 'text';$/;"	c
+TEXT	btg/ack-standalone	/^use constant TEXT => 'text';$/;"	c
 TODO	t/module.t	/^    TODO: {$/;"	l
 TRAILING_METACHAR_BACKSLASH_W	t/ack-w.t	/^TRAILING_METACHAR_BACKSLASH_W: {$/;"	l
 TRAILING_METACHAR_DOT	t/ack-w.t	/^TRAILING_METACHAR_DOT: {$/;"	l
@@ -152,6 +167,8 @@ UNANCHORED	t/multiline.t	/^UNANCHORED: {$/;"	l
 UNRESTRICTED_AND_DASH_G_INTERACTION	t/ack-g.t	/^UNRESTRICTED_AND_DASH_G_INTERACTION: {$/;"	l
 Usage	Ack.pm	/^Usage: ack [OPTION]... PATTERN [FILES]$/;"	l
 Usage	Ack.pm	/^Usage: ack [OPTION]... PATTERN [FILE]$/;"	l
+Usage	btg/ack-standalone	/^Usage: ack [OPTION]... PATTERN [FILES]$/;"	l
+Usage	btg/ack-standalone	/^Usage: ack [OPTION]... PATTERN [FILE]$/;"	l
 VERSION	t/module.t	/^VERSION: {$/;"	l
 WITHOUT_COLUMNS	t/ack-column.t	/^WITHOUT_COLUMNS: {$/;"	l
 WITH_COLUMNS	t/ack-column.t	/^WITH_COLUMNS: {$/;"	l
@@ -161,19 +178,28 @@ WITH_OUTPUT	t/ack-o.t	/^WITH_OUTPUT: {$/;"	l
 WITH_SWITCHES_MULTIPLE_FILES	t/ack-h.t	/^WITH_SWITCHES_MULTIPLE_FILES: {$/;"	l
 WITH_SWITCHES_ONE_FILE	t/ack-h.t	/^WITH_SWITCHES_ONE_FILE: {$/;"	l
 WORDS_FILE_NOT	t/ack-g.t	/^WORDS_FILE_NOT: {$/;"	l
+_candidate_files	btg/ack-standalone	/^sub _candidate_files {$/;"	s
 _get_thpppt	Ack.pm	/^sub _get_thpppt {$/;"	s
+_get_thpppt	btg/ack-standalone	/^sub _get_thpppt {$/;"	s
 _key	Ack.pm	/^sub _key {$/;"	s
+_key	btg/ack-standalone	/^sub _key {$/;"	s
 _listify	Ack.pm	/^sub _listify {$/;"	s
+_listify	btg/ack-standalone	/^sub _listify {$/;"	s
 _my_program	Ack.pm	/^sub _my_program {$/;"	s
+_my_program	btg/ack-standalone	/^sub _my_program {$/;"	s
+_setup	btg/ack-standalone	/^sub _setup {$/;"	s
 _thpppt	Ack.pm	/^sub _thpppt {$/;"	s
+_thpppt	btg/ack-standalone	/^sub _thpppt {$/;"	s
 ack	t/command-line-files.t	/^ack: non-existent-file.txt: No such file or directory$/;"	l
 ack_lists_match	t/Util.pm	/^sub ack_lists_match {$/;"	s
 ack_sets_match	t/Util.pm	/^sub ack_sets_match {$/;"	s
 build_ack_command_line	t/Util.pm	/^sub build_ack_command_line {$/;"	s
 build_command_line	t/Util.pm	/^sub build_command_line {$/;"	s
 build_regex	Ack.pm	/^sub build_regex {$/;"	s
+build_regex	btg/ack-standalone	/^sub build_regex {$/;"	s
 by_2nd	t/module.t	/^sub by_2nd { return $a->[1] cmp $b->[1]}$/;"	s
 check_regex	Ack.pm	/^sub check_regex {$/;"	s
+check_regex	btg/ack-standalone	/^sub check_regex {$/;"	s
 check_stderr	t/ack-type.t	/^sub check_stderr {$/;"	s
 check_u	t/ack-u.t	/^sub check_u {$/;"	s
 check_with	t/ack-type.t	/^sub check_with {$/;"	s
@@ -182,96 +208,150 @@ close	Basic.pm	/^sub close {$/;"	s
 close	Repository.pm	/^sub close {$/;"	s
 close	Resource.pm	/^sub close {$/;"	s
 close	Tar.pm	/^sub close {$/;"	s
+close	btg/ack-standalone	/^sub close {$/;"	s
 critic	Makefile.PL	/^critic:$/;"	l
 def_types_from_ARGV	Ack.pm	/^sub def_types_from_ARGV {$/;"	s
+def_types_from_ARGV	btg/ack-standalone	/^sub def_types_from_ARGV {$/;"	s
 delete_type	Ack.pm	/^sub delete_type {$/;"	s
+delete_type	btg/ack-standalone	/^sub delete_type {$/;"	s
 die	Ack.pm	/^sub die { ## no critic (ProhibitBuiltinHomonyms)$/;"	s
+die	btg/ack-standalone	/^sub die {$/;"	s
 dprof	Makefile.PL	/^dprof: all$/;"	l
 dproflb	Makefile.PL	/^dproflb: all$/;"	l
 expand_filenames	Ack.pm	/^    sub expand_filenames {$/;"	s
+expand_filenames	btg/ack-standalone	/^    sub expand_filenames {$/;"	s
 extensions_handled	Tar.pm	/^sub extensions_handled {$/;"	s
 fastprof	Makefile.PL	/^fastprof: all$/;"	l
+files	btg/ack-standalone	/^sub files {$/;"	s
 filetype_setup	Ack.pm	/^sub filetype_setup {$/;"	s
+filetype_setup	btg/ack-standalone	/^sub filetype_setup {$/;"	s
 filetypes	Ack.pm	/^sub filetypes {$/;"	s
+filetypes	btg/ack-standalone	/^sub filetypes {$/;"	s
 filetypes_supported	Ack.pm	/^sub filetypes_supported {$/;"	s
+filetypes_supported	btg/ack-standalone	/^sub filetypes_supported {$/;"	s
 filetypes_supported_set	Ack.pm	/^sub filetypes_supported_set {$/;"	s
+filetypes_supported_set	btg/ack-standalone	/^sub filetypes_supported_set {$/;"	s
 fill_type_wanted	t/module.t	/^sub fill_type_wanted {$/;"	s
 get_command_line_options	Ack.pm	/^sub get_command_line_options {$/;"	s
+get_command_line_options	btg/ack-standalone	/^sub get_command_line_options {$/;"	s
 get_copyright	Ack.pm	/^sub get_copyright {$/;"	s
+get_copyright	btg/ack-standalone	/^sub get_copyright {$/;"	s
 get_iterator	Ack.pm	/^sub get_iterator {$/;"	s
+get_iterator	btg/ack-standalone	/^sub get_iterator {$/;"	s
 get_rc	t/Util.pm	/^sub get_rc {$/;"	s
 get_starting_points	Ack.pm	/^sub get_starting_points {$/;"	s
+get_starting_points	btg/ack-standalone	/^sub get_starting_points {$/;"	s
 get_version_statement	Ack.pm	/^sub get_version_statement {$/;"	s
+get_version_statement	btg/ack-standalone	/^sub get_version_statement {$/;"	s
 ignoredir_filter	Ack.pm	/^sub ignoredir_filter {$/;"	s
+ignoredir_filter	btg/ack-standalone	/^sub ignoredir_filter {$/;"	s
 input_from_pipe	Ack.pm	/^sub input_from_pipe {$/;"	s
+input_from_pipe	btg/ack-standalone	/^sub input_from_pipe {$/;"	s
 is_binary	Basic.pm	/^sub is_binary {$/;"	s
 is_binary	Resource.pm	/^sub is_binary {$/;"	s
 is_binary	Tar.pm	/^sub is_binary {$/;"	s
+is_binary	btg/ack-standalone	/^sub is_binary {$/;"	s
 is_filetype	t/Util.pm	/^sub is_filetype {$/;"	s
 is_interesting	Ack.pm	/^sub is_interesting {$/;"	s
+is_interesting	btg/ack-standalone	/^sub is_interesting {$/;"	s
 is_searchable	Ack.pm	/^sub is_searchable {$/;"	s
+is_searchable	btg/ack-standalone	/^sub is_searchable {$/;"	s
 is_win32	t/Util.pm	/^sub is_win32 {$/;"	s
 lists_match	t/Util.pm	/^sub lists_match {$/;"	s
 load_colors	Ack.pm	/^sub load_colors {$/;"	s
+load_colors	btg/ack-standalone	/^sub load_colors {$/;"	s
 main	Makefile.PL	/^package main;$/;"	p
 main	ack-base	/^sub main {$/;"	s
+main	btg/ack-standalone	/^sub main {$/;"	s
 name	Basic.pm	/^sub name {$/;"	s
 name	Resource.pm	/^sub name {$/;"	s
 name	Tar.pm	/^sub name {$/;"	s
+name	btg/ack-standalone	/^sub name {$/;"	s
 needs_line_scan	Basic.pm	/^sub needs_line_scan {$/;"	s
 needs_line_scan	Resource.pm	/^sub needs_line_scan {$/;"	s
 needs_line_scan	Tar.pm	/^sub needs_line_scan {$/;"	s
+needs_line_scan	btg/ack-standalone	/^sub needs_line_scan {$/;"	s
 new	Basic.pm	/^sub new {$/;"	s
 new	Repository.pm	/^sub new {$/;"	s
 new	Resource.pm	/^sub new {$/;"	s
 new	Tar.pm	/^sub new {$/;"	s
+new	btg/ack-standalone	/^sub new {$/;"	s
 next_resource	Basic.pm	/^sub next_resource {$/;"	s
 next_resource	Repository.pm	/^sub next_resource {$/;"	s
 next_resource	Tar.pm	/^sub next_resource {$/;"	s
+next_resource	btg/ack-standalone	/^sub next_resource {$/;"	s
 next_text	Basic.pm	/^sub next_text {$/;"	s
 next_text	Resource.pm	/^sub next_text {$/;"	s
 next_text	Tar.pm	/^sub next_text {$/;"	s
+next_text	btg/ack-standalone	/^sub next_text {$/;"	s
 nytprof	Makefile.PL	/^nytprof: all$/;"	l
 option_in_usage	t/longopts.t	/^sub option_in_usage {$/;"	s
 output_to_pipe	Ack.pm	/^sub output_to_pipe {$/;"	s
+output_to_pipe	btg/ack-standalone	/^sub output_to_pipe {$/;"	s
 pipe_into_ack	t/Util.pm	/^sub pipe_into_ack {$/;"	s
 prep_environment	t/Util.pm	/^sub prep_environment {$/;"	s
 print	Ack.pm	/^sub print                   { print {$fh} @_ }$/;"	s
+print	btg/ack-standalone	/^sub print                   { print {$fh} @_ }$/;"	s
 print_blank_line	Ack.pm	/^sub print_blank_line        { App::Ack::print( "\\n" ) }$/;"	s
+print_blank_line	btg/ack-standalone	/^sub print_blank_line        { App::Ack::print( "\\n" ) }$/;"	s
 print_column_no	Ack.pm	/^sub print_column_no         { App::Ack::print( $_[0], $_[1] ) }$/;"	s
+print_column_no	btg/ack-standalone	/^sub print_column_no         { App::Ack::print( $_[0], $_[1] ) }$/;"	s
 print_count	Ack.pm	/^sub print_count {$/;"	s
+print_count	btg/ack-standalone	/^sub print_count {$/;"	s
 print_count0	Ack.pm	/^sub print_count0 {$/;"	s
+print_count0	btg/ack-standalone	/^sub print_count0 {$/;"	s
 print_filename	Ack.pm	/^sub print_filename          { App::Ack::print( $_[0], $_[1] ) }$/;"	s
+print_filename	btg/ack-standalone	/^sub print_filename          { App::Ack::print( $_[0], $_[1] ) }$/;"	s
 print_files	Ack.pm	/^sub print_files {$/;"	s
+print_files	btg/ack-standalone	/^sub print_files {$/;"	s
 print_files_with_matches	Ack.pm	/^sub print_files_with_matches {$/;"	s
+print_files_with_matches	btg/ack-standalone	/^sub print_files_with_matches {$/;"	s
 print_first_filename	Ack.pm	/^sub print_first_filename    { App::Ack::print( $_[0], "\\n" ) }$/;"	s
+print_first_filename	btg/ack-standalone	/^sub print_first_filename    { App::Ack::print( $_[0], "\\n" ) }$/;"	s
 print_line_no	Ack.pm	/^sub print_line_no           { App::Ack::print( $_[0], $_[1] ) }$/;"	s
+print_line_no	btg/ack-standalone	/^sub print_line_no           { App::Ack::print( $_[0], $_[1] ) }$/;"	s
 print_match_or_context	Ack.pm	/^sub print_match_or_context {$/;"	s
+print_match_or_context	btg/ack-standalone	/^sub print_match_or_context {$/;"	s
 print_matches	Ack.pm	/^sub print_matches {$/;"	s
+print_matches	btg/ack-standalone	/^sub print_matches {$/;"	s
 print_separator	Ack.pm	/^sub print_separator         { App::Ack::print( "--\\n" ) }$/;"	s
+print_separator	btg/ack-standalone	/^sub print_separator         { App::Ack::print( "--\\n" ) }$/;"	s
 print_version_statement	Ack.pm	/^sub print_version_statement {$/;"	s
+print_version_statement	btg/ack-standalone	/^sub print_version_statement {$/;"	s
 profile	Makefile.PL	/^profile: all$/;"	l
 profiler	Makefile.PL	/^profiler: all$/;"	l
 read_ackrc	Ack.pm	/^sub read_ackrc {$/;"	s
+read_ackrc	btg/ack-standalone	/^sub read_ackrc {$/;"	s
 remove_dir_sep	Ack.pm	/^sub remove_dir_sep {$/;"	s
+remove_dir_sep	btg/ack-standalone	/^sub remove_dir_sep {$/;"	s
 reorder	t/module.t	/^sub reorder {$/;"	s
 reset	Basic.pm	/^sub reset {$/;"	s
 reset	Resource.pm	/^sub reset {$/;"	s
 reset	Tar.pm	/^sub reset {$/;"	s
+reset	btg/ack-standalone	/^sub reset {$/;"	s
+reslash	btg/ack-standalone	/^sub reslash {$/;"	s
 run_ack	t/Util.pm	/^sub run_ack {$/;"	s
 run_ack_with_stderr	t/Util.pm	/^sub run_ack_with_stderr {$/;"	s
 search_and_list	Ack.pm	/^sub search_and_list {$/;"	s
+search_and_list	btg/ack-standalone	/^sub search_and_list {$/;"	s
 search_resource	Ack.pm	/^sub search_resource {$/;"	s
+search_resource	btg/ack-standalone	/^sub search_resource {$/;"	s
 set_up_assertion_that_these_options_will_ignore_those_directories	t/ack-ignore-dir.t	/^sub set_up_assertion_that_these_options_will_ignore_those_directories {$/;"	s
 set_up_pager	Ack.pm	/^sub set_up_pager {$/;"	s
+set_up_pager	btg/ack-standalone	/^sub set_up_pager {$/;"	s
 sets_match	t/Util.pm	/^sub sets_match {$/;"	s
 show_help	Ack.pm	/^sub show_help {$/;"	s
+show_help	btg/ack-standalone	/^sub show_help {$/;"	s
 show_help_types	Ack.pm	/^sub show_help_types {$/;"	s
+show_help_types	btg/ack-standalone	/^sub show_help_types {$/;"	s
 slurp	t/Util.pm	/^sub slurp {$/;"	s
 smallprof	Makefile.PL	/^smallprof: all$/;"	l
+sort_reverse	btg/ack-standalone	/^sub sort_reverse($$)    { return $_[1]->[1] cmp $_[0]->[1] }$/;"	s
+sort_standard	btg/ack-standalone	/^sub sort_standard($$)   { return $_[0]->[1] cmp $_[1]->[1] }$/;"	s
 tags	Makefile.PL	/^tags:$/;"	l
 test_ack_with	t/illegal-regex.t	/^sub test_ack_with {$/;"	s
 test_match	t/ack-match.t	/^sub test_match {$/;"	s
 tidy	Makefile.PL	/^tidy:$/;"	l
 timed	Makefile.PL	/^timed: all$/;"	l
 warn	Ack.pm	/^sub warn { ## no critic (ProhibitBuiltinHomonyms)$/;"	s
+warn	btg/ack-standalone	/^sub warn {$/;"	s

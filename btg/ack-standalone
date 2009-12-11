@@ -4,7 +4,7 @@
 # Please DO NOT EDIT or send patches for it.
 #
 # Please take a look at the source from
-# http://code.google.com/p/ack/source
+# http://github.com/petdance/ack
 # and submit patches against the individual files
 # that build ack.
 #
@@ -12,7 +12,7 @@
 use warnings;
 use strict;
 
-our $VERSION = '1.90';
+our $VERSION = '1.92';
 # Check http://betterthangrep.com/ for updates
 
 # These are all our globals.
@@ -92,7 +92,7 @@ sub main {
 
     App::Ack::set_up_pager( $opt->{pager} ) if defined $opt->{pager};
     if ( $opt->{f} ) {
-        App::Ack::print_files( $iter, $opt );
+        $nmatches = App::Ack::print_files( $iter, $opt );
     }
     elsif ( $opt->{l} || $opt->{count} ) {
         $nmatches = App::Ack::print_files_with_matches( $iter, $opt );
@@ -143,7 +143,7 @@ including:
 
 =over 4
 
-=item * Backup files: Files ending with F<~>, or F<#*#>
+=item * Backup files: Files matching F<#*#> or ending with F<~>.
 
 =item * Coredumps: Files matching F<core.\d+>
 
@@ -660,8 +660,8 @@ no match is found.
 
 The I<grep> code 2 for errors is not used.
 
-0 is returned if C<-f> or C<-g> are specified, irrespective of
-number of files found.
+If C<-f> or C<-g> are specified, then 0 is returned if at least one
+file is found.  If no files are found, then 1 is returned.
 
 =cut
 
@@ -729,6 +729,31 @@ them here.
 
 =head1 FAQ
 
+=head2 Why isn't ack finding a match in (some file)?
+
+Probably because it's of a type that ack doesn't recognize.
+
+ack's searching behavior is driven by filetype.  If ack doesn't
+know what kind of file it is, ack ignores it.
+
+If you want ack to search files that it doesn't recognize, use the
+C<-a> switch.
+
+If you want ack to search every file, even ones that it always
+ignores like coredumps and backup files, use the C<-u> switch.
+
+=head2 Why does ack ignore unknown files by default?
+
+ack is designed by a programmer, for programmers, for searching
+large trees of code.  Most codebases have a lot files in them which
+aren't source files (like compiled object files, source control
+metadata, etc), and grep wastes a lot of time searching through all
+of those as well and returning matches from those files.
+
+That's why ack's behavior of not searching things it doesn't recognize
+is one of its greatest strengths: the speed you get from only
+searching the things that you want to be looking at.
+
 =head2 Wouldn't it be great if F<ack> did search & replace?
 
 No, ack will always be read-only.  Perl has a perfectly good way
@@ -741,6 +766,25 @@ this form the Unix shell:
 
     $ perl -i -p -e's/foo/bar/g' $(ack -f --php)
 
+=head2 Can you make ack recognize F<.xyz> files?
+
+That's an enhancement.  Please see the section in the manual about
+enhancements.
+
+=head2 There's already a program/package called ack.
+
+Yes, I know.
+
+=head2 Why is it called ack if it's called ack-grep?
+
+The name of the program is "ack".  Some packagers have called it
+"ack-grep" when creating packages because there's already a package
+out there called "ack" that has nothing to do with this ack.
+
+I suggest you rename your ack-grep install to "ack" because one of
+the crucial benefits of ack is having a name that's so short and
+simple to type.
+
 =head1 AUTHOR
 
 Andy Lester, C<< <andy at petdance.com> >>
@@ -748,17 +792,17 @@ Andy Lester, C<< <andy at petdance.com> >>
 =head1 BUGS
 
 Please report any bugs or feature requests to the issues list at
-Google Code: L<http://code.google.com/p/ack/issues/list>
+Github: L<http://github.com/petdance/ack/issues>
 
 =head1 ENHANCEMENTS
 
 All enhancement requests MUST first be posted to the ack-users
 mailing list at L<http://groups.google.com/group/ack-users>.  I
 will not consider a request without it first getting seen by other
-ack users.
+ack users.  This includes requests for new filetypes.
 
 There is a list of enhancements I want to make to F<ack> in the ack
-issues list at Google Code: L<http://code.google.com/p/ack/issues/list>
+issues list at Github: L<http://github.com/petdance/ack/issues>
 
 Patches are always welcome, but patches with tests get the most
 attention.
@@ -773,9 +817,9 @@ Support for and information about F<ack> can be found at:
 
 L<http://betterthangrep.com/>
 
-=item * The ack issues list at Google Code
+=item * The ack issues list at Github
 
-L<http://code.google.com/p/ack/issues/list>
+L<http://github.com/petdance/ack/issues>
 
 =item * AnnoCPAN: Annotated CPAN documentation
 
@@ -789,9 +833,9 @@ L<http://cpanratings.perl.org/d/ack>
 
 L<http://search.cpan.org/dist/ack>
 
-=item * Subversion repository
+=item * Git source repository
 
-L<http://ack.googlecode.com/svn/>
+L<http://github.com/petdance/ack>
 
 =back
 
@@ -800,6 +844,9 @@ L<http://ack.googlecode.com/svn/>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Packy Anderson,
+JR Boyens,
+Dan Sully,
 Ryan Niebur,
 Kent Fredric,
 Mike Morearty,
@@ -1054,8 +1101,8 @@ use strict;
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.90';
-    $COPYRIGHT = 'Copyright 2005-2009 Andy Lester, all rights reserved.';
+    $VERSION = '1.92';
+    $COPYRIGHT = 'Copyright 2005-2009 Andy Lester.';
 }
 
 our $fh;
@@ -1133,11 +1180,12 @@ BEGIN {
         ocaml       => [qw( ml mli )],
         parrot      => [qw( pir pasm pmc ops pod pg tg )],
         perl        => [qw( pl pm pod t )],
-        php         => [qw( php phpt php3 php4 php5 )],
+        php         => [qw( php phpt php3 php4 php5 phtml)],
         plone       => [qw( pt cpt metadata cpy py )],
         python      => [qw( py )],
         rake        => q{Rakefiles},
         ruby        => [qw( rb rhtml rjs rxml erb rake )],
+        scala       => [qw( scala )],
         scheme      => [qw( scm ss )],
         shell       => [qw( sh bash csh tcsh ksh zsh )],
         skipped     => q{Files, but not directories, normally skipped by ack (default: off)},
@@ -1284,7 +1332,7 @@ sub get_command_line_options {
     my $parser = Getopt::Long::Parser->new();
     $parser->configure( 'bundling', 'no_ignore_case', );
     $parser->getoptions( %{$getopt_specs} ) or
-        App::Ack::die( 'See ack --help or ack --man for options.' );
+        App::Ack::die( 'See ack --help, ack --help-types or ack --man for options.' );
 
     my $to_screen = not output_to_pipe();
     my %defaults = (
@@ -1448,10 +1496,10 @@ use constant TEXT => 'text';
 sub filetypes {
     my $filename = shift;
 
-    return 'skipped' unless is_searchable( $filename );
-
     my $basename = $filename;
     $basename =~ s{.*[$dir_sep_chars]}{};
+
+    return 'skipped' unless is_searchable( $basename );
 
     my $lc_basename = lc $basename;
     return ('make',TEXT)        if $lc_basename eq 'makefile';
@@ -1509,7 +1557,9 @@ sub is_searchable {
     # If these are updated, update the --help message
     return if $filename =~ /[.]bak$/;
     return if $filename =~ /~$/;
-    return if $filename =~ m{[$dir_sep_chars]?(?:#.+#|core\.\d+|[._].*\.swp)$}o;
+    return if $filename =~ m{^#.*#$}o;
+    return if $filename =~ m{^core\.\d+$}o;
+    return if $filename =~ m{[._].*\.swp$}o;
 
     return 1;
 }
@@ -2117,12 +2167,14 @@ sub print_files {
 
     my $ors = $opt->{print0} ? "\0" : "\n";
 
+    my $nmatches = 0;
     while ( defined ( my $file = $iter->() ) ) {
         App::Ack::print $file, $ors;
+        $nmatches++;
         last if $opt->{1};
     }
 
-    return;
+    return $nmatches;
 }
 
 
@@ -2282,14 +2334,14 @@ sub get_iterator {
     if ( $g_regex ) {
         $file_filter
             = $opt->{u}   ? sub { $File::Next::name =~ /$g_regex/ } # XXX Maybe this should be a 1, no?
-            : $opt->{all} ? sub { $starting_point{ $File::Next::name } || ( $File::Next::name =~ /$g_regex/ && is_searchable( $File::Next::name ) ) }
+            : $opt->{all} ? sub { $starting_point{ $File::Next::name } || ( $File::Next::name =~ /$g_regex/ && is_searchable( $_ ) ) }
             :               sub { $starting_point{ $File::Next::name } || ( $File::Next::name =~ /$g_regex/ && is_interesting( @_ ) ) }
             ;
     }
     else {
         $file_filter
             = $opt->{u}   ? sub {1}
-            : $opt->{all} ? sub { $starting_point{ $File::Next::name } || is_searchable( $File::Next::name ) }
+            : $opt->{all} ? sub { $starting_point{ $File::Next::name } || is_searchable( $_ ) }
             :               sub { $starting_point{ $File::Next::name } || is_interesting( @_ ) }
             ;
     }
@@ -2314,7 +2366,7 @@ sub get_iterator {
 sub set_up_pager {
     my $command = shift;
 
-    return unless App::Ack::output_to_pipe();
+    return if App::Ack::output_to_pipe();
 
     my $pager;
     if ( not open( $pager, '|-', $command ) ) {

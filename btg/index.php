@@ -33,8 +33,8 @@ _   /|
 
         <?php include "ack-lists.php" ?>
 
-        <h2>Latest version of ack: 1.90, September 7th, 2009</h2>
-        Read the <a href="http://cpansearch.perl.org/src/PETDANCE/ack-1.90/Changes">Changelog</a>
+        <h2>Latest version of ack: 1.92, December 11, 2009</h2>
+        Read the <a href="Changes">Changelog</a>
 
         <p>
         <b>ack</b> is a tool like <i>grep</i>, designed for programmers with large trees of

@@ -785,6 +785,14 @@ I suggest you rename your ack-grep install to "ack" because one of
 the crucial benefits of ack is having a name that's so short and
 simple to type.
 
+=head2 Can I do multi-line regexes?
+
+No, ack does not support regexes that match multiple lines.  Doing
+so would require reading in the entire file at a time.
+
+If you want to see lines near your match, use the C<--A>, C<--B>
+and C<--C> switches for displaying context.
+
 =head1 AUTHOR
 
 Andy Lester, C<< <andy at petdance.com> >>

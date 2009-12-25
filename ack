@@ -336,7 +336,7 @@ Stop reading a file after I<NUM> matches.
 
 Print this manual page.
 
-=item B<-n>
+=item B<-n>, B<--no-recurse>
 
 No descending into subdirectories.
 
@@ -382,6 +382,11 @@ Quote all metacharacters in PATTERN, it is treated as a literal.
 
 This applies only to the PATTERN, not to the regexes given for the B<-g>
 and B<-G> options.
+
+=item B<-r>, B<-R>, B<--recurse>
+
+Recurse into sub-directories. This is the default and just here for
+compatibility with grep. You can also use it for turning B<--no-recurse> off.
 
 =item B<--smart-case>, B<--no-smart-case>
 
@@ -1302,7 +1307,7 @@ sub get_command_line_options {
         'passthru'              => \$opt{passthru},
         'print0'                => \$opt{print0},
         'Q|literal'             => \$opt{Q},
-        'r|R|recurse'           => sub {},
+        'r|R|recurse'           => sub { $opt{n} = 0 },
         'smart-case!'           => \$opt{smart_case},
         'sort-files'            => \$opt{sort_files},
         'u|unrestricted'        => \$opt{u},

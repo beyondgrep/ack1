@@ -561,11 +561,15 @@ sub is_searchable {
 
 Returns a regex object based on a string and command-line options.
 
+Dies when the regex $str is undefinied (i.e. not given on command line).
+
 =cut
 
 sub build_regex {
     my $str = shift;
     my $opt = shift;
+
+    defined $str or App::Ack::die( 'No regular expression found.' );
 
     $str = quotemeta( $str ) if $opt->{Q};
     if ( $opt->{w} ) {

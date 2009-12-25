@@ -69,7 +69,6 @@ sub main {
 
     my $file_matching = $opt->{f} || $opt->{lines};
     if ( !$file_matching ) {
-        @ARGV or App::Ack::die( 'No regular expression found.' );
         $opt->{regex} = App::Ack::build_regex( defined $opt->{regex} ? $opt->{regex} : shift @ARGV, $opt );
     }
 

@@ -18,6 +18,9 @@ NEXT
         ack --match Sue
         cat foo | ack --perl
 
+    Added option --show-types to output the types that ack considers
+    a file to have. (Torsten Blix)
+
     [DOCUMENTATION]
     Clarified the documentation of --ignore-dir.  (Torsten Blix)
 
@@ -25,8 +28,6 @@ NEXT
 
 
 1.92        Fri Dec 11 11:47:56 CST 2009
-
-    ack is now hosted at github: http://github.com/petdance/ack
 
     [FIXES]
     The --pager flag would not work.  Now it does.  Thanks Packy

@@ -77,6 +77,7 @@ File finding:
                         The PATTERN must not be specified.
   -g REGEX              Same as -f, but only print files matching REGEX.
   --sort-files          Sort the found files lexically.
+  --show-types          Show which types each file has.
 
 File inclusion/exclusion:
   -a, --all-types       All file types searched;

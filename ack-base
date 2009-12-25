@@ -404,6 +404,12 @@ B<-g> and B<-G> options.
 Sorts the found files lexically.  Use this if you want your file
 listings to be deterministic between runs of I<ack>.
 
+=item B<--show-types>
+
+Outputs the filetypes that ack associates with each file.
+
+Works with B<-f> and B<-g> options.
+
 =item B<--thpppt>
 
 Display the all-important Bill The Cat logo.  Note that the exact

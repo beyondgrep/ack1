@@ -229,6 +229,7 @@ sub get_command_line_options {
         'print0'                => \$opt{print0},
         'Q|literal'             => \$opt{Q},
         'r|R|recurse'           => sub { $opt{n} = 0 },
+        'show-types'            => \$opt{show_types},
         'smart-case!'           => \$opt{smart_case},
         'sort-files'            => \$opt{sort_files},
         'u|unrestricted'        => \$opt{u},
@@ -759,6 +760,7 @@ File finding:
                         The PATTERN must not be specified.
   -g REGEX              Same as -f, but only print files matching REGEX.
   --sort-files          Sort the found files lexically.
+  --show-types          Show which types each file has.
 
 File inclusion/exclusion:
   -a, --all-types       All file types searched;
@@ -1267,7 +1269,7 @@ sub print_files {
 
     my $nmatches = 0;
     while ( defined ( my $file = $iter->() ) ) {
-        App::Ack::print $file, $ors;
+        App::Ack::print $file, $opt->{show_types} ? " => " . join( ',', filetypes( $file ) ) : (),  $ors;
         $nmatches++;
         last if $opt->{1};
     }

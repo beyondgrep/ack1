@@ -412,6 +412,12 @@ B<-g> and B<-G> options.
 Sorts the found files lexically.  Use this if you want your file
 listings to be deterministic between runs of I<ack>.
 
+=item B<--show-types>
+
+Outputs the filetypes that ack associates with each file.
+
+Works with B<-f> and B<-g> options.
+
 =item B<--thpppt>
 
 Display the all-important Bill The Cat logo.  Note that the exact
@@ -1326,6 +1332,7 @@ sub get_command_line_options {
         'print0'                => \$opt{print0},
         'Q|literal'             => \$opt{Q},
         'r|R|recurse'           => sub { $opt{n} = 0 },
+        'show-types'            => \$opt{show_types},
         'smart-case!'           => \$opt{smart_case},
         'sort-files'            => \$opt{sort_files},
         'u|unrestricted'        => \$opt{u},
@@ -1769,6 +1776,7 @@ File finding:
                         The PATTERN must not be specified.
   -g REGEX              Same as -f, but only print files matching REGEX.
   --sort-files          Sort the found files lexically.
+  --show-types          Show which types each file has.
 
 File inclusion/exclusion:
   -a, --all-types       All file types searched;
@@ -2215,7 +2223,7 @@ sub print_files {
 
     my $nmatches = 0;
     while ( defined ( my $file = $iter->() ) ) {
-        App::Ack::print $file, $ors;
+        App::Ack::print $file, $opt->{show_types} ? " => " . join( ',', filetypes( $file ) ) : (),  $ors;
         $nmatches++;
         last if $opt->{1};
     }

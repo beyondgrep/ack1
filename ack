@@ -73,9 +73,9 @@ sub main {
             App::Ack::warn( "Ignoring $nargs argument$s on the command-line while acting as a filter." );
         }
         my $res = App::Ack::Resource::Basic->new( '-' );
-        App::Ack::search_resource( $res, $opt );
+        my $nmatches = App::Ack::search_resource( $res, $opt );
         $res->close();
-        exit 0;
+        App::Ack::exit_from_ack( $nmatches );
     }
 
     my $file_matching = $opt->{f} || $opt->{lines};
@@ -105,7 +105,7 @@ sub main {
         $nmatches = App::Ack::print_matches( $iter, $opt );
     }
     close $App::Ack::fh;
-    exit ($nmatches ? 0 : 1);
+    App::Ack::exit_from_ack( $nmatches );
 }
 
 =head1 NAME
@@ -2445,6 +2445,14 @@ sub input_from_pipe {
 
 sub output_to_pipe {
     return $output_to_pipe;
+}
+
+
+sub exit_from_ack {
+    my $nmatches = shift;
+
+    my $rc = $nmatches ? 0 : 1;
+    exit $rc;
 }
 
 

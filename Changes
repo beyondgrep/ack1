@@ -23,6 +23,9 @@ NEXT
 
     Added --clojure (Janne Hietamäk)
 
+    ack always returned 0 when piped into, no matter how many matches where
+    found. (Torsten Blix)
+
     [DOCUMENTATION]
     Clarified the documentation of --ignore-dir.  (Torsten Blix)
 

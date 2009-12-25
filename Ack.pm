@@ -1528,6 +1528,22 @@ sub output_to_pipe {
     return $output_to_pipe;
 }
 
+=head2 exit_from_ack
+
+Exit from the application with the correct exit code.
+
+Returns with 0 if a match was found, otherwise with 1. The number of matches is
+handed in as the only argument.
+
+=cut
+
+sub exit_from_ack {
+    my $nmatches = shift;
+
+    my $rc = $nmatches ? 0 : 1;
+    exit $rc;
+}
+
 
 =head1 COPYRIGHT & LICENSE
 

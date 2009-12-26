@@ -18,23 +18,25 @@ NEXT
         ack --match Sue
         cat foo | ack --perl
 
-    Fixed issue 74: analog to grep, 'ack --count regex file' now only outputs the
-    number of found matches, if only one file is given.
+    Fixed issue 74: analog to grep, 'ack --count regex file' now
+    only outputs the number of found matches, if only one file is
+    given.
+
+    Fixed issue 76: Giving both --line and a regex (with --match)
+    now leads to an error. The same is true for -f or -g in conjunction
+    with --match. (Torsten Blix)
+
+    Fixed issue 80: Piping into ack --count now works as expected.
+    ack always returned 0 when piped into, no matter how many matches
+    where found. (Torsten Blix)
+
+    Fixed issue 81: .ackrc now ignores leading/trailing whitespace.
+    (Torsten Blix)
 
     Added option --show-types to output the types that ack considers
     a file to have. (Torsten Blix)
 
-    Piping into ack --count now works as expected. (Torsten Blix)
-
-    Giving both --line and a regex (with --match) now leads to an error. This
-    fixes issue 76. The same is true for -f or -g in conjunction with --match.
-
     Added --clojure (Janne Hietamäk)
-
-    ack always returned 0 when piped into, no matter how many matches where
-    found. (Torsten Blix)
-
-    .ackrc now ignores leading/trailing whitespace.  (Torsten Blix)
 
     'ack --count --no-filename regex' doesn't output a list of numbers but a
     sum of all occurences. This is NOT what grep does but is the more sensible

@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 15;
+use Test::More tests => 12;
 
 use lib 't';
 use Util;
@@ -71,23 +71,10 @@ DASH_LC: {
 }
 
 PIPE_INTO_C: {
-    my $expected = 2;
-
     my $file = 't/text/science-of-myth.txt';
     my @args = qw( religion -i -c );
     my @results = pipe_into_ack( $file, @args );
 
     is( scalar @results, 1, 'Piping into ack --count should return one line of results' );
-    is( $results[0], $expected, 'Piping into ack --count should simply return the count' );
-}
-
-TOTAL_COUNT: {
-    my $expected = 5;
-
-    my $file = 't/text';
-    my @args = qw( red --text -c --no-filename ); # don't show filenames => output one total (matches in 3 files)
-    my @results = run_ack( @args, $file );
-
-    is( scalar @results, 1, 'Total count should return one line of results' );
-    is( $results[0], $expected, 'Total count should simply return the count' );
+    is( $results[0], '2', 'Piping into ack --count should return "-:<count>"' );
 }

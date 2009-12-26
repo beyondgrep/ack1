@@ -26,16 +26,7 @@ NEXT
     ack always returned 0 when piped into, no matter how many matches where
     found. (Torsten Blix)
 
-    [DOCUMENTATION]
-    Clarified the documentation of --ignore-dir.  (Torsten Blix)
-
-    Added man page documenation of --recurse option.  (Torsten Blix)
-
-    --noenv can be canceled by specifying --env: (Torsten Blix)
-
-        ACK_OPTIONS=-i ack --noenv --env sue t/text/boy-named-sue.txt
-
-    Giving both --line and a regex now leads to an error. (Torsten Blix)
+    .ackrc now ignores leading/trailing whitespace.  (Torsten Blix)
 
 
 1.92        Fri Dec 11 11:47:56 CST 2009

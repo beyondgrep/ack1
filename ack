@@ -1285,6 +1285,12 @@ sub read_ackrc {
             chomp @lines;
             close $fh or App::Ack::die( "$filename: $!\n" );
 
+            # get rid of leading and trailing whitespaces
+            for ( @lines ) {
+               s/^\s+//;
+               s/\s+$//;
+            }
+
             return @lines;
         }
     }

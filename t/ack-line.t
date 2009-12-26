@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 18;
+use Test::More tests => 22;
 
 use lib 't';
 use Util;
@@ -141,4 +141,16 @@ EOF
     my @args = qw( --cc --lines=1 --after=3 --sort );
 
     ack_lists_match( [ @args, @files ], \@expected, 'Looking for first line in multiple files' );
+}
+
+LINE_WITH_REGEX: {
+    # specifying both --line and a regex should result in an error
+    my @files = qw( t/text/boy-named-sue.txt );
+    my @args = qw( --lines=1 --match Sue );
+
+    my ($stdout, $stderr) = run_ack_with_stderr( @args, @files );
+    isnt( get_rc(), 0, 'Specifying both --line and --match must lead to an error RC' );
+    is( scalar @{$stdout}, 0, 'No normal output' );
+    is( scalar @{$stderr}, 1, 'One line of stderr output' );
+    like( $stderr->[0], qr/\(Sue\)/, 'Error message must contain "(Sue)"' );
 }

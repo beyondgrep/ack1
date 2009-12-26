@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 47;
+use Test::More tests => 55;
 
 use lib 't';
 use Util;
@@ -327,4 +327,28 @@ INVERT_MATCH_CONTENT_SWAPPED: {
     my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, "Looking for files without $content_regex in files matching $file_regex - swapped" );
+}
+
+G_WITH_REGEX: {
+    # specifying both -g and a regex should result in an error
+    my @files = qw( t/text );
+    my @args = qw( -g boy --match Sue );
+
+    my ($stdout, $stderr) = run_ack_with_stderr( @args, @files );
+    isnt( get_rc(), 0, 'Specifying both -g and --match must lead to an error RC' );
+    is( scalar @{$stdout}, 0, 'No normal output' );
+    is( scalar @{$stderr}, 1, 'One line of stderr output' );
+    like( $stderr->[0], qr/\(Sue\)/, 'Error message must contain "(Sue)"' );
+}
+
+F_WITH_REGEX: {
+    # specifying both -f and a regex should result in an error
+    my @files = qw( t/text );
+    my @args = qw( -f --match Sue );
+
+    my ($stdout, $stderr) = run_ack_with_stderr( @args, @files );
+    isnt( get_rc(), 0, 'Specifying both -f and --match must lead to an error RC' );
+    is( scalar @{$stdout}, 0, 'No normal output' );
+    is( scalar @{$stderr}, 1, 'One line of stderr output' );
+    like( $stderr->[0], qr/\(Sue\)/, 'Error message must contain "(Sue)"' );
 }

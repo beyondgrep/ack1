@@ -71,7 +71,9 @@ sub main {
     }
 
     my $file_matching = $opt->{f} || $opt->{lines};
-    if ( !$file_matching ) {
+    if ( $file_matching ) {
+        App::Ack::die( "Can't specify both a regex ($opt->{regex}) and use one of --line, -f or -g." ) if $opt->{regex};
+    } else {
         $opt->{regex} = App::Ack::build_regex( defined $opt->{regex} ? $opt->{regex} : shift @ARGV, $opt );
     }
 

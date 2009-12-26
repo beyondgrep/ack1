@@ -1199,7 +1199,7 @@ sub print_match_or_context {
 } # scope around search_resource() and print_match_or_context()
 
 
-=head2 search_and_list( $fh, $filename, \%opt )
+=head2 search_and_list( $res, \%opt )
 
 Optimized version of searching for -l and --count, which do not
 show lines.

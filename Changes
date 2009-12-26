@@ -21,6 +21,11 @@ NEXT
     Added option --show-types to output the types that ack considers
     a file to have. (Torsten Blix)
 
+    Piping into ack --count now works as expected. (Torsten Blix)
+
+    Giving both --line and a regex (with --match) now leads to an error. This
+    fixes issue 76. The same is true for -f or -g in conjunction with --match.
+
     Added --clojure (Janne Hietamäk)
 
     ack always returned 0 when piped into, no matter how many matches where

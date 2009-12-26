@@ -72,8 +72,15 @@ sub main {
             my $s = $nargs == 1 ? '' : 's';
             App::Ack::warn( "Ignoring $nargs argument$s on the command-line while acting as a filter." );
         }
+
         my $res = App::Ack::Resource::Basic->new( '-' );
-        my $nmatches = App::Ack::search_resource( $res, $opt );
+        my $nmatches;
+        if ( $opt->{count} ) {
+            $nmatches = App::Ack::search_and_list( $res, $opt );
+        } else {
+            # normal searching
+            $nmatches = App::Ack::search_resource( $res, $opt );
+        }
         $res->close();
         App::Ack::exit_from_ack( $nmatches );
     }

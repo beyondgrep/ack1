@@ -32,13 +32,16 @@ MAIN: {
         /^--th[pt]+t+$/ && App::Ack::_thpppt($_);
 
         # See if we want to ignore the environment. (Don't tell Al Gore.)
-        if ( $_ eq '--noenv' ) {
-            my @keys = ( 'ACKRC', grep { /^ACK_/ } keys %ENV );
-            delete @ENV{@keys};
-            $env_is_usable = 0;
+        if ( /^--(no)?env$/ ) {
+            $env_is_usable = defined $1 ? 0 : 1;
         }
     }
-    unshift( @ARGV, App::Ack::read_ackrc() ) if $env_is_usable;
+    if ( $env_is_usable ) {
+        unshift( @ARGV, App::Ack::read_ackrc() );
+    } else {
+        my @keys = ( 'ACKRC', grep { /^ACK_/ } keys %ENV );
+        delete @ENV{@keys};
+    }
     App::Ack::load_colors();
 
     if ( exists $ENV{ACK_SWITCHES} ) {

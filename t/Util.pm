@@ -112,8 +112,9 @@ sub run_ack_with_stderr {
     my @stdout;
     my @stderr;
 
-    # The --noenv makes sure we don't pull in anything from the user.
-    if ( !grep { $_ =~ /^--(no)?env$/ } @args ) {
+    # The --noenv makes sure we don't pull in anything from the user
+    #    unless explicitly specified in the test
+    if ( !grep { /^--(no)?env$/ } @args ) {
         unshift( @args, '--noenv' );
     }
 

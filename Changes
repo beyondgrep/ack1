@@ -27,6 +27,9 @@ NEXT
     Added man page documenation of --recurse option.  (Torsten Blix)
 
 
+    --noenv can be canceled by specifying --env:
+      ACK_OPTIONS=-i ack --noenv --env sue t/text/boy-named-sue.txt
+
 1.92        Fri Dec 11 11:47:56 CST 2009
 
     [FIXES]

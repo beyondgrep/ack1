@@ -207,6 +207,8 @@ each input file.  If B<-l> is in effect, it will only show the
 number of lines for each file that has lines matching.  Without
 B<-l>, some line counts may be zeroes.
 
+If combined with B<-h> (B<--no-filename>) ack outputs only one total count.
+
 =item B<--color>, B<--nocolor>
 
 B<--color> highlights the matching text.  B<--nocolor> supresses

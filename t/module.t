@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 53;
+use Test::More tests => 57;
 use Data::Dumper;
 
 use lib 't';
@@ -223,38 +223,44 @@ my $original_iterator;
              "t${dir_sep}text${dir_sep}4th-of-july.txt",
              1,
              "\n",
+             1,
              1
            ],
            [
              'count0',
              "t${dir_sep}text${dir_sep}boy-named-sue.txt",
-             "\n"
+             "\n",
+             1
            ],
            [
              'count0',
              "t${dir_sep}text${dir_sep}shut-up-be-happy.txt",
-             "\n"
+             "\n",
+             1
            ],
            [
              'count0',
              "t${dir_sep}text${dir_sep}science-of-myth.txt",
-             "\n"
+             "\n",
+             1
            ],
            [
              'count0',
              "t${dir_sep}text${dir_sep}freedom-of-choice.txt",
-             "\n"
+             "\n",
+             1
            ],
            [
              'count0',
              "t${dir_sep}text${dir_sep}me-and-bobbie-mcgee.txt",
-             "\n"
+             "\n",
+             1
            ],
          );
 
     my @e = sort by_2nd @expected;
     my @r = sort by_2nd @result;
-    lists_match( \@r, \@e );
+    lists_match( \@r, \@e, 'XXX' );
     lists_match( \@warns, [], 'no warning' );
 }
 
@@ -279,93 +285,111 @@ my $original_iterator;
              'count0',
              "t${dir_sep}text${dir_sep}4th-of-july.txt",
              "\n",
+             1
            ],
            [
              'count0',
              "t${dir_sep}text${dir_sep}boy-named-sue.txt",
-             "\n"
+             "\n",
+             1
            ],
            [
              'count0',
              "t${dir_sep}text${dir_sep}shut-up-be-happy.txt",
-             "\n"
+             "\n",
+             1
            ],
            [
              'count',
              "t${dir_sep}text${dir_sep}science-of-myth.txt",
              4,
              "\n",
+             1,
              1
            ],
            [
              'count0',
              "t${dir_sep}text${dir_sep}freedom-of-choice.txt",
-             "\n"
+             "\n",
+             1
            ],
            [
              'count0',
              "t${dir_sep}text${dir_sep}me-and-bobbie-mcgee.txt",
-             "\n"
+             "\n",
+             1
            ],
            [
              'count0',
              "t${dir_sep}etc${dir_sep}shebang.rb.xxx",
-             "\n"
+             "\n",
+             1
            ],
            [
              'count0',
              "t${dir_sep}etc${dir_sep}buttonhook.xml.xxx",
-             "\n"
+             "\n",
+             1
            ],
            [
              'count0',
              "t${dir_sep}etc${dir_sep}shebang.php.xxx",
-             "\n"
+             "\n",
+             1
            ],
            [
              'count0',
              "t${dir_sep}etc${dir_sep}shebang.foobar.xxx",
-             "\n"
+             "\n",
+             1
            ],
            [
              'count0',
              "t${dir_sep}etc${dir_sep}shebang.py.xxx",
-             "\n"
+             "\n",
+             1
            ],
            [
              'count0',
              "t${dir_sep}etc${dir_sep}buttonhook.html.xxx",
-             "\n"
+             "\n",
+             1
            ],
            [
              'count0',
              "t${dir_sep}etc${dir_sep}shebang.sh.xxx",
-             "\n"
+             "\n",
+             1
            ],
            [
              'count0',
              "t${dir_sep}etc${dir_sep}shebang.pl.xxx",
-             "\n"
+             "\n",
+             1
            ],
            [
              'count0',
              "t${dir_sep}etc${dir_sep}buttonhook.rss.xxx",
-             "\n"
+             "\n",
+             1
            ],
            [
              'count0',
              "t${dir_sep}etc${dir_sep}shebang.empty.xxx",
-             "\n"
+             "\n",
+             1
            ],
            [
              'count0',
              "t${dir_sep}etc${dir_sep}buttonhook.rfc.xxx",
-             "\n"
+             "\n",
+             1
            ],
            [
              'count0',
              "t${dir_sep}etc${dir_sep}buttonhook.noxml.xxx",
-             "\n"
+             "\n",
+             1
            ],
          );
 
@@ -399,6 +423,7 @@ my $original_iterator;
              "t${dir_sep}text${dir_sep}4th-of-july.txt",
              36,
              "\n",
+             1,
              1
            ],
            [
@@ -407,12 +432,14 @@ my $original_iterator;
              72,
              "\n",
              1,
+             1
            ],
            [
              'count',
              "t${dir_sep}text${dir_sep}shut-up-be-happy.txt",
              26,
              "\n",
+             1,
              1
            ],
            [
@@ -420,6 +447,7 @@ my $original_iterator;
              "t${dir_sep}text${dir_sep}science-of-myth.txt",
              26,
              "\n",
+             1,
              1
            ],
            [
@@ -427,6 +455,7 @@ my $original_iterator;
              "t${dir_sep}text${dir_sep}freedom-of-choice.txt",
              50,
              "\n",
+             1,
              1
            ],
            [
@@ -434,6 +463,7 @@ my $original_iterator;
              "t${dir_sep}text${dir_sep}me-and-bobbie-mcgee.txt",
              32,
              "\n",
+             1,
              1
            ],
          );
@@ -466,6 +496,7 @@ my $original_iterator;
              "t${dir_sep}text${dir_sep}4th-of-july.txt",
              37,
              "\n",
+             1,
              1
            ],
            [
@@ -474,12 +505,14 @@ my $original_iterator;
              72,
              "\n",
              1,
+             1
            ],
            [
              'count',
              "t${dir_sep}text${dir_sep}shut-up-be-happy.txt",
              26,
              "\n",
+             1,
              1
            ],
            [
@@ -487,6 +520,7 @@ my $original_iterator;
              "t${dir_sep}text${dir_sep}science-of-myth.txt",
              22,
              "\n",
+             1,
              1
            ],
            [
@@ -494,6 +528,7 @@ my $original_iterator;
              "t${dir_sep}text${dir_sep}freedom-of-choice.txt",
              50,
              "\n",
+             1,
              1
            ],
            [
@@ -501,6 +536,7 @@ my $original_iterator;
              "t${dir_sep}text${dir_sep}me-and-bobbie-mcgee.txt",
              32,
              "\n",
+             1,
              1
            ],
          );
@@ -533,7 +569,8 @@ my $original_iterator;
              "t${dir_sep}swamp${dir_sep}Makefile",
              1,
              "\n",
-             undef
+             undef,
+             1
            ]
          );
     lists_match( \@result, \@expected );
@@ -560,7 +597,8 @@ my $original_iterator;
              "t${dir_sep}swamp${dir_sep}Makefile",
              1,
              "\n",
-             undef
+             undef,
+             1
            ]
          );
     lists_match( \@result, \@expected );
@@ -588,7 +626,8 @@ my $original_iterator;
              "t${dir_sep}swamp${dir_sep}javascript.js",
              1,
              "\n",
-             undef
+             undef,
+             1
            ]
          );
     lists_match( \@result, \@expected );
@@ -616,7 +655,8 @@ my $original_iterator;
              "t${dir_sep}swamp${dir_sep}c-source.c",
              1,
              "\n",
-             undef
+             undef,
+             1
            ]
 
          );
@@ -624,6 +664,35 @@ my $original_iterator;
     lists_match( \@warns, [], 'no warning' );
 }
 
+TOTAL_COUNT: {
+    @result = ();
+    @warns  = ();
+    # activate 'show_total' by giving count=1 and exactly 1 file (which leads
+    # to show_filename set to false in App::Ack::get_starting_points)
+    my %opts = (
+        count => 1,
+        regex => 'to',
+    );
+    my $dir = 't/swamp/c-source.c';
+    my $what = App::Ack::get_starting_points( [$dir], \%opts );
+    lists_match( $what, ["t${dir_sep}swamp${dir_sep}c-source.c"], 'get_starting_points' );
+    my $iter = App::Ack::get_iterator( $what, \%opts );
+    isa_ok( $iter, 'CODE' );
+    App::Ack::filetype_setup();
+    App::Ack::print_files_with_matches( $iter, \%opts );
+    my @expected = (
+           [
+             'count',
+             '', # the total count output hands in an empty filename
+             5,  # there are 5 'to's in the file
+             "\n",
+             $opts{count},
+             0   # the total count output sets show_filename to 0
+           ]
+         );
+    lists_match( \@result, \@expected );
+    lists_match( \@warns, [], 'no warning' );
+}
 
 sub by_2nd { return $a->[1] cmp $b->[1]}
 

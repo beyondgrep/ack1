@@ -18,6 +18,9 @@ NEXT
         ack --match Sue
         cat foo | ack --perl
 
+    Fixed issue 74: analog to grep, 'ack --count regex file' now only outputs the
+    number of found matches, if only one file is given.
+
     Added option --show-types to output the types that ack considers
     a file to have. (Torsten Blix)
 
@@ -33,8 +36,14 @@ NEXT
 
     .ackrc now ignores leading/trailing whitespace.  (Torsten Blix)
 
+    'ack --count --no-filename regex' doesn't output a list of numbers but a
+    sum of all occurences. This is NOT what grep does but is the more sensible
+    behavior.
+
 
 1.92        Fri Dec 11 11:47:56 CST 2009
+
+    The source code for ack is now at github: http://github.com/petdance/ack
 
     [FIXES]
     The --pager flag would not work.  Now it does.  Thanks Packy

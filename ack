@@ -215,6 +215,8 @@ each input file.  If B<-l> is in effect, it will only show the
 number of lines for each file that has lines matching.  Without
 B<-l>, some line counts may be zeroes.
 
+If combined with B<-h> (B<--no-filename>) ack outputs only one total count.
+
 =item B<--color>, B<--nocolor>
 
 B<--color> highlights the matching text.  B<--nocolor> supresses
@@ -1976,17 +1978,27 @@ sub print_count {
     my $nmatches = shift;
     my $ors = shift;
     my $count = shift;
+    my $show_filename = shift;
 
-    App::Ack::print( $filename );
-    App::Ack::print( ':', $nmatches ) if $count;
+    if ($show_filename) {
+        App::Ack::print( $filename );
+        App::Ack::print( ':', $nmatches ) if $count;
+    } else {
+        App::Ack::print( $nmatches ) if $count;
+    }
     App::Ack::print( $ors );
 }
 
 sub print_count0 {
     my $filename = shift;
     my $ors = shift;
+    my $show_filename = shift;
 
-    App::Ack::print( $filename, ':0', $ors );
+    if ($show_filename) {
+        App::Ack::print( $filename, ':0', $ors );
+    } else {
+        App::Ack::print( '0', $ors );
+    }
 }
 
 
@@ -2185,6 +2197,17 @@ sub print_match_or_context {
 } # scope around search_resource() and print_match_or_context()
 
 
+TOTAL_COUNT_SCOPE: {
+my $total_count;
+
+sub get_total_count {
+    return $total_count;
+}
+
+sub reset_total_count {
+    $total_count = 0;
+}
+
 
 sub search_and_list {
     my $res = shift;
@@ -2193,6 +2216,7 @@ sub search_and_list {
     my $nmatches = 0;
     my $count = $opt->{count};
     my $ors = $opt->{print0} ? "\0" : "\n"; # output record separator
+    my $show_filename = $opt->{show_filename};
 
     my $regex = qr/$opt->{regex}/;
 
@@ -2215,15 +2239,21 @@ sub search_and_list {
         }
     }
 
-    if ( $nmatches ) {
-        App::Ack::print_count( $res->name, $nmatches, $ors, $count );
-    }
-    elsif ( $count && !$opt->{l} ) {
-        App::Ack::print_count0( $res->name, $ors );
+    if ( $opt->{show_total} ) {
+        $total_count += $nmatches;
+    } else {
+        if ( $nmatches ) {
+            App::Ack::print_count( $res->name, $nmatches, $ors, $count, $show_filename );
+        }
+        elsif ( $count && !$opt->{l} ) {
+            App::Ack::print_count0( $res->name, $ors, $show_filename );
+        }
     }
 
     return $nmatches ? 1 : 0;
 }   # search_and_list()
+
+} # scope around $total_count
 
 
 
@@ -2254,6 +2284,17 @@ sub print_files_with_matches {
     my $iter = shift;
     my $opt = shift;
 
+    # if we have -l and only 1 file given on command line (this means
+    # show_filename is set to 0), we want to see the filename nevertheless
+    $opt->{show_filename} = 1 if $opt->{l};
+
+    $opt->{show_filename} = 0 if $opt->{h};
+    $opt->{show_filename} = 1 if $opt->{H};
+
+    # abuse options to hand in the show_total parameter to search_and_list
+    $opt->{show_total} = $opt->{count} && !$opt->{show_filename};
+    reset_total_count();
+
     my $nmatches = 0;
     while ( defined ( my $filename = $iter->() ) ) {
         my $repo = App::Ack::Repository::Basic->new( $filename );
@@ -2264,6 +2305,10 @@ sub print_files_with_matches {
             last if $nmatches && $opt->{1};
         }
         $repo->close();
+    }
+
+    if ( $nmatches && $opt->{show_total} ) {
+        App::Ack::print_count('', get_total_count(), "\n", 1, 0  )
     }
 
     return $nmatches;

@@ -81,6 +81,8 @@ our $ack_return_code;
 sub run_cmd {
     my $cmd = shift;
 
+    # diag( "Running command: $cmd" );
+
     my @stdout = `$cmd`;
     my ($sig,$core,$rc) = (($? & 127),  ($? & 128) , ($? >> 8));
     $ack_return_code = $rc;

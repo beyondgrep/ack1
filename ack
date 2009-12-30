@@ -294,13 +294,18 @@ Ignore case in the search strings.
 This applies only to the PATTERN, not to the regexes given for the B<-g>
 and B<-G> options.
 
-=item B<--[no]ignore-dir=DIRNAME>
+=item B<--[no]ignore-dir=I<DIRNAME>>
 
 Ignore directory (as CVS, .svn, etc are ignored). May be used multiple times
 to ignore multiple directories. For example, mason users may wish to include
 B<--ignore-dir=data>. The B<--noignore-dir> option allows users to search
 directories which would normally be ignored (perhaps to research the contents
 of F<.svn/props> directories).
+
+The I<DIRNAME> must always be a simple directory name. Nested directories like
+F<foo/bar> are NOT supported. You would need to specify B<--ignore-dir=foo> and
+then no files from any foo directory are taken into account by ack unless given
+explicitly on the command line.
 
 =item B<--line=I<NUM>>
 

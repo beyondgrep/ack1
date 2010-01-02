@@ -29,7 +29,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]jsp          .jsp .jspx .jhtm .jhtml
     --[no]lisp         .lisp .lsp
     --[no]lua          .lua
-    --[no]make         Makefiles
+    --[no]make         Makefiles (including *.mk and *.mak)
     --[no]mason        .mas .mhtml .mpl .mtxt
     --[no]objc         .m .h
     --[no]objcpp       .mm .h

@@ -93,7 +93,7 @@ BEGIN {
         jsp         => [qw( jsp jspx jhtm jhtml )],
         lisp        => [qw( lisp lsp )],
         lua         => [qw( lua )],
-        make        => q{Makefiles},
+        make        => q{Makefiles (including *.mk and *.mak)},
         mason       => [qw( mas mhtml mpl mtxt )],
         objc        => [qw( m h )],
         objcpp      => [qw( mm h )],
@@ -130,6 +130,8 @@ BEGIN {
             }
         }
     }
+    # add manually Makefile extensions
+    push @{$types{$_}}, 'make' for qw{ mk mak };
 
     # These have to be checked before any filehandle diddling.
     $output_to_pipe  = not -t *STDOUT;
@@ -488,7 +490,7 @@ sub filetypes {
     return 'skipped' unless is_searchable( $basename );
 
     my $lc_basename = lc $basename;
-    return ('make',TEXT)        if $lc_basename eq 'makefile';
+    return ('make',TEXT)        if $lc_basename eq 'makefile' || $lc_basename eq 'gnumakefile'; 
     return ('rake','ruby',TEXT) if $lc_basename eq 'rakefile';
 
     # If there's an extension, look it up

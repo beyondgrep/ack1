@@ -57,7 +57,7 @@ package MY;
 sub MY::top_targets {
     my $str = shift->SUPER::top_targets(@_);
 
-    $str =~ s/^pure_all.+/$& ack ack-help.txt ack-help-types.txt/m;
+    $str =~ s/^pure_all.+/$& ack ack-help.txt ack-help-types.txt ack-help-dirs.txt/m;
 
     return $str;
 }
@@ -74,6 +74,7 @@ RESOURCE_PM     = Resource.pm
 ALL_PM          = $(ACK_PM) $(REPOSITORY_PM) $(RESOURCE_PM) $(BASIC_PM)
 ACK_HELP        = ack-help.txt
 ACK_HELP_TYPES  = ack-help-types.txt
+ACK_HELP_DIRS   = ack-help-dirs.txt
 PERL_T          = $(PERL) -T
 
 .PHONY: tags critic
@@ -135,6 +136,9 @@ $(ACK_HELP) : $(ACK)
 
 $(ACK_HELP_TYPES) : $(ACK)
 	$(PERL_T) $(ACK) --noenv --help=types > $(ACK_HELP_TYPES) || perl -e0
+
+$(ACK_HELP_DIRS) : $(ACK)
+	$(PERL_T) $(ACK) --noenv --help=dirs > $(ACK_HELP_DIRS) || perl -e0
 
 MAKE_FRAG
 

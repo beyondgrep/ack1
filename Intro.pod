@@ -1,0 +1,51 @@
+=head1 NAME
+
+App::Ack::Intro - An introduction to ack
+
+=head1 WHAT ACK CAN DO
+
+Ack is a powerful alternative to grep for programmers.  It's made to make a programmer's life easier by optimizing common tasks that programmers face every day.
+
+=head1 THE PHILOSOPHY OF ACK
+
+=head1 COOL ACK FEATURES
+
+=head2 Automatically search entire directory trees
+
+=head2 Automatically ignore VCS directories
+
+=head2 Exclude directories from search
+
+Ack automatically ignores directories having to do with version
+control systems, but sometimes you just want to exclude a directory
+for the duration of one command.  For example, to keep ack from
+searching your 'test' directory, use C<--ignore-dir=test/>.
+
+=head2 Match only whole words
+
+Ack can easily be restricted so it only matches whole words, not portions
+of words, by adding either C<-w> or C<--word-regexp>.  For example,
+
+   ack --w skip
+
+will match lines that have the word "skip" by itself, but will not
+match strings like "skipping" or "skipped".
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2005-2010 Andy Lester.
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+=over 4
+
+=item * the GNU General Public License as published by the Free
+Software Foundation; either version 1, or (at your option) any later
+version, or
+
+=item * the "Artistic License" which comes with Perl 5.
+
+=back
+
+=cut

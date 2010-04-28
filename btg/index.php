@@ -61,7 +61,7 @@ _   /|
             If you don't want to mess with setting up Perl's CPAN shell, this is easiest.
             <blockquote>
                 <code>
-                    curl http://betterthangrep.com/ack-standalone &gt; ~/bin/ack &amp;&amp; chmod 0755 !$
+                    curl http://betterthangrep.com/ack-standalone &gt; ~/bin/ack &amp;&amp; chmod 0755 !#:3
                 </code>
             </blockquote>
             </li>

@@ -773,9 +773,13 @@ The name of the program is "ack".  Some packagers have called it
 "ack-grep" when creating packages because there's already a package
 out there called "ack" that has nothing to do with this ack.
 
-I suggest you rename your ack-grep install to "ack" because one of
-the crucial benefits of ack is having a name that's so short and
-simple to type.
+I suggest you make a symlink named F<ack> that points to F<ack-grep>
+because one of the crucial benefits of ack is having a name that's
+so short and simple to type.
+
+To do that, run this with F<sudo> or as root:
+
+   ln -s /usr/bin/ack-grep /usr/bin/ack
 
 =head1 AUTHOR
 

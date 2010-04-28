@@ -4,24 +4,19 @@ App::Ack::Intro - An introduction to ack
 
 =head1 WHAT ACK CAN DO
 
-Ack is a powerful alternative to grep for programmers.  It's made to make a programmer's life easier by optimizing common tasks that programmers face every day.
+Ack is a powerful alternative to grep for programmers.  It's made
+to make a programmer's life easier by optimizing common tasks that
+programmers face every day.
 
 =head1 THE PHILOSOPHY OF ACK
 
-=head1 COOL ACK FEATURES
+=head1 CONTROL WHAT YOU SEARCH FOR
 
-=head2 Automatically search entire directory trees
+=head2 Search without regard to case with C<-i>
 
-=head2 Automatically ignore VCS directories
+=head2 Do smart case searching with C<--smartcase>
 
-=head2 Exclude directories from search
-
-Ack automatically ignores directories having to do with version
-control systems, but sometimes you just want to exclude a directory
-for the duration of one command.  For example, to keep ack from
-searching your 'test' directory, use C<--ignore-dir=test/>.
-
-=head2 Match only whole words
+=head2 Match only whole words with C<-w>
 
 Ack can easily be restricted so it only matches whole words, not portions
 of words, by adding either C<-w> or C<--word-regexp>.  For example,
@@ -30,6 +25,29 @@ of words, by adding either C<-w> or C<--word-regexp>.  For example,
 
 will match lines that have the word "skip" by itself, but will not
 match strings like "skipping" or "skipped".
+
+=head1 CONTROL WHERE YOU SEARCH
+
+=head2 Automatically search entire directory trees
+
+=head2 Automatically ignore VCS directories
+
+=head2 Limit by language with C<--perl>, C<--html>, C<--sql> etc
+
+=head2 Exclude languages with C<--noperl>, C<--nohtml>, C<--nosql> etc
+
+=head2 Ignore directories from search C<--ignore-dir>
+
+Ack automatically ignores directories having to do with version
+control systems, but sometimes you just want to exclude a directory
+for the duration of one command.  For example, to keep ack from
+searching your 'test' directory, use C<--ignore-dir=test/>.
+
+=head1 CONTROL SEARCH RESULTS
+
+=head2 Show only the match with C<-o>
+
+=head2 Show context lines around the match with C<-A>, C<-B> and C<-C>
 
 =head1 COPYRIGHT & LICENSE
 
@@ -47,5 +65,37 @@ version, or
 =item * the "Artistic License" which comes with Perl 5.
 
 =back
+
+=cut
+
+=for scraps
+
+Off the topic of my head:
+
+1. -h (--no-filename) , -l (only filenames) etc. Also exist in GNU grep, but 
+they are still useful.
+
+2. I have this in my .ackrc:
+
+Add Website Meta Language files to .html.
+--type-add=html=.wml
+
+# Add CMake files
+--type-set=cmake=.txt,.cmake
+
+[/quote]
+
+Other stuff can be added.
+
+3. -i for case insensitive searches.
+
+5. ack -f for displaying a list of files in the current directory that are not 
+temporary/version-control-related/etc.
+
+6. -a for showing all files.
+
+7. Sometimes I use --nofollow (especially as root).
+
+8. --print0 is useful with xargs (though I haven't used it a lot yet).
 
 =cut

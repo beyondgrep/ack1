@@ -23,12 +23,14 @@ programmers face every day.
 Ack can easily be restricted so it only matches whole words, not portions
 of words, by adding either C<-w> or C<--word-regexp>.  For example,
 
-   ack --w skip
-   # or
-   ack '\bskip\b'
+    ack --w skip
 
 will match lines that have the word "skip" by itself, but will not
 match strings like "skipping" or "skipped".
+
+This is identical to:
+
+    ack '\bskip\b'
 
 =head1 CONTROL WHERE YOU SEARCH
 
@@ -55,7 +57,15 @@ searching your 'test' directory, use C<--ignore-dir=test/>.
 
 =head1 CUSTOMIZE ACK
 
+=head2 F<~/.ackrc>
+
+=head2 C<ACK_OPTIONS>
+
 =head1 TAKE ACK WITH YOU
+
+=head2 Put ack in your ~/bin
+
+Ack doesn't have to be installed system-wide for you to use it.
 
 =head1 COPYRIGHT & LICENSE
 

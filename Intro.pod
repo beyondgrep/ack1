@@ -10,7 +10,9 @@ programmers face every day.
 
 =head1 THE PHILOSOPHY OF ACK
 
-=head1 CONTROL WHAT YOU SEARCH FOR
+=head1 SPECIFY YOUR SEARCHES
+
+=head2 Use Perl regular expressions
 
 =head2 Search without regard to case with C<-i>
 
@@ -22,6 +24,8 @@ Ack can easily be restricted so it only matches whole words, not portions
 of words, by adding either C<-w> or C<--word-regexp>.  For example,
 
    ack --w skip
+   # or
+   ack '\bskip\b'
 
 will match lines that have the word "skip" by itself, but will not
 match strings like "skipping" or "skipped".
@@ -48,6 +52,10 @@ searching your 'test' directory, use C<--ignore-dir=test/>.
 =head2 Show only the match with C<-o>
 
 =head2 Show context lines around the match with C<-A>, C<-B> and C<-C>
+
+=head1 CUSTOMIZE ACK
+
+=head1 TAKE ACK WITH YOU
 
 =head1 COPYRIGHT & LICENSE
 

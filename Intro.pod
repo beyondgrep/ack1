@@ -10,9 +10,15 @@ programmers face every day.
 
 =head1 THE PHILOSOPHY OF ACK
 
+=head2 Ack is designed for programmers
+
+=head2 Understand ack's idea of the file type
+
 =head1 SPECIFY YOUR SEARCHES
 
 =head2 Use Perl regular expressions
+
+=head2 Auto-escape regular expression metacharacters with C<-Q>
 
 =head2 Search without regard to case with C<-i>
 

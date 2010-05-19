@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 55;
+use Test::More tests => 57;
 
 use lib 't';
 use Util;
@@ -327,6 +327,21 @@ INVERT_MATCH_CONTENT_SWAPPED: {
     my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, "Looking for files without $content_regex in files matching $file_regex - swapped" );
+}
+
+INVERT_FILE_MATCH: {
+    my @expected = qw(
+        t/text/boy-named-sue.txt
+        t/text/me-and-bobbie-mcgee.txt
+        t/text/shut-up-be-happy.txt
+    );
+    my $file_regex = 'of';
+
+    my @files = qw( t/text/ );
+    my @args = ( '-a', '--invert-file-match', '-g', $file_regex );
+    my @results = run_ack( @args, @files );
+
+    sets_match( \@results, \@expected, "Looking for file names that do not match $file_regex" );
 }
 
 G_WITH_REGEX: {

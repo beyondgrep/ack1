@@ -1505,6 +1505,14 @@ sub get_starting_points {
     return \@what;
 }
 
+sub _match {
+    my ( $target, $expression, $invert_flag ) = @_;
+    if ( $invert_flag ) {
+        return $target !~ $expression;
+    } else {
+        return $target =~ $expression;
+    }
+}
 
 =head2 get_iterator
 
@@ -1523,19 +1531,11 @@ sub get_iterator {
     my $file_filter;
 
     if ( $g_regex ) {
-        if ( $opt->{invert_file_match} ) {
-            $file_filter
-                = $opt->{u}   ? sub { $File::Next::name !~ /$g_regex/ } # XXX Maybe this should be a 1, no?
-                : $opt->{all} ? sub { $starting_point{ $File::Next::name } || ( $File::Next::name !~ /$g_regex/ && is_searchable( $_ ) ) }
-                :               sub { $starting_point{ $File::Next::name } || ( $File::Next::name !~ /$g_regex/ && is_interesting( @_ ) ) }
-                ;
-        } else {
-            $file_filter
-                = $opt->{u}   ? sub { $File::Next::name =~ /$g_regex/ } # XXX Maybe this should be a 1, no?
-                : $opt->{all} ? sub { $starting_point{ $File::Next::name } || ( $File::Next::name =~ /$g_regex/ && is_searchable( $_ ) ) }
-                :               sub { $starting_point{ $File::Next::name } || ( $File::Next::name =~ /$g_regex/ && is_interesting( @_ ) ) }
-                ;
-        }
+        $file_filter
+            = $opt->{u}   ? sub { _match( $File::Next::name, qr/$g_regex/, $opt->{invert_file_match} ) }    # XXX Maybe this should be a 1, no?
+            : $opt->{all} ? sub { $starting_point{ $File::Next::name } || ( _match( $File::Next::name, qr/$g_regex/, $opt->{invert_file_match} ) && is_searchable( $_ ) ) }
+            :               sub { $starting_point{ $File::Next::name } || ( _match( $File::Next::name, qr/$g_regex/, $opt->{invert_file_match} ) && is_interesting( @ _) ) }
+            ;
     }
     else {
         $file_filter

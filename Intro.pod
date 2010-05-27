@@ -21,7 +21,7 @@ programmers face every day.
 Ack can easily be restricted so it only matches whole words, not portions
 of words, by adding either C<-w> or C<--word-regexp>.  For example,
 
-   ack --w skip
+   ack -w skip
 
 will match lines that have the word "skip" by itself, but will not
 match strings like "skipping" or "skipped".
@@ -31,6 +31,14 @@ match strings like "skipping" or "skipped".
 =head2 Automatically search entire directory trees
 
 =head2 Automatically ignore VCS directories
+
+Are you tired of F<grep> finding matches in your CVS, Subversion
+or Git directories? Even if no matches are found, searching those
+directories never returns references in source code. ack automatically
+ignores files contained in the directories for these popular version
+control systems and many others.  If your VCS doesn't have directories
+already built into ack, you can add them by just adding C<--ignore-dir>
+lines to your F<.ackrc> file.
 
 =head2 Limit by language with C<--perl>, C<--html>, C<--sql> etc
 
@@ -48,6 +56,19 @@ searching your 'test' directory, use C<--ignore-dir=test/>.
 =head2 Show only the match with C<-o>
 
 =head2 Show context lines around the match with C<-A>, C<-B> and C<-C>
+
+=head2 List only the filename with C<-l>
+
+=head1 USE ACK AS A FILE-FINDING TOOL
+
+=head2 Open files that ack finds
+
+Need to edit every perl file that calls a particular subroutine?
+Let ack not only find the files for you (restricting the search to
+perl files with the C<--perl> flag), but load them into your editor
+by using either C<-l> or C<--files-with-matches>:
+
+    emacs $(ack -l --perl bad_subroutine)
 
 =head1 COPYRIGHT & LICENSE
 

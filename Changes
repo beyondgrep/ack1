@@ -3,6 +3,9 @@ NEXT
     [ENHANCEMENTS]
     Added --verilog and --vhdl types.
 
+    Updated the README to Markdown format.  Thanks to Mark Szymanski
+    for the idea.
+
 
 1.92        Fri Dec 11 11:47:56 CST 2009
 

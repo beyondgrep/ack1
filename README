@@ -1,7 +1,7 @@
-ack is a grep-like tool tailored to working with large trees of source
-code.
+ack is a grep-like tool optimized for working with large trees of
+source code.
 
-INSTALLATION
+# INSTALLATION
 
 To install this module, run the following commands:
 
@@ -10,37 +10,34 @@ To install this module, run the following commands:
     make test
     make install
 
-SUPPORT AND DOCUMENTATION
+# SUPPORT AND DOCUMENTATION
 
 You can look for information at:
 
-    Search CPAN
-        http://search.cpan.org/dist/ack
+* ack home page
+    * <http://betterthangrep.com/>
 
-    AnnoCPAN, annotated CPAN documentation:
-        http://annocpan.org/dist/ack
+* CPAN home
+    * <http://search.cpan.org/dist/ack>
 
-    CPAN Ratings:
-        http://cpanratings.perl.org/d/ack
+* Project home
+    * <http://github.com/petdance/ack>
 
-    Project Home at Github
-        http://github.com/petdance/ack
+* AnnoCPAN, annotated documentation
+    * <http://annocpan.org/dist/ack>
 
-    Issue list at Google Code (report bugs there)
-        http://code.google.com/p/ack/issues/list
+* CPAN Ratings
+    * <http://cpanratings.perl.org/d/ack>
 
-    Mailing List
-        ack-users@googlegroups.com
+* Issue list at Github (report bugs here)
+    * <http://github.com/petdance/ack/issues>
 
-COPYRIGHT AND LICENCE
+* The ack mailing list
+    * <http://groups.google.com/group/ack-users>
 
-Copyright 2005-2009 Andy Lester.
+# COPYRIGHT AND LICENSE
+
+Copyright 2005-2010 Andy Lester.
 
 This program is free software; you can redistribute it and/or modify
-it under the terms of either:
-
-* the GNU General Public License as published by the Free Software
-Foundation; either version 1, or (at your option) any later version,
-or
-
-* the Artistic License version 2.0.
+it under the terms of the Artistic License version 2.0.

@@ -1,3 +1,9 @@
+
+NEXT
+    [ENHANCEMENTS]
+    Added --verilog and --vhdl types.
+
+
 1.92        Fri Dec 11 11:47:56 CST 2009
 
     ack is now hosted at github: http://github.com/petdance/ack

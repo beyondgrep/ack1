@@ -115,6 +115,8 @@ BEGIN {
         text        => q{Text files, as defined by Perl's -T op (default: off)},
         tt          => [qw( tt tt2 ttml )],
         vb          => [qw( bas cls frm ctl vb resx )],
+        verilog     => [qw( v vh sv )],
+        vhdl        => [qw( vhd vhdl )],
         vim         => [qw( vim )],
         yaml        => [qw( yaml yml )],
         xml         => [qw( xml dtd xslt ent )],

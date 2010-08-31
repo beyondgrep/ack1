@@ -789,6 +789,14 @@ To do that, run this with F<sudo> or as root:
 
    ln -s /usr/bin/ack-grep /usr/bin/ack
 
+=head2 Can I do multi-line regexes?
+
+No, ack does not support regexes that match multiple lines.  Doing
+so would require reading in the entire file at a time.
+
+If you want to see lines near your match, use the C<--A>, C<--B>
+and C<--C> switches for displaying context.
+
 =head1 AUTHOR
 
 Andy Lester, C<< <andy at petdance.com> >>
@@ -1200,6 +1208,8 @@ BEGIN {
         text        => q{Text files, as defined by Perl's -T op (default: off)},
         tt          => [qw( tt tt2 ttml )],
         vb          => [qw( bas cls frm ctl vb resx )],
+        verilog     => [qw( v vh sv )],
+        vhdl        => [qw( vhd vhdl )],
         vim         => [qw( vim )],
         yaml        => [qw( yaml yml )],
         xml         => [qw( xml dtd xslt ent )],

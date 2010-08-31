@@ -1,0 +1,146 @@
+=head1 NAME
+
+App::Ack::Intro - An introduction to ack
+
+=head1 WHAT ACK CAN DO
+
+Ack is a powerful alternative to grep for programmers.  It's made
+to make a programmer's life easier by optimizing common tasks that
+programmers face every day.
+
+=head1 THE PHILOSOPHY OF ACK
+
+=head2 Ack is designed for programmers
+
+=head2 Understand ack's idea of the file type
+
+=head1 SPECIFY YOUR SEARCHES
+
+=head2 Use Perl regular expressions
+
+=head2 Auto-escape regular expression metacharacters with C<-Q>
+
+=head2 Search without regard to case with C<-i>
+
+=head2 Do smart case searching with C<--smartcase>
+
+=head2 Match only whole words with C<-w>
+
+Ack can easily be restricted so it only matches whole words, not portions
+of words, by adding either C<-w> or C<--word-regexp>.  For example,
+
+    ack --w skip
+
+will match lines that have the word "skip" by itself, but will not
+match strings like "skipping" or "skipped".
+
+This is identical to:
+
+    ack '\bskip\b'
+
+=head1 CONTROL WHERE YOU SEARCH
+
+=head2 Automatically search entire directory trees
+
+=head2 Automatically ignore VCS directories
+
+Are you tired of F<grep> finding matches in your CVS, Subversion
+or Git directories? Even if no matches are found, searching those
+directories never returns references in source code. ack automatically
+ignores files contained in the directories for these popular version
+control systems and many others.  If your VCS doesn't have directories
+already built into ack, you can add them by just adding C<--ignore-dir>
+lines to your F<.ackrc> file.
+
+=head2 Limit by language with C<--perl>, C<--html>, C<--sql> etc
+
+=head2 Exclude languages with C<--noperl>, C<--nohtml>, C<--nosql> etc
+
+=head2 Ignore directories from search C<--ignore-dir>
+
+Ack automatically ignores directories having to do with version
+control systems, but sometimes you just want to exclude a directory
+for the duration of one command.  For example, to keep ack from
+searching your 'test' directory, use C<--ignore-dir=test/>.
+
+=head1 CONTROL SEARCH RESULTS
+
+=head2 Show only the match with C<-o>
+
+=head2 Show context lines around the match with C<-A>, C<-B> and C<-C>
+
+=head2 List only the filename with C<-l>
+
+=head1 USE ACK AS A FILE-FINDING TOOL
+
+=head2 Open files that ack finds
+
+Need to edit every perl file that calls a particular subroutine?
+Let ack not only find the files for you (restricting the search to
+perl files with the C<--perl> flag), but load them into your editor
+by using either C<-l> or C<--files-with-matches>:
+
+    emacs $(ack -l --perl bad_subroutine)
+
+=head1 CUSTOMIZE ACK
+
+=head2 F<~/.ackrc>
+
+=head2 C<ACK_OPTIONS>
+
+=head1 TAKE ACK WITH YOU
+
+=head2 Put ack in your ~/bin
+
+Ack doesn't have to be installed system-wide for you to use it.
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2005-2010 Andy Lester.
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of either:
+
+=over 4
+
+=item * the GNU General Public License as published by the Free
+Software Foundation; either version 1, or (at your option) any later
+version, or
+
+=item * the "Artistic License" which comes with Perl 5.
+
+=back
+
+=cut
+
+=for scraps
+
+Off the topic of my head:
+
+1. -h (--no-filename) , -l (only filenames) etc. Also exist in GNU grep, but 
+they are still useful.
+
+2. I have this in my .ackrc:
+
+Add Website Meta Language files to .html.
+--type-add=html=.wml
+
+# Add CMake files
+--type-set=cmake=.txt,.cmake
+
+[/quote]
+
+Other stuff can be added.
+
+3. -i for case insensitive searches.
+
+5. ack -f for displaying a list of files in the current directory that are not 
+temporary/version-control-related/etc.
+
+6. -a for showing all files.
+
+7. Sometimes I use --nofollow (especially as root).
+
+8. --print0 is useful with xargs (though I haven't used it a lot yet).
+
+=cut

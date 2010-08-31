@@ -61,7 +61,7 @@ _   /|
             If you don't want to mess with setting up Perl's CPAN shell, this is easiest.
             <blockquote>
                 <code>
-                    curl http://betterthangrep.com/ack-standalone &gt; ~/bin/ack &amp;&amp; chmod 0755 !$
+                    curl http://betterthangrep.com/ack-standalone &gt; ~/bin/ack &amp;&amp; chmod 0755 !#:3
                 </code>
             </blockquote>
             </li>
@@ -233,15 +233,19 @@ $ ack --help-types
 </pre>
 
 
-        <!-- Google tracking, must be just before close of body tag -->
+<!-- Google tracking, must be just before close of body tag -->
 <script type="text/javascript">
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">
-var pageTracker = _gat._getTracker("UA-631706-7");
-pageTracker._initData();
-pageTracker._trackPageview();
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-631706-7']);
+_gaq.push(['_trackPageview']);
+
+(function() {
+var ga = document.createElement('script');
+ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 
+'http://www') + '.google-analytics.com/ga.js';
+ga.setAttribute('async', 'true');
+document.documentElement.firstChild.appendChild(ga);
+})();
 </script>
     </body>
 </html>

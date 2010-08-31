@@ -51,6 +51,8 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]text         Text files, as defined by Perl's -T op (default: off)
     --[no]tt           .tt .tt2 .ttml
     --[no]vb           .bas .cls .frm .ctl .vb .resx
+    --[no]verilog      .v .vh .sv
+    --[no]vhdl         .vhd .vhdl
     --[no]vim          .vim
     --[no]xml          .xml .dtd .xslt .ent
     --[no]yaml         .yaml .yml

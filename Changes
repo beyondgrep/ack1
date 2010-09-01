@@ -6,6 +6,9 @@ NEXT
     Updated the README to Markdown format.  Thanks to Mark Szymanski
     for the idea.
 
+    Added new switch --color-lineno and environment variable ACK_COLOR_LINENO,
+    which allow setting the line number color.
+
 
 1.92        Fri Dec 11 11:47:56 CST 2009
 

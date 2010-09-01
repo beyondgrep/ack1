@@ -221,7 +221,7 @@ Sets the color to be used for filenames.
 
 Sets the color to be used for matches.
 
-=item B<--color-linenum=I<color>>
+=item B<--color-lineno=I<color>>
 
 Sets the color to be used for line numbers.
 
@@ -601,12 +601,12 @@ This option can also be set with B<--color-match>.
 
 See B<ACK_COLOR_FILENAME> for the color specifications.
 
-=item ACK_COLOR_LINENUM
+=item ACK_COLOR_LINENO
 
 Specifies the color of the line number when printed in B<--color>
 mode.  By default, it's "bold yellow".
 
-This option can also be set with B<--color-linenum>.
+This option can also be set with B<--color-lineno>.
 
 See B<ACK_COLOR_FILENAME> for the color specifications.
 
@@ -1288,7 +1288,7 @@ sub get_command_line_options {
         'color|colour!'         => \$opt{color},
         'color-match=s'         => \$ENV{ACK_COLOR_MATCH},
         'color-filename=s'      => \$ENV{ACK_COLOR_FILENAME},
-        'color-linenum=s'       => \$ENV{ACK_COLOR_LINENUM},
+        'color-lineno=s'        => \$ENV{ACK_COLOR_LINENO},
         'column!'               => \$opt{column},
         count                   => \$opt{count},
         'env!'                  => sub { }, # ignore this option, it is handled beforehand
@@ -1747,7 +1747,7 @@ File presentation:
   --[no]colour          Same as --[no]color
   --color-filename=COLOR
   --color-match=COLOR
-  --color-linenum=COLOR Set the color for filenames, matches, and line numbers.
+  --color-lineno=COLOR  Set the color for filenames, matches, and line numbers.
   --flush               Flush output immediately, even when ack is used
                         non-interactively (when output goes to a pipe or
                         file).
@@ -1896,7 +1896,7 @@ sub load_colors {
 
     $ENV{ACK_COLOR_MATCH}    ||= 'black on_yellow';
     $ENV{ACK_COLOR_FILENAME} ||= 'bold green';
-    $ENV{ACK_COLOR_LINENUM}  ||= 'bold yellow';
+    $ENV{ACK_COLOR_LINENO}   ||= 'bold yellow';
 
     return;
 }
@@ -2111,7 +2111,7 @@ sub print_match_or_context {
             App::Ack::print_filename($display_filename, $sep) if not $heading;
             my $display_line_no =
                 $color
-                    ? Term::ANSIColor::colored( $line_no, $ENV{ACK_COLOR_LINENUM} )
+                    ? Term::ANSIColor::colored( $line_no, $ENV{ACK_COLOR_LINENO} )
                     : $line_no;
             App::Ack::print_line_no($display_line_no, $sep);
         }

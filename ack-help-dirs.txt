@@ -1,0 +1,10 @@
+Usage: ack [OPTION]... PATTERN [FILES]
+
+The following is a list of directories currently ignored by ack.
+
+You can add or remove directories from this list by using the
+--[no]ignore-dir option on the command line, in the ACK_OPTIONS
+environment variable or in your .ackrc.
+
+    autom4te.cache, blib, _build, .bzr, .cdv, cover_db, CVS, _darcs, ~.dep,
+    ~.dot, .git, .hg, ~.nib, .pc, ~.plst, RCS, SCCS, _sgbak and .svn

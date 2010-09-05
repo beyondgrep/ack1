@@ -294,13 +294,18 @@ Ignore case in the search strings.
 This applies only to the PATTERN, not to the regexes given for the B<-g>
 and B<-G> options.
 
-=item B<--[no]ignore-dir=DIRNAME>
+=item B<--[no]ignore-dir=I<DIRNAME>>
 
 Ignore directory (as CVS, .svn, etc are ignored). May be used multiple times
 to ignore multiple directories. For example, mason users may wish to include
 B<--ignore-dir=data>. The B<--noignore-dir> option allows users to search
 directories which would normally be ignored (perhaps to research the contents
 of F<.svn/props> directories).
+
+The I<DIRNAME> must always be a simple directory name. Nested directories like
+F<foo/bar> are NOT supported. You would need to specify B<--ignore-dir=foo> and
+then no files from any foo directory are taken into account by ack unless given
+explicitly on the command line.
 
 =item B<--line=I<NUM>>
 
@@ -336,7 +341,7 @@ Stop reading a file after I<NUM> matches.
 
 Print this manual page.
 
-=item B<-n>
+=item B<-n>, B<--no-recurse>
 
 No descending into subdirectories.
 
@@ -382,6 +387,11 @@ Quote all metacharacters in PATTERN, it is treated as a literal.
 
 This applies only to the PATTERN, not to the regexes given for the B<-g>
 and B<-G> options.
+
+=item B<-r>, B<-R>, B<--recurse>
+
+Recurse into sub-directories. This is the default and just here for
+compatibility with grep. You can also use it for turning B<--no-recurse> off.
 
 =item B<--smart-case>, B<--no-smart-case>
 
@@ -1171,6 +1181,7 @@ BEGIN {
         binary      => q{Binary files, as defined by Perl's -B op (default: off)},
         cc          => [qw( c h xs )],
         cfmx        => [qw( cfc cfm cfml )],
+        clojure     => [qw( clj )],
         cpp         => [qw( cpp cc cxx m hpp hh h hxx )],
         csharp      => [qw( cs )],
         css         => [qw( css )],
@@ -1208,6 +1219,8 @@ BEGIN {
         text        => q{Text files, as defined by Perl's -T op (default: off)},
         tt          => [qw( tt tt2 ttml )],
         vb          => [qw( bas cls frm ctl vb resx )],
+        verilog     => [qw( v vh sv )],
+        vhdl        => [qw( vhd vhdl )],
         vim         => [qw( vim )],
         yaml        => [qw( yaml yml )],
         xml         => [qw( xml dtd xslt ent )],
@@ -1299,7 +1312,7 @@ sub get_command_line_options {
         'passthru'              => \$opt{passthru},
         'print0'                => \$opt{print0},
         'Q|literal'             => \$opt{Q},
-        'r|R|recurse'           => sub {},
+        'r|R|recurse'           => sub { $opt{n} = 0 },
         'smart-case!'           => \$opt{smart_case},
         'sort-files'            => \$opt{sort_files},
         'u|unrestricted'        => \$opt{u},

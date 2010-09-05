@@ -6,6 +6,13 @@ NEXT
     Updated the README to Markdown format.  Thanks to Mark Szymanski
     for the idea.
 
+    Added RSpec's .spec file to the --ruby list.
+
+    Added docs for -r, -R, --recurse options.
+
+    [DOCUMENTATION]
+    Clarified the documentation of --ignore-dir.  Thanks, Torsten Blix.
+
 
 1.92        Fri Dec 11 11:47:56 CST 2009
 

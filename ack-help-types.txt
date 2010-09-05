@@ -40,7 +40,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]plone        .pt .cpt .metadata .cpy .py
     --[no]python       .py
     --[no]rake         Rakefiles
-    --[no]ruby         .rb .rhtml .rjs .rxml .erb .rake
+    --[no]ruby         .rb .rhtml .rjs .rxml .erb .rake .spec
     --[no]scala        .scala
     --[no]scheme       .scm .ss
     --[no]shell        .sh .bash .csh .tcsh .ksh .zsh

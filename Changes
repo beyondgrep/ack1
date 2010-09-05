@@ -1,18 +1,33 @@
 
-NEXT
-    [ENHANCEMENTS]
-    Added --verilog and --vhdl types.
+1.93_01     Sun Sep  5 16:00:29 CDT 2010
+    [FILE TYPE UPDATES]
 
+    Added --verilog, --vhdl and --clojure.
+
+    Files that match *.mk and *.mak as well as GNUmakefile are now included in
+    the ack filetype 'make' (issue 88).
+
+    Added RSpec's .spec type to the --ruby list.
+
+
+    [ENHANCEMENTS]
     Updated the README to Markdown format.  Thanks to Mark Szymanski
     for the idea.
-
-    Added RSpec's .spec file to the --ruby list.
 
     Added docs for -r, -R, --recurse options.
 
     Added new switch --color-lineno and environment variable ACK_COLOR_LINENO,
     which allow setting the line number color.  (Marq Schneider)
 
+    Added option --show-types to output the types that ack considers
+    a file to have. (Torsten Blix)
+
+    'ack --count --no-filename regex' doesn't output a list of numbers but a
+    sum of all occurences. This is NOT what grep does but is the more sensible
+    behavior.
+
+
+    [FIXES]
     Fixed ack misbehavior when using --match or not specifying a regex:
 
         ack --match Sue
@@ -32,18 +47,6 @@ NEXT
 
     Fixed issue 81: .ackrc now ignores leading/trailing whitespace.
     (Torsten Blix)
-
-    Added option --show-types to output the types that ack considers
-    a file to have. (Torsten Blix)
-
-    Added --clojure (Janne Hietamäk)
-
-    Files that match *.mk and *.mak as well as GNUmakefile are now included in
-    the ack filetype 'make' (issue 88).
-
-    'ack --count --no-filename regex' doesn't output a list of numbers but a
-    sum of all occurences. This is NOT what grep does but is the more sensible
-    behavior.
 
 
 1.92        Fri Dec 11 11:47:56 CST 2009

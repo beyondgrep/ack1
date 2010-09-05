@@ -10,8 +10,12 @@ NEXT
 
     Added docs for -r, -R, --recurse options.
 
+    Added new switch --color-lineno and environment variable ACK_COLOR_LINENO,
+    which allow setting the line number color.  Thanks, Marq Schneider.
+
     [DOCUMENTATION]
     Clarified the documentation of --ignore-dir.  Thanks, Torsten Blix.
+
 
 
 1.92        Fri Dec 11 11:47:56 CST 2009

@@ -21,6 +21,8 @@ NEXT
     Added option --show-types to output the types that ack considers
     a file to have. (Torsten Blix)
 
+    Added --clojure (Janne Hietamäk)
+
     [DOCUMENTATION]
     Clarified the documentation of --ignore-dir.  (Torsten Blix)
 

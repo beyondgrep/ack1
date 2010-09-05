@@ -14,6 +14,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]binary       Binary files, as defined by Perl's -B op (default: off)
     --[no]cc           .c .h .xs
     --[no]cfmx         .cfc .cfm .cfml
+    --[no]clojure      .clj
     --[no]cpp          .cpp .cc .cxx .m .hpp .hh .h .hxx
     --[no]csharp       .cs
     --[no]css          .css

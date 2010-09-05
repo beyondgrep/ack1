@@ -78,6 +78,7 @@ BEGIN {
         binary      => q{Binary files, as defined by Perl's -B op (default: off)},
         cc          => [qw( c h xs )],
         cfmx        => [qw( cfc cfm cfml )],
+        clojure     => [qw( clj )],
         cpp         => [qw( cpp cc cxx m hpp hh h hxx )],
         csharp      => [qw( cs )],
         css         => [qw( css )],

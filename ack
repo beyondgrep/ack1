@@ -776,10 +776,12 @@ them here.
 
 =head2 Why isn't ack finding a match in (some file)?
 
-Probably because it's of a type that ack doesn't recognize.
+Probably because it's of a type that ack doesn't recognize.  ack's
+searching behavior is driven by filetype.  B<If ack doesn't know
+what kind of file it is, ack ignores the file.>
 
-ack's searching behavior is driven by filetype.  If ack doesn't
-know what kind of file it is, ack ignores it.
+Use the C<-f> switch to see a list of files that ack will search
+for you.
 
 If you want ack to search files that it doesn't recognize, use the
 C<-a> switch.

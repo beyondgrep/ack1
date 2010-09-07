@@ -1,6 +1,10 @@
 ack is a grep-like tool optimized for working with large trees of
 source code.
 
+ack is *not* intended to be a general-purpose replacement for grep.
+ack is for searching source code of defined file types.  For searching
+other files, you may want to stick with grep.
+
 # INSTALLATION
 
 To install this module, run the following commands:

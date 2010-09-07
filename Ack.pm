@@ -985,7 +985,8 @@ sub print_count {
     if ($show_filename) {
         App::Ack::print( $filename );
         App::Ack::print( ':', $nmatches ) if $count;
-    } else {
+    }
+    else {
         App::Ack::print( $nmatches ) if $count;
     }
     App::Ack::print( $ors );
@@ -998,7 +999,8 @@ sub print_count0 {
 
     if ($show_filename) {
         App::Ack::print( $filename, ':0', $ors );
-    } else {
+    }
+    else {
         App::Ack::print( '0', $ors );
     }
 }
@@ -1261,7 +1263,8 @@ sub search_and_list {
 
     if ( $opt->{show_total} ) {
         $total_count += $nmatches;
-    } else {
+    }
+    else {
         if ( $nmatches ) {
             App::Ack::print_count( $res->name, $nmatches, $ors, $count, $show_filename );
         }

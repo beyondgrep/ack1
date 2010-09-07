@@ -30,7 +30,8 @@ MAIN: {
     }
     if ( $env_is_usable ) {
         unshift( @ARGV, App::Ack::read_ackrc() );
-    } else {
+    }
+    else {
         my @keys = ( 'ACKRC', grep { /^ACK_/ } keys %ENV );
         delete @ENV{@keys};
     }
@@ -69,7 +70,8 @@ sub main {
         my $nmatches;
         if ( $opt->{count} ) {
             $nmatches = App::Ack::search_and_list( $res, $opt );
-        } else {
+        }
+        else {
             # normal searching
             $nmatches = App::Ack::search_resource( $res, $opt );
         }
@@ -80,7 +82,8 @@ sub main {
     my $file_matching = $opt->{f} || $opt->{lines};
     if ( $file_matching ) {
         App::Ack::die( "Can't specify both a regex ($opt->{regex}) and use one of --line, -f or -g." ) if $opt->{regex};
-    } else {
+    }
+    else {
         $opt->{regex} = App::Ack::build_regex( defined $opt->{regex} ? $opt->{regex} : shift @ARGV, $opt );
     }
 

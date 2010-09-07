@@ -38,7 +38,8 @@ MAIN: {
     }
     if ( $env_is_usable ) {
         unshift( @ARGV, App::Ack::read_ackrc() );
-    } else {
+    }
+    else {
         my @keys = ( 'ACKRC', grep { /^ACK_/ } keys %ENV );
         delete @ENV{@keys};
     }
@@ -77,7 +78,8 @@ sub main {
         my $nmatches;
         if ( $opt->{count} ) {
             $nmatches = App::Ack::search_and_list( $res, $opt );
-        } else {
+        }
+        else {
             # normal searching
             $nmatches = App::Ack::search_resource( $res, $opt );
         }
@@ -88,7 +90,8 @@ sub main {
     my $file_matching = $opt->{f} || $opt->{lines};
     if ( $file_matching ) {
         App::Ack::die( "Can't specify both a regex ($opt->{regex}) and use one of --line, -f or -g." ) if $opt->{regex};
-    } else {
+    }
+    else {
         $opt->{regex} = App::Ack::build_regex( defined $opt->{regex} ? $opt->{regex} : shift @ARGV, $opt );
     }
 
@@ -1975,7 +1978,8 @@ sub print_count {
     if ($show_filename) {
         App::Ack::print( $filename );
         App::Ack::print( ':', $nmatches ) if $count;
-    } else {
+    }
+    else {
         App::Ack::print( $nmatches ) if $count;
     }
     App::Ack::print( $ors );
@@ -1988,7 +1992,8 @@ sub print_count0 {
 
     if ($show_filename) {
         App::Ack::print( $filename, ':0', $ors );
-    } else {
+    }
+    else {
         App::Ack::print( '0', $ors );
     }
 }
@@ -2233,7 +2238,8 @@ sub search_and_list {
 
     if ( $opt->{show_total} ) {
         $total_count += $nmatches;
-    } else {
+    }
+    else {
         if ( $nmatches ) {
             App::Ack::print_count( $res->name, $nmatches, $ors, $count, $show_filename );
         }

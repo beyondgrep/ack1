@@ -1359,7 +1359,7 @@ sub get_command_line_options {
         'ignore-dirs=s'         => sub { shift; my $dir = remove_dir_sep( shift ); $ignore_dirs{$dir} = '--ignore-dirs' },
         'noignore-dirs=s'       => sub { shift; my $dir = remove_dir_sep( shift ); delete $ignore_dirs{$dir} },
 
-        'version'   => sub { print_version_statement(); exit 1; },
+        'version'   => sub { print_version_statement(); exit; },
         'help|?:s'  => sub { shift; show_help(@_); exit; },
         'help-types'=> sub { show_help_types(); exit; },
         'man'       => sub {

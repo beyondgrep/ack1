@@ -1,6 +1,10 @@
 History file for ack.  http://betterthangrep.com/
 
 NEXT
+    [FIXES]
+    --man and --version now return with an exit code of 0.  They
+    used to exit with a 1.
+
 
 1.93_01     Sun Sep  5 16:00:29 CDT 2010
     [FILE TYPE UPDATES]

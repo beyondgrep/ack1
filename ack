@@ -1362,7 +1362,13 @@ sub get_command_line_options {
         'version'   => sub { print_version_statement(); exit 1; },
         'help|?:s'  => sub { shift; show_help(@_); exit; },
         'help-types'=> sub { show_help_types(); exit; },
-        'man'       => sub { require Pod::Usage; Pod::Usage::pod2usage({-verbose => 2}); exit; },
+        'man'       => sub {
+            require Pod::Usage;
+            Pod::Usage::pod2usage({
+                -verbose => 2,
+                -exitval => 0,
+            });
+        },
 
         'type=s'    => sub {
             # Whatever --type=xxx they specify, set it manually in the hash

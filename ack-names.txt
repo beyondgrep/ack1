@@ -8,6 +8,29 @@ Must be
 * relatively low Googling conflict
 * No conflict with existing BSD ports, Ubuntu packages or Fedora RPMs
 
+http://www.acronymfinder.com/ is handy
+
 gus = general unified search
 
+hap
 
+gim
+
+fid
+
+orp
+
+mug
+
+kif
+
+lak -- could be confused with "ack", means "love and kisses"
+
+xoa -- singularly mine, no conflicts
+
+
+# Won't work
+
+puf -- parallel URL fetcher
+
+dit

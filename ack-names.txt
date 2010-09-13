@@ -1,5 +1,13 @@
 What do we call ack 2.0?
 
+Must be
+
+* pronouncable
+* easy to type
+* three characters
+* relatively low Googling conflict
+* No conflict with existing BSD ports, Ubuntu packages or Fedora RPMs
+
 gus = general unified search
 
 

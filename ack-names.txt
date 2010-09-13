@@ -6,6 +6,7 @@ Must be
 * easy to type
 * three characters
 * relatively low Googling conflict
+** not already a word
 * No conflict with existing BSD ports, Ubuntu packages or Fedora RPMs
 
 http://www.acronymfinder.com/ is handy
@@ -30,9 +31,17 @@ xoa -- singularly mine, no conflicts, but not pronouncable.  "zoe-uh"?
 
 dij
 
+glo
+
+dif
+
 
 # Won't work
 
 puf -- parallel URL fetcher
 
 dit -- overloaded meaning
+
+jix -- Joomla Import/Export
+
+jak -- video game character

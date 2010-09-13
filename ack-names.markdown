@@ -13,13 +13,13 @@ http://www.acronymfinder.com/ is handy
 
 # Favorites
 
-lak -- could be confused with "ack", means "love and kisses"
-
 xoa -- singularly mine, no conflicts, but not pronouncable.  "zoe-uh"?
 
-gus = general unified search
+gus -- general unified search, don't like the name so much, though
 
 # Ideas
+
+nak -- easy to type, but implies negative of ack.
 
 hap
 
@@ -42,6 +42,8 @@ kel
 
 # Won't work
 
+lak -- could be confused with "ack" or worse, "lack"
+
 puf -- parallel URL fetcher
 
 dit -- overloaded meaning
@@ -51,3 +53,5 @@ jix -- Joomla Import/Export
 jak -- video game character
 
 fid -- too close to "find"
+
+pof -- points to dating site plentyoffish.com

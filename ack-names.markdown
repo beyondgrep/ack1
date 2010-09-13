@@ -15,7 +15,7 @@ Must be
     * not already a word
 * No conflict with existing BSD ports, Ubuntu packages or Fedora RPMs
 
-[http://www.acronymfinder.com/](acronymfinder.com) is handy.
+[acronymfinder.com](http://www.acronymfinder.com/) is handy.
 
 # Favorites
 

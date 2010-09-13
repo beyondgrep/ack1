@@ -17,27 +17,37 @@ xoa -- singularly mine, no conflicts, but not pronouncable.  "zoe-uh"?
 
 gus -- general unified search, don't like the name so much, though
 
+wij --
+
+bax -- my first dog, sounds ack-like
+
+bix -- easy to type, but always refers to Bix Beiderbecke
+
 # Ideas
-
-nak -- easy to type, but implies negative of ack.
-
-hap
-
-gim
-
-orp
-
-mug
-
-kif
-
-dij
-
-glo
 
 dif
 
-kel 
+dij
+
+gim
+
+glo
+
+hap
+
+kel
+
+kif
+
+mug
+
+nak -- easy to type, but implies negative of ack.
+
+nar -- No Asshole Rule
+
+nif
+
+orp
 
 
 # Won't work

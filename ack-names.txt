@@ -26,11 +26,13 @@ kif
 
 lak -- could be confused with "ack", means "love and kisses"
 
-xoa -- singularly mine, no conflicts
+xoa -- singularly mine, no conflicts, but not pronouncable.  "zoe-uh"?
+
+dij
 
 
 # Won't work
 
 puf -- parallel URL fetcher
 
-dit
+dit -- overloaded meaning

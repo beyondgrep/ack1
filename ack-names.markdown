@@ -1,4 +1,8 @@
-# What do we call ack 2.0?
+# What do we call the new general purpose ack?
+
+Ack is too surprising to non-programmers.  There will be a less
+surprising, more greplike tool that takes goodness from ack.  But
+what do we call it?
 
 Must be
 

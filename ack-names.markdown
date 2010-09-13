@@ -15,7 +15,7 @@ Must be
 
 # Favorites
 
-bax -- my first dog, sounds ack-like
+bax -- easy type, my first dog, sounds ack-like, could sound like "backs" like "backups"
 
 wij --
 

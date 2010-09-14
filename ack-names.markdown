@@ -13,9 +13,10 @@ Must be
     * four maaaaybe if it's super easy to type, say, like "akjf"
 * relatively low Googling conflict
     * not already a word
-* No conflict with existing BSD ports, Ubuntu packages or Fedora RPMs
+* No conflict with existing [BSD ports](http://www.freebsd.org/ports/),
+[Ubuntu packages](http://packages.ubuntu.com/) or [Fedora RPMs](http://rpm.pbone.net/).
 
-[acronymfinder.com](http://www.acronymfinder.com/) is handy.
+* [acronymfinder.com](http://www.acronymfinder.com/) is handy for overloaded name conflicts.
 
 # Favorites
 

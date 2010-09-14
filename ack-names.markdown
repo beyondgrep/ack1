@@ -29,6 +29,8 @@ gus -- general unified search, don't like the name so much, though
 
 bix -- easy to type, but always refers to Bix Beiderbecke
 
+rst -- follows the standard of TCP flags like ack, pronounceable as "rist", easy to type, I don't like the lack of vowel.
+
 # Ideas
 
 dif

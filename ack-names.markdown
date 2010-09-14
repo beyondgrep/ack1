@@ -19,27 +19,27 @@ Must be
 
 # Favorites
 
-bax -- easy type, my first dog, sounds ack-like, could sound like "backs" like "backups"
-
-wij --
-
-xoa -- singularly mine, no conflicts, but not pronouncable.  "zoe-uh"?
+wij -- easy type, abbreviates to "Where In Jesus' name did I put..."
 
 gus -- general unified search, don't like the name so much, though
 
-bix -- easy to type, but always refers to Bix Beiderbecke
+glo -- Kinda grep-like, easy type, very pronouncable, could get confused with "glow"?
+
+# Ideas
 
 rst -- follows the standard of TCP flags like ack, pronounceable as "rist", easy to type, I don't like the lack of vowel.
 
-# Ideas
+xoa -- singularly mine, no conflicts, but not pronouncable.  "zoe-uh"?
+
+bix -- easy to type, but always refers to Bix Beiderbecke, or Byte Information Exchange
+
+bax -- easy type, my first dog, sounds ack-like, could sound like "backs" like "backups"
 
 dif
 
 dij
 
 gim
-
-glo
 
 hap
 

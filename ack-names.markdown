@@ -38,8 +38,6 @@ bix -- easy to type, but always refers to Bix Beiderbecke, or Byte Information E
 
 bax -- easy type, my first dog, sounds ack-like, could sound like "backs" like "backups"
 
-dif
-
 dij
 
 gim
@@ -74,3 +72,6 @@ jak -- video game character
 fid -- too close to "find"
 
 pof -- points to dating site plentyoffish.com
+
+dif -- Too close to "diff"
+

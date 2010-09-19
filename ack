@@ -836,6 +836,11 @@ To do that, run this with F<sudo> or as root:
 
    ln -s /usr/bin/ack-grep /usr/bin/ack
 
+=head2 What does F<ack> mean?
+
+Nothing.  I wanted a name that was easy to type and that you could
+pronounce as a single syllable.
+
 =head2 Can I do multi-line regexes?
 
 No, ack does not support regexes that match multiple lines.  Doing

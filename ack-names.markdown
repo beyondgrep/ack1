@@ -52,8 +52,6 @@ mug
 
 nak -- easy to type, but implies negative of ack.
 
-nar -- No Asshole Rule
-
 nif
 
 orp

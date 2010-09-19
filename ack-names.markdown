@@ -28,6 +28,8 @@ glo -- Kinda grep-like, easy type, very pronouncable, could get confused with "g
 
 # Ideas
 
+erg -- Relates to doing work. Downside is that it's all left-hand.
+
 rst -- follows the standard of TCP flags like ack, pronounceable as "rist", easy to type, I don't like the lack of vowel.
 
 xoa -- singularly mine, no conflicts, but not pronouncable.  "zoe-uh"?

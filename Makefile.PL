@@ -82,7 +82,7 @@ PERL_T          = $(PERL) -T
 tags:
 	ctags -f tags --recurse --totals \
 		--exclude=blib \
-		--exclude=.svn \
+		--exclude=.git \
 		--exclude='*~' \
 		--exclude=$(ACK) \
 		--languages=Perl --langmap=Perl:+.t \

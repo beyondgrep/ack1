@@ -801,7 +801,7 @@ switches.
 
 You can certainly use ack to select your files to update.  For
 example, to change all "foo" to "bar" in all PHP files, you can do
-this form the Unix shell:
+this from the Unix shell:
 
     $ perl -i -p -e's/foo/bar/g' $(ack -f --php)
 

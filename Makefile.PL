@@ -35,7 +35,7 @@ my %parms = (
 );
 
 if ( $ExtUtils::MakeMaker::VERSION =~ /^\d\.\d\d$/ and $ExtUtils::MakeMaker::VERSION > 6.30 ) {
-    $parms{LICENSE} = 'perl';
+    $parms{LICENSE} = 'artistic_2';
 }
 
 if ( $ExtUtils::MakeMaker::VERSION ge '6.46' ) {

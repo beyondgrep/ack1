@@ -1923,9 +1923,8 @@ Running under Perl $ver at $this_perl
 
 $copyright
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of either: the GNU General Public License as
-published by the Free Software Foundation; or the Artistic License.
+This program is free software.  You may modify or distribute it
+under the terms of the Artistic License v2.0.
 END_OF_VERSION
 }
 

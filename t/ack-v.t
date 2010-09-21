@@ -18,7 +18,7 @@ NORMAL_CASE: {
     my @args = qw( -v are -a -h -m1 );
     my @results = run_ack( @args, @files );
 
-    sets_match( \@results, \@expected, 'First line of a file that does not contain "are".' );
+    lists_match( \@results, \@expected, 'First line of a file that does not contain "are".' );
 }
 
 DASH_L: {

@@ -88,8 +88,6 @@ LINE_1_AND_5_AND_NON_EXISTENT: {
 }
 
 LINE_AND_PASSTHRU: {
-    # TODO: check if this is really what --passthru is supposed to do
-    #       atm this gives back the whole document
     my @expected = split( /\n/, <<"EOF" );
 =head1 Dummy document
 

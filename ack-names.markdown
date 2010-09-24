@@ -20,6 +20,8 @@ Must be
 
 # Favorites
 
+kap -- easy type, same short A sound as ack, direct and unambiguous
+
 wij -- easy type, abbreviates to "Where In Jesus' name did I put..."
 
 gus -- general unified search, don't like the name so much, though

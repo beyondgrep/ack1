@@ -456,7 +456,7 @@ to ignore.
 =cut
 
 sub ignoredir_filter {
-    return !exists $ignore_dirs{$_};
+    return !exists $ignore_dirs{$_} && !exists $ignore_dirs{$File::Next::dir};
 }
 
 =head2 remove_dir_sep( $path )

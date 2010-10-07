@@ -1555,7 +1555,7 @@ sub delete_type {
 
 
 sub ignoredir_filter {
-    return !exists $ignore_dirs{$_};
+    return !exists $ignore_dirs{$_} && !exists $ignore_dirs{$File::Next::dir};
 }
 
 

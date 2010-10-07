@@ -1344,6 +1344,7 @@ sub get_command_line_options {
         'h|no-filename'         => \$opt{h},
         'H|with-filename'       => \$opt{H},
         'i|ignore-case'         => \$opt{i},
+        'invert-file-match'     => \$opt{invert_file_match},
         'lines=s'               => sub { shift; my $val = shift; push @{$opt{lines}}, $val },
         'l|files-with-matches'  => \$opt{l},
         'L|files-without-matches' => sub { $opt{l} = $opt{v} = 1 },
@@ -1579,7 +1580,7 @@ sub filetypes {
     return 'skipped' unless is_searchable( $basename );
 
     my $lc_basename = lc $basename;
-    return ('make',TEXT)        if $lc_basename eq 'makefile' || $lc_basename eq 'gnumakefile'; 
+    return ('make',TEXT)        if $lc_basename eq 'makefile' || $lc_basename eq 'gnumakefile';
     return ('rake','ruby',TEXT) if $lc_basename eq 'rakefile';
 
     # If there's an extension, look it up
@@ -1808,6 +1809,7 @@ File finding:
                         The PATTERN must not be specified.
   -g REGEX              Same as -f, but only print files matching REGEX.
   --sort-files          Sort the found files lexically.
+  --invert-file-match   Print/search handle files that do not match -g/-G.
   --show-types          Show which types each file has.
 
 File inclusion/exclusion:
@@ -2450,6 +2452,16 @@ sub get_starting_points {
     return \@what;
 }
 
+sub _match {
+    my ( $target, $expression, $invert_flag ) = @_;
+
+    if ( $invert_flag ) {
+        return $target !~ $expression;
+    }
+    else {
+        return $target =~ $expression;
+    }
+}
 
 
 sub get_iterator {
@@ -2464,9 +2476,9 @@ sub get_iterator {
 
     if ( $g_regex ) {
         $file_filter
-            = $opt->{u}   ? sub { $File::Next::name =~ /$g_regex/ } # XXX Maybe this should be a 1, no?
-            : $opt->{all} ? sub { $starting_point{ $File::Next::name } || ( $File::Next::name =~ /$g_regex/ && is_searchable( $_ ) ) }
-            :               sub { $starting_point{ $File::Next::name } || ( $File::Next::name =~ /$g_regex/ && is_interesting( @_ ) ) }
+            = $opt->{u}   ? sub { _match( $File::Next::name, qr/$g_regex/, $opt->{invert_file_match} ) }    # XXX Maybe this should be a 1, no?
+            : $opt->{all} ? sub { $starting_point{ $File::Next::name } || ( _match( $File::Next::name, qr/$g_regex/, $opt->{invert_file_match} ) && is_searchable( $_ ) ) }
+            :               sub { $starting_point{ $File::Next::name } || ( _match( $File::Next::name, qr/$g_regex/, $opt->{invert_file_match} ) && is_interesting( @ _) ) }
             ;
     }
     else {

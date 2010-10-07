@@ -775,7 +775,7 @@ File finding:
                         The PATTERN must not be specified.
   -g REGEX              Same as -f, but only print files matching REGEX.
   --sort-files          Sort the found files lexically.
-  --invert-file-match   print/search handle files that do not match REGEX (-g/-G)
+  --invert-file-match   Print/search handle files that do not match -g/-G.
   --show-types          Show which types each file has.
 
 File inclusion/exclusion:
@@ -1507,9 +1507,11 @@ sub get_starting_points {
 
 sub _match {
     my ( $target, $expression, $invert_flag ) = @_;
+
     if ( $invert_flag ) {
         return $target !~ $expression;
-    } else {
+    }
+    else {
         return $target =~ $expression;
     }
 }

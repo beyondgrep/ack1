@@ -12,7 +12,7 @@
 use warnings;
 use strict;
 
-our $VERSION = '1.93_01';
+our $VERSION = '1.93_02';
 # Check http://betterthangrep.com/ for updates
 
 # These are all our globals.
@@ -908,6 +908,7 @@ L<http://github.com/petdance/ack>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Nick Hooey,
 Bo Borgerson,
 Mark Szymanski,
 Marq Schneider,
@@ -1158,7 +1159,7 @@ use strict;
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.93_01';
+    $VERSION = '1.93_02';
     $COPYRIGHT = 'Copyright 2005-2010 Andy Lester.';
 }
 

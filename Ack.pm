@@ -88,6 +88,7 @@ BEGIN {
         erlang      => [qw( erl hrl )],
         fortran     => [qw( f f77 f90 f95 f03 for ftn fpp )],
         go          => [qw( go )],
+        haml        => [qw( sass scss haml less sass2 )],
         haskell     => [qw( hs lhs )],
         hh          => [qw( h )],
         html        => [qw( htm html shtml xhtml )],

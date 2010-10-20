@@ -3,6 +3,8 @@ History file for ack.  http://betterthangrep.com/
 NEXT
 
     [ENHANCEMENTS]
+    Added support for Haml and Sass
+
     Added support for Go and Delphi.
 
     Ignores Monotone's _MTN directories.

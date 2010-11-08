@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 use lib 't';
 use Util;
@@ -28,7 +28,14 @@ NO_MATCH: {
     my @files = qw( t/text/boy-named-sue.txt );
     my @args = qw( Pumpkin  --text );
     my @results = run_ack( @args, @files );
-    is(  get_rc(), 1, 'No Pumpkin  so bad RC needed');
+    is( get_rc(), 1, 'No Pumpkin so bad RC needed');
+}
+
+PIPE_INTO_ACK: {
+    my $file = qw( t/text/boy-named-sue.txt );
+    my @args = qw( Pumpkin );
+    my @results = pipe_into_ack( $file, @args );
+    is( get_rc(), 1, 'No Pumpkin while piping, so bad RC needed');
 }
 
 ## TBD RC 2 for bad file?

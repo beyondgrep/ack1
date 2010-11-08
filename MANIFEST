@@ -8,7 +8,7 @@ Resource.pm
 Changes
 MANIFEST
 Makefile.PL
-README
+README.markdown
 ack
 ack-base
 ack-help.txt

@@ -20,7 +20,7 @@ TRAILING_PUNC: {
     my @args = qw( Sue! -w -h --text );
     my @results = run_ack( @args, @files );
 
-    sets_match( \@results, \@expected, 'Looking for Sue!' );
+    lists_match( \@results, \@expected, 'Looking for Sue!' );
 }
 
 TRAILING_METACHAR_BACKSLASH_W: {
@@ -33,7 +33,7 @@ TRAILING_METACHAR_BACKSLASH_W: {
     my @args = qw( mu\w -w -h --text );
     my @results = run_ack( @args, @files );
 
-    sets_match( \@results, \@expected, 'Looking for mu\\w' );
+    lists_match( \@results, \@expected, 'Looking for mu\\w' );
 }
 
 
@@ -48,7 +48,7 @@ TRAILING_METACHAR_DOT: {
     my @args = ( 'mu.', qw( -w -h --text ) );
     my @results = run_ack( @args, @files );
 
-    sets_match( \@results, \@expected, 'Looking for mu.' );
+    lists_match( \@results, \@expected, 'Looking for mu.' );
 }
 
 

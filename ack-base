@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-our $VERSION = '1.92';
+our $VERSION = '1.93_02';
 # Check http://betterthangrep.com/ for updates
 
 # These are all our globals.
@@ -24,13 +24,17 @@ MAIN: {
         /^--th[pt]+t+$/ && App::Ack::_thpppt($_);
 
         # See if we want to ignore the environment. (Don't tell Al Gore.)
-        if ( $_ eq '--noenv' ) {
-            my @keys = ( 'ACKRC', grep { /^ACK_/ } keys %ENV );
-            delete @ENV{@keys};
-            $env_is_usable = 0;
+        if ( /^--(no)?env$/ ) {
+            $env_is_usable = defined $1 ? 0 : 1;
         }
     }
-    unshift( @ARGV, App::Ack::read_ackrc() ) if $env_is_usable;
+    if ( $env_is_usable ) {
+        unshift( @ARGV, App::Ack::read_ackrc() );
+    }
+    else {
+        my @keys = ( 'ACKRC', grep { /^ACK_/ } keys %ENV );
+        delete @ENV{@keys};
+    }
     App::Ack::load_colors();
 
     if ( exists $ENV{ACK_SWITCHES} ) {
@@ -61,15 +65,25 @@ sub main {
             my $s = $nargs == 1 ? '' : 's';
             App::Ack::warn( "Ignoring $nargs argument$s on the command-line while acting as a filter." );
         }
+
         my $res = App::Ack::Resource::Basic->new( '-' );
-        App::Ack::search_resource( $res, $opt );
+        my $nmatches;
+        if ( $opt->{count} ) {
+            $nmatches = App::Ack::search_and_list( $res, $opt );
+        }
+        else {
+            # normal searching
+            $nmatches = App::Ack::search_resource( $res, $opt );
+        }
         $res->close();
-        exit 0;
+        App::Ack::exit_from_ack( $nmatches );
     }
 
     my $file_matching = $opt->{f} || $opt->{lines};
-    if ( !$file_matching ) {
-        @ARGV or App::Ack::die( 'No regular expression found.' );
+    if ( $file_matching ) {
+        App::Ack::die( "Can't specify both a regex ($opt->{regex}) and use one of --line, -f or -g." ) if $opt->{regex};
+    }
+    else {
         $opt->{regex} = App::Ack::build_regex( defined $opt->{regex} ? $opt->{regex} : shift @ARGV, $opt );
     }
 
@@ -93,7 +107,7 @@ sub main {
         $nmatches = App::Ack::print_matches( $iter, $opt );
     }
     close $App::Ack::fh;
-    exit ($nmatches ? 0 : 1);
+    App::Ack::exit_from_ack( $nmatches );
 }
 
 =head1 NAME
@@ -196,6 +210,8 @@ each input file.  If B<-l> is in effect, it will only show the
 number of lines for each file that has lines matching.  Without
 B<-l>, some line counts may be zeroes.
 
+If combined with B<-h> (B<--no-filename>) ack outputs only one total count.
+
 =item B<--color>, B<--nocolor>
 
 B<--color> highlights the matching text.  B<--nocolor> supresses
@@ -212,6 +228,10 @@ Sets the color to be used for filenames.
 =item B<--color-match=I<color>>
 
 Sets the color to be used for matches.
+
+=item B<--color-lineno=I<color>>
+
+Sets the color to be used for line numbers.
 
 =item B<--column>
 
@@ -286,13 +306,18 @@ Ignore case in the search strings.
 This applies only to the PATTERN, not to the regexes given for the B<-g>
 and B<-G> options.
 
-=item B<--[no]ignore-dir=DIRNAME>
+=item B<--[no]ignore-dir=I<DIRNAME>>
 
 Ignore directory (as CVS, .svn, etc are ignored). May be used multiple times
 to ignore multiple directories. For example, mason users may wish to include
 B<--ignore-dir=data>. The B<--noignore-dir> option allows users to search
 directories which would normally be ignored (perhaps to research the contents
 of F<.svn/props> directories).
+
+The I<DIRNAME> must always be a simple directory name. Nested directories like
+F<foo/bar> are NOT supported. You would need to specify B<--ignore-dir=foo> and
+then no files from any foo directory are taken into account by ack unless given
+explicitly on the command line.
 
 =item B<--line=I<NUM>>
 
@@ -328,7 +353,7 @@ Stop reading a file after I<NUM> matches.
 
 Print this manual page.
 
-=item B<-n>
+=item B<-n>, B<--no-recurse>
 
 No descending into subdirectories.
 
@@ -375,6 +400,11 @@ Quote all metacharacters in PATTERN, it is treated as a literal.
 This applies only to the PATTERN, not to the regexes given for the B<-g>
 and B<-G> options.
 
+=item B<-r>, B<-R>, B<--recurse>
+
+Recurse into sub-directories. This is the default and just here for
+compatibility with grep. You can also use it for turning B<--no-recurse> off.
+
 =item B<--smart-case>, B<--no-smart-case>
 
 Ignore case in the search strings if PATTERN contains no uppercase
@@ -390,6 +420,12 @@ B<-g> and B<-G> options.
 
 Sorts the found files lexically.  Use this if you want your file
 listings to be deterministic between runs of I<ack>.
+
+=item B<--show-types>
+
+Outputs the filetypes that ack associates with each file.
+
+Works with B<-f> and B<-g> options.
 
 =item B<--thpppt>
 
@@ -589,6 +625,15 @@ This option can also be set with B<--color-match>.
 
 See B<ACK_COLOR_FILENAME> for the color specifications.
 
+=item ACK_COLOR_LINENO
+
+Specifies the color of the line number when printed in B<--color>
+mode.  By default, it's "bold yellow".
+
+This option can also be set with B<--color-lineno>.
+
+See B<ACK_COLOR_FILENAME> for the color specifications.
+
 =item ACK_PAGER
 
 Specifies a pager program, such as C<more>, C<less> or C<most>, to which
@@ -723,10 +768,12 @@ them here.
 
 =head2 Why isn't ack finding a match in (some file)?
 
-Probably because it's of a type that ack doesn't recognize.
+Probably because it's of a type that ack doesn't recognize.  ack's
+searching behavior is driven by filetype.  B<If ack doesn't know
+what kind of file it is, ack ignores the file.>
 
-ack's searching behavior is driven by filetype.  If ack doesn't
-know what kind of file it is, ack ignores it.
+Use the C<-f> switch to see a list of files that ack will search
+for you.
 
 If you want ack to search files that it doesn't recognize, use the
 C<-a> switch.
@@ -754,7 +801,7 @@ switches.
 
 You can certainly use ack to select your files to update.  For
 example, to change all "foo" to "bar" in all PHP files, you can do
-this form the Unix shell:
+this from the Unix shell:
 
     $ perl -i -p -e's/foo/bar/g' $(ack -f --php)
 
@@ -780,6 +827,11 @@ so short and simple to type.
 To do that, run this with F<sudo> or as root:
 
    ln -s /usr/bin/ack-grep /usr/bin/ack
+
+=head2 What does F<ack> mean?
+
+Nothing.  I wanted a name that was easy to type and that you could
+pronounce as a single syllable.
 
 =head2 Can I do multi-line regexes?
 
@@ -848,6 +900,10 @@ L<http://github.com/petdance/ack>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Nick Hooey,
+Bo Borgerson,
+Mark Szymanski,
+Marq Schneider,
 Packy Anderson,
 JR Boyens,
 Dan Sully,
@@ -909,19 +965,9 @@ and Pete Krawczyk.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2005-2009 Andy Lester.
+Copyright 2005-2010 Andy Lester.
 
 This program is free software; you can redistribute it and/or modify
-it under the terms of either:
-
-=over 4
-
-=item * the GNU General Public License as published by the Free
-Software Foundation; either version 1, or (at your option) any later
-version, or
-
-=item * the Artistic License version 2.0.
-
-=back
+it under the terms of the Artistic License v2.0.
 
 =cut

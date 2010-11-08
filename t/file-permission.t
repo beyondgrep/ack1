@@ -44,7 +44,7 @@ sub check_with {
     local $Test::Builder::Level = $Test::Builder::Level + 1;
 
     my ($stdout, $stderr) = run_ack_with_stderr( @_ );
-    is( $?,             1<<8, 'Search normal: exit code ONE for no output for GREP compatibility' );
+    is( get_rc(), 1, 'Search normal: exit code ONE for no output for GREP compatibility' );
             ## XXX Should be TWO for best GREP compatibility since there was an error ...
             ##      but we agreed that wasn't required
     is( scalar @{$stdout}, 0, 'Search normal: no normal output' );

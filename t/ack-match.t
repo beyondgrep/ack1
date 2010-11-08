@@ -19,9 +19,20 @@ my @tests = (
 );
 
 # 3 tests for each call to test_match()
-plan tests => @tests * 3;
+# and 4 other test
+plan tests => @tests * 3 + 4;
 
 test_match( @{$_} ) for @tests;
+
+# giving only the --match argument (and no other args) should not
+# result in an error
+run_ack( '--match', 'Sue' );
+
+# not giving a regex when piping into ack should result in an error
+my ($stdout, $stderr) = pipe_into_ack_with_stderr( 't/text/4th-of-july.txt', '--perl' );
+ok( get_rc() != 0, 'ack should return an error when piped into without a regex' );
+is( scalar @{$stdout}, 0, 'ack should return no STDOUT when piped into without a regex' );
+is( scalar @{$stderr}, 1, 'ack should return one line of error message when piped into without a regex' );
 
 # call ack normally and compare output to calling with --match regex
 #

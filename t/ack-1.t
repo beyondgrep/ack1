@@ -19,7 +19,7 @@ SINGLE_TEXT_MATCH: {
     my @args = qw( Sue -1 -h --text );
     my @results = run_ack( @args, @files );
 
-    sets_match( \@results, \@expected, 'Looking for first instance of Sue!' );
+    lists_match( \@results, \@expected, 'Looking for first instance of Sue!' );
 }
 
 
@@ -32,7 +32,7 @@ DASH_V: {
     my @args = qw( Sue -1 -h -v --text );
     my @results = run_ack( @args, @files );
 
-    sets_match( \@results, \@expected, 'Looking for first non-match' );
+    lists_match( \@results, \@expected, 'Looking for first non-match' );
 }
 
 DASH_F: {

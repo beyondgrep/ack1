@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 29;
+use Test::More tests => 34;
 
 use lib 't';
 use Util;
@@ -27,7 +27,11 @@ ok(  is_filetype( 'foo.handler.pod', 'perl' ), 'foo.handler.pod can be perl' );
 ok(  is_filetype( '/tmp/wango/foo.pod', 'perl' ), '/tmp/wango/foo.pod can be perl' );
 ok(  is_filetype( '/tmp/wango/foo.handler.pod', 'perl' ), '/tmp/wango/foo.handler.pod can be perl' );
 ok(  is_filetype( '/tmp/blongo/makefile', 'make' ), '/tmp/blongo/makefile is a makefile' );
-ok(  is_filetype( 'Makefile', 'make' ), 'Makefile is a makefile' );
+ok(  is_filetype( 'Rakefile', 'rake' ), 'Rakefile is a rakefile' );
+# check type 'make'
+for my $f ( qw{ Makefile makefile GNUmakefile part1.mk part2.mak } ) {
+    ok(  is_filetype( $f, 'make' ), "$f is a makefile" );
+}
 
 is(App::Ack::filetypes('foo.pod~'), 'skipped',
     'correctly skip backup file');

@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 10;
+use Test::More tests => 12;
 
 use lib 't';
 use Util;
@@ -68,4 +68,13 @@ DASH_LC: {
     my @results = run_ack( @args, @files );
 
     sets_match( \@results, \@expected, 'Religion counts -l -c' );
+}
+
+PIPE_INTO_C: {
+    my $file = 't/text/science-of-myth.txt';
+    my @args = qw( religion -i -c );
+    my @results = pipe_into_ack( $file, @args );
+
+    is( scalar @results, 1, 'Piping into ack --count should return one line of results' );
+    is( $results[0], '2', 'Piping into ack --count should return "-:<count>"' );
 }

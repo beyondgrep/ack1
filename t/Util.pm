@@ -72,24 +72,23 @@ sub run_ack {
 # capture returncode
 our $ack_return_code;
 
-sub run_ack_with_stderr {
-    my @args = @_;
+# run the given command, assuming that the command was created with
+# build_ack_command_line (and thus writes its STDERR to $catcherr_file).
+#
+# sets $ack_return_code and unlinks the $catcherr_file
+#
+# returns chomped STDOUT and STDERR as two array refs
+sub run_cmd {
+    my $cmd = shift;
 
-    my @stdout;
-    my @stderr;
+    # diag( "Running command: $cmd" );
 
-    # The --noenv makes sure we don't pull in anything from the user.
-    if ( !grep { $_ =~ /^--(no)?env$/ } @args ) {
-        unshift( @args, '--noenv' );
-    }
-
-    my $cmd = build_ack_command_line( @args );
-
-    @stdout = `$cmd`;
+    my @stdout = `$cmd`;
     my ($sig,$core,$rc) = (($? & 127),  ($? & 128) , ($? >> 8));
     $ack_return_code = $rc;
     ## XXX what do do with $core or $sig?
 
+    my @stderr;
     open( my $fh, '<', $catcherr_file ) or die $!;
     while ( <$fh> ) {
         push( @stderr, $_ );
@@ -99,6 +98,7 @@ sub run_ack_with_stderr {
 
     chomp @stdout;
     chomp @stderr;
+
     return ( \@stdout, \@stderr );
 }
 
@@ -108,19 +108,41 @@ sub get_rc {
 
 } # scope for $ack_return_code
 
-sub pipe_into_ack {
+sub run_ack_with_stderr {
+    my @args = @_;
+
+    my @stdout;
+    my @stderr;
+
+    # The --noenv makes sure we don't pull in anything from the user
+    #    unless explicitly specified in the test
+    if ( !grep { /^--(no)?env$/ } @args ) {
+        unshift( @args, '--noenv' );
+    }
+
+    my $cmd = build_ack_command_line( @args );
+
+    return run_cmd($cmd);
+}
+
+# pipe into ack and return STDOUT and STDERR as array refs
+sub pipe_into_ack_with_stderr {
     my $input = shift;
     my @args = @_;
 
     my $cmd = build_ack_command_line( @args );
     $cmd = "$^X -pe1 $input | $cmd";
-    my @results = `$cmd`;
-    chomp @results;
 
-    unlink $catcherr_file;
-
-    return @results;
+    my ($stdout, $stderr) = run_cmd( $cmd );
+    return ( $stdout, $stderr );
 }
+
+# pipe into ack and return STDOUT as array, for arguments see pipe_into_ack_with_stderr
+sub pipe_into_ack {
+    my ($stdout, $stderr) = pipe_into_ack_with_stderr( @_ );
+    return @$stdout;
+}
+
 
 # Use this one if order is important
 sub lists_match {

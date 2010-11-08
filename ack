@@ -1219,6 +1219,7 @@ BEGIN {
         cc          => [qw( c h xs )],
         cfmx        => [qw( cfc cfm cfml )],
         clojure     => [qw( clj )],
+        coffeescript=> [qw( coffee )],
         cpp         => [qw( cpp cc cxx m hpp hh h hxx )],
         csharp      => [qw( cs )],
         css         => [qw( css )],

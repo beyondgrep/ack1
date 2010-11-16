@@ -1,6 +1,83 @@
+History file for ack.  http://betterthangrep.com/
+
+1.94        Mon Nov 15 22:38:48 CST 2010
+
+    [ENHANCEMENTS]
+    Added support for Go and Delphi.
+
+    Ignores Monotone's _MTN directories.
+
+    Added .xsl to the list of --xml files.
+
+
+1.93_02     Wed Oct  6 21:39:58 CDT 2010
+    [FIXES]
+    --man and --version now return with an exit code of 0.  They
+    used to exit with a 1. Thanks to Bo Borgerson.
+
+    [ENHANCEMENTS]
+    The --ignore-dir option now can ignore entire paths relative
+    to your current directory.  Thanks to Nick Hooey.  For example:
+
+        ack --ignore-dir=t/subsystem/test-data
+
+    Added --invert-file-match switch to negate the sense of the
+    -g/-G switches.  Thanks, Lars Dieckow.
+
+
+1.93_01     Sun Sep  5 16:00:29 CDT 2010
+    [FILE TYPE UPDATES]
+
+    Added --verilog, --vhdl and --clojure.
+
+    Files that match *.mk and *.mak as well as GNUmakefile are now included in
+    the ack filetype 'make' (issue 88).
+
+    Added RSpec's .spec type to the --ruby list.
+
+
+    [ENHANCEMENTS]
+    Updated the README to Markdown format.  Thanks to Mark Szymanski
+    for the idea.
+
+    Added docs for -r, -R, --recurse options.
+
+    Added new switch --color-lineno and environment variable ACK_COLOR_LINENO,
+    which allow setting the line number color.  (Marq Schneider)
+
+    Added option --show-types to output the types that ack considers
+    a file to have. (Torsten Blix)
+
+    'ack --count --no-filename regex' doesn't output a list of numbers but a
+    sum of all occurences. This is NOT what grep does but is the more sensible
+    behavior.
+
+
+    [FIXES]
+    Fixed ack misbehavior when using --match or not specifying a regex:
+
+        ack --match Sue
+        cat foo | ack --perl
+
+    Fixed issue 74: analog to grep, 'ack --count regex file' now
+    only outputs the number of found matches, if only one file is
+    given.
+
+    Fixed issue 76: Giving both --line and a regex (with --match)
+    now leads to an error. The same is true for -f or -g in conjunction
+    with --match. (Torsten Blix)
+
+    Fixed issue 80: Piping into ack --count now works as expected.
+    ack always returned 0 when piped into, no matter how many matches
+    where found. (Torsten Blix)
+
+    Fixed issue 81: .ackrc now ignores leading/trailing whitespace.
+    (Torsten Blix)
+
+
 1.92        Fri Dec 11 11:47:56 CST 2009
 
-    ack is now hosted at github: http://github.com/petdance/ack
+    The source code for ack is now at github: http://github.com/petdance/ack
 
     [FIXES]
     The --pager flag would not work.  Now it does.  Thanks Packy

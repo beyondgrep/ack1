@@ -33,12 +33,14 @@ _   /|
 
         <?php include "ack-lists.php" ?>
 
-        <h2>Latest version of ack: 1.92, December 11, 2009</h2>
+        <h2>Latest version of ack: 1.94, November 15, 2010</h2>
         Read the <a href="Changes">Changelog</a>
 
         <p>
         <b>ack</b> is a tool like <i>grep</i>, designed for programmers with large trees of
         heterogeneous source code.
+        </p>
+
         <p>
         ack is written purely in Perl, and takes advantage of the power of Perl's
         regular expressions.

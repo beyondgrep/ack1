@@ -57,5 +57,5 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]verilog      .v .vh .sv
     --[no]vhdl         .vhd .vhdl
     --[no]vim          .vim
-    --[no]xml          .xml .dtd .xslt .ent
+    --[no]xml          .xml .dtd .xsl .xslt .ent
     --[no]yaml         .yaml .yml

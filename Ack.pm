@@ -123,7 +123,7 @@ BEGIN {
         vhdl        => [qw( vhd vhdl )],
         vim         => [qw( vim )],
         yaml        => [qw( yaml yml )],
-        xml         => [qw( xml dtd xslt ent )],
+        xml         => [qw( xml dtd xsl xslt ent )],
     );
 
     while ( my ($type,$exts) = each %mappings ) {

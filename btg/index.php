@@ -1,7 +1,7 @@
 <html>
     <head>
         <meta NAME="Author" Content="Andy Lester">
-        <title>ack -- better than grep, a power search tool for programmers</title>
+        <title>ack 1.94 -- better than grep, a source code search tool for programmers</title>
         <style type="text/css">
             <!--
             div.bill pre {

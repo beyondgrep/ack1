@@ -12,7 +12,7 @@
 use warnings;
 use strict;
 
-our $VERSION = '1.93_02';
+our $VERSION = '1.94';
 # Check http://betterthangrep.com/ for updates
 
 # These are all our globals.
@@ -1159,7 +1159,7 @@ use strict;
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.93_02';
+    $VERSION = '1.94';
     $COPYRIGHT = 'Copyright 2005-2010 Andy Lester.';
 }
 

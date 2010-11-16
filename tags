@@ -60,6 +60,7 @@ DASH_F	t/zero.t	/^DASH_F: {$/;"	l
 DASH_G	t/ack-1.t	/^DASH_G: {$/;"	l
 DASH_G	t/ack-show-types.t	/^DASH_G: {$/;"	l
 DASH_IGNORE_DIR	t/ack-ignore-dir.t	/^DASH_IGNORE_DIR: {$/;"	l
+DASH_IGNORE_DIR_IGNORES_RELATIVE_PATHS	t/ack-ignore-dir.t	/^DASH_IGNORE_DIR_IGNORES_RELATIVE_PATHS: {$/;"	l
 DASH_IGNORE_DIR_MULTIPLE_TIMES	t/ack-ignore-dir.t	/^DASH_IGNORE_DIR_MULTIPLE_TIMES: {$/;"	l
 DASH_IGNORE_DIR_WITH_DASH_NOIGNORE_DIR	t/ack-ignore-dir.t	/^DASH_IGNORE_DIR_WITH_DASH_NOIGNORE_DIR: {$/;"	l
 DASH_IGNORE_DIR_WITH_SLASH	t/ack-ignore-dir.t	/^DASH_IGNORE_DIR_WITH_SLASH: {$/;"	l
@@ -99,6 +100,7 @@ HIDE_THE_WRAPPERS	t/module.t	/^HIDE_THE_WRAPPERS: {$/;"	l
 HIGHLIGHTING	t/ack-passthru.t	/^HIGHLIGHTING: {$/;"	l
 HIGHLIGHTING	t/context.t	/^HIGHLIGHTING: {$/;"	l
 INCOMPLETE_LaST_LINE	t/incomplete-last-line.t	/^INCOMPLETE_LaST_LINE: {$/;"	l
+INVERT_FILE_MATCH	t/ack-g.t	/^INVERT_FILE_MATCH: {$/;"	l
 INVERT_MATCH_CONTENT	t/ack-g.t	/^INVERT_MATCH_CONTENT: {$/;"	l
 INVERT_MATCH_CONTENT_SWAPPED	t/ack-g.t	/^INVERT_MATCH_CONTENT_SWAPPED: {$/;"	l
 INVERT_MATCH_FILE_NOT	t/ack-g.t	/^INVERT_MATCH_FILE_NOT: {$/;"	l
@@ -195,6 +197,7 @@ _key	Ack.pm	/^sub _key {$/;"	s
 _key	btg/ack-standalone	/^sub _key {$/;"	s
 _listify	Ack.pm	/^sub _listify {$/;"	s
 _listify	btg/ack-standalone	/^sub _listify {$/;"	s
+_match	Ack.pm	/^sub _match {$/;"	s
 _my_program	Ack.pm	/^sub _my_program {$/;"	s
 _my_program	btg/ack-standalone	/^sub _my_program {$/;"	s
 _setup	btg/ack-standalone	/^sub _setup {$/;"	s

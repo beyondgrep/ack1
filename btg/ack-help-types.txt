@@ -14,12 +14,15 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]binary       Binary files, as defined by Perl's -B op (default: off)
     --[no]cc           .c .h .xs
     --[no]cfmx         .cfc .cfm .cfml
+    --[no]clojure      .clj
     --[no]cpp          .cpp .cc .cxx .m .hpp .hh .h .hxx
     --[no]csharp       .cs
     --[no]css          .css
+    --[no]delphi       .pas .int .dfm .nfm .dof .dpk .dproj .groupproj .bdsgroup .bdsproj
     --[no]elisp        .el
     --[no]erlang       .erl .hrl
     --[no]fortran      .f .f77 .f90 .f95 .f03 .for .ftn .fpp
+    --[no]go           .go
     --[no]haskell      .hs .lhs
     --[no]hh           .h
     --[no]html         .htm .html .shtml .xhtml
@@ -28,7 +31,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]jsp          .jsp .jspx .jhtm .jhtml
     --[no]lisp         .lisp .lsp
     --[no]lua          .lua
-    --[no]make         Makefiles
+    --[no]make         Makefiles (including *.mk and *.mak)
     --[no]mason        .mas .mhtml .mpl .mtxt
     --[no]objc         .m .h
     --[no]objcpp       .mm .h
@@ -39,7 +42,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]plone        .pt .cpt .metadata .cpy .py
     --[no]python       .py
     --[no]rake         Rakefiles
-    --[no]ruby         .rb .rhtml .rjs .rxml .erb .rake
+    --[no]ruby         .rb .rhtml .rjs .rxml .erb .rake .spec
     --[no]scala        .scala
     --[no]scheme       .scm .ss
     --[no]shell        .sh .bash .csh .tcsh .ksh .zsh
@@ -51,6 +54,8 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]text         Text files, as defined by Perl's -T op (default: off)
     --[no]tt           .tt .tt2 .ttml
     --[no]vb           .bas .cls .frm .ctl .vb .resx
+    --[no]verilog      .v .vh .sv
+    --[no]vhdl         .vhd .vhdl
     --[no]vim          .vim
-    --[no]xml          .xml .dtd .xslt .ent
+    --[no]xml          .xml .dtd .xsl .xslt .ent
     --[no]yaml         .yaml .yml

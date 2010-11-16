@@ -66,7 +66,8 @@ File presentation:
                         output is redirected, or on Windows)
   --[no]colour          Same as --[no]color
   --color-filename=COLOR
-  --color-match=COLOR   Set the color for matches and filenames.
+  --color-match=COLOR
+  --color-lineno=COLOR  Set the color for filenames, matches, and line numbers.
   --flush               Flush output immediately, even when ack is used
                         non-interactively (when output goes to a pipe or
                         file).
@@ -76,6 +77,8 @@ File finding:
                         The PATTERN must not be specified.
   -g REGEX              Same as -f, but only print files matching REGEX.
   --sort-files          Sort the found files lexically.
+  --invert-file-match   Print/search handle files that do not match -g/-G.
+  --show-types          Show which types each file has.
 
 File inclusion/exclusion:
   -a, --all-types       All file types searched;
@@ -104,8 +107,7 @@ File inclusion/exclusion:
 
   Directories ignored by default:
     autom4te.cache, blib, _build, .bzr, .cdv, cover_db, CVS, _darcs, ~.dep,
-    ~.dot, .git, .hg, ~.nib, nytprof, .pc, ~.plst, RCS, SCCS, _sgbak and
-    .svn
+    ~.dot, .git, .hg, _MTN, ~.nib, .pc, ~.plst, RCS, SCCS, _sgbak and .svn
 
   Files not checked for type:
     /~$/           - Unix backup files
@@ -122,4 +124,4 @@ Miscellaneous:
 
 Exit status is 0 if match, 1 if no match.
 
-This is version 1.92 of ack.
+This is version 1.94 of ack.

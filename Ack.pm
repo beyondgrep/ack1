@@ -558,6 +558,7 @@ Recognized files:
   /#.+#$/         - Emacs swap files
   /[._].*\.swp$/  - Vi(m) swap files
   /core\.\d+$/    - core dumps
+  /[.]min\.js$/   - Minified javascript files
 
 Note that I<$filename> must be just a file, not a full path.
 
@@ -572,6 +573,7 @@ sub is_searchable {
     return if $filename =~ m{^#.*#$}o;
     return if $filename =~ m{^core\.\d+$}o;
     return if $filename =~ m{[._].*\.swp$}o;
+    return if $filename =~ /[.]min\.js$/;
 
     return 1;
 }
@@ -810,10 +812,11 @@ File inclusion/exclusion:
     $ignore_dirs
 
   Files not checked for type:
-    /~\$/           - Unix backup files
-    /#.+#\$/        - Emacs swap files
+    /~\$/            - Unix backup files
+    /#.+#\$/         - Emacs swap files
     /[._].*\\.swp\$/ - Vi(m) swap files
-    /core\\.\\d+\$/   - core dumps
+    /core\\.\\d+\$/  - core dumps
+    /[.]min\\.js\$/  - Minified javascript files
 
 Miscellaneous:
   --noenv               Ignore environment variables and ~/.ackrc

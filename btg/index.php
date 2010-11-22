@@ -71,6 +71,7 @@ _   /|
             <li>Install the <b>Ubuntu package</b>: ack-grep</li>
             <li>Install the <b>Fedora package</b>: ack</li>
             <li>Install the <b>Gentoo package</b>: sys-apps/ack</li>
+            <li>Install the <b>Arch package</b>: community/ack</li>
         </ul>
 
         <h2>Ack in Project for Textmate users</h2>

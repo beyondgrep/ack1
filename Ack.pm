@@ -538,7 +538,7 @@ sub filetypes {
     close $fh;
 
     if ( $header =~ /^#!/ ) {
-        return ($1,TEXT)       if $header =~ /\b(ruby|p(?:erl|hp|ython))\b/;
+        return ($1,TEXT)       if $header =~ /\b(ruby|lua|p(?:erl|hp|ython))\b/;
         return ('shell',TEXT)  if $header =~ /\b(?:ba|t?c|k|z)?sh\b/;
     }
     else {

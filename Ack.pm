@@ -105,6 +105,7 @@ BEGIN {
         perl        => [qw( pl pm pod t )],
         php         => [qw( php phpt php3 php4 php5 phtml)],
         plone       => [qw( pt cpt metadata cpy py )],
+	puppet      => [qw( pp )],
         python      => [qw( py )],
         rake        => q{Rakefiles},
         ruby        => [qw( rb rhtml rjs rxml erb rake spec )],

@@ -40,6 +40,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]perl         .pl .pm .pod .t
     --[no]php          .php .phpt .php3 .php4 .php5 .phtml
     --[no]plone        .pt .cpt .metadata .cpy .py
+    --[no]puppet       .pp
     --[no]python       .py
     --[no]rake         Rakefiles
     --[no]ruby         .rb .rhtml .rjs .rxml .erb .rake .spec

@@ -68,6 +68,7 @@ _   /|
             </blockquote>
             </li>
             <li>Install the <b>Macport</b>: <a href="http://trac.macports.org/browser/trunk/dports/perl/p5-app-ack/Portfile">http://trac.macports.org/browser/trunk/dports/perl/p5-app-ack/Portfile</a></li>
+            <li>Install the <b>Debian package</b>: <a href="http://packages.debian.org/search?keywords=ack-grep">ack-grep</a></li>
             <li>Install the <b>Ubuntu package</b>: ack-grep</li>
             <li>Install the <b>Fedora package</b>: ack</li>
             <li>Install the <b>Gentoo package</b>: sys-apps/ack</li>

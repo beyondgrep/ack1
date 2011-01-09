@@ -1228,6 +1228,7 @@ BEGIN {
         erlang      => [qw( erl hrl )],
         fortran     => [qw( f f77 f90 f95 f03 for ftn fpp )],
         go          => [qw( go )],
+        groovy      => [qw( groovy gtmpl gpp grunit )],
         haskell     => [qw( hs lhs )],
         hh          => [qw( h )],
         html        => [qw( htm html shtml xhtml )],

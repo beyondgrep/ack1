@@ -23,6 +23,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]erlang       .erl .hrl
     --[no]fortran      .f .f77 .f90 .f95 .f03 .for .ftn .fpp
     --[no]go           .go
+    --[no]groovy       .groovy .gtmpl .gpp .grunit
     --[no]haskell      .hs .lhs
     --[no]hh           .h
     --[no]html         .htm .html .shtml .xhtml

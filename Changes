@@ -1,5 +1,11 @@
 History file for ack.  http://betterthangrep.com/
 
+NEXT
+
+    [ENHANCEMENTS]
+    Added Groovy support (--groovy).
+
+
 1.94        Mon Nov 15 22:38:48 CST 2010
 
     [ENHANCEMENTS]

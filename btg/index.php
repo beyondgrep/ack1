@@ -34,7 +34,14 @@ _   /|
         <?php include "ack-lists.php" ?>
 
         <h2>Latest version of ack: 1.94, November 15, 2010</h2>
+
+        <p>
+        (<a href="http://ucallweconn.net/be/betterthangrep-be">Belorussion translation</a> of this page)
+        </p>
+
+        <p>
         Read the <a href="Changes">Changelog</a>
+        </p>
 
         <p>
         <b>ack</b> is a tool like <i>grep</i>, designed for programmers with large trees of

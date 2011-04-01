@@ -1643,7 +1643,7 @@ sub is_searchable {
     return if $filename =~ m{^#.*#$}o;
     return if $filename =~ m{^core\.\d+$}o;
     return if $filename =~ m{[._].*\.swp$}o;
-    return if $filename =~ /[.]min\.js$/;
+    return if $filename =~ /[.-]min\.js$/;
 
     return 1;
 }

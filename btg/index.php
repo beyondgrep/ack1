@@ -17,7 +17,7 @@
     </head>
     <body bgcolor="white">
         <div class="bill" align="center">
-            <table border="0" cellpadding="10" cellspacing="20">
+            <table border="0" cellpadding="10" cellspacing="10">
                 <tr>
                     <td>
 <pre>
@@ -31,19 +31,9 @@ _   /|
             </table>
         </div>
 
+
+        <p>
         <?php include "ack-lists.php" ?>
-
-        <h2>Latest version of ack: 1.94, November 15, 2010</h2>
-
-        <p>
-        (<a href="http://ucallweconn.net/be/betterthangrep-be">Belorussion translation</a> of this page)
-        </p>
-
-        <p>
-        Read the <a href="Changes">Changelog</a>
-        </p>
-
-        <p>
         <b>ack</b> is a tool like <i>grep</i>, designed for programmers with large trees of
         heterogeneous source code.
         </p>
@@ -51,6 +41,12 @@ _   /|
         <p>
         ack is written purely in Perl, and takes advantage of the power of Perl's
         regular expressions.
+        </p>
+
+        <h2>Latest version of ack: 1.94, November 15, 2010</h2>
+
+        <p>
+        Read the <a href="Changes">Changelog</a>
         </p>
 
         <h2>How to install ack</h2>
@@ -82,21 +78,21 @@ _   /|
             <li>Install the <b>Arch package</b>: community/ack</li>
         </ul>
 
-        <h2>Ack in Project for Textmate users</h2>
+        <h2>AckMate for Textmate users</h2>
         <p>
-        Users of TextMate, the programmer's editor for the Mac, can use the Ack in Project plugin by Trevor Squires:
+        Users of TextMate, the programmer's editor for the Mac, can use the AckMate plugin by Trevor Squires:
         </p>
         <blockquote>
-            TextMate users know just how slow its “Find in Project”
-            can be with large source trees. That’s why you need
-            "ack-in-project" – a TextMate bundle that uses
-            the super-speedy ‘ack’ tool to search your code
+            TextMate users know just how slow its "Find in Project"
+            can be with large source trees. That's why you need
+            "ack-in-project" &mdash; a TextMate bundle that uses
+            the super-speedy "ack" tool to search your code
             FAST. It gives you beautiful, clickable results just
             as fast as "ack" can find them. Check it out at:
-            <a href="http://github.com/protocool/ack-tmbundle/tree/master">http://github.com/protocool/ack-tmbundle/tree/master</a>
+            <a href="http://github.com/protocool/ackmate">http://github.com/protocool/ackmate</a>
         </blockquote>
 
-        <h2>Testimonials</h2>
+        <h2>Testimonials about ack</h2>
 
         <p>
         "Whoa, this is *so* much better than grep it's not even funny."

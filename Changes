@@ -4,6 +4,7 @@ NEXT
 
     [ENHANCEMENTS]
     Added Groovy support (--groovy).
+    Added Restructured Text (reST) support (--rst).
 
 
 1.94        Mon Nov 15 22:38:48 CST 2010

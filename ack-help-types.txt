@@ -33,6 +33,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]lisp         .lisp .lsp
     --[no]lua          .lua
     --[no]make         Makefiles (including *.mk and *.mak)
+    --[no]mako         .mako .mak
     --[no]mason        .mas .mhtml .mpl .mtxt
     --[no]objc         .m .h
     --[no]objcpp       .mm .h

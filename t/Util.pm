@@ -3,7 +3,7 @@ use File::Next ();
 use App::Ack ();
 
 sub prep_environment {
-    delete @ENV{qw( ACK_OPTIONS ACKRC ACK_PAGER )};
+    delete @ENV{qw( ACK_OPTIONS ACK_PAGER )};
     $ENV{ACKRC} = 't/ackrc';
 }
 

@@ -219,7 +219,7 @@ _   /|
             <li>Uses <b>real Perl regular expressions</b>, not a GNU subset.
             <li>Allows you to specify output using Perl's special variables.  To find all <tt>#include</tt> files in C programs:
             <ul>
-                <li><tt>ack --cc '#include\s+&lt;(.*)&gt; --output '$1' -h</tt>
+                <li><tt>ack --cc '#include\s+&lt;(.*)&gt;' --output '$1' -h</tt>
             </ul>
             <li>
             Many command-line switches are the same as in GNU grep:<br>

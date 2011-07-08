@@ -69,6 +69,7 @@ BEGIN {
         'autom4te.cache'    => 'autoconf',
         'cover_db'          => 'Devel::Cover',
         _build              => 'Module::Build',
+        target              => 'Maven Target',
     );
 
     %mappings = (

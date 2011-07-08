@@ -87,6 +87,7 @@ BEGIN {
         elisp       => [qw( el )],
         erlang      => [qw( erl hrl )],
         fortran     => [qw( f f77 f90 f95 f03 for ftn fpp )],
+        ftl         => [qw( ftl dec )],
         go          => [qw( go )],
         groovy      => [qw( groovy gtmpl gpp grunit )],
         haskell     => [qw( hs lhs )],

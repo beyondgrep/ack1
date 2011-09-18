@@ -4,7 +4,7 @@ use App::Ack ();
 
 sub prep_environment {
     delete @ENV{qw( ACK_OPTIONS ACK_PAGER )};
-    $ENV{ACKRC} = 't/ackrc';
+    $ENV{ACKRC} = 't/ackrc-empty';
 }
 
 # capture stderr output into this file

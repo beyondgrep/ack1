@@ -559,7 +559,7 @@ Recognized files:
   /#.+#$/         - Emacs swap files
   /[._].*\.swp$/  - Vi(m) swap files
   /core\.\d+$/    - core dumps
-  /[.-]min\.js$/   - Minified javascript files
+  /[.-]min\.js$/  - Minified javascript files
 
 Note that I<$filename> must be just a file, not a full path.
 

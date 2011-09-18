@@ -3,6 +3,8 @@ History file for ack.  http://betterthangrep.com/
 NEXT
 
     [ENHANCEMENTS]
+    Now ignores minified Javascript files.
+
     Added Groovy support (--groovy).
 
 

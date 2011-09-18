@@ -1,7 +1,7 @@
 <html>
     <head>
         <meta NAME="Author" Content="Andy Lester">
-        <title>ack 1.94 -- better than grep, a source code search tool for programmers</title>
+        <title>ack 1.96 -- better than grep, a source code search tool for programmers</title>
         <style type="text/css">
             <!--
             div.bill pre {
@@ -43,7 +43,7 @@ _   /|
         regular expressions.
         </p>
 
-        <h2>Latest version of ack: 1.94, November 15, 2010</h2>
+        <h2>Latest version of ack: 1.96, September 18, 2011</h2>
 
         <p>
         Read the <a href="Changes">Changelog</a>

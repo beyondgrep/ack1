@@ -20,8 +20,8 @@ Version 1.94
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.94';
-    $COPYRIGHT = 'Copyright 2005-2010 Andy Lester.';
+    $VERSION = '1.96';
+    $COPYRIGHT = 'Copyright 2005-2011 Andy Lester.';
 }
 
 our $fh;

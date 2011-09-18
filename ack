@@ -908,6 +908,7 @@ L<http://github.com/petdance/ack>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Matthew Wild,
 Scott Kyle,
 Nick Hooey,
 Bo Borgerson,
@@ -1623,7 +1624,7 @@ sub filetypes {
     close $fh;
 
     if ( $header =~ /^#!/ ) {
-        return ($1,TEXT)       if $header =~ /\b(ruby|p(?:erl|hp|ython))\b/;
+        return ($1,TEXT)       if $header =~ /\b(ruby|lua|p(?:erl|hp|ython))-?(\d[\d.]*)?\b/;
         return ('shell',TEXT)  if $header =~ /\b(?:ba|t?c|k|z)?sh\b/;
     }
     else {

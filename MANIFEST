@@ -84,6 +84,8 @@ t/swamp/crystallography-weenies.f
 t/swamp/pipe-stress-freaks.F
 t/swamp/c-header.h
 t/swamp/c-source.c
+t/swamp/compressed-min.js
+t/swamp/compressed.min.js
 t/swamp/groceries/CVS/fruit
 t/swamp/groceries/CVS/junk
 t/swamp/groceries/CVS/meat

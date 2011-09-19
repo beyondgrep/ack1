@@ -110,10 +110,11 @@ File inclusion/exclusion:
     ~.dot, .git, .hg, _MTN, ~.nib, .pc, ~.plst, RCS, SCCS, _sgbak and .svn
 
   Files not checked for type:
-    /~$/           - Unix backup files
-    /#.+#$/        - Emacs swap files
+    /~$/            - Unix backup files
+    /#.+#$/         - Emacs swap files
     /[._].*\.swp$/ - Vi(m) swap files
-    /core\.\d+$/   - core dumps
+    /core\.\d+$/  - core dumps
+    /[.-]min\.js$/  - Minified javascript files
 
 Miscellaneous:
   --noenv               Ignore environment variables and ~/.ackrc
@@ -124,4 +125,4 @@ Miscellaneous:
 
 Exit status is 0 if match, 1 if no match.
 
-This is version 1.94 of ack.
+This is version 1.96 of ack.

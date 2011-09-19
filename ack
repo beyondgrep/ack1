@@ -12,7 +12,7 @@
 use warnings;
 use strict;
 
-our $VERSION = '1.94';
+our $VERSION = '1.96';
 # Check http://betterthangrep.com/ for updates
 
 # These are all our globals.
@@ -975,7 +975,7 @@ and Pete Krawczyk.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2005-2010 Andy Lester.
+Copyright 2005-2011 Andy Lester.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the Artistic License v2.0.
@@ -1161,8 +1161,8 @@ use strict;
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.94';
-    $COPYRIGHT = 'Copyright 2005-2010 Andy Lester.';
+    $VERSION = '1.96';
+    $COPYRIGHT = 'Copyright 2005-2011 Andy Lester.';
 }
 
 our $fh;

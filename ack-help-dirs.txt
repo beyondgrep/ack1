@@ -125,4 +125,4 @@ Miscellaneous:
 
 Exit status is 0 if match, 1 if no match.
 
-This is version 1.94 of ack.
+This is version 1.96 of ack.

@@ -1,9 +1,9 @@
 History file for ack.  http://betterthangrep.com/
 
-NEXT
-
+1.96        Sun Sep 18 13:33:39 CDT 2011
     [ENHANCEMENTS]
-    Now ignores minified Javascript files.
+    Now ignores minified Javascript files.  Anything matching -min.js
+    or .min.js is ignored.
 
     Added Groovy support (--groovy).
 
@@ -17,7 +17,6 @@ NEXT
 
 
 1.94        Mon Nov 15 22:38:48 CST 2010
-
     [ENHANCEMENTS]
     Added support for Go and Delphi.
 

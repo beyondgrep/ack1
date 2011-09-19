@@ -5,15 +5,16 @@ History file for ack.  http://betterthangrep.com/
     Now ignores minified Javascript files.  Anything matching -min.js
     or .min.js is ignored.
 
-    Added Groovy support (--groovy).
-
-    Added .pm6 as a --perl extension.
-
     Lua can now get detected from the shebang line.  Thanks, Matthew Wild.
 
     Added support for version numbers in executables in shebang
     detection.  Now if your Perl program's shebang refers to
     /usr/local/bin/perl-5.14.1, ack will find it.
+
+    [FILE TYPE UPDATES]
+    Added Groovy support (--groovy).
+
+    Added .pm6 as a --perl extension.
 
 
 1.94        Mon Nov 15 22:38:48 CST 2010
@@ -22,6 +23,7 @@ History file for ack.  http://betterthangrep.com/
 
     Ignores Monotone's _MTN directories.
 
+    [FILE TYPE UPDATES]
     Added .xsl to the list of --xml files.
 
 

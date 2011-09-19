@@ -1,5 +1,21 @@
 History file for ack.  http://betterthangrep.com/
 
+NEXT
+
+    [ENHANCEMENTS]
+    Now ignores minified Javascript files.
+
+    Added Groovy support (--groovy).
+
+    Added .pm6 as a --perl extension.
+
+    Lua can now get detected from the shebang line.  Thanks, Matthew Wild.
+
+    Added support for version numbers in executables in shebang
+    detection.  Now if your Perl program's shebang refers to
+    /usr/local/bin/perl-5.14.1, ack will find it.
+
+
 1.94        Mon Nov 15 22:38:48 CST 2010
 
     [ENHANCEMENTS]

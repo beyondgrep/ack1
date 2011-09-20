@@ -12,7 +12,7 @@
 use warnings;
 use strict;
 
-our $VERSION = '1.94';
+our $VERSION = '1.96';
 # Check http://betterthangrep.com/ for updates
 
 # These are all our globals.
@@ -908,6 +908,8 @@ L<http://github.com/petdance/ack>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Matthew Wild,
+Scott Kyle,
 Nick Hooey,
 Bo Borgerson,
 Mark Szymanski,
@@ -973,7 +975,7 @@ and Pete Krawczyk.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2005-2010 Andy Lester.
+Copyright 2005-2011 Andy Lester.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the Artistic License v2.0.
@@ -1159,8 +1161,8 @@ use strict;
 our $VERSION;
 our $COPYRIGHT;
 BEGIN {
-    $VERSION = '1.94';
-    $COPYRIGHT = 'Copyright 2005-2010 Andy Lester.';
+    $VERSION = '1.96';
+    $COPYRIGHT = 'Copyright 2005-2011 Andy Lester.';
 }
 
 our $fh;
@@ -1242,7 +1244,7 @@ BEGIN {
         objcpp      => [qw( mm h )],
         ocaml       => [qw( ml mli )],
         parrot      => [qw( pir pasm pmc ops pod pg tg )],
-        perl        => [qw( pl pm pod t )],
+        perl        => [qw( pl pm pm6 pod t )],
         php         => [qw( php phpt php3 php4 php5 phtml)],
         plone       => [qw( pt cpt metadata cpy py )],
         python      => [qw( py )],
@@ -1622,7 +1624,7 @@ sub filetypes {
     close $fh;
 
     if ( $header =~ /^#!/ ) {
-        return ($1,TEXT)       if $header =~ /\b(ruby|p(?:erl|hp|ython))\b/;
+        return ($1,TEXT)       if $header =~ /\b(ruby|lua|p(?:erl|hp|ython))-?(\d[\d.]*)?\b/;
         return ('shell',TEXT)  if $header =~ /\b(?:ba|t?c|k|z)?sh\b/;
     }
     else {
@@ -1642,6 +1644,7 @@ sub is_searchable {
     return if $filename =~ m{^#.*#$}o;
     return if $filename =~ m{^core\.\d+$}o;
     return if $filename =~ m{[._].*\.swp$}o;
+    return if $filename =~ /[.-]min\.js$/;
 
     return 1;
 }
@@ -1845,10 +1848,11 @@ File inclusion/exclusion:
     $ignore_dirs
 
   Files not checked for type:
-    /~\$/           - Unix backup files
-    /#.+#\$/        - Emacs swap files
+    /~\$/            - Unix backup files
+    /#.+#\$/         - Emacs swap files
     /[._].*\\.swp\$/ - Vi(m) swap files
-    /core\\.\\d+\$/   - core dumps
+    /core\\.\\d+\$/  - core dumps
+    /[.-]min\\.js\$/  - Minified javascript files
 
 Miscellaneous:
   --noenv               Ignore environment variables and ~/.ackrc

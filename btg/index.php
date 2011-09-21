@@ -181,7 +181,7 @@ _   /|
         <ol>
             <li>It's <b>blazingly fast</b> because it only searches the stuff you want searched.</li>
             <li>ack is pure Perl, so it <b>runs on Windows</b> just fine. It has <b>no dependencies</b> other than Perl 5.</li>
-            <li>The <a href="http://ack.googlecode.com/svn/tags/latest/ack">standalone
+            <li>The <a href="http://betterthangrep.com/ack-standalone">standalone
                 version</a> uses no non-standard modules, so you can put it in your
             <tt>~/bin</tt> without fear.</li>
             <li>

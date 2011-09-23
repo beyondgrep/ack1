@@ -21,6 +21,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]delphi       .pas .int .dfm .nfm .dof .dpk .dproj .groupproj .bdsgroup .bdsproj
     --[no]elisp        .el
     --[no]erlang       .erl .hrl
+    --[no]fish         .fish
     --[no]fortran      .f .f77 .f90 .f95 .f03 .for .ftn .fpp
     --[no]go           .go
     --[no]groovy       .groovy .gtmpl .gpp .grunit

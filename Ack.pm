@@ -75,6 +75,7 @@ BEGIN {
         actionscript => [qw( as mxml )],
         ada         => [qw( ada adb ads )],
         asm         => [qw( asm s )],
+        aspnet      => [qw( aspx ascx asmx svc master edmx ashx resx sitemap browser skin )],
         batch       => [qw( bat cmd )],
         binary      => q{Binary files, as defined by Perl's -B op (default: off)},
         cc          => [qw( c h xs )],

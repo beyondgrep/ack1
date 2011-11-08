@@ -5,6 +5,11 @@ ack is *not* intended to be a general-purpose replacement for grep.
 ack is for searching source code of defined file types.  For searching
 other files, you may want to stick with grep.
 
+# DEPENDENCIES
+
+    File::Next
+        https://github.com/petdance/file-next
+
 # INSTALLATION
 
 To install this module, run the following commands:

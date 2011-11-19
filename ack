@@ -4,7 +4,7 @@
 # Please DO NOT EDIT or send patches for it.
 #
 # Please take a look at the source from
-# http://github.com/petdance/ack
+# https://github.com/petdance/ack
 # and submit patches against the individual files
 # that build ack.
 #
@@ -856,7 +856,7 @@ Andy Lester, C<< <andy at petdance.com> >>
 =head1 BUGS
 
 Please report any bugs or feature requests to the issues list at
-Github: L<http://github.com/petdance/ack/issues>
+Github: L<https://github.com/petdance/ack/issues>
 
 =head1 ENHANCEMENTS
 
@@ -866,7 +866,7 @@ will not consider a request without it first getting seen by other
 ack users.  This includes requests for new filetypes.
 
 There is a list of enhancements I want to make to F<ack> in the ack
-issues list at Github: L<http://github.com/petdance/ack/issues>
+issues list at Github: L<https://github.com/petdance/ack/issues>
 
 Patches are always welcome, but patches with tests get the most
 attention.
@@ -883,7 +883,7 @@ L<http://betterthangrep.com/>
 
 =item * The ack issues list at Github
 
-L<http://github.com/petdance/ack/issues>
+L<https://github.com/petdance/ack/issues>
 
 =item * AnnoCPAN: Annotated CPAN documentation
 
@@ -899,7 +899,7 @@ L<http://search.cpan.org/dist/ack>
 
 =item * Git source repository
 
-L<http://github.com/petdance/ack>
+L<https://github.com/petdance/ack>
 
 =back
 

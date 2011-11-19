@@ -94,7 +94,7 @@ _   /|
             the super-speedy "ack" tool to search your code
             FAST. It gives you beautiful, clickable results just
             as fast as "ack" can find them. Check it out at:
-            <a href="http://github.com/protocool/ackmate">http://github.com/protocool/ackmate</a>
+            <a href="https://github.com/protocool/ackmate">https://github.com/protocool/ackmate</a>
         </blockquote>
 
         <h2>Testimonials about ack</h2>

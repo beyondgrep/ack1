@@ -233,7 +233,7 @@ sub get_command_line_options {
         'L|files-without-matches' => sub { $opt{l} = $opt{v} = 1 },
         'm|max-count=i'         => \$opt{m},
         'match=s'               => \$opt{regex},
-        'n|no-recurse'          => \$opt{n},
+        'n|no-recur|no-recurse' => \$opt{n},
         o                       => sub { $opt{output} = '$&' },
         'output=s'              => \$opt{output},
         'pager=s'               => \$opt{pager},
@@ -241,7 +241,7 @@ sub get_command_line_options {
         'passthru'              => \$opt{passthru},
         'print0'                => \$opt{print0},
         'Q|literal'             => \$opt{Q},
-        'r|R|recurse'           => sub { $opt{n} = 0 },
+        'r|R|recur|recurse'     => sub { $opt{n} = 0 },
         'show-types'            => \$opt{show_types},
         'smart-case!'           => \$opt{smart_case},
         'sort-files'            => \$opt{sort_files},
@@ -789,8 +789,10 @@ File inclusion/exclusion:
                         Ignores CVS, .svn and other ignored directories
   -u, --unrestricted    All files and directories searched
   --[no]ignore-dir=name Add/Remove directory from the list of ignored dirs
-  -r, -R, --recurse     Recurse into subdirectories (ack's default behavior)
-  -n, --no-recurse      No descending into subdirectories
+  -r, -R, --recur       Recur into subdirectories (ack's default behavior)
+  -r, -R, --recurse     Same as --recur
+  -n, --no-recur        No descending into subdirectories
+  -n, --no-recurse      Same as --no-recur
   -G REGEX              Only search files that match REGEX
 
   --perl                Include only Perl files.

@@ -85,8 +85,10 @@ File inclusion/exclusion:
                         Ignores CVS, .svn and other ignored directories
   -u, --unrestricted    All files and directories searched
   --[no]ignore-dir=name Add/Remove directory from the list of ignored dirs
-  -r, -R, --recurse     Recurse into subdirectories (ack's default behavior)
-  -n, --no-recurse      No descending into subdirectories
+  -r, -R, --recur       Recur into subdirectories (ack's default behavior)
+  -n, --no-recur        No descending into subdirectories
+  -r, -R, --recurse     Same as --recur
+  -n, --no-recurse      Same as --no-recur
   -G REGEX              Only search files that match REGEX
 
   --perl                Include only Perl files.

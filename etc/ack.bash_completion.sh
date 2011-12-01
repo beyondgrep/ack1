@@ -79,6 +79,8 @@ _ack() {
     --nopager
     --passthru
     --print0
+    --recur
+    --norecur
     --recurse
     --norecurse
     --rc=

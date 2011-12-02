@@ -215,14 +215,14 @@ _   /|
             files without suffixes, which the find command will not.
             <li>File-filtering capabilities usable without searching with <tt>ack -f</tt>.  This lets you <b>create lists of files of a given type</b>.<br>
             <tt>$ ack -f --perl &gt; all-perl-files</tt>
-            <li><b>Color highlighting</b> of search results.
+            <li>Nicer and more flexible <b>color highlighting</b> of search results.</li>
             <li>Uses <b>real Perl regular expressions</b>, not a GNU subset.
             <li>Allows you to specify output using Perl's special variables.  To find all <tt>#include</tt> files in C programs:
             <ul>
                 <li><tt>ack --cc '#include\s+&lt;(.*)&gt;' --output '$1' -h</tt>
             </ul>
             <li>
-            Many command-line switches are the same as in GNU grep:<br>
+            Many command-line switches are the same as in GNU grep, so you don't have to relearn two sets:<br>
             <tt>-w</tt> does word-only searching<br>
             <tt>-c</tt> shows counts per file of matches<br>
             <tt>-l</tt> gives the filename instead of matching lines<br>

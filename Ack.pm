@@ -1598,7 +1598,7 @@ sub input_from_pipe {
 
 =head2 output_to_pipe()
 
-Returns true if ack's input is coming from a pipe.
+Returns true if ack's output is going to a pipe.
 
 =cut
 

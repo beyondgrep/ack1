@@ -1227,6 +1227,7 @@ BEGIN {
         delphi      => [qw( pas int dfm nfm dof dpk dproj groupproj bdsgroup bdsproj )],
         elisp       => [qw( el )],
         erlang      => [qw( erl hrl )],
+        fish        => [qw( fish )],
         fortran     => [qw( f f77 f90 f95 f03 for ftn fpp )],
         go          => [qw( go )],
         groovy      => [qw( groovy gtmpl gpp grunit )],

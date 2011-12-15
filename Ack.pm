@@ -98,6 +98,7 @@ BEGIN {
         lisp        => [qw( lisp lsp )],
         lua         => [qw( lua )],
         make        => q{Makefiles (including *.mk and *.mak)},
+        mako        => [qw( mako mak )],
         mason       => [qw( mas mhtml mpl mtxt )],
         objc        => [qw( m h )],
         objcpp      => [qw( mm h )],

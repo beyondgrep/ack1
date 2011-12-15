@@ -908,7 +908,8 @@ L<https://github.com/petdance/ack>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
-Olivier Mengué,
+Karen Etheridge,
+Olivier Mengue,
 Matthew Wild,
 Scott Kyle,
 Nick Hooey,
@@ -1245,7 +1246,7 @@ BEGIN {
         objcpp      => [qw( mm h )],
         ocaml       => [qw( ml mli )],
         parrot      => [qw( pir pasm pmc ops pod pg tg )],
-        perl        => [qw( pl pm pm6 pod t )],
+        perl        => [qw( pl pm pm6 pod t psgi )],
         php         => [qw( php phpt php3 php4 php5 phtml)],
         plone       => [qw( pt cpt metadata cpy py )],
         python      => [qw( py )],

@@ -1,5 +1,10 @@
 History file for ack.  http://betterthangrep.com/
 
+NEXT
+    [FILE TYPE UPDATES]
+    Added .psgi to --perl.
+
+
 1.96        Sun Sep 18 13:33:39 CDT 2011
     [ENHANCEMENTS]
     Now ignores minified Javascript files.  Anything matching -min.js

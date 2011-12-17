@@ -908,6 +908,7 @@ L<https://github.com/petdance/ack>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Christopher Larson,
 Karen Etheridge,
 Olivier Mengue,
 Matthew Wild,
@@ -1254,7 +1255,7 @@ BEGIN {
         ruby        => [qw( rb rhtml rjs rxml erb rake spec )],
         scala       => [qw( scala )],
         scheme      => [qw( scm ss )],
-        shell       => [qw( sh bash csh tcsh ksh zsh )],
+        shell       => [qw( sh bash csh tcsh ksh zsh fish )],
         skipped     => q{Files, but not directories, normally skipped by ack (default: off)},
         smalltalk   => [qw( st )],
         sql         => [qw( sql ctl )],

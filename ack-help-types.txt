@@ -44,6 +44,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]python       .py
     --[no]rake         Rakefiles
     --[no]ruby         .rb .rhtml .rjs .rxml .erb .rake .spec
+    --[no]sass         .sass .scss
     --[no]scala        .scala
     --[no]scheme       .scm .ss
     --[no]shell        .sh .bash .csh .tcsh .ksh .zsh

@@ -3,6 +3,7 @@ History file for ack.  http://betterthangrep.com/
 NEXT
     [FILE TYPE UPDATES]
     Added .psgi to --perl.
+    Added SASS/SCSS support (--sass).
 
 
 1.96        Sun Sep 18 13:33:39 CDT 2011

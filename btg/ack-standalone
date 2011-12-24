@@ -1250,6 +1250,7 @@ BEGIN {
         python      => [qw( py )],
         rake        => q{Rakefiles},
         ruby        => [qw( rb rhtml rjs rxml erb rake spec )],
+        sass        => [qw( sass scss )],
         scala       => [qw( scala )],
         scheme      => [qw( scm ss )],
         shell       => [qw( sh bash csh tcsh ksh zsh )],

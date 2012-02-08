@@ -95,6 +95,7 @@ BEGIN {
         java        => [qw( java properties )],
         js          => [qw( js )],
         jsp         => [qw( jsp jspx jhtm jhtml )],
+        less        => [qw( less )],
         lisp        => [qw( lisp lsp )],
         lua         => [qw( lua )],
         make        => q{Makefiles (including *.mk and *.mak)},

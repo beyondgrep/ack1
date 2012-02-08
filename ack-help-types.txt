@@ -30,6 +30,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]java         .java .properties
     --[no]js           .js
     --[no]jsp          .jsp .jspx .jhtm .jhtml
+    --[no]less         .less
     --[no]lisp         .lisp .lsp
     --[no]lua          .lua
     --[no]make         Makefiles (including *.mk and *.mak)

@@ -18,6 +18,7 @@ use strict;
 
 use App::Ack;
 use App::Ack::Resource;
+use IO::Uncompress::AnyUncompress;
 
 our @ISA = qw( App::Ack::Resource );
 
@@ -49,7 +50,17 @@ sub new {
         $self->{could_be_binary} = 0;
     }
     else {
-        if ( !open( $self->{fh}, '<', $self->{filename} ) ) {
+        if ($self->{filename} =~/\.gz$/ && $self->{filename}!~/.tar.gz/) 
+        {
+            $self->{fh}=IO::Uncompress::AnyUncompress->new($self->{filename});
+#            if (! ($self->{fh}=IO::Uncompress::AnyUncompress->new($self->{filename})))
+#            {
+#                die ($self->{filename}."I am here");
+#                App::Ack::warn( "$filename: $!" );
+#                return;
+#            }
+        }
+        elsif ( !open( $self->{fh}, '<', $self->{filename} ) ) {
             App::Ack::warn( "$self->{filename}: $!" );
             return;
         }

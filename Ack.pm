@@ -6,6 +6,7 @@ use strict;
 use File::Next 0.40;
 
 use App::Ack::Plugin::Basic;
+use IO::Uncompress::AnyUncompress;
 
 =head1 NAME
 
@@ -531,7 +532,17 @@ sub filetypes {
 
     # If there's no extension, or we don't recognize it, check the shebang line
     my $fh;
-    if ( !open( $fh, '<', $filename ) ) {
+
+
+    if ($filename =~/\.gz$/ && $filename !~/\.tar\.gz/) 
+    {
+        if (! ($fh=IO::Uncompress::AnyUncompress->new($filename)))
+        {
+            App::Ack::warn( "$filename: $!" );
+            return;
+        }
+    }
+    elsif ( !open( $fh, '<', $filename ) ) {
         App::Ack::warn( "$filename: $!" );
         return;
     }
@@ -832,7 +843,7 @@ This is version $VERSION of ack.
 END_OF_HELP
 
     return;
- }
+}
 
 
 =head2 show_help_types()
@@ -1039,109 +1050,109 @@ Assumes an open resource, and that the caller will close the resource.
     my $any_output;                   # has there been any output for the current file yet
     my $context_overall_output_count; # has there been any output at all
 
-sub search_resource {
-    my $res = shift;
-    my $opt = shift;
+    sub search_resource {
+        my $res = shift;
+        my $opt = shift;
 
-    $filename = $res->name();
+        $filename = $res->name();
 
-    my $v = $opt->{v};
-    my $passthru = $opt->{passthru};
-    my $max = $opt->{m};
-    my $nmatches = 0;
+        my $v = $opt->{v};
+        my $passthru = $opt->{passthru};
+        my $max = $opt->{m};
+        my $nmatches = 0;
 
-    $display_filename = undef;
+        $display_filename = undef;
 
-    # for --line processing
-    my $has_lines = 0;
-    my @lines;
-    if ( defined $opt->{lines} ) {
-        $has_lines = 1;
-        @lines = ( @{$opt->{lines}}, -1 );
-        undef $regex; # Don't match when printing matching line
-    }
-    else {
-        $regex = qr/$opt->{regex}/;
-    }
+        # for --line processing
+        my $has_lines = 0;
+        my @lines;
+        if ( defined $opt->{lines} ) {
+            $has_lines = 1;
+            @lines = ( @{$opt->{lines}}, -1 );
+            undef $regex; # Don't match when printing matching line
+        }
+        else {
+            $regex = qr/$opt->{regex}/;
+        }
 
-    # for context processing
-    $last_output_line = -1;
-    $any_output = 0;
-    my $before_context = $opt->{before_context};
-    my $after_context  = $opt->{after_context};
+        # for context processing
+        $last_output_line = -1;
+        $any_output = 0;
+        my $before_context = $opt->{before_context};
+        my $after_context  = $opt->{after_context};
 
-    $keep_context = ($before_context || $after_context) && !$passthru;
+        $keep_context = ($before_context || $after_context) && !$passthru;
 
-    my @before;
-    my $before_starts_at_line;
-    my $after = 0; # number of lines still to print after a match
+        my @before;
+        my $before_starts_at_line;
+        my $after = 0; # number of lines still to print after a match
 
-    while ( $res->next_text ) {
-        # XXX Optimize away the case when there are no more @lines to find.
-        # XXX $has_lines, $passthru and $v never change.  Optimize.
-        if ( $has_lines
-               ? $. != $lines[0]  # $lines[0] should be a scalar
-               : $v ? m/$regex/ : !m/$regex/ ) {
-            if ( $passthru ) {
-                App::Ack::print( $_ );
-                next;
-            }
-
-            if ( $keep_context ) {
-                if ( $after ) {
-                    print_match_or_context( $opt, 0, $., $-[0], $+[0], $_ );
-                    $after--;
+        while ( $res->next_text ) {
+            # XXX Optimize away the case when there are no more @lines to find.
+            # XXX $has_lines, $passthru and $v never change.  Optimize.
+            if ( $has_lines
+                ? $. != $lines[0]  # $lines[0] should be a scalar
+                : $v ? m/$regex/ : !m/$regex/ ) {
+                if ( $passthru ) {
+                    App::Ack::print( $_ );
+                    next;
                 }
-                elsif ( $before_context ) {
-                    if ( @before ) {
-                        if ( @before >= $before_context ) {
-                            shift @before;
-                            ++$before_starts_at_line;
+
+                if ( $keep_context ) {
+                    if ( $after ) {
+                        print_match_or_context( $opt, 0, $., $-[0], $+[0], $_ );
+                        $after--;
+                    }
+                    elsif ( $before_context ) {
+                        if ( @before ) {
+                            if ( @before >= $before_context ) {
+                                shift @before;
+                                ++$before_starts_at_line;
+                            }
                         }
+                        else {
+                            $before_starts_at_line = $.;
+                        }
+                        push @before, $_;
                     }
-                    else {
-                        $before_starts_at_line = $.;
-                    }
-                    push @before, $_;
+                    last if $max && ( $nmatches >= $max ) && !$after;
                 }
-                last if $max && ( $nmatches >= $max ) && !$after;
+                next;
+            } # not a match
+
+            ++$nmatches;
+
+            # print an empty line as a divider before first line in each file (not before the first file)
+            if ( !$any_output && $opt->{show_filename} && $opt->{break} && defined( $context_overall_output_count ) ) {
+                App::Ack::print_blank_line();
             }
-            next;
-        } # not a match
 
-        ++$nmatches;
+            shift @lines if $has_lines;
 
-        # print an empty line as a divider before first line in each file (not before the first file)
-        if ( !$any_output && $opt->{show_filename} && $opt->{break} && defined( $context_overall_output_count ) ) {
-            App::Ack::print_blank_line();
-        }
-
-        shift @lines if $has_lines;
-
-        if ( $res->is_binary ) {
-            App::Ack::print( "Binary file $filename matches\n" );
-            last;
-        }
-        if ( $keep_context ) {
-            if ( @before ) {
-                print_match_or_context( $opt, 0, $before_starts_at_line, $-[0], $+[0], @before );
-                @before = ();
-                $before_starts_at_line = 0;
+            if ( $res->is_binary ) {
+                App::Ack::print( "Binary file $filename matches\n" );
+                last;
             }
-            if ( $max && $nmatches > $max ) {
-                --$after;
+            if ( $keep_context ) {
+                if ( @before ) {
+                    print_match_or_context( $opt, 0, $before_starts_at_line, $-[0], $+[0], @before );
+                    @before = ();
+                    $before_starts_at_line = 0;
+                }
+                if ( $max && $nmatches > $max ) {
+                    --$after;
+                }
+                else {
+                    $after = $after_context;
+                }
             }
-            else {
-                $after = $after_context;
-            }
-        }
-        print_match_or_context( $opt, 1, $., $-[0], $+[0], $_ );
+            print_match_or_context( $opt, 1, $., $-[0], $+[0], $_ );
 
-        last if $max && ( $nmatches >= $max ) && !$after;
-    } # while
+            last if $max && ( $nmatches >= $max ) && !$after;
+        } # while
 
-    return $nmatches;
-}   # search_resource()
+        return $nmatches;
+    }   # search_resource()
 
 
 =head2 print_match_or_context( $opt, $is_match, $starting_line_no, $match_start, $match_end, @lines )
@@ -1165,9 +1176,9 @@ sub print_match_or_context {
     if ( $show_filename ) {
         if ( not defined $display_filename ) {
             $display_filename =
-                $color
-                    ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} )
-                    : $filename;
+            $color
+            ? Term::ANSIColor::colored( $filename, $ENV{ACK_COLOR_FILENAME} )
+            : $filename;
             if ( $heading && !$any_output ) {
                 App::Ack::print_first_filename($display_filename);
             }
@@ -1190,9 +1201,9 @@ sub print_match_or_context {
         if ( $show_filename ) {
             App::Ack::print_filename($display_filename, $sep) if not $heading;
             my $display_line_no =
-                $color
-                    ? Term::ANSIColor::colored( $line_no, $ENV{ACK_COLOR_LINENO} )
-                    : $line_no;
+            $color
+            ? Term::ANSIColor::colored( $line_no, $ENV{ACK_COLOR_LINENO} )
+            : $line_no;
             App::Ack::print_line_no($display_line_no, $sep);
         }
 
@@ -1203,7 +1214,7 @@ sub print_match_or_context {
         }
         else {
             if ( $color && $is_match && $regex &&
-                 s/$regex/Term::ANSIColor::colored( substr($_, $-[0], $+[0] - $-[0]), $ENV{ACK_COLOR_MATCH} )/eg ) {
+                s/$regex/Term::ANSIColor::colored( substr($_, $-[0], $+[0] - $-[0]), $ENV{ACK_COLOR_MATCH} )/eg ) {
                 # At the end of the line reset the color and remove newline
                 s/[\r\n]*\z/\e[0m\e[K/;
             }
@@ -1228,15 +1239,15 @@ sub print_match_or_context {
 
 
 TOTAL_COUNT_SCOPE: {
-my $total_count;
+    my $total_count;
 
-sub get_total_count {
-    return $total_count;
-}
+    sub get_total_count {
+        return $total_count;
+    }
 
-sub reset_total_count {
-    $total_count = 0;
-}
+    sub reset_total_count {
+        $total_count = 0;
+    }
 
 =head2 search_and_list( $res, \%opt )
 
@@ -1478,7 +1489,7 @@ EXPAND_FILENAMES_SCOPE: {
         } # end foreach pattern
 
         return \@files;
-    } # end expand_filenames
+} # end expand_filenames
 } # EXPAND_FILENAMES_SCOPE
 
 
@@ -1541,33 +1552,33 @@ sub get_iterator {
 
     if ( $g_regex ) {
         $file_filter
-            = $opt->{u}   ? sub { _match( $File::Next::name, qr/$g_regex/, $opt->{invert_file_match} ) }    # XXX Maybe this should be a 1, no?
-            : $opt->{all} ? sub { $starting_point{ $File::Next::name } || ( _match( $File::Next::name, qr/$g_regex/, $opt->{invert_file_match} ) && is_searchable( $_ ) ) }
-            :               sub { $starting_point{ $File::Next::name } || ( _match( $File::Next::name, qr/$g_regex/, $opt->{invert_file_match} ) && is_interesting( @ _) ) }
-            ;
+        = $opt->{u}   ? sub { _match( $File::Next::name, qr/$g_regex/, $opt->{invert_file_match} ) }    # XXX Maybe this should be a 1, no?
+        : $opt->{all} ? sub { $starting_point{ $File::Next::name } || ( _match( $File::Next::name, qr/$g_regex/, $opt->{invert_file_match} ) && is_searchable( $_ ) ) }
+        :               sub { $starting_point{ $File::Next::name } || ( _match( $File::Next::name, qr/$g_regex/, $opt->{invert_file_match} ) && is_interesting( @ _) ) }
+        ;
     }
     else {
         $file_filter
-            = $opt->{u}   ? sub {1}
-            : $opt->{all} ? sub { $starting_point{ $File::Next::name } || is_searchable( $_ ) }
-            :               sub { $starting_point{ $File::Next::name } || is_interesting( @_ ) }
-            ;
+        = $opt->{u}   ? sub {1}
+        : $opt->{all} ? sub { $starting_point{ $File::Next::name } || is_searchable( $_ ) }
+        :               sub { $starting_point{ $File::Next::name } || is_interesting( @_ ) }
+        ;
     }
 
     my $descend_filter
-        = $opt->{n} ? sub {0}
-        : $opt->{u} ? sub {1}
-        : \&ignoredir_filter;
+    = $opt->{n} ? sub {0}
+    : $opt->{u} ? sub {1}
+    : \&ignoredir_filter;
 
-    my $iter =
-        File::Next::files( {
-            file_filter     => $file_filter,
-            descend_filter  => $descend_filter,
-            error_handler   => sub { my $msg = shift; App::Ack::warn( $msg ) },
-            sort_files      => $opt->{sort_files},
-            follow_symlinks => $opt->{follow},
-        }, @{$what} );
-    return $iter;
+my $iter =
+File::Next::files( {
+        file_filter     => $file_filter,
+        descend_filter  => $descend_filter,
+        error_handler   => sub { my $msg = shift; App::Ack::warn( $msg ) },
+        sort_files      => $opt->{sort_files},
+        follow_symlinks => $opt->{follow},
+    }, @{$what} );
+return $iter;
 }
 
 

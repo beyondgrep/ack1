@@ -17,7 +17,6 @@ ACK_F: {
         t/etc/shebang.empty.xxx
         t/swamp/moose-andy.jpg
         t/swamp/perl.tar.gz
-        t/swamp/solution8.tar
     );
 
     my @files = qw( t );

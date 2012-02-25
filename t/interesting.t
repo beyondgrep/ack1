@@ -125,6 +125,5 @@ BINARY_FILES: {
     sets_match( \@files, [qw(
         t/swamp/moose-andy.jpg
         t/swamp/perl.tar.gz
-        t/swamp/solution8.tar
     )], 'BINARY_FILES' );
 }

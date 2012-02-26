@@ -42,6 +42,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]php          .php .phpt .php3 .php4 .php5 .phtml
     --[no]plone        .pt .cpt .metadata .cpy .py
     --[no]python       .py
+    --[no]qml          .qml
     --[no]rake         Rakefiles
     --[no]ruby         .rb .rhtml .rjs .rxml .erb .rake .spec
     --[no]scala        .scala

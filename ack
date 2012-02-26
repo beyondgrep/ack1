@@ -1250,6 +1250,7 @@ BEGIN {
         php         => [qw( php phpt php3 php4 php5 phtml)],
         plone       => [qw( pt cpt metadata cpy py )],
         python      => [qw( py )],
+        qml         => [qw( qml )],
         rake        => q{Rakefiles},
         ruby        => [qw( rb rhtml rjs rxml erb rake spec )],
         scala       => [qw( scala )],

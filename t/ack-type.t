@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 74;
+use Test::More tests => 82;
 
 use lib 't';
 use Util qw( sets_match );
@@ -36,6 +36,15 @@ my $foo = [qw(
 my $bar = [qw(
     t/swamp/file.bar
 )];
+
+my $none = [
+    't/swamp/0',
+    't/swamp/no-extension',
+    't/swamp/not-an-#emacs-workfile#',
+    't/swamp/notaMakefile',
+    't/swamp/notaRakefile',
+    't/swamp/perl-without-extension',
+];
 
 my $xml = [qw(
     t/etc/buttonhook.rss.xxx
@@ -108,6 +117,15 @@ check_with( '--type-add xml=.foo,.bar --xml', $foo_bar_xml );
 
 # check that --type-set redefines
 check_with( '--type-set cc=.foo --cc', $foo );
+
+# check --type-set with empty EXT
+check_with( '--type-set empty= --type empty --no-recurse', [] );
+check_with( '--type-set empty= --type empty --no-recurse --type-allow-empty', $none );
+
+# check --type-add with empty EXT
+check_with( '--type-add cc= --cc --no-recurse', $cc_hh );
+check_with( '--type-add cc= --cc --no-recurse --type-allow-empty', [ sort @$cc_hh, @$none ]);
+
 
 # check that builtin types cannot be changed
 BUILTIN: {

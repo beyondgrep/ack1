@@ -48,6 +48,7 @@ ACK_F_TEXT: {
         t/swamp/Makefile
         t/swamp/Makefile.PL
         t/swamp/javascript.js
+        t/swamp/no-extension
         t/swamp/not-an-#emacs-workfile#
         t/swamp/notaMakefile
         t/swamp/notaRakefile

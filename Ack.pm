@@ -792,6 +792,7 @@ File inclusion/exclusion:
   -u, --unrestricted    All files and directories searched
   --[no]ignore-dir=name Add/Remove directory from the list of ignored dirs
   -r, -R, --recurse     Recurse into subdirectories (ack's default behavior)
+  --re-engine=name      Use re::engine::* when searching
   -n, --no-recurse      No descending into subdirectories
   -G REGEX              Only search files that match REGEX
 

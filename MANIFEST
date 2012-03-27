@@ -18,6 +18,7 @@ squash
 TODO
 
 etc/ack.bash_completion.sh
+etc/ack.zsh_completion
 
 t/00-load.t
 t/ack-1.t

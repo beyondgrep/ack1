@@ -881,6 +881,10 @@ Support for and information about F<ack> can be found at:
 
 L<http://betterthangrep.com/>
 
+=item * The ack-users mailing list
+
+L<http://groups.google.com/group/ack-users>
+
 =item * The ack issues list at Github
 
 L<https://github.com/petdance/ack/issues>
@@ -908,6 +912,7 @@ L<https://github.com/petdance/ack>
 How appropriate to have I<ack>nowledgements!
 
 Thanks to everyone who has contributed to ack in any way, including
+Shlomi Fish,
 Karen Etheridge,
 Olivier Mengue,
 Matthew Wild,
@@ -977,7 +982,7 @@ and Pete Krawczyk.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2005-2011 Andy Lester.
+Copyright 2005-2012 Andy Lester.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the Artistic License v2.0.

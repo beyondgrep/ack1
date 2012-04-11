@@ -57,7 +57,6 @@ t/multiline.t
 t/pod.t
 t/rc.t
 t/standalone.t
-t/tar.t
 t/zero.t
 t/Util.pm
 
@@ -130,7 +129,6 @@ t/swamp/perl.pod
 t/swamp/perl.tar.gz
 t/swamp/Rakefile
 t/swamp/sample.rake
-t/swamp/solution8.tar
 t/text/4th-of-july.txt
 t/text/boy-named-sue.txt
 t/text/freedom-of-choice.txt

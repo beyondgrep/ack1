@@ -738,7 +738,7 @@ For example:
 
 or if you prefer:
 
-    perl -p -i -e's/this/thatg/' $(ack -f --perl)
+    perl -p -i -e's/this/that/g' $(ack -f --perl)
 
 =head2 Use F<-Q> when in doubt about metacharacters
 

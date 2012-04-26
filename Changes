@@ -1,6 +1,9 @@
 History file for ack.  http://betterthangrep.com/
 
 NEXT
+    [ENHANCEMENTS]
+    Add the ack --bar option to warn for traps.
+
     [FILE TYPE UPDATES]
     Added .psgi to --perl.
 

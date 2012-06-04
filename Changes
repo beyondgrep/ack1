@@ -7,6 +7,8 @@ NEXT
     [FILE TYPE UPDATES]
     Added .psgi to --perl.
 
+    Added Elixir support (--elixir).
+
 
 1.96        Sun Sep 18 13:33:39 CDT 2011
     [ENHANCEMENTS]

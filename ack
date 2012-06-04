@@ -1238,6 +1238,7 @@ BEGIN {
         css         => [qw( css )],
         delphi      => [qw( pas int dfm nfm dof dpk dproj groupproj bdsgroup bdsproj )],
         elisp       => [qw( el )],
+        elixir      => [qw( ex exs )],
         erlang      => [qw( erl hrl )],
         fortran     => [qw( f f77 f90 f95 f03 for ftn fpp )],
         go          => [qw( go )],

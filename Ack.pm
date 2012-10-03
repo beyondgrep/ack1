@@ -80,6 +80,7 @@ BEGIN {
         cc          => [qw( c h xs )],
         cfmx        => [qw( cfc cfm cfml )],
         clojure     => [qw( clj )],
+        coffee      => [qw( coffee )],
         cpp         => [qw( cpp cc cxx m hpp hh h hxx )],
         csharp      => [qw( cs )],
         css         => [qw( css )],

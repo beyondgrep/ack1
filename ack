@@ -1264,6 +1264,7 @@ BEGIN {
         ruby        => [qw( rb rhtml rjs rxml erb rake spec )],
         scala       => [qw( scala )],
         scheme      => [qw( scm ss )],
+        sass        => [qw( scss sass )],
         shell       => [qw( sh bash csh tcsh ksh zsh )],
         skipped     => q{Files, but not directories, normally skipped by ack (default: off)},
         smalltalk   => [qw( st )],

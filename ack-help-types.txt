@@ -15,6 +15,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]cc           .c .h .xs
     --[no]cfmx         .cfc .cfm .cfml
     --[no]clojure      .clj
+    --[no]coffee       .coffee
     --[no]cpp          .cpp .cc .cxx .m .hpp .hh .h .hxx
     --[no]csharp       .cs
     --[no]css          .css
@@ -46,6 +47,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]ruby         .rb .rhtml .rjs .rxml .erb .rake .spec
     --[no]scala        .scala
     --[no]scheme       .scm .ss
+    --[no]sass         .scss .sass
     --[no]shell        .sh .bash .csh .tcsh .ksh .zsh
     --[no]skipped      Files, but not directories, normally skipped by ack (default: off)
     --[no]smalltalk    .st

@@ -30,7 +30,7 @@ You can look for information at:
     * <http://search.cpan.org/dist/ack>
 
 * Project home
-    * <http://github.com/petdance/ack>
+    * <https://github.com/petdance/ack>
 
 * AnnoCPAN, annotated documentation
     * <http://annocpan.org/dist/ack>
@@ -39,7 +39,7 @@ You can look for information at:
     * <http://cpanratings.perl.org/d/ack>
 
 * Issue list at Github (report bugs here)
-    * <http://github.com/petdance/ack/issues>
+    * <https://github.com/petdance/ack/issues>
 
 * The ack mailing list
     * <http://groups.google.com/group/ack-users>

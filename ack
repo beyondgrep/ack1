@@ -1228,6 +1228,7 @@ BEGIN {
         actionscript => [qw( as mxml )],
         ada         => [qw( ada adb ads )],
         asm         => [qw( asm s )],
+        asp         => [qw( asp )],
         batch       => [qw( bat cmd )],
         binary      => q{Binary files, as defined by Perl's -B op (default: off)},
         cc          => [qw( c h xs )],

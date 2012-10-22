@@ -31,6 +31,7 @@ MAIN: {
         # Priorities! Get the --thpppt and --bar checking out of the way.
         /^--th[pt]+t+$/ && App::Ack::_thpppt($_);
         /^--bar$/ && App::Ack::_bar();
+        /^--c(hocolate|athy)$/ && App::Ack::_cathy();
 
         # See if we want to ignore the environment. (Don't tell Al Gore.)
         if ( /^--(no)?env$/ ) {
@@ -999,12 +1000,11 @@ use strict;
 use warnings;
 
 
-our $VERSION = '1.06';
+our $VERSION = '1.10';
 
 
 
 use File::Spec ();
-
 
 our $name; # name of the current file
 our $dir;  # dir of the current file
@@ -1017,30 +1017,32 @@ BEGIN {
         file_filter     => undef,
         descend_filter  => undef,
         error_handler   => sub { CORE::die @_ },
+        warning_handler => sub { CORE::warn @_ },
         sort_files      => undef,
         follow_symlinks => 1,
+        nul_separated   => 0,
     );
     %skip_dirs = map {($_,1)} (File::Spec->curdir, File::Spec->updir);
 }
 
 
 sub files {
-    ($_[0] eq __PACKAGE__) && die 'File::Next::files must not be invoked as File::Next->files';
+    die _bad_invocation() if @_ && defined($_[0]) && ($_[0] eq __PACKAGE__);
 
     my ($parms,@queue) = _setup( \%files_defaults, @_ );
     my $filter = $parms->{file_filter};
 
     return sub {
         while (@queue) {
-            my ($dir,$file,$fullpath) = splice( @queue, 0, 3 );
-            if ( -f $fullpath ) {
+            my ($dirname,$file,$fullpath) = splice( @queue, 0, 3 );
+            if ( -f $fullpath || -p $fullpath ) {
                 if ( $filter ) {
                     local $_ = $file;
-                    local $File::Next::dir = $dir;
+                    local $File::Next::dir = $dirname;
                     local $File::Next::name = $fullpath;
                     next if not $filter->();
                 }
-                return wantarray ? ($dir,$file,$fullpath) : $fullpath;
+                return wantarray ? ($dirname,$file,$fullpath) : $fullpath;
             }
             elsif ( -d _ ) {
                 unshift( @queue, _candidate_files( $parms, $fullpath ) );
@@ -1056,6 +1058,63 @@ sub files {
 
 
 
+sub from_file {
+    die _bad_invocation() if @_ && defined($_[0]) && ($_[0] eq __PACKAGE__);
+
+    my ($parms,@queue) = _setup( \%files_defaults, @_ );
+    my $err  = $parms->{error_handler};
+    my $warn = $parms->{error_handler};
+
+    my $filename = $queue[1];
+
+    if ( !defined($filename) ) {
+        $err->( 'Must pass a filename to from_file()' );
+        return undef;
+    }
+
+    my $fh;
+    if ( $filename eq '-' ) {
+        $fh = \*STDIN;
+    }
+    else {
+        if ( !open( $fh, '<', $filename ) ) {
+            $err->( "Unable to open $filename: $!" );
+            return undef;
+        }
+    }
+    my $filter = $parms->{file_filter};
+
+    return sub {
+        local $/ = $parms->{nul_separated} ? "\x00" : $/;
+        while ( my $fullpath = <$fh> ) {
+            chomp $fullpath;
+            next unless $fullpath =~ /./;
+            if ( not ( -f $fullpath || -p _ ) ) {
+                $warn->( "$fullpath: No such file" );
+                next;
+            }
+
+            my ($volume,$dirname,$file) = File::Spec->splitpath( $fullpath );
+            if ( $filter ) {
+                local $_ = $file;
+                local $File::Next::dir  = $dirname;
+                local $File::Next::name = $fullpath;
+                next if not $filter->();
+            }
+            return wantarray ? ($dirname,$file,$fullpath) : $fullpath;
+        } # while
+        close $fh;
+
+        return;
+    }; # iterator
+}
+
+sub _bad_invocation {
+    my $good = (caller(1))[3];
+    my $bad  = $good;
+    $bad =~ s/(.+)::/$1->/;
+    return "$good must not be invoked as $bad";
+}
 
 sub sort_standard($$)   { return $_[0]->[1] cmp $_[1]->[1] }
 sub sort_reverse($$)    { return $_[1]->[1] cmp $_[0]->[1] }
@@ -1113,12 +1172,12 @@ sub _setup {
 
 
 sub _candidate_files {
-    my $parms = shift;
-    my $dir = shift;
+    my $parms   = shift;
+    my $dirname = shift;
 
     my $dh;
-    if ( !opendir $dh, $dir ) {
-        $parms->{error_handler}->( "$dir: $!" );
+    if ( !opendir $dh, $dirname ) {
+        $parms->{error_handler}->( "$dirname: $!" );
         return;
     }
 
@@ -1131,7 +1190,7 @@ sub _candidate_files {
         my $has_stat;
 
         # Only do directory checking if we have a descend_filter
-        my $fullpath = File::Spec->catdir( $dir, $file );
+        my $fullpath = File::Spec->catdir( $dirname, $file );
         if ( !$follow_symlinks ) {
             next if -l $fullpath;
             $has_stat = 1;
@@ -1145,10 +1204,10 @@ sub _candidate_files {
             }
         }
         if ( $sort_sub ) {
-            push( @newfiles, [ $dir, $file, $fullpath ] );
+            push( @newfiles, [ $dirname, $file, $fullpath ] );
         }
         else {
-            push( @newfiles, $dir, $file, $fullpath );
+            push( @newfiles, $dirname, $file, $fullpath );
         }
     }
     closedir $dh;
@@ -1775,11 +1834,73 @@ sub _bar {
 7+:!,!~#,"=!7'I!?#I"7/+!7+
 77I!+!7!?!7!I"71+!7,
 _BAR
+    App::Ack::__pic($x);
+}
 
-    $x =~ s/(.)(.)/$1x(ord($2)-32)/eg;
-    App::Ack::print( $x );
+sub _cathy {
+    my $x = <<'CATHY';
+ 0+!--+!
+ 0|! "C!H!O!C!O!L!A!T!E!!! !|!
+ 0|! "C!H!O!C!O!L!A!T!E!!! !|!
+ 0|! "C!H!O!C!O!L!A!T!E!!! !|!
+ 0|! $A"C!K!!! $|!
+ 0+!--+!
+ 6\\! 1:!,!.! !
+ 7\\! /.!M!~!Z!M!~!
+ 8\\! /~!D! "M! !
+ 4.! $\\! /M!~!.!8! +.!M# 4
+ 0,!.! (\\! .~!M!N! ,+!I!.!M!.! 3
+ /?!O!.!M!:! '\\! .O!.! +~!Z!=!N!.! 4
+ ..! !D!Z!.!Z!.! '\\! 9=!M".! 6
+ /.! !.!~!M".! '\\! 8~! 9
+ 4M!.! /.!7!N!M!.! F
+ 4.! &:!M! !N"M# !M"N!M! #D!M&=! =
+ :M!7!M#:! !~!M!7!,!$!M!:! #.! !O!N!.!M!:!M# ;
+ 8Z!M"~!N!$!D!.!N!?! !I!N!.! (?!M! !M!,!D!M".! 9
+ (?!Z!M!N!:! )=!M!O!8!.!M!+!M! !M!,! !O!M! +,!M!.!M!~!Z!N!M!:! &:!~! 0
+ &8!7!.!~!M"D!M!,! &M!?!=!8! !M!,!O! !M!+! !+!O!.!M! $M#~! !.!8!M!Z!.!M! !O!M"Z! %:!~!M!Z!M!Z!.! +
+ &:!M!7!,! *M!.!Z!M! !8"M!.!M!~! !.!M!.!=! #~!8!.!M! !7!M! "N!Z#I! !D!M!,!M!.! $."M!,! !M!.! *
+ 2$!O! "N! !.!M!I! !7" "M! "+!O! !~!M! !d!O!.!7!I!M!.! !.!O!=!M!.! !M",!M!.! %.!$!O!D! +
+ 1~!O! "M!+! !8!$! "M! "?!O! %Z!8!D!M!?!8!I!O!7!M! #M!.!M! "M",!M! 4
+ 07!~! ".!8! !.!M! "I!+! !.!M! &Z!D!.!7!=!M! !:!.!M! #:!8"+! !.!+!8! !8! 3
+ /~!M! #N! !~!M!$! !.!M! !.!M" &~!M! "~!M!O! "D! $M! !8! "M!,!M!+!D!.! 1
+ #.! #?!M!N!.! #~!O! $M!.!7!$! "?" !?!~!M! '7!8!?!M!.!+!M"O! $?"$!D! !.!O! !$!7!I!.! 0
+ $,!M!:!O!?! ".! !?!=! $=!:!O! !M! "M! !M! !+!$! (.! +.!M! !M!.! !8! !+"Z!~! $:!M!$! !.! '
+ #.!8!.!I!$! $7!I! %M" !=!M! !~!M!D! "7!I! .I!O! %?!=!,!D! !,!M! !D!~!8!~! %D!M! (
+ #.!M"?! $=!O! %=!N! "8!.! !Z!M! #M!~! (M!:! #.!M" &O! !M!.! !?!,! !8!.!N!~! $8!N!M!,!.! %
+ *$!O! &M!,! "O! !.!M!.! #M! (~!M( &O!.! !7! "M! !.!M!.!M!,! #.!M! !M! &
+ )=!8!.! $.!M!O!.! "$!.!I!N! !I!M# (7!M(I! %D"Z!M! "=!I! "M! !M!:! #~!D! '
+ )D! &8!N!:! ".!O! !M!="M! "M! (7!M) %." !M!D!."M!.! !$!=! !M!,! +
+ (M! &+!.!M! #Z!7!O!M!.!~!8! +,!M#D!?!M#D! #.!Z!M#,!Z!?! !~!N! "N!.! !M! +
+ 'D!:! %$!D! !?! #M!Z! !8!.! !M"?!7!?!7! '+!I!D! !?!O!:!M!:! ":!M!:! !M!7".!M! "8!+! !:!D! !.!M! *
+ %.!O!:! $.!O!+! !D!.! #M! "M!.!+!N!I!Z! "7!M!N!M!N!?!I!7!Z!=!M'D"~! #M!.!8!$! !:! !.!M! "N!?! !,!O! )
+ !.!?!M!:!M!I! %8!,! "M!.! #M! "N! !M!.! !M!.! !+!~! !.!M!.! ':!M! $M! $M!Z!$! !M!.! "D! "M! "?!M! (
+ !7!8! !+!I! ".! "$!=! ":!$! "+! !M!.! !O! !M!I!M".! !=!~! ",!O! '=!M! $$!,! #N!:! ":!8!.! !D!~! !,!M!.! !:!M!.! &
+ !:!,!.! &Z" #D! !.!8!."M!.! !8!?!Z!M!.!M! #Z!~! !?!M!Z!.! %~!O!.!8!$!N!8!O!I!:!~! !+! #M!.! !.!M!.! !+!M! ".!~!M!+! $
+ !.! 'D!I! #?!M!.!M!,! !.!Z! !.!8! #M&O!I!?! (~!I!M"." !M!Z!.! !M!N!.! "+!$!.! "M!.! !M!?!.! "8!M! $
+ (O!8! $M! !M!.! ".!:! !+!=! #M! #.!M! !+" *$!M":!.! !M!~! "M!7! #M! #7!Z! "M"$!M!.! !.! #
+ '$!Z! #.!7!+!M! $.!,! !+!:! #N! #.!M!.!+!M! +D!M! #=!N! ":!O! #=!M! #Z!D! $M!I! %
+ $,! ".! $.!M" %$!.! !?!~! "+!7!." !.!M!,! !M! *,!N!M!.$M!?! "D!,! #M!.! #N! +
+ ,M!Z! &M! "I!,! "M! %I!M! !?!=!.! (Z!8!M! $:!M!.! !,!M! $D! #.!M!.! )
+ +8!O! &.!8! "I!,! !~!M! &N!M! !M!D! '?!N!O!." $?!7! "?!~! #M!.! #I!D!.! (
+ 3M!,! "N!.! !D" &.!+!M!.! !M":!.":!M!7!M!D! 'M!.! "M!.! "M!,! $I! )
+ 3I! #M! "M!,! !:! &.!M" ".!,! !.!$!M!I! #.! !:! !.!M!?! "N!+! ".! /
+ 1M!,! #.!M!8!M!=!.! +~!N"O!Z"~! *+!M!.! "M! 2
+ 0.!M! &M!.! 8:! %.!M!Z! "M!=! *O!,! %
+ 0?!$! &N! )." .,! %."M! ":!M!.! 0
+ 0N!:! %?!O! #.! ..! &,! &.!D!,! "N!I! 0
+CATHY
+    App::Ack::__pic($x);
+}
+
+sub __pic {
+    my($compressed) = @_;
+    $compressed =~ s/(.)(.)/$1x(ord($2)-32)/eg;
+    App::Ack::print( $compressed );
     exit 0;
 }
+
+
 
 sub _key {
     my $str = lc shift;
@@ -1921,6 +2042,7 @@ Miscellaneous:
   --version             Display version & copyright
   --thpppt              Bill the Cat
   --bar                 The warning admiral
+  --chocolate           Cathy
 
 Exit status is 0 if match, 1 if no match.
 

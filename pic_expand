@@ -1,0 +1,8 @@
+#!/usr/bin/env perl
+use strict;
+use warnings;
+
+while(<>){
+    s/(.)(.)/$1x(ord($2)-32)/eg;
+    print;
+}

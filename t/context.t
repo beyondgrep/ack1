@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 22;
+use Test::More tests => 24;
 use File::Next 0.34; # for reslash function
 
 use lib 't';
@@ -242,11 +242,13 @@ WITH_COLUMNS_AND_CONTEXT: {
 25-
 26-    -- "The Science Of Myth", Screeching Weasel
 HERE
-	my $weasel = File::Next::reslash( 't/text/science-of-myth.txt' );
+    my $weasel = File::Next::reslash( 't/text/science-of-myth.txt' );
     my @files = ( $weasel );
-    @expected = map { "${weasel}:$_" } @expected;
+    @expected = map {
+        $_ eq '--' ? $_ : ($weasel . (/\A\d+-/ ? '-' : ':') . $_)
+    } @expected;
 
-    my @args = qw( somehow -w -i --noenv --type=text --column -C2 );
+    my @args = qw( somehow -H -w -i --noenv --type=text --column -C2 );
     my @results = run_ack( @args, @files );
 
     lists_match( \@results, \@expected, 'Checking context with column numbers' );

@@ -1260,7 +1260,7 @@ sub print_match_or_context {
                 # remove any kind of newline at the end of the line
                 s/[\r\n]*\z//;
             }
-            if ( $show_column ) {
+            if ( $show_column && $is_match ) {
                 App::Ack::print_column_no( $match_start+1, $sep );
             }
             App::Ack::print($_ . "\n");

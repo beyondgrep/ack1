@@ -3,7 +3,7 @@
 use warnings;
 use strict;
 
-use Test::More tests => 22;
+use Test::More tests => 24;
 use File::Next 0.34; # for reslash function
 
 use lib 't';
@@ -224,4 +224,32 @@ EOF
     s/^\s+// for @expected;
 
     ack_lists_match( [ @args, @files ], \@expected, 'Context is disabled with -o' );
+}
+
+WITH_COLUMNS_AND_CONTEXT: {
+    my @expected = split( /\n/, <<'HERE' );
+8-See, half the world sees the myth as fact, and it's seen as a lie by the other half
+9-And the simple truth is that it's none of that 'cause
+10:1:Somehow no matter what the world keeps turning
+11:1:Somehow we get by without ever learning
+12-
+13-Science and religion are not mutually exclusive
+--
+21-'cause some things are better left without a doubt
+22-And if it works, then it gets the job done
+23:1:Somehow no matter what the world keeps turning
+24:1:Somehow we get by without ever learning
+25-
+26-    -- "The Science Of Myth", Screeching Weasel
+HERE
+    my $weasel = File::Next::reslash( 't/text/science-of-myth.txt' );
+    my @files = ( $weasel );
+    @expected = map {
+        $_ eq '--' ? $_ : ($weasel . (/\A\d+-/ ? '-' : ':') . $_)
+    } @expected;
+
+    my @args = qw( somehow -H -w -i --noenv --type=text --column -C2 );
+    my @results = run_ack( @args, @files );
+
+    lists_match( \@results, \@expected, 'Checking context with column numbers' );
 }

@@ -15,7 +15,7 @@
 have ack || have ack-grep && {
 
 # please accept my apologies for polluting the environment!
-__ack_types=$(ack-grep --help=types 2>/dev/null || ack --help=types 2>/dev/null | \
+__ack_types=$( (ack-grep --help=types 2>/dev/null || ack --help=types 2>/dev/null) | \
   perl -ne 'print "$1 no$1 " if /^\s+--\[no\](\S+)\s+/' 2>/dev/null)
 
 __ack_typeopts=""

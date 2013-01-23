@@ -18,6 +18,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]cpp          .cpp .cc .cxx .m .hpp .hh .h .hxx
     --[no]csharp       .cs
     --[no]css          .css
+    --[no]dart         .dart
     --[no]delphi       .pas .int .dfm .nfm .dof .dpk .dproj .groupproj .bdsgroup .bdsproj
     --[no]elisp        .el
     --[no]erlang       .erl .hrl

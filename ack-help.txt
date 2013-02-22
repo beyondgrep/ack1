@@ -112,9 +112,10 @@ File inclusion/exclusion:
   Files not checked for type:
     /~$/            - Unix backup files
     /#.+#$/         - Emacs swap files
-    /[._].*\.swp$/ - Vi(m) swap files
-    /core\.\d+$/  - core dumps
+    /[._].*\.swp$/  - Vi(m) swap files
+    /core\.\d+$/    - core dumps
     /[.-]min\.js$/  - Minified javascript files
+    /[.-]min\.css$/  - Minified CSS files
 
 Miscellaneous:
   --noenv               Ignore environment variables and ~/.ackrc

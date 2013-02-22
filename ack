@@ -1657,6 +1657,7 @@ sub is_searchable {
     return if $filename =~ m{^core\.\d+$}o;
     return if $filename =~ m{[._].*\.swp$}o;
     return if $filename =~ /[.-]min\.js$/;
+    return if $filename =~ /[.-]min\.css$/;
 
     return 1;
 }
@@ -1913,6 +1914,7 @@ File inclusion/exclusion:
     /[._].*\\.swp\$/ - Vi(m) swap files
     /core\\.\\d+\$/  - core dumps
     /[.-]min\\.js\$/  - Minified javascript files
+    /[.-]min\\.css\$/ - Minified CSS files
 
 Miscellaneous:
   --noenv               Ignore environment variables and ~/.ackrc

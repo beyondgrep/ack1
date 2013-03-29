@@ -93,7 +93,7 @@ BEGIN {
         hh          => [qw( h )],
         html        => [qw( htm html shtml xhtml )],
         java        => [qw( java properties )],
-        js          => [qw( js )],
+        js          => [qw( js coffee ls )],
         jsp         => [qw( jsp jspx jhtm jhtml )],
         lisp        => [qw( lisp lsp )],
         lua         => [qw( lua )],

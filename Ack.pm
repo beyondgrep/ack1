@@ -94,6 +94,7 @@ BEGIN {
         html        => [qw( htm html shtml xhtml )],
         java        => [qw( java properties )],
         js          => [qw( js )],
+        json        => [qw( json )],
         jsp         => [qw( jsp jspx jhtm jhtml )],
         lisp        => [qw( lisp lsp )],
         lua         => [qw( lua )],

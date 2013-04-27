@@ -29,6 +29,7 @@ Note that some extensions may appear in multiple types.  For example,
     --[no]html         .htm .html .shtml .xhtml
     --[no]java         .java .properties
     --[no]js           .js
+    --[no]json         .json
     --[no]jsp          .jsp .jspx .jhtm .jhtml
     --[no]lisp         .lisp .lsp
     --[no]lua          .lua

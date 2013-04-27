@@ -42,6 +42,7 @@ t/ack-type.t
 t/ack-u.t
 t/ack-v.t
 t/ack-w.t
+t/ackrc-empty
 t/code.t
 t/command-line-files.t
 t/context.t

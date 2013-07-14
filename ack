@@ -1292,7 +1292,7 @@ BEGIN {
 
     # These have to be checked before any filehandle diddling.
     $output_to_pipe  = not -t *STDOUT;
-    $input_from_pipe = -p STDIN;
+    $input_from_pipe = not -t *STDIN;
 
     $is_cygwin       = ($^O eq 'cygwin');
     $is_windows      = ($^O =~ /MSWin32/);

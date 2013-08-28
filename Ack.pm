@@ -46,6 +46,7 @@ our $is_windows;
 use File::Spec ();
 use File::Glob ':glob';
 use Getopt::Long ();
+use Module::Load ();
 
 BEGIN {
     %ignore_dirs = (
@@ -241,6 +242,7 @@ sub get_command_line_options {
         'passthru'              => \$opt{passthru},
         'print0'                => \$opt{print0},
         'Q|literal'             => \$opt{Q},
+        're-engine=s'           => \$opt{re_engine},
         'r|R|recurse'           => sub { $opt{n} = 0 },
         'show-types'            => \$opt{show_types},
         'smart-case!'           => \$opt{smart_case},
@@ -838,6 +840,7 @@ File inclusion/exclusion:
   -u, --unrestricted    All files and directories searched
   --[no]ignore-dir=name Add/Remove directory from the list of ignored dirs
   -r, -R, --recurse     Recurse into subdirectories (ack's default behavior)
+  --re-engine=name      Use re::engine::* when searching
   -n, --no-recurse      No descending into subdirectories
   -G REGEX              Only search files that match REGEX
 
@@ -1100,6 +1103,10 @@ sub search_resource {
     my $nmatches = 0;
 
     $display_filename = undef;
+
+    # Import re::engine::* if option is set:
+    $opt->{re_engine} and Module::Load::load(
+        "re::engine::" . delete($opt->{re_engine}), "import" );
 
     # for --line processing
     my $has_lines = 0;

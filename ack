@@ -409,6 +409,11 @@ Quote all metacharacters in PATTERN, it is treated as a literal.
 This applies only to the PATTERN, not to the regexes given for the B<-g>
 and B<-G> options.
 
+=item B<--re-engine=name>
+
+Use an alternative regular expression engine when searching. Pass the option,
+e.g., "RE2" to load and use L<re::engine::RE2>.
+
 =item B<-r>, B<-R>, B<--recurse>
 
 Recurse into sub-directories. This is the default and just here for

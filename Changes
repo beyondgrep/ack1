@@ -21,6 +21,7 @@ NEXT
 
     [FILE TYPE UPDATES]
     Added Groovy support (--groovy).
+    Added Restructured Text (reST) support (--rst).
 
     Added .pm6 as a --perl extension.
 

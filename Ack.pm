@@ -108,6 +108,7 @@ BEGIN {
         plone       => [qw( pt cpt metadata cpy py )],
         python      => [qw( py )],
         rake        => q{Rakefiles},
+        rst         => [qw( rst )],
         ruby        => [qw( rb rhtml rjs rxml erb rake spec )],
         scala       => [qw( scala )],
         scheme      => [qw( scm ss )],

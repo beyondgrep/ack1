@@ -2767,6 +2767,7 @@ sub needs_line_scan {
         App::Ack::warn( "$self->{filename}: $!" );
         return 1;
     }
+    $rc = sysseek($self->{fh}, 0, 1); # position in bytes
     return 0 unless $rc && ( $rc == $size );
 
     my $regex = $opt->{regex};

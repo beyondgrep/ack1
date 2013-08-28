@@ -381,6 +381,7 @@ i.e. into %mappings, etc.
 
 sub def_types_from_ARGV {
     my @typedef;
+    my $allow_empty_types;
 
     my $parser = Getopt::Long::Parser->new();
         # pass_through   => leave unrecognized command line arguments alone
@@ -389,10 +390,11 @@ sub def_types_from_ARGV {
     $parser->getoptions(
         'type-set=s' => sub { shift; push @typedef, ['c', shift] },
         'type-add=s' => sub { shift; push @typedef, ['a', shift] },
+        'type-allow-empty' => \$allow_empty_types,
     ) or App::Ack::die( 'See ack --help or ack --man for options.' );
 
     for my $td (@typedef) {
-        my ($type, $ext) = split /=/, $td->[1];
+        my ($type, $ext) = split /=/, $td->[1], -1;
 
         if ( $td->[0] eq 'c' ) {
             # type-set
@@ -415,8 +417,11 @@ sub def_types_from_ARGV {
                 unless exists $mappings{$type};
         }
 
-        my @exts = split /,/, $ext;
+        my @exts = length($ext) ? split /,/, $ext, -1 : '';  # split returns undef on empty string
         s/^\.// for @exts;
+
+        # restore old behavior of ignoring empty typedefs unless explicitly asked to do otherwise
+        @exts = grep{ $_ } @exts unless $allow_empty_types;
 
         if ( !exists $mappings{$type} || ref($mappings{$type}) eq 'ARRAY' ) {
             push @{$mappings{$type}}, @exts;
@@ -507,6 +512,10 @@ sub filetypes {
     # If there's an extension, look it up
     if ( $filename =~ m{\.([^\.$dir_sep_chars]+)$}o ) {
         my $ref = $types{lc $1};
+        return (@{$ref},TEXT) if $ref;
+    } elsif ( exists $types{''} ) {
+        # files without extensions could have an user defined type
+        my $ref = $types{''};
         return (@{$ref},TEXT) if $ref;
     }
 
@@ -854,6 +863,8 @@ File inclusion/exclusion:
   --type-add TYPE=.EXTENSION[,.EXT2[,...]]
                         Files with the given EXTENSION(s) are recognized as
                         being of (the existing) type TYPE
+  --type-allow-empty    Allow files without an extension to be recognized as
+                        a distinct type.
 
   --[no]follow          Follow symlinks.  Default is off.
 

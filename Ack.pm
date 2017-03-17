@@ -83,6 +83,7 @@ BEGIN {
         cpp         => [qw( cpp cc cxx m hpp hh h hxx )],
         csharp      => [qw( cs )],
         css         => [qw( css )],
+        dart        => [qw( dart )],
         delphi      => [qw( pas int dfm nfm dof dpk dproj groupproj bdsgroup bdsproj )],
         elisp       => [qw( el )],
         erlang      => [qw( erl hrl )],

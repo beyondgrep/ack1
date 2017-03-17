@@ -55,7 +55,7 @@ sub main {
 
     $| = 1 if $opt->{flush}; # Unbuffer the output if flush mode
 
-    if ( App::Ack::input_from_pipe() ) {
+    if ( App::Ack::input_from_pipe( $opt ) ) {
         # We're going into filter mode
         for ( qw( f g l ) ) {
             $opt->{$_} and App::Ack::die( "Can't use -$_ when acting as a filter." );

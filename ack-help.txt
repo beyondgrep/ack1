@@ -118,6 +118,7 @@ File inclusion/exclusion:
 
 Miscellaneous:
   --noenv               Ignore environment variables and ~/.ackrc
+  --no-filter           Do not run in filter mode, despite STDIN being a pipe
   --help                This help
   --man                 Man page
   --version             Display version & copyright
